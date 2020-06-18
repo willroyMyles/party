@@ -21,7 +21,13 @@ export const AccountPage = (props: any) => {
 				</View>
 
 				<View flex-1 bottom paddingB-50>
-					<Button bg-grey80 enableShadow size="large">
+					<Button
+						bg-grey80
+						enableShadow
+						size="large"
+						onPress={() => {
+							props.navigation.push("login")
+						}}>
 						<Text imp1>Get Started</Text>
 					</Button>
 					<View padding-20 paddingT-20 style={{alignItems: "center"}}>
