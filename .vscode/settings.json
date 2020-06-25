@@ -3,12 +3,12 @@
     ".vscode": true,
     ".expo-shared": true,
     "assets": true,
-    "node_modules": true,
     ".expo": true,
     "package-lock.json": true,
     "babel.config.js": true,
     ".gitignore": true,
     "yarn.lock": true,
-    "app.json": true
+    "app.json": true,
+    "node_modules": true
   }
 }
