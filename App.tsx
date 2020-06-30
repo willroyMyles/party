@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useState, ReactNode} from "react"
 import {StyleSheet, Text, View} from "react-native"
 import AccountPage from "./pages/AccountPage"
 import {Colors, Typography, ThemeManager} from "react-native-ui-lib"
 import {SafeAreaProvider} from "react-native-safe-area-context"
-import {NavigationContainer} from "@react-navigation/native"
+import {NavigationContainer, useNavigation} from "@react-navigation/native"
 import {createStackNavigator} from "@react-navigation/stack"
 import LoginPage from "./pages/LoginPage"
 import Signup from "./pages/Signup"
@@ -17,6 +17,7 @@ import {observer} from "mobx-react"
 import uiManager, {ThemeType} from "./dataLayer/UiManager"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
 import {generate} from "@ant-design/colors"
+import EventView from "./home/views/EventView"
 
 const Stack = createStackNavigator()
 
@@ -108,6 +109,8 @@ export default observer(function App() {
 		btn: s.btn_text,
 	})
 
+	const [node, setnode] = useState<ReactNode>(undefined)
+
 	useEffect(() => {
 		eventEmitter.once(eventStrings.themeChanged, () => {
 			console.log("listener")
@@ -133,6 +136,7 @@ export default observer(function App() {
 								<Stack.Screen name="signup" component={Signup} />
 
 								{/* sub pages */}
+								<Stack.Screen options={{headerShown: true}} name="event" component={EventView} />
 
 								<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />
 								<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />

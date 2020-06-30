@@ -15,7 +15,7 @@ const ThemeSwitcher = observer(() => {
 			value={uiManager.setting.theme}
 			thumbColor={Colors.primary}
 			thumbStyle={{backgroundColor: Colors.primary}}
-			onValueChange={(val) => {
+			onValueChange={(val: boolean) => {
 				setOn(val)
 				uiManager.setThemeType(val)
 				eventEmitter.emit(eventStrings.themeChanged)
