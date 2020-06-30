@@ -4,10 +4,11 @@ import ThemeSwitcher from "../../universial/ThemeSwitcher"
 import uiManager from "../../dataLayer/UiManager"
 import {observer} from "mobx-react"
 import {eventEmitter, eventStrings} from "../../universial/EventEmitter"
+import {useTheme} from "styled-components"
 
 const Profile = observer(() => {
 	const [ntn, setNtn] = useState(true)
-	useEffect(() => {}, [])
+	const theme = useTheme()
 
 	return (
 		<View bg-background flex-1>

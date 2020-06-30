@@ -8,11 +8,8 @@ import {createStackNavigator} from "@react-navigation/stack"
 import LoginPage from "./pages/LoginPage"
 import Signup from "./pages/Signup"
 import HomePage from "./home/HomePage"
-import {ApplicationProvider, Layout, IconRegistry} from "@ui-kitten/components"
 import Profile from "./home/settings_pages/Profile"
 import Contact_About_Page from "./home/settings_pages/Contact_About_Page"
-import * as eva from "@eva-design/eva"
-import {EvaIconsPack} from "@ui-kitten/eva-icons"
 import {observer} from "mobx-react"
 import uiManager, {ThemeType} from "./dataLayer/UiManager"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
@@ -99,30 +96,31 @@ export default observer(function App(props: any) {
 		<SafeAreaProvider>
 			<ThemeProvider theme={uiManager.theme}>
 				<View style={styles.container}>
-					<IconRegistry icons={EvaIconsPack} />
-					<ApplicationProvider theme={eva.dark} {...eva}>
-						<View style={{flex: 1}}>
-							<NavigationContainer>
-								<Stack.Navigator
-									screenOptions={{
-										headerShown: false,
-										headerStyle: {backgroundColor: Colors.background},
-										headerTintColor: uiManager.theme.primary_text,
-									}}>
-									<Stack.Screen name="home" component={HomePage} />
-									<Stack.Screen name="accounts" component={AccountPage} />
-									<Stack.Screen name="login" component={LoginPage} />
-									<Stack.Screen name="signup" component={Signup} />
+					<View style={{flex: 1}}>
+						<NavigationContainer>
+							<Stack.Navigator
+								screenOptions={{
+									headerShown: false,
+									headerStyle: {backgroundColor: Colors.background},
+									headerTintColor: uiManager.theme.primary_text,
+								}}>
+								<Stack.Screen
+									options={{headerShown: true, headerTitle: "My #1 Party"}}
+									name="home"
+									component={HomePage}
+								/>
+								<Stack.Screen name="accounts" component={AccountPage} />
+								<Stack.Screen name="login" component={LoginPage} />
+								<Stack.Screen name="signup" component={Signup} />
 
-									{/* sub pages */}
-									<Stack.Screen options={{headerShown: true}} name="event" component={EventView} />
+								{/* sub pages */}
+								<Stack.Screen options={{headerShown: true}} name="event" component={EventView} />
 
-									<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />
-									<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />
-								</Stack.Navigator>
-							</NavigationContainer>
-						</View>
-					</ApplicationProvider>
+								<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />
+								<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />
+							</Stack.Navigator>
+						</NavigationContainer>
+					</View>
 				</View>
 				{ok && <View />}
 			</ThemeProvider>

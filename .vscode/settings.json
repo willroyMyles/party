@@ -8,7 +8,6 @@
     "babel.config.js": true,
     ".gitignore": true,
     "yarn.lock": true,
-    "app.json": true,
-    "node_modules": true
+    "app.json": true
   }
 }

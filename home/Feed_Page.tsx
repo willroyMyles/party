@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react"
 import {View, Card, Image, Text, TouchableOpacity, Button} from "react-native-ui-lib"
 import {SafeAreaView} from "react-native-safe-area-context"
-import {List, ListItem, Layout} from "@ui-kitten/components"
 import dataProvider from "../dataLayer/DataStore"
 import {FlatList, ScrollView} from "react-native"
 import moment from "moment"

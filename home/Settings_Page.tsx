@@ -2,9 +2,11 @@ import React from "react"
 import {View, Text, Button} from "react-native-ui-lib"
 import {SafeAreaView} from "react-native-safe-area-context"
 import {useNavigation} from "@react-navigation/native"
+import {useTheme} from "styled-components"
 
 const Settings_Page = () => {
 	const navigation = useNavigation()
+	const theme = useTheme()
 
 	return (
 		<View flex-1 bg-background padding-10 style={{minHeight: "100%"}}>

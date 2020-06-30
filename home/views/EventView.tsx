@@ -1,7 +1,6 @@
 import React from "react"
 import {View, Card, Image, Avatar, Text, TouchableOpacity, Button, Colors} from "react-native-ui-lib"
 import dataProvider from "../../dataLayer/DataStore"
-// import {Avatar} from "@ui-kitten/components"
 
 const EventView = () => {
 	const event = dataProvider.currentEvent
