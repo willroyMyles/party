@@ -47,7 +47,7 @@ const HomePage = () => {
 					tabBarPosition="bottom">
 					<tab.Screen name="feeds" component={Feed_Page} />
 					<tab.Screen name="category" component={Category_Page} />
-					<tab.Screen name="settings" component={Settings_Page} />
+					{/* <tab.Screen name="settings" component={Settings_Page} /> */}
 				</tab.Navigator>
 			)}
 		</SafeAreaView>

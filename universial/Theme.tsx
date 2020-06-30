@@ -16,7 +16,7 @@ const light = generate("yellow")
 
 export const lightTheme: Theme = {
 	primary: light[5],
-	primary_text: Colors.grey20,
+	primary_text: Colors.grey10,
 	secondary_text: Colors.grey40,
 	teritairy_text: Colors.grey50,
 	caption: Colors.grey60,
@@ -25,9 +25,9 @@ export const lightTheme: Theme = {
 
 export const darkTheme: Theme = {
 	primary: light[5],
-	primary_text: Colors.grey80,
+	primary_text: Colors.white,
 	secondary_text: Colors.grey60,
-	teritairy_text: Colors.grey50,
+	teritairy_text: Colors.grey30,
 	caption: Colors.grey30,
 	background: Colors.grey20,
 }

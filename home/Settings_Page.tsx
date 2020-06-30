@@ -1,29 +1,42 @@
 import React from "react"
-import {View, Text, Button} from "react-native-ui-lib"
+import {View, Text, Button, ListItem, TouchableOpacity} from "react-native-ui-lib"
 import {SafeAreaView} from "react-native-safe-area-context"
 import {useNavigation} from "@react-navigation/native"
 import {useTheme} from "styled-components"
+import ThemeSwitcher from "../universial/ThemeSwitcher"
+import Row from "../components/Row"
+import * as faker from "faker"
 
 const Settings_Page = () => {
 	const navigation = useNavigation()
 	const theme = useTheme()
 
 	return (
-		<View flex-1 bg-background padding-10 style={{minHeight: "100%"}}>
-			<Text imp>Settings</Text>
-			<View marginT-10 flex-1 style={{justifyContent: "center"}}>
-				<Button marginV-10 borderRadius={0} bg-primary enableShadow onPress={() => navigation.navigate("profile")}>
-					<Text btn>Profile</Text>
-				</Button>
-				<Button
-					marginV-10
-					bg-primary
-					enableShadow
-					borderRadius={0}
-					style={{elevation: 10}}
-					onPress={() => navigation.navigate("about")}>
-					<Text btn>About / Contact</Text>
-				</Button>
+		<View flex-1 bg-background padding-20 style={{minHeight: "100%"}}>
+			<View>
+				<Text imp1 marginV-35 marginB-20>
+					Profile
+				</Text>
+				<Row>
+					<Text reg>dark theme</Text>
+					<ThemeSwitcher />
+				</Row>
+			</View>
+
+			<View>
+				<Text imp1 marginV-45 marginB-20>
+					About
+				</Text>
+				<Row>
+					<TouchableOpacity style={{width: "100%"}} activeOpacity={0.7}>
+						<Text reg>privacy policy</Text>
+					</TouchableOpacity>
+				</Row>
+				<Row>
+					<TouchableOpacity style={{width: "100%"}} activeOpacity={0.7}>
+						<Text reg>About</Text>
+					</TouchableOpacity>
+				</Row>
 			</View>
 		</View>
 	)
