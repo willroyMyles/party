@@ -4,39 +4,51 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs"
 import Feed_Page from "./Feed_Page"
 import Category_Page from "./Category_Page"
 import Settings_Page from "./Settings_Page"
-import {ViewPager, BottomNavigation, BottomNavigationTab} from "@ui-kitten/components"
+import {ViewPager, BottomNavigation, BottomNavigationTab, Tab} from "@ui-kitten/components"
 import {SafeAreaView} from "react-native-safe-area-context"
 import Icon from "react-native-vector-icons/Feather"
 import uiManager from "../dataLayer/UiManager"
 import {useNavigation} from "@react-navigation/native"
 import {eventEmitter, eventStrings} from "../universial/EventEmitter"
 import {ScrollView} from "react-native"
+import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs"
+import CustomTabBar from "../components/CustomTabBar"
+import {useTheme} from "styled-components"
 
-// import * as Icon from "react-feather"
+const tab = createMaterialTopTabNavigator()
 
 const HomePage = () => {
-	const [index, setIndex] = useState(0)
+	const [index, setIndex] = useState(true)
 	const nav = useNavigation()
+
+	const theme = useTheme()
+	console.log(theme)
+
+	useEffect(() => {
+		eventEmitter.addListener(eventStrings.themeChanged, () => {
+			console.log("listener home")
+			// setOk(!ok)
+			setIndex(false)
+			setIndex(true)
+		})
+
+		return () => {
+			eventEmitter.removeListener(eventStrings.themeChanged, () => {})
+		}
+	}, [])
 
 	return (
 		<SafeAreaView style={{backgroundColor: Colors.background, flex: 1}}>
-			{/* <View flex-1>
-				{index == 0 && <Category_Page />}
-				{index == 1 && <Feed_Page />}
-				{index == 2 && <Settings_Page />}
-			</View> */}
-			<ViewPager onSelect={(num: number) => setIndex(num)} selectedIndex={index} style={{flex: 1}}>
-				<Category_Page />
-				<Feed_Page />
-				<Settings_Page />
-			</ViewPager>
-
-			<Bar
-				index={index}
-				onSelected={setIndex}
-				tabName={["category", "feed", "settings"]}
-				icons={["layers", "list", "settings"]}
-			/>
+			{index && (
+				<tab.Navigator
+					sceneContainerStyle={{backgroundColor: Colors.background}}
+					tabBarOptions={{contentContainerStyle: {backgroundColor: Colors.background}, activeTintColor: Colors.text}}
+					tabBarPosition="bottom">
+					<tab.Screen name="feeds" component={Feed_Page} />
+					<tab.Screen name="category" component={Category_Page} />
+					<tab.Screen name="settings" component={Settings_Page} />
+				</tab.Navigator>
+			)}
 		</SafeAreaView>
 	)
 }

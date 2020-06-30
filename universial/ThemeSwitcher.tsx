@@ -18,7 +18,7 @@ const ThemeSwitcher = observer(() => {
 			onValueChange={(val: boolean) => {
 				setOn(val)
 				uiManager.setThemeType(val)
-				eventEmitter.emit(eventStrings.themeChanged)
+				// eventEmitter.emit(eventStrings.themeChanged)
 			}}></Switch>
 	)
 })

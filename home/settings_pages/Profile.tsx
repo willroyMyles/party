@@ -9,11 +9,6 @@ const Profile = observer(() => {
 	const [ntn, setNtn] = useState(true)
 	useEffect(() => {}, [])
 
-	eventEmitter.once(eventStrings.themeChanged, () => {
-		setNtn(!ntn)
-		console.log("theme changed")
-	})
-
 	return (
 		<View bg-background flex-1>
 			<Text imp> Profile</Text>

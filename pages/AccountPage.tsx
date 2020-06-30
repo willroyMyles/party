@@ -6,7 +6,6 @@ import {SafeAreaView} from "react-native-safe-area-context"
 
 export const AccountPage = (props: any) => {
 	const safearea = useSafeArea()
-	console.log(props)
 
 	return (
 		<SafeAreaView style={{flex: 1}}>

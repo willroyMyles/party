@@ -18,21 +18,20 @@ import uiManager, {ThemeType} from "./dataLayer/UiManager"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
 import {generate} from "@ant-design/colors"
 import EventView from "./home/views/EventView"
+import {ThemeProvider} from "styled-components"
+import {lightTheme, darkTheme} from "./universial/Theme"
 
 const Stack = createStackNavigator()
 
-export default observer(function App() {
+export default observer(function App(props: any) {
 	const [ok, setOk] = useState(false)
 	const col = generate(Colors.yellow20, {})
-	console.log(col)
 
 	if (uiManager.themeType == ThemeType.DARK) {
 		Colors.loadColors({
 			base: "rgba(16,16,16,.15)",
 			primary: col[5],
-			// background: Colors.grey10,
 			background: "#222",
-			// background_secondary: Colors.grey20,
 			background_secondary: "#333",
 			text: Colors.grey80,
 			text_light: Colors.grey70,
@@ -113,39 +112,45 @@ export default observer(function App() {
 
 	useEffect(() => {
 		eventEmitter.once(eventStrings.themeChanged, () => {
-			console.log("listener")
 			setOk(!ok)
 		})
+
+		return () => {
+			eventEmitter.removeListener(eventStrings.themeChanged, () => {})
+		}
 	}, [])
+
 	return (
 		<SafeAreaProvider>
-			<View style={styles.container}>
-				<IconRegistry icons={EvaIconsPack} />
-				<ApplicationProvider theme={eva.dark} {...eva}>
-					<View style={{flex: 1}}>
-						<NavigationContainer>
-							<Stack.Navigator
-								screenOptions={{
-									headerShown: false,
-									headerStyle: {backgroundColor: Colors.background},
-									headerTintColor: Colors.text,
-								}}>
-								<Stack.Screen name="home" component={HomePage} />
-								<Stack.Screen name="accounts" component={AccountPage} />
-								<Stack.Screen name="login" component={LoginPage} />
-								<Stack.Screen name="signup" component={Signup} />
+			<ThemeProvider theme={uiManager.theme}>
+				<View style={styles.container}>
+					<IconRegistry icons={EvaIconsPack} />
+					<ApplicationProvider theme={eva.dark} {...eva}>
+						<View style={{flex: 1}}>
+							<NavigationContainer>
+								<Stack.Navigator
+									screenOptions={{
+										headerShown: false,
+										headerStyle: {backgroundColor: Colors.background},
+										headerTintColor: Colors.text,
+									}}>
+									<Stack.Screen name="home" component={HomePage} />
+									<Stack.Screen name="accounts" component={AccountPage} />
+									<Stack.Screen name="login" component={LoginPage} />
+									<Stack.Screen name="signup" component={Signup} />
 
-								{/* sub pages */}
-								<Stack.Screen options={{headerShown: true}} name="event" component={EventView} />
+									{/* sub pages */}
+									<Stack.Screen options={{headerShown: true}} name="event" component={EventView} />
 
-								<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />
-								<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />
-							</Stack.Navigator>
-						</NavigationContainer>
-					</View>
-				</ApplicationProvider>
-			</View>
-			{ok && <View />}
+									<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />
+									<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />
+								</Stack.Navigator>
+							</NavigationContainer>
+						</View>
+					</ApplicationProvider>
+				</View>
+				{ok && <View />}
+			</ThemeProvider>
 		</SafeAreaProvider>
 	)
 })
@@ -154,9 +159,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: "column",
-		// // backgroundColor: "#333",
-		// alignItems: "center",
-		// justifyContent: "center",
 	},
 	text: {
 		color: "#fff",

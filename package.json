@@ -15,6 +15,7 @@
 		"@react-native-community/masked-view": "0.1.6",
 		"@react-native-community/netinfo": "^5.9.2",
 		"@react-navigation/bottom-tabs": "^5.5.2",
+		"@react-navigation/material-top-tabs": "^5.2.12",
 		"@react-navigation/native": "^5.5.1",
 		"@react-navigation/stack": "^5.5.1",
 		"@ui-kitten/components": "^5.0.0",
@@ -36,9 +37,11 @@
 		"react-native-safe-area-view": "^1.1.1",
 		"react-native-screens": "~2.2.0",
 		"react-native-svg": "^11.0.1",
+		"react-native-tab-view": "^2.14.4",
 		"react-native-ui-lib": "^5.9.3",
 		"react-native-vector-icons": "^6.6.0",
-		"react-native-web": "~0.11.7"
+		"react-native-web": "~0.11.7",
+		"styled-components": "^5.1.1"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.6",
@@ -47,6 +50,7 @@
 		"@types/react": "~16.9.23",
 		"@types/react-native": "~0.61.17",
 		"@types/react-native-vector-icons": "^6.4.5",
+		"@types/styled-components": "^5.1.0",
 		"babel-preset-expo": "~8.1.0",
 		"typescript": "~3.8.3"
 	},
