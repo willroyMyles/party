@@ -1,17 +1,35 @@
 import {createGlobalStyle} from "styled-components"
+import {generate} from "@ant-design/colors"
+import {Colors} from "react-native-ui-lib"
 
-export const lightTheme = {
-	body: "red",
-	text: "#363537",
-	toggleBorder: "#FFF",
-	gradient: "linear-gradient(#39598A, #79D7ED)",
+export interface Theme {
+	background: string
+	primary_text: string
+	secondary_text: string
+	teritairy_text: string
+	caption: string
+	primary: string
 }
 
-export const darkTheme = {
-	body: "green",
-	text: "#FAFAFA",
-	toggleBorder: "#6B8096",
-	gradient: "linear-gradient(#091236, #1E215D)",
+const storm = "#112432"
+const light = generate("yellow")
+
+export const lightTheme: Theme = {
+	primary: light[5],
+	primary_text: Colors.grey20,
+	secondary_text: Colors.grey40,
+	teritairy_text: Colors.grey50,
+	caption: Colors.grey60,
+	background: Colors.grey80,
+}
+
+export const darkTheme: Theme = {
+	primary: light[5],
+	primary_text: Colors.grey80,
+	secondary_text: Colors.grey60,
+	teritairy_text: Colors.grey50,
+	caption: Colors.grey30,
+	background: Colors.grey20,
 }
 
 // export const GlobalStyles = createGlobalStyle`

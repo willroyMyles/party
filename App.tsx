@@ -18,7 +18,7 @@ import uiManager, {ThemeType} from "./dataLayer/UiManager"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
 import {generate} from "@ant-design/colors"
 import EventView from "./home/views/EventView"
-import {ThemeProvider} from "styled-components"
+import {ThemeProvider, useTheme} from "styled-components"
 import {lightTheme, darkTheme} from "./universial/Theme"
 
 const Stack = createStackNavigator()
@@ -27,34 +27,9 @@ export default observer(function App(props: any) {
 	const [ok, setOk] = useState(false)
 	const col = generate(Colors.yellow20, {})
 
-	if (uiManager.themeType == ThemeType.DARK) {
-		Colors.loadColors({
-			base: "rgba(16,16,16,.15)",
-			primary: col[5],
-			background: "#222",
-			background_secondary: "#333",
-			text: Colors.grey80,
-			text_light: Colors.grey70,
-			textShadowColor: Colors.white,
-			text_disabled: Colors.dark20,
-		})
-	}
-	if (uiManager.themeType == ThemeType.LIGHT) {
-		Colors.loadColors({
-			base: Colors.white,
-			primary: Colors.yellow20,
-			background: Colors.grey80,
-			background_secondary: Colors.white,
-			text: Colors.grey30,
-			text_light: Colors.grey50,
-			textShadowColor: Colors.grey70,
-			text_disabled: Colors.dark60,
-		})
-	}
-
 	const s = StyleSheet.create({
 		desc: {
-			color: Colors.text,
+			color: uiManager.theme.secondary_text,
 			fontSize: 22,
 		},
 		tabs_text: {
@@ -64,12 +39,12 @@ export default observer(function App(props: any) {
 			textShadowRadius: 1,
 		},
 		important: {
-			color: Colors.text,
+			color: uiManager.theme.primary_text,
 			fontSize: 35,
 			fontWeight: "700",
 		},
 		check: {
-			color: Colors.text,
+			color: uiManager.theme.primary_text,
 			fontSize: 22,
 			fontWeight: "700",
 		},
@@ -79,13 +54,13 @@ export default observer(function App(props: any) {
 			color: Colors.primary,
 		},
 		regular: {
-			color: Colors.text,
+			color: uiManager.theme.primary_text,
 			textShadowRadius: 1,
 			fontSize: 16,
 			fontWeight: "700",
 		},
 		hint: {
-			color: Colors.text,
+			color: uiManager.theme.primary_text,
 			textShadowRadius: 0.1,
 			fontSize: 14,
 			fontWeight: "700",
@@ -132,7 +107,7 @@ export default observer(function App(props: any) {
 									screenOptions={{
 										headerShown: false,
 										headerStyle: {backgroundColor: Colors.background},
-										headerTintColor: Colors.text,
+										headerTintColor: uiManager.theme.primary_text,
 									}}>
 									<Stack.Screen name="home" component={HomePage} />
 									<Stack.Screen name="accounts" component={AccountPage} />

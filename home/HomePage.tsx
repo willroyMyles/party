@@ -22,7 +22,6 @@ const HomePage = () => {
 	const nav = useNavigation()
 
 	const theme = useTheme()
-	console.log(theme)
 
 	useEffect(() => {
 		eventEmitter.addListener(eventStrings.themeChanged, () => {
@@ -38,11 +37,14 @@ const HomePage = () => {
 	}, [])
 
 	return (
-		<SafeAreaView style={{backgroundColor: Colors.background, flex: 1}}>
+		<SafeAreaView style={{backgroundColor: uiManager.theme.background, flex: 1}}>
 			{index && (
 				<tab.Navigator
-					sceneContainerStyle={{backgroundColor: Colors.background}}
-					tabBarOptions={{contentContainerStyle: {backgroundColor: Colors.background}, activeTintColor: Colors.text}}
+					sceneContainerStyle={{backgroundColor: uiManager.theme.background}}
+					tabBarOptions={{
+						contentContainerStyle: {backgroundColor: uiManager.theme.background},
+						activeTintColor: Colors.text,
+					}}
 					tabBarPosition="bottom">
 					<tab.Screen name="feeds" component={Feed_Page} />
 					<tab.Screen name="category" component={Category_Page} />
