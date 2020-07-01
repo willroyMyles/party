@@ -35,6 +35,7 @@ export default observer(function App(props: any) {
 		Font.loadAsync({
 			Nunito_Black: require("./assets/fonts/Nunito/Nunito-Black.ttf"),
 			Nunito_Regular: require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
+			Nunito_Semi_Bold: require("./assets/fonts/Nunito/Nunito-SemiBold.ttf"),
 		}).then((res) => {
 			console.log(Font.isLoaded("Nunito_Black"))
 			setLoading(false)

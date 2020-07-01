@@ -29,17 +29,15 @@ const Feed_Page = () => {
 	return (
 		<View bg-background style={{height: "100%"}}>
 			{/* <ScrollView> */}
-			<Text imp>Feed pages</Text>
-			<View style={{height: 200, width: 200, backgroundColor: theme.body}} />
-			{/* <FlatList
+			<FlatList
 				onScroll={(e) => {}}
-				style={{flexGrow: 1, flexDirection: "column"}}
+				style={{flexGrow: 1, borderWidth: 0, flexDirection: "column"}}
 				data={data}
 				keyExtractor={({item, index}) => index}
-				renderItem={({item, index, separators}) => {
+				renderItem={({item, index}) => {
 					return <Feed_Item key={index} onClick={handleViewClick} index={index} item={item} />
 				}}
-			/> */}
+			/>
 		</View>
 	)
 }

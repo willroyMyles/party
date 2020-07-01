@@ -35,7 +35,10 @@ class ThemeHelper {
 			date: {
 				fontSize: 16,
 				color: Colors.primary,
-				fontFamily: "Nunito_Regular",
+				fontFamily: "Nunito_Semi_Bold",
+				textShadowRadius: 0,
+				marginBottom: -1,
+				marginTop: 4,
 			},
 			regular: {
 				color: manager.theme.primary_text,

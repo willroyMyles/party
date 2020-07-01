@@ -13,38 +13,44 @@ const Feed_Item = ({
 	onClick: (item: FeedItemModel) => void
 }) => {
 	return (
-		<View bg-background_secondary margin-20 br20 style={{elevation: 4, overflow: "hidden"}}>
+		<View padding-15 br20 style={{elevation: 0, overflow: "hidden"}}>
 			<View>
-				<Image style={{borderRadius: 6}} source={{uri: item.image}} cover />
-				<View
-					style={{
-						position: "absolute",
-						backgroundColor: "rgba(0,0,0,.1)",
-						height: "100%",
-						width: "100%",
-						justifyContent: "center",
-						alignItems: "flex-end",
-						alignSelf: "center",
-						opacity: 0,
-					}}>
-					<TouchableOpacity
-						activeOpacity={0.8}
+				<View style={{elevation: 10, borderWidth: 0}}>
+					<Image style={{borderRadius: 6}} source={{uri: item.image}} cover />
+					<View
 						style={{
-							backgroundColor: "rgba(20,20,20,.7)",
-							height: "40%",
-							width: "30%",
-							borderRadius: 7,
+							position: "absolute",
+							backgroundColor: "rgba(0,0,0,.1)",
+							height: "100%",
+							width: "100%",
 							justifyContent: "center",
-							alignItems: "center",
+							alignItems: "flex-end",
+							alignSelf: "center",
+							opacity: 1,
+							zIndex: 3,
 						}}>
-						<View>
-							<Text btn>View </Text>
-						</View>
-					</TouchableOpacity>
+						<TouchableOpacity
+							activeOpacity={0.8}
+							onPress={() => {
+								onClick(item)
+							}}
+							style={{
+								backgroundColor: "rgba(20,20,20,.8)",
+								height: "40%",
+								width: "30%",
+								borderRadius: 7,
+								justifyContent: "center",
+								alignItems: "center",
+							}}>
+							<View>
+								<Text desc>View </Text>
+							</View>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
 			<View style={{flex: 1, flexDirection: "row", justifyContent: "space-between"}}>
-				<View flex-3 padding-15>
+				<View flex-3>
 					<Text date>{moment(item.date).format("MMMM DD, YYYY")}</Text>
 					<Text reg marginT-3>
 						{item.title}
@@ -52,14 +58,13 @@ const Feed_Item = ({
 					<Text hint>{item.hint}</Text>
 				</View>
 				<View flex-1>
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						onPress={() => {
-							// eventEmitter.emit(eventStrings.eventClicked, item)
 							onClick(item)
 						}}
 						activeOpacity={0.8}
 						style={{
-							backgroundColor: "rgba(0,0,120,.06)", //find color base on thee
+							backgroundColor: "rgba(0,0,120,.00)", //find color base on thee
 							height: "100%",
 							justifyContent: "center",
 							alignItems: "center",
@@ -67,7 +72,7 @@ const Feed_Item = ({
 						<View>
 							<Text reg>View</Text>
 						</View>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</View>
 			</View>
 		</View>
