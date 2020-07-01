@@ -8,7 +8,6 @@ import {useNavigation} from "@react-navigation/native"
 const Leftheader = (props: {tintColor?: string | undefined}) => {
 	const theme = useTheme()
 	const navigation = useNavigation()
-	console.log(navigation)
 
 	const settingsPressed = (event: any) => {
 		navigation.navigate("settings")

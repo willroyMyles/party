@@ -4,8 +4,6 @@ import {StyleSheet, Text, View} from "react-native"
 
 class ThemeHelper {
 	reviseLoading = (manager: Store) => {
-		console.log(manager)
-
 		Colors.loadColors({
 			background: manager.theme.background,
 			primary: manager.theme.primary,
@@ -15,45 +13,48 @@ class ThemeHelper {
 			desc: {
 				color: manager.theme.secondary_text,
 				fontSize: 22,
+				fontFamily: "Nunito_Regular",
 			},
 			tabs_text: {
-				fontWeight: "700",
 				fontSize: 16,
 				textTransform: "uppercase",
 				textShadowRadius: 1,
+				fontFamily: "Nunito_Regular",
 			},
 			important: {
 				color: manager.theme.primary_text,
 				fontSize: 35,
-				fontWeight: "700",
+				fontWeight: "200",
+				fontFamily: "Nunito_Regular",
 			},
 			check: {
 				color: manager.theme.primary_text,
 				fontSize: 22,
-				fontWeight: "700",
+				fontFamily: "Nunito_Regular",
 			},
 			date: {
-				fontWeight: "700",
 				fontSize: 16,
 				color: Colors.primary,
+				fontFamily: "Nunito_Regular",
 			},
 			regular: {
 				color: manager.theme.primary_text,
 				textShadowRadius: 1,
 				fontSize: 16,
 				fontWeight: "600",
+				fontFamily: "Nunito_Regular",
 			},
 			hint: {
 				color: manager.theme.primary_text,
 				textShadowRadius: 0.1,
 				fontSize: 14,
-				fontWeight: "700",
 				opacity: 0.5,
+				fontFamily: "Nunito_Regular",
 			},
 			btn_text: {
 				color: Colors.background,
-				fontWeight: "700",
 				textShadowRadius: 0.2,
+				fontFamily: "Nunito_Regular",
 			},
 		})
 		Typography.loadTypographies({

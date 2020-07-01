@@ -19,20 +19,35 @@ import {ThemeProvider, useTheme} from "styled-components"
 import {lightTheme, darkTheme} from "./universial/Theme"
 import Leftheader from "./components/Leftheader"
 import Settings_Page from "./home/Settings_Page"
+import * as Font from "expo-font"
+import {AppLoading} from "expo"
 
 const Stack = createStackNavigator()
 
 export default observer(function App(props: any) {
 	const [ok, setOk] = useState(false)
 	const col = generate(Colors.yellow20, {})
+	const [loading, setLoading] = useState(false)
 
 	const [node, setnode] = useState<ReactNode>(undefined)
+
+	useEffect(() => {
+		Font.loadAsync({
+			Nunito_Black: require("./assets/fonts/Nunito/Nunito-Black.ttf"),
+			Nunito_Regular: require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
+		}).then((res) => {
+			console.log(Font.isLoaded("Nunito_Black"))
+			setLoading(false)
+		})
+	}, [])
+
+	if (loading) return <AppLoading />
 
 	return (
 		<SafeAreaProvider>
 			<ThemeProvider theme={uiManager.theme}>
 				<View style={styles.container}>
-					<View style={{flex: 1}}>
+					{!loading && (
 						<NavigationContainer>
 							<Stack.Navigator
 								screenOptions={{
@@ -61,9 +76,8 @@ export default observer(function App(props: any) {
 								<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />
 							</Stack.Navigator>
 						</NavigationContainer>
-					</View>
+					)}
 				</View>
-				{ok && <View />}
 			</ThemeProvider>
 		</SafeAreaProvider>
 	)

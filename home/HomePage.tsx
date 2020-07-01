@@ -22,19 +22,6 @@ const HomePage = () => {
 
 	const theme = useTheme()
 
-	useEffect(() => {
-		eventEmitter.addListener(eventStrings.themeChanged, () => {
-			console.log("listener home")
-			// setOk(!ok)
-			setIndex(false)
-			setIndex(true)
-		})
-
-		return () => {
-			eventEmitter.removeListener(eventStrings.themeChanged, () => {})
-		}
-	}, [])
-
 	return (
 		<SafeAreaView style={{backgroundColor: uiManager.theme.background, flex: 1}}>
 			{index && (

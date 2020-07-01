@@ -6,6 +6,7 @@ import {useTheme} from "styled-components"
 import ThemeSwitcher from "../universial/ThemeSwitcher"
 import Row from "../components/Row"
 import * as faker from "faker"
+import uiManager from "../dataLayer/UiManager"
 
 const Settings_Page = () => {
 	const navigation = useNavigation()
@@ -20,6 +21,18 @@ const Settings_Page = () => {
 				<Row>
 					<Text reg>dark theme</Text>
 					<ThemeSwitcher />
+				</Row>
+				<Row>
+					<Text reg>clear theme (development)</Text>
+					<Button
+						onPress={() => {
+							uiManager.clearTheme()
+						}}
+						size="small"
+						round={false}
+						borderRadius={2}>
+						<Text>clear</Text>
+					</Button>
 				</Row>
 			</View>
 

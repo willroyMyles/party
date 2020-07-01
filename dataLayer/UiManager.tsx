@@ -15,7 +15,6 @@ export class Store {
 
 	t = autorun((runner) => {
 		if (this.theme) {
-			console.log(AsyncStorage)
 			AsyncStorage.getItem("theme").then((res) => {
 				if (res) {
 					this.setThemeType(ThemeType.DARK.toString() == res)
@@ -26,6 +25,13 @@ export class Store {
 		}
 		runner.dispose()
 	})
+
+	@action clearTheme = () => {
+		AsyncStorage.removeItem("theme")
+		this.theme = lightTheme
+		themeHelper.reviseLoading(this)
+		this.setting.theme = false
+	}
 	@action setThemeType = (val: boolean) => {
 		if (val) this.themeType = ThemeType.DARK
 		else this.themeType = ThemeType.LIGHT
