@@ -35,7 +35,7 @@ const Feed_Page = () => {
 				data={data}
 				renderItem={({item, index}) => {
 					return (
-						<View key={index}>
+						<View marginV-5 key={index}>
 							<Feed_Item onClick={handleViewClick} index={index} item={item} />
 						</View>
 					)
