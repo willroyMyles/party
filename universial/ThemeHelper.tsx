@@ -7,6 +7,7 @@ class ThemeHelper {
 		Colors.loadColors({
 			background: manager.theme.background,
 			primary: manager.theme.primary,
+			inactive: "rgba(200,200,200,.3)",
 		})
 
 		const s = StyleSheet.create({

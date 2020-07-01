@@ -29,16 +29,32 @@ const HomePage = () => {
 					sceneContainerStyle={{backgroundColor: uiManager.theme.background}}
 					tabBarOptions={{
 						contentContainerStyle: {backgroundColor: uiManager.theme.background},
-						activeTintColor: Colors.text,
+						activeTintColor: Colors.primary,
+						inactiveTintColor: Colors.inactive,
+						showIcon: true,
+						// renderIndicator: (props) => <View height={10} width={10} br100 bg-primary />,
+						indicatorContainerStyle: {borderWidth: 10},
 					}}
 					tabBarPosition="bottom">
-					<tab.Screen name="feeds" component={Feed_Page} />
-					<tab.Screen name="category" component={Category_Page} />
+					<tab.Screen
+						options={{tabBarIcon: (props) => <Tabi {...props} name="layers" />}}
+						name="feeds"
+						component={Feed_Page}
+					/>
+					<tab.Screen
+						options={{tabBarIcon: (props) => <Tabi {...props} name="grid" />}}
+						name="category"
+						component={Category_Page}
+					/>
 					{/* <tab.Screen name="settings" component={Settings_Page} /> */}
 				</tab.Navigator>
 			)}
 		</SafeAreaView>
 	)
+}
+
+const Tabi = (props: {focused: boolean; color: string; name: string}) => {
+	return <Icon name={props.name} size={20} color={props.color} />
 }
 
 export default HomePage
