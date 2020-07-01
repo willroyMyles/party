@@ -33,10 +33,14 @@ const Feed_Page = () => {
 				onScroll={(e) => {}}
 				style={{flexGrow: 1, borderWidth: 0, flexDirection: "column"}}
 				data={data}
-				keyExtractor={({item, index}) => index}
 				renderItem={({item, index}) => {
-					return <Feed_Item key={index} onClick={handleViewClick} index={index} item={item} />
+					return (
+						<View key={index}>
+							<Feed_Item onClick={handleViewClick} index={index} item={item} />
+						</View>
+					)
 				}}
+				keyExtractor={(item) => item.reference}
 			/>
 		</View>
 	)

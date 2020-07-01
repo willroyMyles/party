@@ -7,25 +7,23 @@ const EventView = () => {
 	return (
 		<View bg-background flex-1>
 			<Image style={{borderRadius: 6}} source={{uri: event.image}} cover />
-			<View padding-10 marginV-25>
-				<View marginV-0>
-					<View padding-10 style={{flexDirection: "row", alignItems: "center"}}>
-						<Avatar backgroundColor={Colors.grey40} label={event.person} />
-						<View paddingL-10 />
-						<Text reg>organizers</Text>
-					</View>
+			<View padding-10>
+				<View padding-5 center marginV-10>
+					<Avatar backgroundColor={Colors.grey40} label={event.person} />
+					<View paddingL-10 />
+					<Text hint>organizers</Text>
 				</View>
 				<View marginV-10>
-					<Text imp>{event.title}</Text>
+					<Text imp1>{event.title}</Text>
 				</View>
 				<View marginV-10>
-					<Text>time</Text>
+					<Text reg>time</Text>
 				</View>
 				<View marginV-10>
-					<Text>location</Text>
+					<Text reg>location</Text>
 				</View>
 				<View marginV-10>
-					<Text>admission</Text>
+					<Text reg>admission</Text>
 				</View>
 				<View marginV-10>
 					<Text imp1>about</Text>

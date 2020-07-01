@@ -18,7 +18,8 @@ class Store {
 				element.hint = faker.lorem.sentence(2)
 				element.poster = faker.name.findName()
 				element.about = faker.lorem.paragraphs(1)
-				element.place = faker.address.secondaryAddress()
+				element.location = faker.address.secondaryAddress()
+				element.reference = faker.random.alphaNumeric(9)
 				this.data.push(element)
 			}
 			resolve(true)

@@ -5,5 +5,6 @@ export interface FeedItemModel {
 	hint?: string
 	poster?: string
 	about?: string
-	place?: string
+	location?: string
+	reference?: string | undefined
 }

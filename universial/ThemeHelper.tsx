@@ -44,8 +44,8 @@ class ThemeHelper {
 				color: manager.theme.primary_text,
 				textShadowRadius: 1,
 				fontSize: 16,
-				fontWeight: "600",
 				fontFamily: "Nunito_Regular",
+				opacity: 0.85,
 			},
 			hint: {
 				color: manager.theme.primary_text,
