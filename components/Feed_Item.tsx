@@ -1,7 +1,8 @@
-import React from "react"
+import React, {useState} from "react"
 import {View, Text, TouchableOpacity, Image} from "react-native-ui-lib"
 import {FeedItemModel} from "../universial/Models"
 import moment from "moment"
+import * as faker from "faker"
 
 const Feed_Item = ({
 	item,
@@ -12,6 +13,8 @@ const Feed_Item = ({
 	index: number
 	onClick: (item: FeedItemModel) => void
 }) => {
+	const [uri, setUri] = useState("")
+
 	return (
 		<View padding-15 br20 style={{elevation: 0, overflow: "hidden"}}>
 			<View>

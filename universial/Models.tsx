@@ -23,6 +23,6 @@ export interface FeedItemModel {
 	poster?: string
 	about?: string
 	location?: string
-	reference?: string | undefined
+	reference?: string
 	partyType?: PartyType
 }

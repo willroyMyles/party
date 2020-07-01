@@ -15,7 +15,12 @@ const Feed_Page = () => {
 	const [data, setdata] = useState(dataProvider.data)
 	useEffect(() => {
 		dataProvider.generateFakeData().then((res) => {
-			setdata(dataProvider.data)
+			// setdata(dataProvider.data)
+			const d: any = []
+			dataProvider.data.forEach((item, key) => {
+				d.push(item)
+			})
+			setdata(d)
 		})
 	}, [])
 
