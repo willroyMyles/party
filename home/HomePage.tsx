@@ -13,6 +13,7 @@ import {ScrollView} from "react-native"
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs"
 import CustomTabBar from "../components/CustomTabBar"
 import {useTheme} from "styled-components"
+import {TabBar} from "react-native-tab-view"
 
 const tab = createMaterialTopTabNavigator()
 
@@ -26,6 +27,7 @@ const HomePage = () => {
 		<SafeAreaView style={{backgroundColor: uiManager.theme.background, flex: 1}}>
 			{index && (
 				<tab.Navigator
+					tabBar={(props) => <CustomTabBar {...props} />}
 					sceneContainerStyle={{backgroundColor: uiManager.theme.background}}
 					tabBarOptions={{
 						contentContainerStyle: {backgroundColor: uiManager.theme.background},

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {View, Card, Image, Text, TouchableOpacity, Button} from "react-native-ui-lib"
+import {View, Card, Image, Text, TouchableOpacity, Button, FloatingButton} from "react-native-ui-lib"
 import {SafeAreaView} from "react-native-safe-area-context"
 import dataProvider from "../dataLayer/DataStore"
 import {FlatList, ScrollView} from "react-native"
@@ -12,7 +12,7 @@ import {useTheme} from "styled-components"
 
 const Feed_Page = () => {
 	const navigation = useNavigation()
-	const [data, setdata] = useState(dataProvider.data)
+	const [data, setdata] = useState([])
 	useEffect(() => {
 		dataProvider.generateFakeData().then((res) => {
 			// setdata(dataProvider.data)
@@ -31,12 +31,13 @@ const Feed_Page = () => {
 
 	const theme: any = useTheme()
 
-	return (
-		<View bg-background style={{height: "100%"}}>
-			{/* <ScrollView> */}
+	const Listt = () => {
+		return (
 			<FlatList
 				onScroll={(e) => {}}
-				style={{flexGrow: 1, borderWidth: 0, flexDirection: "column"}}
+				// scrollEnabled={false}
+				// contentContainerStyle={{borderWidth: 1, overflow: "visible", flex: 3}}
+				style={{borderWidth: 0, flex: 1}}
 				data={data}
 				renderItem={({item, index}) => {
 					return (
@@ -47,6 +48,12 @@ const Feed_Page = () => {
 				}}
 				keyExtractor={(item) => item.reference}
 			/>
+		)
+	}
+
+	return (
+		<View flex bg-background style={{height: "100%", overflow: "scroll"}}>
+			<Listt />
 		</View>
 	)
 }

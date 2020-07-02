@@ -28,7 +28,7 @@ const Stack = createStackNavigator()
 export default observer(function App(props: any) {
 	const [ok, setOk] = useState(false)
 	const col = generate(Colors.yellow20, {})
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(true)
 
 	const [node, setnode] = useState<ReactNode>(undefined)
 
