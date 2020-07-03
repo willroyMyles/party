@@ -12,6 +12,10 @@ const Settings_Page = () => {
 	const navigation = useNavigation()
 	const theme = useTheme()
 
+	const onLoginPressed = () => {
+		navigation.navigate("login")
+	}
+
 	return (
 		<View flex-1 bg-background padding-20 style={{minHeight: "100%"}}>
 			<View>
@@ -48,6 +52,16 @@ const Settings_Page = () => {
 				<Row>
 					<TouchableOpacity style={{width: "100%"}} activeOpacity={0.7}>
 						<Text reg>About</Text>
+					</TouchableOpacity>
+				</Row>
+				<Row>
+					<TouchableOpacity
+						onPress={() => {
+							onLoginPressed()
+						}}
+						style={{width: "100%"}}
+						activeOpacity={0.7}>
+						<Text reg>Login</Text>
 					</TouchableOpacity>
 				</Row>
 			</View>

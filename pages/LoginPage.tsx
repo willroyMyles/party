@@ -1,12 +1,20 @@
 import React from "react"
 import {View, Text, TextField, Button, TouchableOpacity} from "react-native-ui-lib"
 import {Link, useNavigation} from "@react-navigation/native"
+import {useForm, Controller} from "react-hook-form"
+import Fire from "../dataLayer/Firebase"
 
 const LoginPage = () => {
 	const navigation = useNavigation()
 
 	const handleSignup = () => {
 		navigation.navigate("signup")
+	}
+
+	const {handleSubmit, errors, control} = useForm()
+
+	const onSubmit = (data: any) => {
+		Fire.signUp(data)
 	}
 
 	return (
@@ -16,33 +24,50 @@ const LoginPage = () => {
 				<View marginV-25>
 					<Text imp> Log in</Text>
 				</View>
-				<TextField
-					placeholder="User Name"
-					floatingPlaceholder={true}
-					floatOnFocus={true}
-					showCharacterCounter={true}
-					maxLength={200}
-					// error={this.state.passErrors}
-					// rightIconSource={AssetsImages.images.eye_off}
-					// rightIconStyle={{tintColor: Colors.grey40}}
-					// onChangeText={(text) => this.setState({pass: text})}
-					// value={this.state.pass}
-					secureTextEntry={true}
+				<Controller
+					name="email"
+					control={control}
+					rules={{required: "email required"}}
+					render={({onChange, onBlur, value}) => (
+						<TextField
+							placeholder="User Name"
+							floatingPlaceholder={true}
+							floatOnFocus={true}
+							showCharacterCounter={true}
+							maxLength={200}
+							onChangeText={(values: any) => onChange(values)}
+							onBlur={onBlur}
+							value={value}
+							error={errors.email ? errors.email.message : null}
+						/>
+					)}
+					defaultValue="heello"
 				/>
-				<TextField
-					placeholder="Password"
-					floatingPlaceholder={true}
-					floatOnFocus={true}
-					showCharacterCounter={true}
-					maxLength={16}
-					// error={this.state.passErrors}
-					// rightIconSource={AssetsImages.images.eye_off}
-					// rightIconStyle={{tintColor: Colors.grey40}}
-					// onChangeText={(text) => this.setState({pass: text})}
-					// value={this.state.pass}
-					secureTextEntry={true}
+
+				<Controller
+					name="password"
+					control={control}
+					render={({onChange, onBlur, value}) => (
+						<TextField
+							placeholder="Password"
+							floatingPlaceholder={true}
+							floatOnFocus={true}
+							showCharacterCounter={true}
+							maxLength={16}
+							secureTextEntry={true}
+							onChangeText={(values: any) => onChange(values)}
+							onBlur={onBlur}
+							value={value}
+						/>
+					)}
 				/>
-				<Button onPress={() => navigation.navigate("home")} bg-grey50 enableShadow marginT-20>
+				<Button
+					onPress={(e: any) => {
+						handleSubmit(onSubmit)()
+					}}
+					bg-grey50
+					enableShadow
+					marginT-20>
 					<Text imp1>Submit</Text>
 				</Button>
 				<View marginT-20 centerH style={{alignItems: "center", flexDirection: "row", justifyContent: "center"}}>
