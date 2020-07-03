@@ -22,6 +22,7 @@
 		"expo-font": "~8.1.0",
 		"faker": "^4.1.0",
 		"feather-icons": "^4.28.0",
+		"firebase": "^7.15.5",
 		"mobx": "^5.15.4",
 		"mobx-react": "^6.2.2",
 		"moment": "^2.27.0",
