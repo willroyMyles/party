@@ -6,7 +6,9 @@ class ThemeHelper {
 	reviseLoading = (manager: Store) => {
 		Colors.loadColors({
 			background: manager.theme.background,
+			backgroundHighlight: manager.theme.bgHilight,
 			primary: manager.theme.primary,
+			textColor: manager.theme.primary_text,
 			inactive: "rgba(200,200,200,.3)",
 		})
 

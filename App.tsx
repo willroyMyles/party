@@ -22,6 +22,8 @@ import Leftheader from "./components/Leftheader"
 import Settings_Page from "./home/Settings_Page"
 import * as Font from "expo-font"
 import {AppLoading} from "expo"
+import CreateEventView from "./home/views/CreateEventView"
+import FormTest from "./home/views/FormTest"
 
 const Stack = createStackNavigator()
 
@@ -72,7 +74,13 @@ export default observer(function App(props: any) {
 								<Stack.Screen options={{headerShown: true}} name="settings" component={Settings_Page} />
 
 								{/* sub pages */}
+								{/* <Stack.Screen options={{headerShown: true}} name="test" component={FormTest} /> */}
 								<Stack.Screen options={{headerShown: true}} name="event" component={EventView} />
+								<Stack.Screen
+									options={{headerShown: true, headerTitle: ""}}
+									name="create_event"
+									component={CreateEventView}
+								/>
 
 								<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />
 								<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />

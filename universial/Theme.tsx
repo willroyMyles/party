@@ -9,6 +9,7 @@ export interface Theme {
 	teritairy_text: string
 	caption: string
 	primary: string
+	bgHilight: string
 }
 
 const storm = "#112432"
@@ -21,6 +22,7 @@ export const lightTheme: Theme = {
 	teritairy_text: Colors.grey50,
 	caption: Colors.grey60,
 	background: Colors.grey80,
+	bgHilight: "rgba(240,243,245,1)",
 }
 
 export const darkTheme: Theme = {
@@ -30,6 +32,7 @@ export const darkTheme: Theme = {
 	teritairy_text: Colors.grey30,
 	caption: Colors.grey30,
 	background: Colors.grey20,
+	bgHilight: "rgba(55,63,65,1)",
 }
 
 // export const GlobalStyles = createGlobalStyle`

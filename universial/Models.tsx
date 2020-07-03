@@ -20,9 +20,12 @@ export interface FeedItemModel {
 	date?: Date
 	title?: string
 	hint?: string
-	poster?: string
+	person?: string
 	about?: string
 	location?: string
 	reference?: string
+	time?: string
 	partyType?: PartyType
+
+	admission?: number
 }

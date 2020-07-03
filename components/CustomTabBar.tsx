@@ -91,10 +91,13 @@ export function CustomTabBar({
 			<TouchableOpacity
 				accessibilityRole="button"
 				activeOpacity={0.8}
+				onPress={() => {
+					navigation.navigate("create_event")
+				}}
 				style={{
 					flex: 0.2,
 					alignItems: "center",
-					padding: 20,
+					padding: 15,
 					position: "absolute",
 					left: "50%",
 					marginStart: -30,

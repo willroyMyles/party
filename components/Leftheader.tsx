@@ -16,7 +16,7 @@ const Leftheader = (props: {tintColor?: string | undefined}) => {
 	return (
 		<View marginH-10 row>
 			<TouchableOpacity marginR-25 onPress={settingsPressed}>
-				<Icon color={uiManager.theme.primary_text} name="settings" size={25} />
+				<Icon color={uiManager.theme.primary_text} name="menu" size={25} />
 			</TouchableOpacity>
 		</View>
 	)
