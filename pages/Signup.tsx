@@ -4,6 +4,7 @@ import {useNavigation} from "@react-navigation/native"
 import {ScrollView, Dimensions, TextInput, StyleSheet} from "react-native"
 import {useForm, Controller} from "react-hook-form"
 import {useTheme} from "styled-components"
+import SkipButton from "../components/SkipButton"
 
 const Signup = () => {
 	const styles = StyleSheet.create({
@@ -130,6 +131,7 @@ const Signup = () => {
 							</Text>
 						</TouchableOpacity>
 					</View>
+					<SkipButton where="home" />
 				</View>
 			</View>
 		</ScrollView>

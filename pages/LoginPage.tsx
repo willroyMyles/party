@@ -4,6 +4,7 @@ import {Link, useNavigation} from "@react-navigation/native"
 import {useForm, Controller} from "react-hook-form"
 import Fire from "../dataLayer/Firebase"
 import {TextInput, StyleSheet} from "react-native"
+import SkipButton from "../components/SkipButton"
 
 const LoginPage = () => {
 	const navigation = useNavigation()
@@ -36,7 +37,7 @@ const LoginPage = () => {
 	})
 
 	return (
-		<View flex-5 centerV bg-primary>
+		<View flex-5 centerV bg-primary style={{justifyContent: "space-around"}}>
 			<View flex-1>
 				<View padding-20 marginV-25 centerV flex-1>
 					<Text imp style={{color: "white"}}>
@@ -105,6 +106,7 @@ const LoginPage = () => {
 						</Text>
 					</TouchableOpacity>
 				</View>
+				<SkipButton where="home" />
 			</View>
 		</View>
 	)

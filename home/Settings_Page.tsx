@@ -16,6 +16,10 @@ const Settings_Page = () => {
 		navigation.navigate("login")
 	}
 
+	const onSignUpPressed = () => {
+		navigation.navigate("signup")
+	}
+
 	return (
 		<View flex-1 bg-background padding-20 style={{minHeight: "100%"}}>
 			<View>
@@ -54,6 +58,13 @@ const Settings_Page = () => {
 						<Text reg>About</Text>
 					</TouchableOpacity>
 				</Row>
+			</View>
+
+			<View>
+				<Text imp1 marginV-45 marginB-20>
+					Account
+				</Text>
+
 				<Row>
 					<TouchableOpacity
 						onPress={() => {
@@ -62,6 +73,16 @@ const Settings_Page = () => {
 						style={{width: "100%"}}
 						activeOpacity={0.7}>
 						<Text reg>Login</Text>
+					</TouchableOpacity>
+				</Row>
+				<Row>
+					<TouchableOpacity
+						onPress={() => {
+							onSignUpPressed()
+						}}
+						style={{width: "100%"}}
+						activeOpacity={0.7}>
+						<Text reg>Sign up</Text>
 					</TouchableOpacity>
 				</Row>
 			</View>
