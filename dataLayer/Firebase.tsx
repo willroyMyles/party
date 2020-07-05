@@ -13,15 +13,27 @@ class FirebaseStore {
 		measurementId: "G-S6PT28Z9P3",
 	}
 	appName = "[DEFAULT]"
-	auth = app.auth()
-	constructor() {}
+	auth!: app.auth.Auth
 
 	init = () => {
-		if (app.app(this.appName)) return
+		if (app.apps.length > 0) return
 		else {
 			app.initializeApp(this.firebaseConfig)
+			this.auth = app.auth()
 		}
 	}
+
+	constructor() {
+		if (app.apps.length > 0) {
+			//initialized already
+		} else {
+			app.initializeApp(this.firebaseConfig)
+		}
+		this.auth = app.auth()
+		console.log("inited")
+	}
+
+	doStuff = () => {}
 
 	signInWithEmailAndPassword = ({email, password}: {email: string; password: string}) => {
 		this.init()
@@ -35,11 +47,23 @@ class FirebaseStore {
 			})
 	}
 
-	signUp = ({email, password}: {email: string; password: string}) => {
+	isLoggedIn = () => {
 		this.init()
-		console.log(email, password)
-		this.auth.createUserWithEmailAndPassword(email, password).then((res) => {
-			console.log(res)
+		console.log(this.auth.currentUser?.email)
+	}
+
+	signUp = ({email, password}: {email: string; password: string}) => {
+		// this.init()
+		// console.log(email, password)
+		return new Promise((resolve, reject) => {
+			this.auth
+				.createUserWithEmailAndPassword(email, password)
+				.then((res) => {
+					resolve(true)
+				})
+				.catch((err) => {
+					reject(err)
+				})
 		})
 	}
 }

@@ -44,6 +44,10 @@ export class Store {
 		// } )
 		themeHelper.reviseLoading(this)
 	}
+
+	begin = () => {
+		console.log("beginning")
+	}
 }
 
 const uiManager = new Store()

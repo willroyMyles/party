@@ -25,6 +25,7 @@ import {AppLoading} from "expo"
 import CreateEventView from "./home/views/CreateEventView"
 import FormTest from "./home/views/FormTest"
 import fire from "./dataLayer/Firebase"
+import themeHelper from "./universial/ThemeHelper"
 
 const Stack = createStackNavigator()
 

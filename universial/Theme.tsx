@@ -1,6 +1,7 @@
-import {createGlobalStyle} from "styled-components"
+import styled, {createGlobalStyle} from "styled-components"
 import {generate} from "@ant-design/colors"
 import {Colors} from "react-native-ui-lib"
+import {StyleSheet} from "react-native"
 
 export interface Theme {
 	background: string
@@ -34,18 +35,3 @@ export const darkTheme: Theme = {
 	background: Colors.grey20,
 	bgHilight: "rgba(55,63,65,1)",
 }
-
-// export const GlobalStyles = createGlobalStyle`
-
-//   body {
-//     align-items: center;
-
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     height: 100%;
-//     margin: 0;
-//     padding: 0;
-//     font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-//     transition: all 0.25s linear;
-//   }`
