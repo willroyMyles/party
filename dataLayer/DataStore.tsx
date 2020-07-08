@@ -16,7 +16,7 @@ class Store {
 				element.date = faker.date.future(2, new Date())
 				element.title = faker.company.catchPhrase()
 				element.hint = faker.lorem.sentence(2)
-				element.poster = faker.name.findName()
+				element.person = faker.name.findName()
 				element.about = faker.lorem.paragraphs(1)
 				element.location = faker.address.secondaryAddress()
 				element.reference = faker.random.alphaNumeric(9)
