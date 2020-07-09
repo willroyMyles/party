@@ -30,7 +30,6 @@ class FirebaseStore {
 			app.initializeApp(this.firebaseConfig)
 		}
 		this.auth = app.auth()
-		console.log("inited")
 	}
 
 	doStuff = () => {}
@@ -40,7 +39,7 @@ class FirebaseStore {
 		this.auth
 			.signInWithEmailAndPassword(email, password)
 			.then((res) => {
-				console.log(res)
+				//TODO should redirect
 			})
 			.catch((err) => {
 				console.log("error will robinson", err)
@@ -49,12 +48,9 @@ class FirebaseStore {
 
 	isLoggedIn = () => {
 		this.init()
-		console.log(this.auth.currentUser?.email)
 	}
 
 	signUp = ({email, password}: {email: string; password: string}) => {
-		// this.init()
-		// console.log(email, password)
 		return new Promise((resolve, reject) => {
 			this.auth
 				.createUserWithEmailAndPassword(email, password)

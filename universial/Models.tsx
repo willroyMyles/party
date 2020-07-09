@@ -16,15 +16,18 @@ export enum PartyType {
 }
 
 export interface FeedItemModel {
-	image?: string
+	flyer?: string
+
+	flyerBase64?: string
 	date?: Date
+	description?: string
 	title?: string
 	hint?: string
 	person?: string
-	about?: string
-	location?: string
+	location?: Object
 	reference?: string
-	time?: string
+	start?: string
+	end?: string
 	partyType?: PartyType
 
 	admission?: number

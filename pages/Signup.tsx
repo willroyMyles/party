@@ -29,10 +29,7 @@ const Signup = () => {
 
 	const handleLogin = () => navigation.navigate("login")
 
-	const handleSignUp = (data: any) => {
-		console.log("data")
-		console.log(data)
-	}
+	const handleSignUp = (data: any) => {}
 
 	return (
 		<ScrollView contentContainerStyle={{minHeight: Dimensions.get("screen").height}}>
@@ -57,7 +54,6 @@ const Signup = () => {
 								style={styles.input}
 								onBlur={onBlur}
 								onChangeText={(value) => {
-									console.log(value)
 									onChange(value)
 								}}
 								value={value}

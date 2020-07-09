@@ -25,8 +25,6 @@ const UseMapView = (props: {setValue: () => null}) => {
 			Location.getCurrentPositionAsync({
 				accuracy: Location.Accuracy.Balanced,
 			}).then((res) => {
-				console.log(res)
-
 				let boundingBox = {
 					southWest: {
 						latitude: res.coords.latitude,
@@ -62,7 +60,6 @@ const UseMapView = (props: {setValue: () => null}) => {
 	const getLocationPermission = () => {
 		return new Promise(async (resolve) => {
 			const result = await Location.requestPermissionsAsync()
-			console.log(result)
 		})
 	}
 

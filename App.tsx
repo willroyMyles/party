@@ -27,6 +27,7 @@ import FormTest from "./home/views/FormTest"
 import fire from "./dataLayer/Firebase"
 import themeHelper from "./universial/ThemeHelper"
 import UseMapView from "./home/views/UseMapView"
+import PreviewEventView from "./home/views/PreviewEventView"
 
 const Stack = createStackNavigator()
 
@@ -43,7 +44,6 @@ export default observer(function App(props: any) {
 			Nunito_Regular: require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
 			Nunito_Semi_Bold: require("./assets/fonts/Nunito/Nunito-SemiBold.ttf"),
 		}).then((res) => {
-			console.log(Font.isLoaded("Nunito_Black"))
 			setLoading(false)
 		})
 	}, [])
@@ -79,6 +79,7 @@ export default observer(function App(props: any) {
 								{/* sub pages */}
 								{/* <Stack.Screen options={{headerShown: true}} name="test" component={FormTest} /> */}
 								<Stack.Screen options={{headerShown: true}} name="event" component={EventView} />
+								<Stack.Screen options={{headerShown: true}} name="previewEvent" component={PreviewEventView} />
 								<Stack.Screen
 									options={{headerShown: true, headerTitle: ""}}
 									name="create_event"

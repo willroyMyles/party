@@ -10,6 +10,8 @@ import DateTimePicker from "@react-native-community/datetimepicker"
 import moment from "moment"
 import {eventEmitter, eventStrings} from "../../universial/EventEmitter"
 import {Region} from "react-native-maps"
+import dataProvider from "../../dataLayer/DataStore"
+import {FeedItemModel} from "../../universial/Models"
 
 const CreateEventView = () => {
 	const theme = useTheme()
@@ -19,7 +21,7 @@ const CreateEventView = () => {
 	const [showEnd, setShowEnd] = useState(false)
 	const [showDate, setShowDate] = useState(false)
 	const [imageUri, setImageUri] = useState<any>()
-	const {register, setValue, handleSubmit, setError, errors, control, getValues} = useForm()
+	const {register, setValue, handleSubmit, setError, errors, control, getValues} = useForm<any>()
 	const [startRef, setStartRef] = useState<any>()
 	const [endRef, setendRef] = useState<any>()
 	const [dateRef, setdateRef] = useState<any>()
@@ -59,7 +61,7 @@ const CreateEventView = () => {
 	}
 
 	const submitter = (data: any) => {
-		console.log(data, "data")
+		// console.log(data, "data")
 	}
 
 	const getFlyer = async () => {
@@ -73,10 +75,13 @@ const CreateEventView = () => {
 				exif: true,
 			}).then((res) => {
 				if (!res.cancelled) {
-					console.log(res.exif)
+					console.log(res.uri)
 					setImageUri(res.uri)
 					setImage(res.base64)
-					setValue("flyer", image)
+					setValue("flyer", res.uri)
+					setValue("flyerBase64", image)
+					console.log(getValues("flyer"))
+					console.log(getValues("flyerBase64"))
 				}
 			})
 		}
@@ -132,6 +137,11 @@ const CreateEventView = () => {
 
 	const showMap = () => navigation.navigate("map-view")
 
+	const onPreview = (data: any) => {
+		dataProvider.currentEvent = data
+		navigation.navigate("previewEvent")
+	}
+
 	return (
 		<ScrollView style={{flex: 1}} endFillColor={Colors.primary}>
 			{showStart && (
@@ -139,22 +149,13 @@ const CreateEventView = () => {
 					testID="dateTimePicker"
 					value={new Date()}
 					mode="time"
-					// is24Hour={true}
-					// display="default"
 					onChange={(e, d) => {
 						onStartChange(e, d)
 					}}
 				/>
 			)}
 			{showEnd && (
-				<DateTimePicker
-					testID="dateTimePicker"
-					value={new Date()}
-					mode="time"
-					// is24Hour={true}
-					// display="default"
-					onChange={(e, d) => onEndChange(e, d)}
-				/>
+				<DateTimePicker testID="dateTimePicker" value={new Date()} mode="time" onChange={(e, d) => onEndChange(e, d)} />
 			)}
 
 			{showDate && (
@@ -162,14 +163,20 @@ const CreateEventView = () => {
 					testID="dateTimePicker"
 					value={new Date()}
 					mode="date"
-					// is24Hour={true}
-					// display="default"
 					onChange={(e, d) => onDateChange(e, d)}
 				/>
 			)}
 			<View bg-background padding-10 paddingB-35>
 				<Text imp>Create Event</Text>
+
+				<View row>
+					<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
+						Flyer
+					</Text>
+					{errors.flyer && <ErrorText text={errors.flyer.message || "error"} />}
+				</View>
 				<View marginT-15>
+					<Controller control={control} rules={{required: "flyer is required"}} name="flyer" />
 					<TouchableOpacity onPress={() => getFlyer()}>
 						<Image
 							source={{uri: imageUri}}
@@ -219,14 +226,14 @@ const CreateEventView = () => {
 						<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
 							name of party
 						</Text>
-						{errors.name && <ErrorText text={errors.name.message} />}
+						{errors.title && <ErrorText text={errors.title.message || ""} />}
 					</View>
 					<Controller
 						control={control}
 						render={({onChange, onBlur, value}) => (
 							<TextInput style={style.input} onBlur={onBlur} onChangeText={(value) => onChange(value)} value={value} />
 						)}
-						name="name"
+						name="title"
 						rules={{required: "is required"}}
 						defaultValue=""
 					/>
@@ -236,7 +243,7 @@ const CreateEventView = () => {
 						<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
 							Description
 						</Text>
-						{errors.description && <ErrorText text={errors.description.message} />}
+						{errors.description && <ErrorText text={errors.description.message || ""} />}
 					</View>
 					<Controller
 						control={control}
@@ -328,7 +335,7 @@ const CreateEventView = () => {
 						<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
 							admission of party
 						</Text>
-						{errors.admission && <ErrorText text={errors.admission.message} />}
+						{errors.admission && <ErrorText text={errors.admission.message || ""} />}
 					</View>
 					<Controller
 						control={control}
@@ -348,7 +355,7 @@ const CreateEventView = () => {
 						<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
 							location of party
 						</Text>
-						{errors.location && <ErrorText text={errors.location.message} />}
+						{errors.location && <ErrorText text={errors.location.message || ""} />}
 					</View>
 					<Controller
 						control={control}
@@ -378,7 +385,13 @@ const CreateEventView = () => {
 							Cancel
 						</Text>
 					</Button>
-					<Button bg-primary size="large" borderRadius={2}>
+					<Button
+						onPress={(e: any) => {
+							handleSubmit(onPreview)()
+						}}
+						bg-primary
+						size="large"
+						borderRadius={2}>
 						<Text btn>Preview</Text>
 					</Button>
 					<Button

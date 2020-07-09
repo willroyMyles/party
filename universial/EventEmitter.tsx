@@ -6,4 +6,5 @@ export const eventStrings = {
 	themeChanged: "theme changed enuh pawdi",
 	eventClicked: "event clicked",
 	locationConfirmed: "used when confirmed is pressed to relay location to create pot view",
+	// previewEvent : "used "
 }
