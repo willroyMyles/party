@@ -14,7 +14,7 @@ const EventView = ({preview}: {preview?: boolean}) => {
 	if (event)
 		return (
 			<ScrollView style={{flex: 1, borderWidth: 1}}>
-				<View bg-background>
+				<View bg-background paddingB-20>
 					<Image style={{borderRadius: 6}} source={{uri: event.flyer}} cover />
 					<View padding-10>
 						<View padding-5 center marginV-10>

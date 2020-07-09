@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import {View, Text, TouchableOpacity, Image} from "react-native-ui-lib"
 import {FeedItemModel} from "../universial/Models"
 import moment from "moment"
-import * as faker from "faker"
+// import * as faker from "faker"
 
 const Feed_Item = ({
 	item,
@@ -19,7 +19,7 @@ const Feed_Item = ({
 		<View padding-15 br20 style={{elevation: 0, overflow: "hidden"}}>
 			<View>
 				<View style={{elevation: 10, borderWidth: 0}}>
-					<Image style={{borderRadius: 6}} source={{uri: item.image}} cover />
+					<Image style={{borderRadius: 6}} source={{uri: item.flyer}} cover />
 					<View
 						style={{
 							position: "absolute",

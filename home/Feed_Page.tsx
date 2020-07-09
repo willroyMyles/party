@@ -9,6 +9,7 @@ import {useNavigation} from "@react-navigation/native"
 import Feed_Item from "../components/Feed_Item"
 import {FeedItemModel} from "../universial/Models"
 import {useTheme} from "styled-components"
+import {fake} from "faker"
 
 const Feed_Page = () => {
 	const navigation = useNavigation()
@@ -46,7 +47,7 @@ const Feed_Page = () => {
 						</View>
 					)
 				}}
-				keyExtractor={(item) => item.reference}
+				keyExtractor={(item: FeedItemModel) => item.reference || fakerStatic.random.number(20000000000).toString()}
 			/>
 		)
 	}
