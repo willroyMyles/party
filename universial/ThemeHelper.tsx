@@ -15,7 +15,7 @@ class ThemeHelper {
 		const s = StyleSheet.create({
 			desc: {
 				color: manager.theme.secondary_text,
-				fontSize: 22,
+				fontSize: 18,
 				fontFamily: "Nunito_Regular",
 			},
 			tabs_text: {
@@ -26,14 +26,16 @@ class ThemeHelper {
 			},
 			important: {
 				color: manager.theme.primary_text,
-				fontSize: 35,
-				fontWeight: "200",
+				fontSize: 25,
+				fontWeight: "700",
 				fontFamily: "Nunito_Regular",
 			},
 			check: {
 				color: manager.theme.primary_text,
-				fontSize: 22,
+				fontSize: 18,
 				fontFamily: "Nunito_Regular",
+				fontWeight: "700",
+				opacity: 0.85,
 			},
 			date: {
 				fontSize: 16,
@@ -51,7 +53,7 @@ class ThemeHelper {
 				opacity: 0.85,
 			},
 			hint: {
-				color: manager.theme.primary_text,
+				color: manager.theme.secondary_text,
 				textShadowRadius: 0.1,
 				fontSize: 14,
 				opacity: 0.5,

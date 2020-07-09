@@ -5,6 +5,9 @@ import {FeedItemModel} from "../../universial/Models"
 import {useNavigation} from "@react-navigation/native"
 import UseSmallMapView from "./UseSmallMapView"
 import {ScrollView} from "react-native"
+import moment from "moment"
+import DateBox from "../../components/DateBox"
+import DateAndTimeBox from "../../universial/DateAndTimeBox"
 
 const EventView = ({preview}: {preview?: boolean}) => {
 	const event: FeedItemModel = dataProvider.currentEvent
@@ -23,17 +26,22 @@ const EventView = ({preview}: {preview?: boolean}) => {
 							<Text hint>organizers</Text>
 						</View>
 						<View marginV-10>
-							<Text imp1>{event.title}</Text>
+							<Text imp>{event.title}</Text>
 						</View>
 						<View marginV-10>
-							<Text reg>{event.description}</Text>
-						</View>
-						<View marginV-10>
-							<Text reg>{event.date}</Text>
+							{/* <DateBox date={event.date} shadow /> */}
+							<Text reg>{moment(event.date).format("MMM D, YYYY")}</Text>
 							<Text reg>
 								{event.start} - {event.end}
 							</Text>
+
+							{/* <DateAndTimeBox date={event.date} start={event.start} end={event.end} shadow /> */}
 						</View>
+						<View marginV-20>
+							<Text hint>INFORMATION</Text>
+							<Text reg>{event.description}</Text>
+						</View>
+
 						<View marginV-10>
 							<Text reg>{event.admission}</Text>
 						</View>

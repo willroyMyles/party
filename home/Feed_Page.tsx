@@ -10,6 +10,7 @@ import Feed_Item from "../components/Feed_Item"
 import {FeedItemModel} from "../universial/Models"
 import {useTheme} from "styled-components"
 import {fake} from "faker"
+import Feed_itemV2 from "../components/Feed_itemV2"
 
 const Feed_Page = () => {
 	const navigation = useNavigation()
@@ -36,14 +37,12 @@ const Feed_Page = () => {
 		return (
 			<FlatList
 				onScroll={(e) => {}}
-				// scrollEnabled={false}
-				// contentContainerStyle={{borderWidth: 1, overflow: "visible", flex: 3}}
 				style={{borderWidth: 0, flex: 1}}
 				data={data}
 				renderItem={({item, index}) => {
 					return (
-						<View marginV-5 key={index}>
-							<Feed_Item onClick={handleViewClick} index={index} item={item} />
+						<View key={index}>
+							<Feed_itemV2 onClick={handleViewClick} index={index} item={item} />
 						</View>
 					)
 				}}
@@ -53,7 +52,7 @@ const Feed_Page = () => {
 	}
 
 	return (
-		<View flex bg-background style={{height: "100%", overflow: "scroll"}}>
+		<View flex bg-background>
 			<Listt />
 		</View>
 	)

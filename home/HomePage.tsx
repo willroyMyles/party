@@ -24,7 +24,7 @@ const HomePage = () => {
 	const theme = useTheme()
 
 	return (
-		<SafeAreaView style={{backgroundColor: uiManager.theme.background, flex: 1}}>
+		<View style={{backgroundColor: uiManager.theme.background, flex: 1}}>
 			{index && (
 				<tab.Navigator
 					tabBar={(props) => <CustomTabBar {...props} />}
@@ -51,7 +51,7 @@ const HomePage = () => {
 					{/* <tab.Screen name="settings" component={Settings_Page} /> */}
 				</tab.Navigator>
 			)}
-		</SafeAreaView>
+		</View>
 	)
 }
 

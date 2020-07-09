@@ -37,11 +37,12 @@ const UseSmallMapView = ({loc}: {loc?: any}) => {
 					showsUserLocation={false}
 					loadingEnabled
 					region={region}
+					zoomEnabled
 					onPress={(e) => {
 						// setloc(null)
 						// setMarker(e.nativeEvent.coordinate)
 					}}
-					style={{width: Dimensions.get("screen").width, height: 250}}>
+					style={{width: "100%", height: 250}}>
 					<Marker image={require("../../assets/marker.png")} pinColor="red" coordinate={region}></Marker>
 				</MapView>
 			</View>
