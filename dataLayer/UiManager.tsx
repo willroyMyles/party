@@ -12,6 +12,11 @@ export class Store {
 	@observable themeType = ThemeType.LIGHT
 	@observable theme = lightTheme
 	@observable setting: any = {theme: false}
+	@observable userImageUri = ""
+
+	v = autorun(() => {
+		AsyncStorage.setItem("userImage", this.userImageUri)
+	})
 
 	t = autorun((runner) => {
 		if (this.theme) {

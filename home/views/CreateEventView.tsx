@@ -12,6 +12,8 @@ import {eventEmitter, eventStrings} from "../../universial/EventEmitter"
 import {Region} from "react-native-maps"
 import dataProvider from "../../dataLayer/DataStore"
 import {FeedItemModel} from "../../universial/Models"
+import {getImage} from "../../universial/GetImage"
+import {PermissionResponse} from "expo-location"
 
 const CreateEventView = () => {
 	const theme = useTheme()
@@ -65,26 +67,17 @@ const CreateEventView = () => {
 	}
 
 	const getFlyer = async () => {
-		let result = await getPhotopermission()
-		if (result) {
-			ImagePicker.launchImageLibraryAsync({
-				quality: 0.5,
-				mediaTypes: ImagePicker.MediaTypeOptions.Images,
-				aspect: [3, 4],
-				base64: true,
-				exif: true,
-			}).then((res) => {
-				if (!res.cancelled) {
-					console.log(res.uri)
-					setImageUri(res.uri)
-					setImage(res.base64)
-					setValue("flyer", res.uri)
-					setValue("flyerBase64", image)
-					console.log(getValues("flyer"))
-					console.log(getValues("flyerBase64"))
-				}
-			})
-		}
+		getImage().then((res: any) => {
+			if (!res.cancelled) {
+				console.log(res.uri)
+				setImageUri(res.uri)
+				setImage(res.base64)
+				setValue("flyer", res.uri)
+				setValue("flyerBase64", image)
+				console.log(getValues("flyer"))
+				console.log(getValues("flyerBase64"))
+			}
+		})
 	}
 
 	const getPhotopermission = async () => {
