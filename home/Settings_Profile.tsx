@@ -1,25 +1,25 @@
 import React, {useState} from "react"
-import {View, Text, Button, Avatar, TouchableOpacity} from "react-native-ui-lib"
+import {View, Text, Button, Avatar, TouchableOpacity, FloatingButton, Colors} from "react-native-ui-lib"
 import ThemeSwitcher from "../universial/ThemeSwitcher"
 import Row from "../components/Row"
 import uiManager from "../dataLayer/UiManager"
 import {useTheme} from "styled-components"
 import {getImage} from "../universial/GetImage"
-export const Settings_Profile = () => {
+import Icon from "react-native-vector-icons/Feather"
+import {observer} from "mobx-react"
+export const Settings_Profile = observer(() => {
 	const theme = useTheme()
-	const [imageUri, setimageUri] = useState()
 
 	const changeUserImage = () => {
 		getImage(0.2).then((res: any) => {
 			if (!res.cancelled) {
 				console.log(res.uri)
-				setimageUri(res.uri)
 				uiManager.userImageUri = res.uri
 			}
 		})
 	}
 	return (
-		<View>
+		<View flex>
 			{/* <Text imp1 marginV-35 marginB-10>
 				Profile
 			</Text> */}
@@ -27,7 +27,7 @@ export const Settings_Profile = () => {
 				<TouchableOpacity
 					onPress={() => changeUserImage()}
 					style={{borderWidth: 1, borderColor: uiManager.theme.secondary_text, borderRadius: 100, elevation: 10}}>
-					<Avatar label="user" source={{uri: imageUri}} size={82} />
+					<Avatar label="user" source={{uri: uiManager.userImageUri}} size={82} />
 				</TouchableOpacity>
 				<Text imp1 marginT-5>
 					name
@@ -49,8 +49,45 @@ export const Settings_Profile = () => {
 					<Text>clear</Text>
 				</Button>
 			</Row>
+			<TouchableOpacity
+				activeOpacity={0.8}
+				marginB-10
+				marginR-10
+				br100
+				padding-25
+				style={{
+					position: "absolute",
+					right: 10,
+					bottom: 10,
+					height: 35,
+					width: 35,
+					backgroundColor: Colors.primary,
+					justifyContent: "center",
+					alignItems: "center",
+					overflow: "visible",
+					elevation: 5,
+				}}>
+				<Icon
+					name="plus"
+					size={30}
+					color={uiManager.theme.background}
+					style={{
+						position: "absolute",
+						alignSelf: "center",
+						justifyContent: "center",
+					}}
+				/>
+				<Text
+					hint
+					style={{
+						position: "absolute",
+						top: 50,
+					}}>
+					create event
+				</Text>
+			</TouchableOpacity>
 		</View>
 	)
-}
+})
 
 export default Settings_Profile

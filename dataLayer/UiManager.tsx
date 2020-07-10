@@ -14,8 +14,15 @@ export class Store {
 	@observable setting: any = {theme: false}
 	@observable userImageUri = ""
 
-	v = autorun(() => {
-		AsyncStorage.setItem("userImage", this.userImageUri)
+	v = autorun(async () => {
+		if (this.userImageUri == "") {
+			const img = await AsyncStorage.getItem("userImage")
+			this.userImageUri = img || ""
+			console.log("image absent", img)
+		} else {
+			AsyncStorage.setItem("userImage", this.userImageUri)
+			console.log("image present")
+		}
 	})
 
 	t = autorun((runner) => {
