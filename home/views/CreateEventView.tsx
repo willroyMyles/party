@@ -69,13 +69,10 @@ const CreateEventView = () => {
 	const getFlyer = async () => {
 		getImage().then((res: any) => {
 			if (!res.cancelled) {
-				console.log(res.uri)
 				setImageUri(res.uri)
 				setImage(res.base64)
 				setValue("flyer", res.uri)
 				setValue("flyerBase64", image)
-				console.log(getValues("flyer"))
-				console.log(getValues("flyerBase64"))
 			}
 		})
 	}

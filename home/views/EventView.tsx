@@ -13,7 +13,6 @@ const EventView = ({preview}: {preview?: boolean}) => {
 	const event: FeedItemModel = dataProvider.currentEvent
 	const navigation = useNavigation()
 
-	console.log(event)
 	if (event)
 		return (
 			<ScrollView style={{flex: 1, borderWidth: 1}}>

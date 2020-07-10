@@ -1,18 +1,20 @@
 import React, {useState} from "react"
 import {View, Text, Button} from "react-native-ui-lib"
 import {useTheme} from "styled-components"
-import MapView, {Marker} from "react-native-maps"
+import MapView, {Marker, LatLng} from "react-native-maps"
 import {Dimensions, StyleSheet} from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome"
 import * as Location from "expo-location"
 import {eventEmitter, eventStrings} from "../../universial/EventEmitter"
 import {useNavigation} from "@react-navigation/native"
+import axios from "axios"
 
 const UseMapView = (props: {setValue: () => null}) => {
 	const theme = useTheme()
 	const navigation = useNavigation()
 	const [marker, setMarker] = useState<any>(null)
 	const [loc, setloc] = useState<any>(undefined)
+	const [scrollEnabled, setScrollEnabled] = useState(true)
 
 	const useLocation = async () => {
 		const perm = await Location.getPermissionsAsync()
@@ -57,6 +59,35 @@ const UseMapView = (props: {setValue: () => null}) => {
 		}
 	}
 
+	const setLocLocation = (coor: LatLng) => {
+		const {width, height} = Dimensions.get("window")
+		const ASPECT_RATIO = width / height
+
+		const northeastLat = coor.latitude + 0.03 // for scale
+		const southwestLat = coor.latitude
+		const latDelta = northeastLat - southwestLat
+		const lngDelta = latDelta * ASPECT_RATIO
+
+		let region = {
+			latitude: coor.latitude,
+			longitude: coor.longitude,
+			latitudeDelta: latDelta,
+			longitudeDelta: lngDelta,
+		}
+
+		setloc(region)
+		setMarker(coor)
+
+		const lat = coor.latitude
+		const lon = coor.longitude
+
+		// const url = `maps.googleapis.com/maps/api/geocode/json?&location=${lat},${lon}`
+		console.log(lat, lon)
+		// axios.get(url).then((res) => {
+		// 	console.log(res, "called")
+		// })
+	}
+
 	const getLocationPermission = () => {
 		return new Promise(async (resolve) => {
 			const result = await Location.requestPermissionsAsync()
@@ -75,12 +106,25 @@ const UseMapView = (props: {setValue: () => null}) => {
 					showsUserLocation
 					region={loc}
 					onPress={(e) => {
-						setloc(null)
-						setMarker(e.nativeEvent.coordinate)
+						setLocLocation(e.nativeEvent.coordinate)
+					}}
+					onPoiClick={(e) => {
+						console.log(e)
 					}}
 					style={{width: Dimensions.get("screen").width, height: "100%"}}>
 					{marker && (
-						<Marker image={require("../../assets/marker.png")} pinColor="red" coordinate={marker}>
+						<Marker
+							draggable
+							onPress={(e) => setScrollEnabled(false)}
+							image={require("../../assets/marker.png")}
+							pinColor="red"
+							onDragEnd={(e) => {
+								setScrollEnabled(true)
+								setMarker(e.nativeEvent.coordinate)
+							}}
+							// title="Party"
+							// description="wildest party ever"
+							coordinate={marker}>
 							{/* <View style={{padding: 10, marginTop: -20, overflow: "visible"}}>
 								<Text>SF</Text>
 							</View> */}

@@ -5,9 +5,7 @@ import {useForm, Controller} from "react-hook-form"
 const FormTest = () => {
 	const {register, setValue, handleSubmit, setError, errors, control, getValues} = useForm()
 
-	const onSubmit = (data: any) => {
-		console.log(data)
-	}
+	const onSubmit = (data: any) => {}
 
 	return (
 		<View>

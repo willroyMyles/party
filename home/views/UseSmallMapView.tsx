@@ -38,6 +38,12 @@ const UseSmallMapView = ({loc}: {loc?: any}) => {
 					loadingEnabled
 					region={region}
 					zoomEnabled
+					toolbarEnabled
+					onPoiClick={(e) => {
+						console.log("clicked")
+
+						console.log(e)
+					}}
 					onPress={(e) => {
 						// setloc(null)
 						// setMarker(e.nativeEvent.coordinate)
