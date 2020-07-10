@@ -1,13 +1,14 @@
 import React, {useState} from "react"
-import {View, Text, Button} from "react-native-ui-lib"
+import {View, Text, Button, TouchableOpacity} from "react-native-ui-lib"
 import {useTheme} from "styled-components"
 import MapView, {Marker, LatLng} from "react-native-maps"
-import {Dimensions, StyleSheet} from "react-native"
+import {Dimensions, StyleSheet, TextInput} from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome"
 import * as Location from "expo-location"
 import {eventEmitter, eventStrings} from "../../universial/EventEmitter"
 import {useNavigation} from "@react-navigation/native"
 import axios from "axios"
+import themeHelper from "../../universial/ThemeHelper"
 
 const UseMapView = (props: {setValue: () => null}) => {
 	const theme = useTheme()
@@ -82,7 +83,7 @@ const UseMapView = (props: {setValue: () => null}) => {
 		const lon = coor.longitude
 
 		// const url = `maps.googleapis.com/maps/api/geocode/json?&location=${lat},${lon}`
-		console.log(lat, lon)
+		// console.log(lat, lon)
 		// axios.get(url).then((res) => {
 		// 	console.log(res, "called")
 		// })
@@ -131,6 +132,20 @@ const UseMapView = (props: {setValue: () => null}) => {
 						</Marker>
 					)}
 				</MapView>
+				<View
+					style={{
+						position: "absolute",
+						top: 25,
+						width: "100%",
+						padding: 5,
+						flexDirection: "row",
+						borderWidth: 1,
+					}}>
+					<TouchableOpacity br100 marginR-10 style={{backgroundColor: "red"}}>
+						<Icon name="arrow-left" size={30} style={{backgroundColor: "green"}} />
+					</TouchableOpacity>
+					<TextInput style={[themeHelper.styles.input, {flex: 1}]} />
+				</View>
 			</View>
 			<View row marginV-35 style={{justifyContent: "space-around", position: "absolute", width: "100%", bottom: 5}}>
 				<Button style={styles.btn} onPress={() => useLocation()} bg-primary size="large" borderRadius={2}>

@@ -5,7 +5,7 @@ import {Dimensions} from "react-native"
 import {LocationData} from "expo-location"
 
 const UseSmallMapView = ({loc}: {loc?: any}) => {
-	if (!loc) return <div></div>
+	if (!loc) return <View></View>
 
 	const gong = String(loc).split(",")
 	const latitude = Number.parseFloat(gong[0])
@@ -26,11 +26,7 @@ const UseSmallMapView = ({loc}: {loc?: any}) => {
 		longitudeDelta: lngDelta,
 	}
 	return (
-		<View
-			onLayout={(ev) => {
-				console.log(ev)
-			}}
-			bg-background>
+		<View bg-background>
 			<View>
 				<MapView
 					scrollEnabled={false}
@@ -39,11 +35,7 @@ const UseSmallMapView = ({loc}: {loc?: any}) => {
 					region={region}
 					zoomEnabled
 					toolbarEnabled
-					onPoiClick={(e) => {
-						console.log("clicked")
-
-						console.log(e)
-					}}
+					onPoiClick={(e) => {}}
 					onPress={(e) => {
 						// setloc(null)
 						// setMarker(e.nativeEvent.coordinate)

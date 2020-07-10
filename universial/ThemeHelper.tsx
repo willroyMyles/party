@@ -76,6 +76,22 @@ class ThemeHelper {
 			btn: s.btn_text,
 		})
 	}
+
+	styles = StyleSheet.create({
+		input: {
+			borderWidth: 1,
+			// borderColor: "rgba(0,0,0,.3)",
+			borderColor: Colors.primary,
+			backgroundColor: Colors.backgroundHighlight,
+			marginBottom: 35,
+			marginTop: 7,
+			borderRadius: 4,
+			padding: 9,
+			elevation: 0,
+			color: Colors.textColor,
+			fontFamily: "Nunito_Semi_Bold",
+		},
+	})
 }
 
 const themeHelper = new ThemeHelper()

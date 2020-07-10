@@ -2,7 +2,7 @@ import React from "react"
 import {View, Card, Image, Avatar, Text, TouchableOpacity, Button, Colors} from "react-native-ui-lib"
 import dataProvider from "../../dataLayer/DataStore"
 import {FeedItemModel} from "../../universial/Models"
-import {useNavigation} from "@react-navigation/native"
+import {useNavigation, useRoute} from "@react-navigation/native"
 import UseSmallMapView from "./UseSmallMapView"
 import {ScrollView} from "react-native"
 import moment from "moment"
@@ -10,42 +10,42 @@ import DateBox from "../../components/DateBox"
 import DateAndTimeBox from "../../universial/DateAndTimeBox"
 
 const EventView = ({preview}: {preview?: boolean}) => {
-	const event: FeedItemModel = dataProvider.currentEvent
-	const navigation = useNavigation()
+	const route = useRoute()
+	const e: FeedItemModel | undefined = route.params
 
-	if (event)
+	if (e)
 		return (
 			<ScrollView style={{flex: 1, borderWidth: 1}}>
 				<View bg-background paddingB-20>
-					<Image style={{borderRadius: 6}} source={{uri: event.flyer}} cover />
+					<Image style={{borderRadius: 6}} source={{uri: e.flyer}} cover />
 					<View padding-10>
 						<View padding-5 center marginV-10>
-							<Avatar backgroundColor={Colors.grey40} label={event.person} />
+							<Avatar backgroundColor={Colors.grey40} label={e.person} />
 							<View paddingL-10 />
 							<Text hint>organizers</Text>
 						</View>
 						<View marginV-10>
-							<Text imp>{event.title}</Text>
+							<Text imp>{e.title}</Text>
 						</View>
 						<View marginV-10>
-							{/* <DateBox date={event.date} shadow /> */}
-							<Text reg>{moment(event.date).format("MMM D, YYYY")}</Text>
+							{/* <DateBox date={e.date} shadow /> */}
+							<Text reg>{moment(e.date).format("MMM D, YYYY")}</Text>
 							<Text reg>
-								{event.start} - {event.end}
+								{e.start} - {e.end}
 							</Text>
 
-							{/* <DateAndTimeBox date={event.date} start={event.start} end={event.end} shadow /> */}
+							{/* <DateAndTimeBox date={e.date} start={e.start} end={e.end} shadow /> */}
 						</View>
 						<View marginV-20>
 							<Text hint>INFORMATION</Text>
-							<Text reg>{event.description}</Text>
+							<Text reg>{e.description}</Text>
 						</View>
 
 						<View marginV-10>
-							<Text reg>{event.admission}</Text>
+							<Text reg>{e.admission}</Text>
 						</View>
 						<View marginV-10>
-							<UseSmallMapView loc={event.location} />
+							<UseSmallMapView loc={e.location} />
 						</View>
 					</View>
 				</View>
@@ -62,7 +62,7 @@ const EventView = ({preview}: {preview?: boolean}) => {
 			</ScrollView>
 		)
 	else {
-		return <div></div>
+		return <View></View>
 	}
 }
 

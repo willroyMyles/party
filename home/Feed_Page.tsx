@@ -28,7 +28,7 @@ const Feed_Page = () => {
 
 	const handleViewClick = (item: FeedItemModel) => {
 		dataProvider.currentEvent = item
-		navigation.navigate("event")
+		navigation.navigate("event", item)
 	}
 
 	const theme: any = useTheme()

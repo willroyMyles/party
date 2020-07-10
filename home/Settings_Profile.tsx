@@ -32,7 +32,6 @@ export const Settings_Profile = observer(() => {
 	const changeUserImage = () => {
 		getImage(0.2).then((res: any) => {
 			if (!res.cancelled) {
-				console.log(res.uri)
 				uiManager.userImageUri = res.uri
 			}
 		})

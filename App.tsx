@@ -85,7 +85,7 @@ export default observer(function App(props: any) {
 									name="create_event"
 									component={CreateEventView}
 								/>
-								<Stack.Screen options={{headerShown: true, headerTitle: ""}} name="map-view" component={UseMapView} />
+								<Stack.Screen name="map-view" component={UseMapView} />
 
 								<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />
 								<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />

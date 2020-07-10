@@ -36,19 +36,11 @@ const Category_Page = () => {
 
 		const arr: Array<Object> = []
 		const newMap = [...map]
-		// console.log(newMap)
-
-		// newMap.forEach((value, index) => {
-		// 	obj.title = value[0]
-		// 	obj.data1 = value[1]
-		// 	arr.push(obj)
-		// })
 
 		newMap.forEach(async (value: [string, FeedItemModel[]], index) => {
 			obj.title = value[0]
 			obj.data = value[1]
 			arr[index] = {title: value[0], data: value[1]}
-			// console.log(obj)
 		})
 
 		setdata(arr)

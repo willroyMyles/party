@@ -90,9 +90,7 @@ const CreateEventView = () => {
 						[
 							{
 								text: "ok",
-								onPress: () => {
-									console.log("pressed")
-								},
+								onPress: () => {},
 								style: "default",
 							},
 						],

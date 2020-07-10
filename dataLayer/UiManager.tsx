@@ -23,7 +23,6 @@ export class Store {
 			return
 		} else {
 			AsyncStorage.setItem("userImage", this.userImageUri)
-			console.log("image present")
 			return
 		}
 	})
