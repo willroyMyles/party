@@ -40,11 +40,13 @@
 		"react-native-safe-area-context": "0.7.3",
 		"react-native-safe-area-view": "^1.1.1",
 		"react-native-screens": "~2.2.0",
+		"react-native-shared-element": "^0.7.0",
 		"react-native-svg": "^11.0.1",
 		"react-native-tab-view": "^2.14.4",
 		"react-native-ui-lib": "^5.9.3",
 		"react-native-vector-icons": "^6.6.0",
 		"react-native-web": "~0.11.7",
+		"react-navigation-shared-element": "^5.0.0-alpha0",
 		"styled-components": "^5.1.1",
 		"webfontloader": "^1.6.28"
 	},

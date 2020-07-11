@@ -4,8 +4,10 @@ import {FeedItemModel} from "../universial/Models"
 import {Dimensions} from "react-native"
 import moment from "moment"
 import uiManager from "../dataLayer/UiManager"
+import {SharedElement} from "react-navigation-shared-element"
 
 const {width, height} = Dimensions.get("screen")
+console.log(width / height)
 
 const Feed_itemV2 = ({
 	item,
@@ -33,17 +35,22 @@ const Feed_itemV2 = ({
 				marginV-8
 				style={{borderWidth: 0, borderRadius: 10, elevation: 10, borderTopWidth: 0}}>
 				<View row>
-					<Image
-						source={{uri: item.flyer}}
-						style={{flex: 1, flexDirection: "row", borderRadius: 10}}
-						height={height * 0.125}
-					/>
+					<SharedElement id={item.reference + "img"} style={{flex: 1}}>
+						<Image
+							source={{uri: item.flyer}}
+							style={{flex: 1, flexDirection: "row", borderRadius: 10}}
+							// height={height * 0.125}
+							aspectRatio={1.33}
+						/>
+					</SharedElement>
 					<View
 						padding-20
 						paddingT-3
 						paddingB-12
 						style={{flex: 2, flexDirection: "column", justifyContent: "space-between"}}>
-						<Text imp1>{item.title}</Text>
+						<SharedElement id={item.reference + "title"}>
+							<Text imp1>{item.title}</Text>
+						</SharedElement>
 						<View marginT-10 row style={{justifyContent: "flex-start"}}>
 							<View>
 								<Text hint>Date</Text>

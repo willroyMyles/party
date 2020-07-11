@@ -8,6 +8,7 @@ import {ScrollView} from "react-native"
 import moment from "moment"
 import DateBox from "../../components/DateBox"
 import DateAndTimeBox from "../../universial/DateAndTimeBox"
+import {SharedElement} from "react-navigation-shared-element"
 
 const EventView = ({preview}: {preview?: boolean}) => {
 	const route = useRoute()
@@ -17,7 +18,9 @@ const EventView = ({preview}: {preview?: boolean}) => {
 		return (
 			<ScrollView style={{flex: 1, borderWidth: 1}}>
 				<View bg-background paddingB-20>
-					<Image style={{borderRadius: 6}} source={{uri: e.flyer}} cover />
+					<SharedElement id={e.reference + "img"}>
+						<Image style={{borderRadius: 6, height: 330}} source={{uri: e.flyer}} aspectRatio={1.33} />
+					</SharedElement>
 					<View padding-10>
 						<View padding-5 center marginV-10>
 							<Avatar backgroundColor={Colors.grey40} label={e.person} />
@@ -25,7 +28,9 @@ const EventView = ({preview}: {preview?: boolean}) => {
 							<Text hint>organizers</Text>
 						</View>
 						<View marginV-10>
-							<Text imp>{e.title}</Text>
+							<SharedElement id={e.reference + "title"}>
+								<Text imp>{e.title}</Text>
+							</SharedElement>
 						</View>
 						<View marginV-10>
 							{/* <DateBox date={e.date} shadow /> */}
