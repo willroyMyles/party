@@ -19,6 +19,8 @@ import {createStackNavigator} from "@react-navigation/stack"
 import {observer} from "mobx-react"
 import {createSharedElementStackNavigator} from "react-navigation-shared-element"
 import {FeedItemModel} from "../universial/Models"
+import dataProvider from "../dataLayer/DataStore"
+import HomePageV2 from "../home/HomePageV2"
 // const Stack = createStackNavigator()
 const Stack = createSharedElementStackNavigator()
 
@@ -39,6 +41,19 @@ export const Navigator = observer(() => {
 					}}
 					name="home"
 					component={HomePage}
+					// sharedElementsConfig={(route, otherRoute, showing) => {
+					// 	const item: FeedItemModel = dataProvider.currentEvent
+					// 	const img = item.reference + "img"
+					// 	const tit = item.reference + "title"
+					// 	if (showing) {
+					// 		return [
+					// 			{id: img, animation: "fade", resize: "stretch"},
+					// 			{id: tit, animation: "fade"},
+					// 		]
+					// 	} else {
+					// 		return []
+					// 	}
+					// }}
 				/>
 				<Stack.Screen name="accounts" component={AccountPage} />
 				<Stack.Screen name="login" component={LoginPage} />
@@ -47,20 +62,7 @@ export const Navigator = observer(() => {
 
 				{/* sub pages */}
 				{/* <Stack.Screen options={{headerShown: true}} name="test" component={FormTest} /> */}
-				<Stack.Screen
-					options={{headerShown: false}}
-					name="event"
-					component={EventView}
-					sharedElementsConfig={(route, otherRoute, showing) => {
-						const item: FeedItemModel = route.params
-						const img = item.reference + "img"
-						const tit = item.reference + "title"
-						return [
-							{id: img, animation: "fade"},
-							{id: tit, animation: "fade"},
-						]
-					}}
-				/>
+				<Stack.Screen options={{headerShown: false}} name="event" component={EventView} />
 				<Stack.Screen options={{headerShown: true}} name="previewEvent" component={PreviewEventView} />
 				<Stack.Screen options={{headerShown: true, headerTitle: ""}} name="create_event" component={CreateEventView} />
 				<Stack.Screen name="map-view" component={UseMapView} />

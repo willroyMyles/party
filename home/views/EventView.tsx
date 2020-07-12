@@ -8,11 +8,11 @@ import {ScrollView} from "react-native"
 import moment from "moment"
 import DateBox from "../../components/DateBox"
 import DateAndTimeBox from "../../universial/DateAndTimeBox"
-import {SharedElement} from "react-navigation-shared-element"
+import {SharedElement, SharedElementsComponentConfig} from "react-navigation-shared-element"
 
 const EventView = ({preview}: {preview?: boolean}) => {
-	const route = useRoute()
-	const e: FeedItemModel | undefined = route.params
+	// const route = useRoute()
+	const e: FeedItemModel | undefined = dataProvider.currentEvent
 
 	if (e)
 		return (
@@ -71,4 +71,13 @@ const EventView = ({preview}: {preview?: boolean}) => {
 	}
 }
 
+EventView.sharedElements = (route: any, otherRoute: any, showing: any) => {
+	const item: FeedItemModel = dataProvider.currentEvent
+	const img = item.reference + "img"
+	const tit = item.reference + "title"
+	return [
+		{id: img, animation: "move"},
+		{id: tit, animation: "fade"},
+	]
+}
 export default EventView

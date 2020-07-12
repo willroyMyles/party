@@ -5,6 +5,8 @@ import {Dimensions} from "react-native"
 import moment from "moment"
 import uiManager from "../dataLayer/UiManager"
 import {SharedElement} from "react-navigation-shared-element"
+import {useNavigation} from "@react-navigation/native"
+import dataProvider from "../dataLayer/DataStore"
 
 const {width, height} = Dimensions.get("screen")
 console.log(width / height)
@@ -12,12 +14,18 @@ console.log(width / height)
 const Feed_itemV2 = ({
 	item,
 	index,
-	onClick,
-}: {
+}: // onClick,
+{
 	item: FeedItemModel
 	index: number
-	onClick: (item: FeedItemModel) => void
+	onClick?: (item: FeedItemModel) => void
 }) => {
+	const navigation = useNavigation()
+	const onClick1 = () => {
+		dataProvider.currentEvent = item
+		navigation.navigate("event")
+	}
+
 	return (
 		<View
 			style={{
@@ -28,7 +36,7 @@ const Feed_itemV2 = ({
 				borderColor: uiManager.theme.bgHilight,
 			}}>
 			<TouchableOpacity
-				onPress={() => onClick(item)}
+				onPress={() => onClick1()}
 				activeOpacity={0.85}
 				padding-9
 				bg-background
@@ -40,7 +48,7 @@ const Feed_itemV2 = ({
 							source={{uri: item.flyer}}
 							style={{flex: 1, flexDirection: "row", borderRadius: 10}}
 							// height={height * 0.125}
-							aspectRatio={1.33}
+							// aspectRatio={1.33}
 						/>
 					</SharedElement>
 					<View
