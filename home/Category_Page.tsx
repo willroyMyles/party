@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {View, Text} from "react-native-ui-lib"
+import {View, Text, TouchableOpacity, Colors} from "react-native-ui-lib"
 import {Dimensions, SectionList} from "react-native"
 import {useTheme} from "styled-components"
 import {FeedItemModel, PartyType} from "../universial/Models"
@@ -8,10 +8,14 @@ import {useNavigation} from "@react-navigation/native"
 import dataProvider from "../dataLayer/DataStore"
 import * as faker from "faker"
 import {eventEmitter, eventStrings} from "../universial/EventEmitter"
+import Feed_itemV2 from "../components/Feed_itemV2"
+import uiManager from "../dataLayer/UiManager"
 
 const Category_Page = () => {
 	const navigation = useNavigation()
 	const [data, setdata] = useState<any[]>()
+	console.log("inview")
+
 	useEffect(() => {
 		// setdata(dataProvider.data)
 		const d: any = []
@@ -53,30 +57,44 @@ const Category_Page = () => {
 
 	const theme: any = useTheme()
 
-	const Listt = () => {
-		return (
+	return (
+		<View bg-background style={{borderWidth: 0}}>
 			<SectionList
 				onScroll={(e) => {}}
-				// scrollEnabled={false}
-				// contentContainerStyle={{borderWidth: 1, overflow: "visible", flex: 3}}
-				style={{borderWidth: 0, flex: 1}}
-				sections={data}
+				// style={{borderWidth: 5}}
+				sections={data || []}
 				renderItem={({item, index}) => {
 					return (
 						<View marginV-5 key={index}>
-							<Feed_Item onClick={handleViewClick} index={index} item={item} />
+							<Feed_itemV2 onClick={handleViewClick} index={index} item={item} />
 						</View>
 					)
 				}}
-				renderSectionHeader={({section: {title}}) => <Text imp1>{title}</Text>}
+				renderSectionHeader={({section: {title}}) => (
+					<View
+						row
+						paddingH-15
+						paddingV-15
+						marginB-15
+						marginT-35
+						style={{
+							justifyContent: "space-between",
+							backgroundColor: uiManager.theme.bgHilight,
+							// elevation: 2,
+							// borderBottomWidth: 2,
+							// borderTopWidth: 2,
+							borderColor: Colors.grey50,
+						}}>
+						<Text imp1 color={Colors.primary}>
+							{title}
+						</Text>
+						<TouchableOpacity>
+							<Text imp1> view all</Text>
+						</TouchableOpacity>
+					</View>
+				)}
 				keyExtractor={(item: FeedItemModel) => item.reference || faker.random.number(20000000000).toString()}
 			/>
-		)
-	}
-
-	return (
-		<View flex bg-background style={{height: "100%", overflow: "scroll"}}>
-			<Listt />
 		</View>
 	)
 }

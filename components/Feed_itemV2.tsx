@@ -1,5 +1,5 @@
 import React from "react"
-import {View, Text, Image, TouchableOpacity} from "react-native-ui-lib"
+import {View, Text, Image, TouchableOpacity, Colors} from "react-native-ui-lib"
 import {FeedItemModel} from "../universial/Models"
 import {Dimensions} from "react-native"
 import moment from "moment"
@@ -41,7 +41,7 @@ const Feed_itemV2 = ({
 				padding-9
 				bg-background
 				marginV-8
-				style={{borderWidth: 0, borderRadius: 10, elevation: 10, borderTopWidth: 0}}>
+				style={{borderWidth: 0, borderRadius: 10, elevation: 5, borderColor: Colors.grey50}}>
 				<View row>
 					<SharedElement id={item.reference + "img"} style={{flex: 1}}>
 						<Image

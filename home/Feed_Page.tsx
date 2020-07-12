@@ -33,11 +33,11 @@ const Feed_Page = () => {
 
 	const theme: any = useTheme()
 
-	const Listt = () => {
-		return (
+	return (
+		<View bg-background>
 			<FlatList
 				onScroll={(e) => {}}
-				style={{borderWidth: 0, flex: 1}}
+				// style={{borderWidth: 0, flex: 1}}
 				data={data}
 				renderItem={({item, index}) => {
 					return (
@@ -48,12 +48,6 @@ const Feed_Page = () => {
 				}}
 				keyExtractor={(item: FeedItemModel) => item.reference || fakerStatic.random.number(20000000000).toString()}
 			/>
-		)
-	}
-
-	return (
-		<View flex bg-background>
-			<Listt />
 		</View>
 	)
 }

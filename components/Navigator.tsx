@@ -21,6 +21,7 @@ import {createSharedElementStackNavigator} from "react-navigation-shared-element
 import {FeedItemModel} from "../universial/Models"
 import dataProvider from "../dataLayer/DataStore"
 import HomePageV2 from "../home/HomePageV2"
+import HomePageV3 from "../home/HomePageV3"
 // const Stack = createStackNavigator()
 const Stack = createSharedElementStackNavigator()
 
@@ -40,20 +41,7 @@ export const Navigator = observer(() => {
 						headerRight: (props) => <Leftheader {...props} />,
 					}}
 					name="home"
-					component={HomePage}
-					// sharedElementsConfig={(route, otherRoute, showing) => {
-					// 	const item: FeedItemModel = dataProvider.currentEvent
-					// 	const img = item.reference + "img"
-					// 	const tit = item.reference + "title"
-					// 	if (showing) {
-					// 		return [
-					// 			{id: img, animation: "fade", resize: "stretch"},
-					// 			{id: tit, animation: "fade"},
-					// 		]
-					// 	} else {
-					// 		return []
-					// 	}
-					// }}
+					component={HomePageV3}
 				/>
 				<Stack.Screen name="accounts" component={AccountPage} />
 				<Stack.Screen name="login" component={LoginPage} />
