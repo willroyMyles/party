@@ -1,13 +1,15 @@
-import React from "react"
-import {View, Text, TextField, Button, TouchableOpacity, Colors} from "react-native-ui-lib"
+import React, {useState} from "react"
+import {View, Text, TextField, Button, TouchableOpacity, Colors, Toast} from "react-native-ui-lib"
 import {Link, useNavigation} from "@react-navigation/native"
 import {useForm, Controller} from "react-hook-form"
 import Fire from "../dataLayer/Firebase"
 import {TextInput, StyleSheet} from "react-native"
 import SkipButton from "../components/SkipButton"
+import fireSotreMob from "../dataLayer/FireStore"
 
 const LoginPage = () => {
 	const navigation = useNavigation()
+	const [toastVisible, setToastVisible] = useState(false)
 
 	const handleSignup = () => {
 		navigation.navigate("signup")
@@ -15,9 +17,15 @@ const LoginPage = () => {
 
 	const {handleSubmit, errors, control} = useForm()
 
-	const onSubmit = (data: any) => {
-		// Fire.signInWithEmailAndPassword(data)
-		Fire.isLoggedIn()
+	const onSubmit = (data: {email: string; password: string}) => {
+		// console.log(data.email, data.password)
+
+		fireSotreMob.signIn(data).then((res) => {
+			if (res) {
+			} else {
+				setToastVisible(true)
+			}
+		})
 	}
 
 	const styles = StyleSheet.create({
@@ -108,6 +116,13 @@ const LoginPage = () => {
 				</View>
 				<SkipButton where="home" />
 			</View>
+			<Toast
+				position="top"
+				visible={toastVisible}
+				autoDismiss={3000}
+				message={"Incorrect email or password"}
+				onDismiss={() => setToastVisible(false)}
+			/>
 		</View>
 	)
 }

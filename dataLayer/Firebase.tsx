@@ -35,15 +35,18 @@ class FirebaseStore {
 	doStuff = () => {}
 
 	signInWithEmailAndPassword = ({email, password}: {email: string; password: string}) => {
-		this.init()
-		this.auth
-			.signInWithEmailAndPassword(email, password)
-			.then((res) => {
-				//TODO should redirect
-			})
-			.catch((err) => {
-				console.log("error will robinson", err)
-			})
+		return new Promise((resolve, reject) => {
+			this.init()
+			this.auth
+				.signInWithEmailAndPassword(email, password)
+				.then((res) => {
+					//TODO should redirect
+				})
+				.catch((err) => {
+					console.log("error will robinson", err)
+					reject(err)
+				})
+		})
 	}
 
 	isLoggedIn = () => {

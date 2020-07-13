@@ -5,9 +5,11 @@ import {TouchableOpacity, Colors} from "react-native-ui-lib"
 import Icon from "react-native-vector-icons/Feather"
 import {useTheme} from "styled-components"
 
-const ViewPagerTabBar = ({names}: {names: any[]}) => {
+const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Value<number>}) => {
 	const [idx, setIdx] = useState(0)
 	const theme = useTheme()
+	// console.log(position)
+
 	return (
 		<View
 			style={{
@@ -21,11 +23,18 @@ const ViewPagerTabBar = ({names}: {names: any[]}) => {
 				const {name, iconName, press} = obj
 				const isFocused = idx === index
 
+				// const inputRange = names.map((_: any, i: number) => i)
+				// const opacity = Animated.interpolate(position, {
+				// 	inputRange,
+				// 	outputRange: inputRange.map((i: number) => (i === index ? 1 : 0.35)),
+				// })
+
 				return (
+					// <Animated.View key={index}>
 					<TouchableOpacity
+						key={index}
 						onPress={() => press(index)}
 						activeOpacity={0.8}
-						key={index}
 						style={{
 							flex: 1,
 							borderWidth: 0,
@@ -34,11 +43,12 @@ const ViewPagerTabBar = ({names}: {names: any[]}) => {
 							padding: 20,
 							flexDirection: "row",
 						}}>
-						<View style={{opacity: 1, paddingEnd: 10}}>
+						<View style={{paddingEnd: 10}}>
 							<Icon name={iconName} size={20} color={Colors.primary} />
 						</View>
-						<Text style={{opacity: 1, fontSize: 16, textTransform: "uppercase", color: Colors.primary}}>{name}</Text>
+						<Text style={{fontSize: 16, textTransform: "uppercase", color: Colors.primary}}>{name}</Text>
 					</TouchableOpacity>
+					// </Animated.View>
 				)
 			})}
 			{/* {names.map((obj: any, index: number) => {
@@ -65,11 +75,7 @@ const ViewPagerTabBar = ({names}: {names: any[]}) => {
 				// 	})
 				// }
 
-				// const inputRange = names.map((_: any, i: number) => i)
-				// const opacity = Animated.interpolate(position, {
-				// 	inputRange,
-				// 	outputRange: inputRange.map((i: number) => (i === index ? 1 : 0.35)),
-				// })
+			
 
 				// const name = names[index].key
 				// const iconName = descriptors[name].options.tabBarIcon().props.name

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react"
 import {View, Text, TouchableOpacity, Colors} from "react-native-ui-lib"
-import {Dimensions, SectionList} from "react-native"
+import {Dimensions, SectionList, FlatList} from "react-native"
 import {useTheme} from "styled-components"
 import {FeedItemModel, PartyType} from "../universial/Models"
 import Feed_Item from "../components/Feed_Item"
@@ -14,7 +14,6 @@ import uiManager from "../dataLayer/UiManager"
 const Category_Page = () => {
 	const navigation = useNavigation()
 	const [data, setdata] = useState<any[]>()
-	console.log("inview")
 
 	useEffect(() => {
 		// setdata(dataProvider.data)
@@ -44,7 +43,8 @@ const Category_Page = () => {
 		newMap.forEach(async (value: [string, FeedItemModel[]], index) => {
 			obj.title = value[0]
 			obj.data = value[1]
-			arr[index] = {title: value[0], data: value[1]}
+			//add slice here to limit data
+			arr[index] = {title: value[0], data: value[1].slice(0, 2)}
 		})
 
 		setdata(arr)
@@ -61,9 +61,17 @@ const Category_Page = () => {
 		<View bg-background style={{borderWidth: 0}}>
 			<SectionList
 				onScroll={(e) => {}}
+				stickySectionHeadersEnabled
 				// style={{borderWidth: 5}}
 				sections={data || []}
-				renderItem={({item, index}) => {
+				extraData={
+					<View>
+						<Text>hi</Text>
+					</View>
+				}
+				renderItem={({item, index, section, separators}) => {
+					// const d = section.data.slice(0, 3)
+
 					return (
 						<View marginV-5 key={index}>
 							<Feed_itemV2 onClick={handleViewClick} index={index} item={item} />
@@ -74,12 +82,13 @@ const Category_Page = () => {
 					<View
 						row
 						paddingH-15
-						paddingV-15
-						marginB-15
-						marginT-35
+						paddingV-10
+						paddingT-35
+						marginB-5
+						// marginT-30
 						style={{
 							justifyContent: "space-between",
-							backgroundColor: uiManager.theme.bgHilight,
+							backgroundColor: uiManager.theme.background,
 							// elevation: 2,
 							// borderBottomWidth: 2,
 							// borderTopWidth: 2,

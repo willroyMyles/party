@@ -1,10 +1,11 @@
-import React, {Component} from "react"
+import React, {Component, useState} from "react"
 import {Text, View} from "react-native-ui-lib"
 import ViewPager, {ViewPagerOnPageScrollEventData} from "@react-native-community/viewpager"
 import Feed_Page from "./Feed_Page"
 import Category_Page from "./Category_Page"
 import ViewPagerTabBar from "../components/ViewPagerTabBar"
 import {NativeSyntheticEvent} from "react-native"
+import Animated from "react-native-reanimated"
 
 export const HomePageV3 = () => {
 	const names = [
@@ -12,8 +13,10 @@ export const HomePageV3 = () => {
 		{name: "categories", iconName: "layers", press: () => null},
 	]
 
+	const [offset, setOffset] = useState<Animated.Value<number>>(new Animated.Value(0))
+
 	const handleMoved = (e: NativeSyntheticEvent<ViewPagerOnPageScrollEventData>) => {
-		// console.log(e)
+		setOffset(new Animated.Value(e.nativeEvent.offset))
 	}
 
 	return (
@@ -22,7 +25,7 @@ export const HomePageV3 = () => {
 				<Feed_Page />
 				<Category_Page />
 			</ViewPager>
-			<ViewPagerTabBar names={names} />
+			<ViewPagerTabBar names={names} position={offset} />
 		</View>
 	)
 }

@@ -1,12 +1,14 @@
-import React from "react"
-import {Button, TouchableOpacity, View, Text, TextField, Colors} from "react-native-ui-lib"
+import React, {useState} from "react"
+import {Button, TouchableOpacity, View, Text, TextField, Colors, Toast} from "react-native-ui-lib"
 import {useNavigation} from "@react-navigation/native"
 import {ScrollView, Dimensions, TextInput, StyleSheet} from "react-native"
 import {useForm, Controller} from "react-hook-form"
 import {useTheme} from "styled-components"
 import SkipButton from "../components/SkipButton"
+import fireSotreMob from "../dataLayer/FireStore"
+import {observer} from "mobx-react"
 
-const Signup = () => {
+const Signup = observer(() => {
 	const styles = StyleSheet.create({
 		input: {
 			borderWidth: 1,
@@ -23,16 +25,49 @@ const Signup = () => {
 		},
 	})
 
+	const [ToastVisible, setToastVisible] = useState(false)
+	const [message, setMessage] = useState("hello")
+
 	const theme = useTheme()
 	const navigation = useNavigation()
-	const {handleSubmit, errors, control} = useForm()
+	const {handleSubmit, errors, control, setError} = useForm()
 
 	const handleLogin = () => navigation.navigate("login")
 
-	const handleSignUp = (data: any) => {}
+	const handleSignUp = (data: any) => {
+		if (checPasswords(data)) {
+			fireSotreMob.signUp(data).then((res) => {
+				if (res) {
+					//successful
+				} else {
+					//unsucessful
+					console.log(fireSotreMob.errorMessageSignUp)
+
+					setMessage(fireSotreMob.errorMessageSignUp)
+					setToastVisible(true)
+				}
+			})
+		} else {
+			setToastVisible(true)
+			setMessage("password mmismatch")
+			setError("password", {message: "mismatch", type: "string"})
+			setError("confirm", {message: "mismatch", type: "string"})
+		}
+	}
+
+	const checPasswords = ({confirm, password}: {confirm: string; password: string}) => {
+		return confirm === password
+	}
 
 	return (
 		<ScrollView contentContainerStyle={{minHeight: Dimensions.get("screen").height}}>
+			<Toast
+				message={fireSotreMob.errorMessageSignUp}
+				position="bottom"
+				visible={ToastVisible}
+				autoDismiss={3000}
+				onDismiss={() => setToastVisible(false)}
+			/>
 			<View flex-5 bg-primary>
 				<View flex-2 centerV padding-20>
 					<View marginV-25>
@@ -132,7 +167,7 @@ const Signup = () => {
 			</View>
 		</ScrollView>
 	)
-}
+})
 
 export default Signup
 
