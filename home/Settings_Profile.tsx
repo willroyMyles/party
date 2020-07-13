@@ -8,6 +8,8 @@ import {getImage} from "../universial/GetImage"
 import Icon from "react-native-vector-icons/Feather"
 import {observer} from "mobx-react"
 import {TextInput, StyleSheet} from "react-native"
+import firebase from "../dataLayer/Firebase"
+import Fire from "../dataLayer/Firebase"
 
 export const Settings_Profile = observer(() => {
 	const theme = useTheme()
@@ -109,7 +111,8 @@ export const Settings_Profile = observer(() => {
 				<Text reg>clear theme (development)</Text>
 				<Button
 					onPress={() => {
-						uiManager.clearTheme()
+						// uiManager.clearTheme()
+						Fire.testAdd()
 					}}
 					size="small"
 					round={false}

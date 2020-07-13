@@ -13,6 +13,7 @@ import * as Font from "expo-font"
 import {AppLoading} from "expo"
 import Navigator from "./components/Navigator"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
+import {decode, encode} from "base-64"
 
 export default observer(function App() {
 	const [loading, setLoading] = useState(true)
@@ -21,6 +22,13 @@ export default observer(function App() {
 	const [] = useState<ReactNode>(undefined)
 
 	useEffect(() => {
+		if (!global.btoa) {
+			global.btoa = encode
+		}
+
+		if (!global.atob) {
+			global.atob = decode
+		}
 		eventEmitter.addListener(eventStrings.loggingIn, setactivityLoading)
 		Font.loadAsync({
 			Nunito_Black: require("./assets/fonts/Nunito/Nunito-Black.ttf"),

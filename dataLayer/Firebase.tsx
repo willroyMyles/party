@@ -1,5 +1,6 @@
 import app from "firebase/app"
 import "firebase/auth"
+import "firebase/firestore"
 
 class FirebaseStore {
 	firebaseConfig = {
@@ -14,13 +15,18 @@ class FirebaseStore {
 	}
 	appName = "[DEFAULT]"
 	auth!: app.auth.Auth
+	dataBase!: app.firestore.Firestore
 
 	init = () => {
-		if (app.apps.length > 0) return
-		else {
-			app.initializeApp(this.firebaseConfig)
-			this.auth = app.auth()
-		}
+		return new Promise((resolve) => {
+			if (app.apps.length > 0) resolve(true)
+			else {
+				app.initializeApp(this.firebaseConfig)
+				this.auth = app.auth()
+				this.dataBase = app.firestore()
+				resolve(true)
+			}
+		})
 	}
 
 	constructor() {
@@ -30,6 +36,7 @@ class FirebaseStore {
 			app.initializeApp(this.firebaseConfig)
 		}
 		this.auth = app.auth()
+		this.dataBase = app.firestore()
 	}
 
 	doStuff = () => {}
@@ -66,6 +73,20 @@ class FirebaseStore {
 					reject(err)
 				})
 		})
+	}
+
+	testAdd = () => {
+		this.init()
+		this.dataBase
+			.collection("user")
+			.add({
+				name: "willroy",
+				age: 23,
+				title: "a demi god!",
+			})
+			.then((res) => {
+				console.log(res)
+			})
 	}
 }
 
