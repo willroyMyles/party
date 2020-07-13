@@ -1,6 +1,7 @@
 import "mobx-react-lite/batchingForReactNative"
 import React, {useEffect, useState, ReactNode} from "react"
-import {StyleSheet, View} from "react-native"
+import {View} from "react-native-ui-lib"
+import {StyleSheet, ActivityIndicator} from "react-native"
 import {Colors} from "react-native-ui-lib"
 import {SafeAreaProvider} from "react-native-safe-area-context"
 import {createStackNavigator} from "@react-navigation/stack"
@@ -11,14 +12,16 @@ import {ThemeProvider} from "styled-components"
 import * as Font from "expo-font"
 import {AppLoading} from "expo"
 import Navigator from "./components/Navigator"
+import {eventEmitter, eventStrings} from "./universial/EventEmitter"
 
 export default observer(function App() {
-	const [] = useState(false)
 	const [loading, setLoading] = useState(true)
+	const [activityLoading, setactivityLoading] = useState(false)
 
 	const [] = useState<ReactNode>(undefined)
 
 	useEffect(() => {
+		eventEmitter.addListener(eventStrings.loggingIn, setactivityLoading)
 		Font.loadAsync({
 			Nunito_Black: require("./assets/fonts/Nunito/Nunito-Black.ttf"),
 			Nunito_Regular: require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
@@ -26,14 +29,31 @@ export default observer(function App() {
 		}).then(() => {
 			setLoading(false)
 		})
+
+		return () => {
+			eventEmitter.removeListener(eventStrings.loggingIn, () => null)
+		}
 	}, [])
 
-	if (loading) return <AppLoading />
+	// if (loading) return <AppLoading />
 
 	return (
 		<SafeAreaProvider>
 			<ThemeProvider theme={uiManager.theme}>
 				<View style={styles.container}>
+					{activityLoading && (
+						<View
+							center
+							style={{
+								position: "absolute",
+								height: "100%",
+								width: "100%",
+								backgroundColor: "rgba(0,0,0,.3)",
+								zIndex: 1,
+							}}>
+							<ActivityIndicator size="large" color={Colors.primary} animating={activityLoading} />
+						</View>
+					)}
 					<Navigator />
 				</View>
 			</ThemeProvider>

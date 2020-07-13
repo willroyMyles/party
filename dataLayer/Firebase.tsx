@@ -58,6 +58,8 @@ class FirebaseStore {
 			this.auth
 				.createUserWithEmailAndPassword(email, password)
 				.then((res) => {
+					console.log(res)
+
 					resolve(true)
 				})
 				.catch((err) => {

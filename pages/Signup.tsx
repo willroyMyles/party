@@ -7,6 +7,7 @@ import {useTheme} from "styled-components"
 import SkipButton from "../components/SkipButton"
 import fireSotreMob from "../dataLayer/FireStore"
 import {observer} from "mobx-react"
+import {eventEmitter, eventStrings} from "../universial/EventEmitter"
 
 const Signup = observer(() => {
 	const styles = StyleSheet.create({
@@ -35,10 +36,12 @@ const Signup = observer(() => {
 	const handleLogin = () => navigation.navigate("login")
 
 	const handleSignUp = (data: any) => {
+		eventEmitter.emit(eventStrings.loggingIn, true)
 		if (checPasswords(data)) {
 			fireSotreMob.signUp(data).then((res) => {
 				if (res) {
 					//successful
+					navigation.navigate("home")
 				} else {
 					//unsucessful
 					console.log(fireSotreMob.errorMessageSignUp)
@@ -46,12 +49,14 @@ const Signup = observer(() => {
 					setMessage(fireSotreMob.errorMessageSignUp)
 					setToastVisible(true)
 				}
+				eventEmitter.emit(eventStrings.loggingIn, false)
 			})
 		} else {
 			setToastVisible(true)
 			setMessage("password mmismatch")
 			setError("password", {message: "mismatch", type: "string"})
 			setError("confirm", {message: "mismatch", type: "string"})
+			eventEmitter.emit(eventStrings.loggingIn, false)
 		}
 	}
 
