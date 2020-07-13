@@ -22,6 +22,7 @@ const LoginPage = () => {
 
 		fireSotreMob.signIn(data).then((res) => {
 			if (res) {
+				navigation.navigate("home")
 			} else {
 				setToastVisible(true)
 			}
@@ -117,10 +118,10 @@ const LoginPage = () => {
 				<SkipButton where="home" />
 			</View>
 			<Toast
-				position="top"
+				position="bottom"
 				visible={toastVisible}
 				autoDismiss={3000}
-				message={"Incorrect email or password"}
+				message={fireSotreMob.errorMessageLogin}
 				onDismiss={() => setToastVisible(false)}
 			/>
 		</View>

@@ -38,7 +38,7 @@ class FireStore {
 				})
 				.catch((err) => {
 					//display correct message
-					this.errorMessageSignUp = err
+					this.errorMessageLogin = err.message
 					resolve(false)
 				})
 		})
