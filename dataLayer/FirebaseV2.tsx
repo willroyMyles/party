@@ -3,6 +3,9 @@ import "firebase/auth"
 import "firebase/firestore"
 import "firebase/storage"
 import {FeedItemModel} from "../universial/Models"
+import fireSotreMob from "./FireStore"
+
+console.ignoredYellowBox = ["Setting a timer"]
 
 const eventCollection = "events"
 const userCollection = "users"
@@ -120,7 +123,8 @@ class FirebaseStore {
 							resolve(true)
 
 							//should update user
-							// this.dataBase.doc(documentPath)
+							//should update array
+							this.dataBase.doc(`${userCollection}/${fireSotreMob.userId}`).set({events: [res.id]}, {merge: true})
 						})
 						.catch((err) => {
 							reject(false)

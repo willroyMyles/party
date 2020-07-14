@@ -8,7 +8,6 @@
     ".gitignore": true,
     "yarn.lock": true,
     "app.json": true,
-    "assets": true,
-    "node_modules": true
+    "assets": true
   }
 }

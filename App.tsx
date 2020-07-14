@@ -15,14 +15,24 @@ import Navigator from "./components/Navigator"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
 import {decode, encode} from "base-64"
 import fireSotreMob from "./dataLayer/FireStore"
+console.ignoredYellowBox = ["Setting a timer"]
 
+import {YellowBox} from "react-native"
+import _ from "lodash"
+
+//ignores a warning
+const _console = _.clone(console)
+console.warn = (message: any) => {
+	if (message.indexOf("Setting a timer") <= -1) {
+		_console.warn(message)
+	}
+}
 export default observer(function App() {
 	const [loading, setLoading] = useState(true)
 	const [activityLoading, setactivityLoading] = useState(false)
 	const [showToast, setshowToast] = useState(false)
 
 	const [] = useState<ReactNode>(undefined)
-	console.ignoredYellowBox = ["Setting a timer"]
 
 	useEffect(() => {
 		if (!global.btoa) {
