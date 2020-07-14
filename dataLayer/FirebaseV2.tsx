@@ -118,8 +118,9 @@ class FirebaseStore {
 						.add(data)
 						.then((res) => {
 							resolve(true)
+
 							//should update user
-							// this.dataBase.collection(userCollection).
+							// this.dataBase.doc(documentPath)
 						})
 						.catch((err) => {
 							reject(false)

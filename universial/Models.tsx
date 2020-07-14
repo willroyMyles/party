@@ -24,6 +24,7 @@ export interface FeedItemModel {
 	title?: string
 	hint?: string
 	person?: string
+	personId?: string
 	location?: Object
 	reference?: string
 	start?: string
@@ -31,4 +32,10 @@ export interface FeedItemModel {
 	partyType?: PartyType
 
 	admission?: number
+}
+
+export interface UserDatabaseModel {
+	email: string
+	userName: string
+	flyers: FeedItemModel[] | null
 }
