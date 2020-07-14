@@ -1,11 +1,12 @@
 import {action, observable} from "mobx"
-import Fire from "./Firebase"
-import {firestore} from "firebase"
+import Fire from "./FirebaseV2"
 import uiManager from "./UiManager"
+import {FeedItemModel} from "../universial/Models"
 
 class FireStore {
 	@observable errorMessageLogin = ""
 	@observable errorMessageSignUp = "error"
+	@observable errorMessage = "error"
 
 	@observable temp = ""
 	@observable userName = ""
@@ -42,6 +43,24 @@ class FireStore {
 					resolve(false)
 				})
 		})
+	}
+
+	@action sendEvent = (data: FeedItemModel) => {
+		return new Promise((resolve) => {
+			Fire.uploadEvent(data)
+				.then((res) => {
+					if (res) {
+						resolve(true)
+					}
+				})
+				.then((err) => {
+					resolve(false)
+				})
+		})
+	}
+
+	@action sendPhoto = (data: FeedItemModel) => {
+		Fire.uploadPhoto(data)
 	}
 }
 

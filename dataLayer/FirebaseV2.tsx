@@ -1,6 +1,8 @@
 import app from "firebase/app"
 import "firebase/auth"
 import "firebase/firestore"
+import "firebase/storage"
+import {FeedItemModel} from "../universial/Models"
 
 class FirebaseStore {
 	firebaseConfig = {
@@ -16,6 +18,7 @@ class FirebaseStore {
 	appName = "[DEFAULT]"
 	auth!: app.auth.Auth
 	dataBase!: app.firestore.Firestore
+	storage!: app.storage.Storage
 
 	init = () => {
 		return new Promise((resolve) => {
@@ -24,6 +27,7 @@ class FirebaseStore {
 				app.initializeApp(this.firebaseConfig)
 				this.auth = app.auth()
 				this.dataBase = app.firestore()
+				this.storage = app.storage()
 				resolve(true)
 			}
 		})
@@ -37,6 +41,7 @@ class FirebaseStore {
 		}
 		this.auth = app.auth()
 		this.dataBase = app.firestore()
+		this.storage = app.storage()
 	}
 
 	doStuff = () => {}
@@ -72,6 +77,49 @@ class FirebaseStore {
 				.catch((err) => {
 					reject(err)
 				})
+		})
+	}
+
+	uploadPhoto = (data: FeedItemModel) => {
+		return new Promise(async (resolve) => {
+			const filename = data.flyer?.substring(data.flyer?.lastIndexOf("/") + 1)
+
+			const response = await fetch(data.flyer || "")
+			const blob = await response.blob()
+
+			const operation = this.storage.ref(`images/flyers/${filename}`)
+
+			operation
+				.put(blob)
+				.then((res) => {
+					// resolve( true )
+					resolve(operation.fullPath)
+				})
+				.catch((err) => {
+					resolve(false)
+				})
+		})
+	}
+
+	uploadEvent = (data: FeedItemModel) => {
+		return new Promise((resolve, reject) => {
+			this.uploadPhoto(data).then((res) => {
+				if (res) {
+					// successful upload of image
+					this.dataBase
+						.collection("events")
+						.add(data)
+						.then((res) => {
+							resolve(true)
+							//should update user
+						})
+						.catch((err) => {
+							reject(false)
+						})
+				} else {
+					reject(false)
+				}
+			})
 		})
 	}
 

@@ -14,6 +14,7 @@ import dataProvider from "../../dataLayer/DataStore"
 import {FeedItemModel} from "../../universial/Models"
 import {getImage} from "../../universial/GetImage"
 import {PermissionResponse} from "expo-location"
+import fireSotreMob from "../../dataLayer/FireStore"
 
 const CreateEventView = () => {
 	const theme = useTheme()
@@ -62,8 +63,17 @@ const CreateEventView = () => {
 		setShowDate(false)
 	}
 
-	const submitter = (data: any) => {
-		// console.log(data, "data")
+	const submitter = (data: FeedItemModel) => {
+		fireSotreMob.sendEvent(data).then((res) => {
+			if (res) {
+				fireSotreMob.errorMessage = "post created successfully"
+				eventEmitter.emit(eventStrings.showToast, true)
+				navigation.navigate("home")
+			} else {
+				fireSotreMob.errorMessage = "something went wrong my friend"
+				eventEmitter.emit(eventStrings.showToast, true)
+			}
+		})
 	}
 
 	const getFlyer = async () => {

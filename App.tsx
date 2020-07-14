@@ -1,6 +1,6 @@
 import "mobx-react-lite/batchingForReactNative"
 import React, {useEffect, useState, ReactNode} from "react"
-import {View} from "react-native-ui-lib"
+import {View, Toast} from "react-native-ui-lib"
 import {StyleSheet, ActivityIndicator} from "react-native"
 import {Colors} from "react-native-ui-lib"
 import {SafeAreaProvider} from "react-native-safe-area-context"
@@ -14,12 +14,15 @@ import {AppLoading} from "expo"
 import Navigator from "./components/Navigator"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
 import {decode, encode} from "base-64"
+import fireSotreMob from "./dataLayer/FireStore"
 
 export default observer(function App() {
 	const [loading, setLoading] = useState(true)
 	const [activityLoading, setactivityLoading] = useState(false)
+	const [showToast, setshowToast] = useState(false)
 
 	const [] = useState<ReactNode>(undefined)
+	console.ignoredYellowBox = ["Setting a timer"]
 
 	useEffect(() => {
 		if (!global.btoa) {
@@ -30,6 +33,7 @@ export default observer(function App() {
 			global.atob = decode
 		}
 		eventEmitter.addListener(eventStrings.loggingIn, setactivityLoading)
+		eventEmitter.addListener(eventStrings.showToast, setshowToast)
 		Font.loadAsync({
 			Nunito_Black: require("./assets/fonts/Nunito/Nunito-Black.ttf"),
 			Nunito_Regular: require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
@@ -40,6 +44,7 @@ export default observer(function App() {
 
 		return () => {
 			eventEmitter.removeListener(eventStrings.loggingIn, () => null)
+			eventEmitter.removeListener(eventStrings.showToast, () => null)
 		}
 	}, [])
 
@@ -63,6 +68,13 @@ export default observer(function App() {
 						</View>
 					)}
 					<Navigator />
+					<Toast
+						onDismiss={() => setshowToast(false)}
+						visible={showToast}
+						position="bottom"
+						autoDismiss={3000}
+						message={fireSotreMob.errorMessage}
+					/>
 				</View>
 			</ThemeProvider>
 		</SafeAreaProvider>

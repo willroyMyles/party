@@ -8,4 +8,5 @@ export const eventStrings = {
 	locationConfirmed: "used when confirmed is pressed to relay location to create pot view",
 	dataFromProviderFinishedLoad: "used to signal data finished loading",
 	loggingIn: "used when logging in or signing up ",
+	showToast: "used for showing toast in app page",
 }

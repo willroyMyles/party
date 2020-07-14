@@ -8,11 +8,11 @@ import {getImage} from "../universial/GetImage"
 import Icon from "react-native-vector-icons/Feather"
 import {observer} from "mobx-react"
 import {TextInput, StyleSheet} from "react-native"
-import firebase from "../dataLayer/Firebase"
-import Fire from "../dataLayer/Firebase"
+import {useNavigation} from "@react-navigation/native"
 
 export const Settings_Profile = observer(() => {
 	const theme = useTheme()
+	const navigation = useNavigation()
 	const [visible, setVisible] = useState(false)
 
 	const style = StyleSheet.create({
@@ -112,7 +112,7 @@ export const Settings_Profile = observer(() => {
 				<Button
 					onPress={() => {
 						// uiManager.clearTheme()
-						Fire.testAdd()
+						// Fire.testAdd()
 					}}
 					size="small"
 					round={false}
@@ -121,6 +121,9 @@ export const Settings_Profile = observer(() => {
 				</Button>
 			</Row>
 			<TouchableOpacity
+				onPress={() => {
+					navigation.navigate("create_event")
+				}}
 				activeOpacity={0.8}
 				marginB-10
 				marginR-10
