@@ -9,6 +9,7 @@ import Icon from "react-native-vector-icons/Feather"
 import {observer} from "mobx-react"
 import {TextInput, StyleSheet} from "react-native"
 import {useNavigation} from "@react-navigation/native"
+import fireSotreMob from "../dataLayer/FireStore"
 
 export const Settings_Profile = observer(() => {
 	const theme = useTheme()
@@ -34,7 +35,10 @@ export const Settings_Profile = observer(() => {
 	const changeUserImage = () => {
 		getImage(0.2).then((res: any) => {
 			if (!res.cancelled) {
+				const oldImage = uiManager.userImageUri
 				uiManager.userImageUri = res.uri
+				const data: any = {avatar: res.uri, old: oldImage}
+				fireSotreMob.sendAvatar(data)
 			}
 		})
 	}

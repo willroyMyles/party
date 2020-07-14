@@ -123,9 +123,7 @@ class FirebaseStore {
 
 							//should update user
 							//should update array
-							this.dataBase
-								.doc(`${userCollection}/${data.personId}`)
-								.set({events: firestore.FieldValue.arrayUnion(res.id)}, {merge: true})
+							this.updateUserEvents(true, res.id, data.personId || "")
 						})
 						.catch((err) => {
 							reject(false)
@@ -137,18 +135,47 @@ class FirebaseStore {
 		})
 	}
 
-	testAdd = () => {
-		this.init()
-		this.dataBase
-			.collection("user")
-			.add({
-				name: "willroy",
-				age: 23,
-				title: "a demi god!",
-			})
-			.then((res) => {
-				console.log(res)
-			})
+	updateUserEvents = (add: boolean, eventId: string, personId: string) => {
+		if (add) {
+			this.dataBase
+				.doc(`${userCollection}/${personId}`)
+				.set({events: firestore.FieldValue.arrayUnion(eventId)}, {merge: true})
+		} else {
+			this.dataBase.doc(`${userCollection}/${personId}`).set({events: firestore.FieldValue.arrayRemove(eventId)})
+		}
+	}
+
+	uploadAvatar = (data: any) => {
+		return new Promise(async (resolve) => {
+			console.log(data)
+
+			const filename = data.avatar.substring(data.avatar.lastIndexOf("/") + 1)
+			const oldFilename = data.old.substring(data.old.lastIndexOf("/") + 1)
+
+			const response = await fetch(data.avatar || "")
+			const blob = await response.blob()
+			this.storage
+				.ref(`images/avatars/${oldFilename}`)
+				.delete()
+				.then((res) => {
+					console.log("success")
+				})
+				.catch((err) => {
+					console.log("error", err)
+				})
+			const operation = this.storage.ref(`images/avatars/${filename}`)
+
+			operation
+				.put(blob)
+				.then((res) => {
+					// resolve( true )
+					resolve(operation.fullPath)
+					this.dataBase.doc(`${userCollection}/${data.id}`).update({avatar: operation.fullPath})
+				})
+				.catch((err) => {
+					resolve(false)
+				})
+		})
 	}
 }
 

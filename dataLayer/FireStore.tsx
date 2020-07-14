@@ -82,8 +82,10 @@ class FireStore {
 		})
 	}
 
-	@action sendPhoto = (data: FeedItemModel) => {
-		Fire.uploadPhoto(data)
+	@action sendAvatar = (data: any) => {
+		data.id = this.userId
+
+		Fire.uploadAvatar(data)
 	}
 }
 
