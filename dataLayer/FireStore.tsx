@@ -2,11 +2,14 @@ import {action, observable} from "mobx"
 import Fire from "./FirebaseV2"
 import uiManager from "./UiManager"
 import {FeedItemModel} from "../universial/Models"
+import {AsyncStorage} from "react-native"
 
 class FireStore {
 	@observable errorMessageLogin = ""
 	@observable errorMessageSignUp = "error"
 	@observable errorMessage = "error"
+
+	@observable userId = ""
 
 	@observable temp = ""
 	@observable userName = ""
@@ -14,12 +17,14 @@ class FireStore {
 		this.temp = data.username
 		return new Promise((resolve) => {
 			Fire.signUp(data)
-				.then((res) => {
+				.then((res: any) => {
 					if (res) {
 						resolve(true)
 						this.userName = this.temp
 						this.temp = ""
 						uiManager.userName = this.userName
+						this.userId = res
+						AsyncStorage.setItem("userId", res)
 					}
 				})
 				.catch((err) => {

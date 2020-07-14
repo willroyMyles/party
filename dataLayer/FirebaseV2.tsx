@@ -4,6 +4,9 @@ import "firebase/firestore"
 import "firebase/storage"
 import {FeedItemModel} from "../universial/Models"
 
+const eventCollection = "events"
+const userCollection = "users"
+
 class FirebaseStore {
 	firebaseConfig = {
 		apiKey: "AIzaSyBR-UlFdPNUufcwSgUq8eAib_UC7CPQCAQ",
@@ -65,14 +68,18 @@ class FirebaseStore {
 		this.init()
 	}
 
-	signUp = ({email, password}: {email: string; password: string}) => {
+	signUp = ({email, password, username}: {email: string; password: string; username: string}) => {
 		return new Promise((resolve, reject) => {
 			this.auth
 				.createUserWithEmailAndPassword(email, password)
 				.then((res) => {
-					console.log(res)
-
-					resolve(true)
+					const data = {email: email, username: username}
+					this.dataBase
+						.collection(userCollection)
+						.add(data)
+						.then((res) => {
+							resolve(res.id)
+						})
 				})
 				.catch((err) => {
 					reject(err)
@@ -107,11 +114,12 @@ class FirebaseStore {
 				if (res) {
 					// successful upload of image
 					this.dataBase
-						.collection("events")
+						.collection(eventCollection)
 						.add(data)
 						.then((res) => {
 							resolve(true)
 							//should update user
+							// this.dataBase.collection(userCollection).
 						})
 						.catch((err) => {
 							reject(false)
