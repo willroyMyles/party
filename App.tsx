@@ -63,7 +63,7 @@ export default observer(function App() {
 	}, [])
 
 	return (
-		<SafeAreaProvider>
+		<SafeAreaProvider style={{backgroundColor: "red"}}>
 			<ThemeProvider theme={uiManager.theme}>
 				<View style={styles.container}>
 					{activityLoading && (

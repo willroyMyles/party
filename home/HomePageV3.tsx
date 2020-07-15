@@ -20,7 +20,7 @@ export const HomePageV3 = () => {
 	}
 
 	return (
-		<View flex-3>
+		<View flex-3 bg-background>
 			<ViewPager onPageScroll={handleMoved} style={{flex: 1}}>
 				<Feed_Page />
 				<Category_Page />

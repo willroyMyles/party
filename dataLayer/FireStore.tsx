@@ -3,7 +3,7 @@ import Fire from "./FirebaseV2"
 import uiManager from "./UiManager"
 import {FeedItemModel} from "../universial/Models"
 import {AsyncStorage} from "react-native"
-import {auth} from "firebase"
+import {auth, app} from "firebase"
 import {PROVIDER_GOOGLE} from "react-native-maps"
 import {GoogleUser} from "expo-google-app-auth"
 
@@ -22,15 +22,19 @@ class FireStore {
 		return new Promise((resolve) => {
 			Fire.HandleGoogleSignIn(result)
 				.then((res: GoogleUser | any) => {
-					this.userName = res.name
-					this.userId = res.id
-					uiManager.userName = this.userName
+					this.setUsernameAndId(res.name, res.id)
+
 					resolve(true)
 				})
 				.catch((err) => {
 					resolve(false)
 				})
 		})
+	}
+
+	setUsernameAndId = (username: string, id: string) => {
+		this.userName = username
+		this.userId = id
 	}
 	@observable errorMessageLogin = ""
 	@observable errorMessageSignUp = "error"
@@ -41,7 +45,29 @@ class FireStore {
 	@observable temp = ""
 	@observable userName = ""
 
+	@observable userImageUri = ""
+
 	v = autorun(async () => {
+		if (this.userImageUri == "") {
+			const img = await AsyncStorage.getItem("userImage")
+			this.userImageUri = img || ""
+			return
+		} else {
+			AsyncStorage.setItem("userImage", this.userImageUri)
+			return
+		}
+	})
+
+	un = autorun(async () => {
+		if (this.userName == "") {
+			const name = await AsyncStorage.getItem("userName")
+			this.userName = name || ""
+		} else {
+			AsyncStorage.setItem("userName", this.userName)
+		}
+	})
+
+	r = autorun(async () => {
 		if (this.userId == "") {
 			const id = await AsyncStorage.getItem("userId")
 			this.userId = id || ""
@@ -59,11 +85,8 @@ class FireStore {
 				.then((res: any) => {
 					if (res) {
 						resolve(true)
-						this.userName = this.temp
-						this.temp = ""
-						uiManager.userName = this.userName
-						this.userId = res
-						AsyncStorage.setItem("userId", res)
+
+						this.setUsernameAndId(this.temp, res)
 					}
 				})
 				.catch((err) => {
@@ -78,8 +101,12 @@ class FireStore {
 	@action signIn = (data: any) => {
 		return new Promise((resolve) => {
 			Fire.signInWithEmailAndPassword(data)
-				.then((res) => {
-					if (res) resolve(true)
+				.then((res: {name: string; id: string} | any) => {
+					if (res) {
+						// get username and id
+						this.setUsernameAndId(res.name, res.id)
+						resolve(true)
+					}
 				})
 				.catch((err) => {
 					//display correct message

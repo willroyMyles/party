@@ -1,6 +1,6 @@
 import React, {useEffect, useState, createRef} from "react"
 import {View, Text, TouchableOpacity, TextField, Colors, Button, Image} from "react-native-ui-lib"
-import {ScrollView, StyleSheet, TextInput, Alert} from "react-native"
+import {ScrollView, StyleSheet, TextInput, Alert, Picker} from "react-native"
 import Icon from "react-native-vector-icons/FontAwesome"
 import {useTheme} from "styled-components"
 import {useForm, Controller} from "react-hook-form"
@@ -11,7 +11,7 @@ import moment from "moment"
 import {eventEmitter, eventStrings} from "../../universial/EventEmitter"
 import {Region} from "react-native-maps"
 import dataProvider from "../../dataLayer/DataStore"
-import {FeedItemModel} from "../../universial/Models"
+import {FeedItemModel, PartyType} from "../../universial/Models"
 import {getImage} from "../../universial/GetImage"
 import {PermissionResponse} from "expo-location"
 import fireSotreMob from "../../dataLayer/FireStore"
@@ -28,6 +28,9 @@ const CreateEventView = () => {
 	const [startRef, setStartRef] = useState<any>()
 	const [endRef, setendRef] = useState<any>()
 	const [dateRef, setdateRef] = useState<any>()
+	const [selectedValue, setSelectedValue] = useState("")
+
+	const array = Object.keys(PartyType).filter((value, index) => isNaN(Number(value)) == true)
 
 	useEffect(() => {
 		eventEmitter.addListener(eventStrings.locationConfirmed, (loc: Region | undefined) => {
@@ -329,7 +332,7 @@ const CreateEventView = () => {
 					</View>
 				</View>
 				<View>
-					<View row>
+					{/* <View row>
 						<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
 							admission of party
 						</Text>
@@ -341,6 +344,29 @@ const CreateEventView = () => {
 							<TextInput style={style.input} onBlur={onBlur} onChangeText={(value) => onChange(value)} value={value} />
 						)}
 						name="admission"
+						rules={{required: "is required"}}
+						defaultValue=""
+					/> */}
+					<View row>
+						<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
+							Type of party
+						</Text>
+						{errors.type && <ErrorText text={errors.type.message || ""} />}
+					</View>
+					<Controller
+						control={control}
+						render={({onChange, onBlur, value}) => (
+							<Picker
+								selectedValue={getValues("type")}
+								onValueChange={(item, index) => {
+									setSelectedValue(item), onChange(item)
+								}}>
+								{array.map((value: string, index: number) => {
+									return <Picker.Item label={value} value={PartyType[value]} />
+								})}
+							</Picker>
+						)}
+						name="type"
 						rules={{required: "is required"}}
 						defaultValue=""
 					/>

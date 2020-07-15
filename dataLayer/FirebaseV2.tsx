@@ -93,8 +93,7 @@ class FirebaseStore {
 			this.auth
 				.signInWithEmailAndPassword(email, password)
 				.then((res) => {
-					//TODO should redirect
-					// resolve(res.user.)
+					resolve({name: res.user?.displayName, id: res.user?.uid})
 				})
 				.catch((err) => {
 					console.log("error will robinson", err)

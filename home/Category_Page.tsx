@@ -85,20 +85,27 @@ const Category_Page = () => {
 						paddingV-10
 						paddingT-35
 						marginB-5
+						paddingR-50
 						// marginT-30
 						style={{
 							justifyContent: "space-between",
-							backgroundColor: uiManager.theme.background,
+							// backgroundColor: uiManager.theme.bgHilight,
 							// elevation: 2,
-							// borderBottomWidth: 2,
+							borderBottomWidth: 2,
 							// borderTopWidth: 2,
-							borderColor: Colors.grey50,
+							borderColor: uiManager.theme.bgHilight,
 						}}>
 						<Text imp1 color={Colors.primary}>
 							{title}
 						</Text>
-						<TouchableOpacity>
-							<Text imp1> view all</Text>
+						<TouchableOpacity
+							activeOpacity={0.8}
+							onPress={() => {
+								navigation.navigate("categoryView", title)
+							}}>
+							<Text reg style={{opacity: 0.7}}>
+								view all
+							</Text>
 						</TouchableOpacity>
 					</View>
 				)}

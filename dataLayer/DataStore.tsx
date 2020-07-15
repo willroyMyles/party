@@ -7,6 +7,10 @@ class Store {
 
 	@observable currentEvent: any = {}
 
+	@action getDataFromServerBasedOnSection = (section: number) => {
+		return new Promise((resolve) => {})
+	}
+
 	@action generateFakeData = () => {
 		return new Promise((resolve) => {
 			this.data = new Map()

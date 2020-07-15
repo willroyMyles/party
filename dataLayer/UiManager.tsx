@@ -12,29 +12,6 @@ export class Store {
 	@observable themeType = ThemeType.LIGHT
 	@observable theme = lightTheme
 	@observable setting: any = {theme: false}
-	@observable userImageUri = ""
-
-	@observable userName = ""
-
-	v = autorun(async () => {
-		if (this.userImageUri == "") {
-			const img = await AsyncStorage.getItem("userImage")
-			this.userImageUri = img || ""
-			return
-		} else {
-			AsyncStorage.setItem("userImage", this.userImageUri)
-			return
-		}
-	})
-
-	un = autorun(async () => {
-		if (this.userName == "") {
-			const name = await AsyncStorage.getItem("userName")
-			this.userName = name || ""
-		} else {
-			AsyncStorage.setItem("userName", this.userName)
-		}
-	})
 
 	t = autorun((runner) => {
 		if (this.theme) {
