@@ -47,6 +47,22 @@ class FireStore {
 
 	@observable userImageUri = ""
 
+	@observable user: firebase.UserInfo | any = null
+
+	ou = autorun(() => {
+		if (this.user == null) {
+			if (Fire.isLoggedIn()) {
+				console.log("getting user", Fire.auth.currentUser?.providerData[0])
+
+				this.user = Fire.auth.currentUser?.providerData[0] || null
+				this.userName = this.user?.displayName || null
+				this.userId = this.user.uid
+				this.userImageUri = this.user.photoURL
+			}
+		} else {
+		}
+	})
+
 	v = autorun(async () => {
 		if (this.userImageUri == "") {
 			const img = await AsyncStorage.getItem("userImage")

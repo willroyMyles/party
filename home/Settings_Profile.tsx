@@ -36,8 +36,8 @@ export const Settings_Profile = observer(() => {
 	const changeUserImage = () => {
 		getImage(0.2).then((res: any) => {
 			if (!res.cancelled) {
-				const oldImage = uiManager.userImageUri
-				uiManager.userImageUri = res.uri
+				const oldImage = fireSotreMob.userImageUri
+				fireSotreMob.userImageUri = res.uri
 				const data: any = {avatar: res.uri, old: oldImage}
 				fireSotreMob.sendAvatar(data)
 			}
@@ -65,17 +65,17 @@ export const Settings_Profile = observer(() => {
 				<TouchableOpacity
 					onPress={() => changeUserImage()}
 					style={{borderWidth: 1, borderColor: uiManager.theme.secondary_text, borderRadius: 100, elevation: 10}}>
-					<Avatar label="user" source={{uri: uiManager.userImageUri}} size={82} />
+					<Avatar label="user" source={{uri: fireSotreMob.userImageUri}} size={82} />
 				</TouchableOpacity>
 				<Text imp1 marginT-5 style={{textTransform: "capitalize"}}>
-					{uiManager.userName}
+					{fireSotreMob.userName}
 				</Text>
 			</View>
 			<Row marginT-15>
 				<View>
 					<Text hint>user-name</Text>
 					<Text reg style={{textTransform: "capitalize"}}>
-						{uiManager.userName}
+						{fireSotreMob.userName}
 					</Text>
 				</View>
 				<Button link onPress={() => setVisible(true)}>
@@ -86,8 +86,8 @@ export const Settings_Profile = observer(() => {
 						<TextInput
 							// onBlur={onBlur}
 							// onFocus={() => setShowDate(true)}
-							onChangeText={(value) => (uiManager.userName = value)}
-							value={uiManager.userName}
+							onChangeText={(value) => (fireSotreMob.userName = value)}
+							value={fireSotreMob.userName}
 							style={[style.input, {width: "98%", marginHorizontal: 5}]}
 							placeholder="name"
 						/>
