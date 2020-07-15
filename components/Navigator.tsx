@@ -22,6 +22,7 @@ import {FeedItemModel} from "../universial/Models"
 import dataProvider from "../dataLayer/DataStore"
 import HomePageV2 from "../home/HomePageV2"
 import HomePageV3 from "../home/HomePageV3"
+import SocialSignIn from "../pages/SocialSignIn"
 // const Stack = createStackNavigator()
 const Stack = createSharedElementStackNavigator()
 
@@ -46,6 +47,7 @@ export const Navigator = observer(() => {
 				<Stack.Screen name="accounts" component={AccountPage} />
 				<Stack.Screen name="login" component={LoginPage} />
 				<Stack.Screen name="signup" component={Signup} />
+				<Stack.Screen name="google" component={SocialSignIn} />
 				<Stack.Screen options={{headerShown: true}} name="settings" component={Settings_Page} />
 
 				{/* sub pages */}

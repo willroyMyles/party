@@ -10,6 +10,42 @@ const eventCollection = "events"
 const userCollection = "users"
 
 class FirebaseStore {
+	HandleGoogleSignIn(result: {
+		type: "success"
+		accessToken: string | null
+		idToken: string | null
+		refreshToken: string | null
+		user: import("expo-google-app-auth").GoogleUser
+	}) {
+		return new Promise((resolve, reject) => {
+			//get crdentials
+			const cred = app.auth.GoogleAuthProvider.credential(result.idToken, result.accessToken)
+			//sign in and retrive info
+			this.auth
+				.signInAndRetrieveDataWithCredential(cred)
+				.then((res) => {
+					console.log("user signed in")
+					//upload new user to database
+					this.dataBase
+						.collection(userCollection)
+						.add({
+							email: result.user.email,
+							avatar: result.user.photoUrl,
+							username: result.user.name,
+							provider: "google",
+						})
+						.then((res) => {
+							resolve(true)
+						})
+						.catch((err) => {
+							reject(false)
+						})
+				})
+				.catch((err) => {
+					reject(false)
+				})
+		})
+	}
 	firebaseConfig = {
 		apiKey: "AIzaSyBR-UlFdPNUufcwSgUq8eAib_UC7CPQCAQ",
 		authDomain: "party-7a1eb.firebaseapp.com",

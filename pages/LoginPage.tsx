@@ -3,9 +3,10 @@ import {View, Text, TextField, Button, TouchableOpacity, Colors, Toast} from "re
 import {Link, useNavigation} from "@react-navigation/native"
 import {useForm, Controller} from "react-hook-form"
 import Fire from "../dataLayer/FirebaseV2"
-import {TextInput, StyleSheet} from "react-native"
+import {TextInput, StyleSheet, Alert} from "react-native"
 import SkipButton from "../components/SkipButton"
 import fireSotreMob from "../dataLayer/FireStore"
+import {SignInWithGoogle} from "../dataLayer/SignInProviders"
 
 const LoginPage = () => {
 	const navigation = useNavigation()
@@ -25,6 +26,17 @@ const LoginPage = () => {
 				navigation.navigate("home")
 			} else {
 				setToastVisible(true)
+			}
+		})
+	}
+
+	const handleGoogle = () => {
+		SignInWithGoogle().then((res) => {
+			if (res) {
+				//success
+				Alert.alert("success", "signed in successfully")
+			} else {
+				//error
 			}
 		})
 	}
@@ -114,6 +126,11 @@ const LoginPage = () => {
 							sign up
 						</Text>
 					</TouchableOpacity>
+				</View>
+				<View>
+					<Button onPress={handleGoogle}>
+						<Text btn>log in with google</Text>
+					</Button>
 				</View>
 				<SkipButton where="home" />
 			</View>
