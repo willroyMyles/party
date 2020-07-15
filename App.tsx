@@ -10,7 +10,7 @@ import uiManager from "./dataLayer/UiManager"
 import {generate} from "@ant-design/colors"
 import {ThemeProvider} from "styled-components"
 import * as Font from "expo-font"
-import {AppLoading} from "expo"
+import * as SplashScreen from "expo-splash-screen"
 import Navigator from "./components/Navigator"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
 import {decode, encode} from "base-64"
@@ -42,6 +42,9 @@ export default observer(function App() {
 		if (!global.atob) {
 			global.atob = decode
 		}
+
+		SplashScreen.preventAutoHideAsync()
+
 		eventEmitter.addListener(eventStrings.loggingIn, setactivityLoading)
 		eventEmitter.addListener(eventStrings.showToast, setshowToast)
 		Font.loadAsync({
@@ -50,6 +53,7 @@ export default observer(function App() {
 			Nunito_Semi_Bold: require("./assets/fonts/Nunito/Nunito-SemiBold.ttf"),
 		}).then(() => {
 			setLoading(false)
+			SplashScreen.hideAsync()
 		})
 
 		return () => {
@@ -57,8 +61,6 @@ export default observer(function App() {
 			eventEmitter.removeListener(eventStrings.showToast, () => null)
 		}
 	}, [])
-
-	// if (loading) return <AppLoading />
 
 	return (
 		<SafeAreaProvider>

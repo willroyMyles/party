@@ -5,6 +5,7 @@ import {FeedItemModel} from "../universial/Models"
 import {AsyncStorage} from "react-native"
 import {auth} from "firebase"
 import {PROVIDER_GOOGLE} from "react-native-maps"
+import {GoogleUser} from "expo-google-app-auth"
 
 AsyncStorage.getItem("userId").then((res) => {
 	console.log(res)
@@ -20,7 +21,10 @@ class FireStore {
 	}) {
 		return new Promise((resolve) => {
 			Fire.HandleGoogleSignIn(result)
-				.then((res) => {
+				.then((res: GoogleUser | any) => {
+					this.userName = res.name
+					this.userId = res.id
+					uiManager.userName = this.userName
 					resolve(true)
 				})
 				.catch((err) => {

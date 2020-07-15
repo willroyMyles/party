@@ -10,6 +10,7 @@ import {observer} from "mobx-react"
 import {TextInput, StyleSheet} from "react-native"
 import {useNavigation} from "@react-navigation/native"
 import fireSotreMob from "../dataLayer/FireStore"
+import Fire from "../dataLayer/FirebaseV2"
 
 export const Settings_Profile = observer(() => {
 	const theme = useTheme()
@@ -117,6 +118,8 @@ export const Settings_Profile = observer(() => {
 					onPress={() => {
 						// uiManager.clearTheme()
 						// Fire.testAdd()
+						const hey = Fire.isLoggedIn()
+						console.log(hey)
 					}}
 					size="small"
 					round={false}

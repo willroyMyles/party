@@ -17,6 +17,8 @@ export const SignInWithGoogle = async () => {
 						resolve(false)
 					}
 				})
+			} else {
+				//canceled or something
 			}
 		} catch ({message}) {
 			alert("login: Error:" + message)

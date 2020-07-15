@@ -1,4 +1,4 @@
-import app, {firestore} from "firebase/app"
+import app, {firestore, auth} from "firebase/app"
 import "firebase/auth"
 import "firebase/firestore"
 import "firebase/storage"
@@ -20,22 +20,22 @@ class FirebaseStore {
 		return new Promise((resolve, reject) => {
 			//get crdentials
 			const cred = app.auth.GoogleAuthProvider.credential(result.idToken, result.accessToken)
+
 			//sign in and retrive info
 			this.auth
-				.signInAndRetrieveDataWithCredential(cred)
+				.signInWithCredential(cred)
 				.then((res) => {
-					console.log("user signed in")
 					//upload new user to database
 					this.dataBase
-						.collection(userCollection)
-						.add({
+						.doc(`${userCollection}/${result.user.id}`)
+						.set({
 							email: result.user.email,
 							avatar: result.user.photoUrl,
 							username: result.user.name,
 							provider: "google",
 						})
 						.then((res) => {
-							resolve(true)
+							resolve(result.user)
 						})
 						.catch((err) => {
 							reject(false)
@@ -94,6 +94,7 @@ class FirebaseStore {
 				.signInWithEmailAndPassword(email, password)
 				.then((res) => {
 					//TODO should redirect
+					// resolve(res.user.)
 				})
 				.catch((err) => {
 					console.log("error will robinson", err)
@@ -104,6 +105,9 @@ class FirebaseStore {
 
 	isLoggedIn = () => {
 		this.init()
+		console.log(this.auth.currentUser)
+
+		return this.auth.currentUser != null
 	}
 
 	signUp = ({email, password, username}: {email: string; password: string; username: string}) => {
@@ -112,11 +116,15 @@ class FirebaseStore {
 				.createUserWithEmailAndPassword(email, password)
 				.then((res) => {
 					const data = {email: email, username: username}
+
 					this.dataBase
 						.collection(userCollection)
 						.add(data)
 						.then((res) => {
 							resolve(res.id)
+						})
+						.catch((err) => {
+							console.log("database error", err)
 						})
 				})
 				.catch((err) => {
