@@ -228,9 +228,12 @@ class FirebaseStore {
 	}
 
 	getEventsInMultiplies = (amount: number) => {
+		const order = "date"
 		return new Promise(async (resolve, reject) => {
 			if (last == null) {
-				const firstQuery = this.dataBase.collection(eventCollection).orderBy("timeStamp").limit(amount)
+				console.log("new")
+
+				const firstQuery = this.dataBase.collection(eventCollection).orderBy(order).limit(amount)
 				const snapshotQuery = await firstQuery.get()
 
 				if (snapshotQuery.empty) return reject("empty")
@@ -240,7 +243,9 @@ class FirebaseStore {
 				last = lastDocInSnapshotQuery
 				resolve(snapshotQuery)
 			} else {
-				const firstQuery = this.dataBase.collection(eventCollection).orderBy("timeStamp").limit(amount).startAfter(last)
+				console.log("old", last.id)
+
+				const firstQuery = this.dataBase.collection(eventCollection).orderBy(order).limit(amount).startAfter(last)
 				const snapshot = await firstQuery.get()
 				if (snapshot.empty) return reject("empty")
 

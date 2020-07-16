@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {View, Text, TouchableOpacity, Colors} from "react-native-ui-lib"
+import {View, Text, TouchableOpacity, Colors, Button} from "react-native-ui-lib"
 import {Dimensions, SectionList, FlatList} from "react-native"
 import {useTheme} from "styled-components"
 import {FeedItemModel, PartyType} from "../universial/Models"
@@ -14,6 +14,22 @@ import uiManager from "../dataLayer/UiManager"
 const Category_Page = () => {
 	const navigation = useNavigation()
 	const [data, setdata] = useState<any[]>()
+	const [dataFinished, setdataFinished] = useState(false)
+
+	const callSome = () => {
+		dataProvider.getEvents().then((res) => {
+			if (res) {
+				const d: any = []
+				dataProvider.data.forEach((item, key) => {
+					d.push(item)
+				})
+				sortData(d)
+			} else {
+				//no more data
+				setdataFinished(true)
+			}
+		})
+	}
 
 	useEffect(() => {
 		// setdata(dataProvider.data)
@@ -111,6 +127,11 @@ const Category_Page = () => {
 				)}
 				keyExtractor={(item: FeedItemModel) => item.reference || faker.random.number(20000000000).toString()}
 			/>
+			<View center>
+				<Button onPress={() => callSome()}>
+					<Text btn>load</Text>
+				</Button>
+			</View>
 		</View>
 	)
 }

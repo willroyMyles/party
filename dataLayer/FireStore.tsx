@@ -8,30 +8,6 @@ import {PROVIDER_GOOGLE} from "react-native-maps"
 import {GoogleUser} from "expo-google-app-auth"
 
 class FireStore {
-	@action handleGoogleSignin(result: {
-		type: "success"
-		accessToken: string | null
-		idToken: string | null
-		refreshToken: string | null
-		user: import("expo-google-app-auth").GoogleUser
-	}) {
-		return new Promise((resolve) => {
-			Fire.HandleGoogleSignIn(result)
-				.then((res: GoogleUser | any) => {
-					this.setUsernameAndId(res.name, res.id)
-
-					resolve(true)
-				})
-				.catch((err) => {
-					resolve(false)
-				})
-		})
-	}
-
-	setUsernameAndId = (username: string, id: string) => {
-		this.userName = username
-		this.userId = id
-	}
 	@observable errorMessageLogin = ""
 	@observable errorMessageSignUp = "error"
 	@observable errorMessage = "error"
@@ -142,10 +118,48 @@ class FireStore {
 		})
 	}
 
+	// @action getEvent = () => {
+	// 	return new Promise((resolve) => {
+	// 		Fire.getEventsInMultiplies( 1 ).then( res =>
+	// 		{
+
+	// 			resolve(true)
+	// 		} ).catch( err =>
+	// 		{
+	// 			resolve(false)
+	// 		})
+	// 	})
+	// }
+
 	@action sendAvatar = (data: any) => {
 		data.id = this.userId
 
 		Fire.uploadAvatar(data)
+	}
+
+	@action handleGoogleSignin(result: {
+		type: "success"
+		accessToken: string | null
+		idToken: string | null
+		refreshToken: string | null
+		user: import("expo-google-app-auth").GoogleUser
+	}) {
+		return new Promise((resolve) => {
+			Fire.HandleGoogleSignIn(result)
+				.then((res: GoogleUser | any) => {
+					this.setUsernameAndId(res.name, res.id)
+
+					resolve(true)
+				})
+				.catch((err) => {
+					resolve(false)
+				})
+		})
+	}
+
+	setUsernameAndId = (username: string, id: string) => {
+		this.userName = username
+		this.userId = id
 	}
 }
 
