@@ -3,11 +3,13 @@ import "firebase/auth"
 import "firebase/firestore"
 import "firebase/storage"
 import {FeedItemModel} from "../universial/Models"
+import * as faker from "faker"
 
 console.ignoredYellowBox = ["Setting a timer"]
 
 const eventCollection = "events"
 const userCollection = "users"
+let last: firestore.QueryDocumentSnapshot<firestore.DocumentData> | null = null
 
 class FirebaseStore {
 	HandleGoogleSignIn(result: {
@@ -104,8 +106,6 @@ class FirebaseStore {
 
 	isLoggedIn = () => {
 		this.init()
-		console.log(this.auth.currentUser)
-
 		return this.auth.currentUser != null
 	}
 
@@ -157,6 +157,8 @@ class FirebaseStore {
 		return new Promise((resolve, reject) => {
 			this.uploadPhoto(data).then((res) => {
 				if (res) {
+					data.timeStamp = firestore.FieldValue.serverTimestamp()
+					data.reference = faker.random.uuid()
 					// successful upload of image
 					this.dataBase
 						.collection(eventCollection)
@@ -218,6 +220,34 @@ class FirebaseStore {
 				.catch((err) => {
 					resolve(false)
 				})
+		})
+	}
+
+	resetLast = () => {
+		last = null
+	}
+
+	getEventsInMultiplies = (amount: number) => {
+		return new Promise(async (resolve, reject) => {
+			if (last == null) {
+				const firstQuery = this.dataBase.collection(eventCollection).orderBy("timeStamp").limit(amount)
+				const snapshotQuery = await firstQuery.get()
+
+				if (snapshotQuery.empty) return reject("empty")
+
+				//get the last document
+				const lastDocInSnapshotQuery = snapshotQuery.docs[snapshotQuery.docs.length - 1]
+				last = lastDocInSnapshotQuery
+				resolve(snapshotQuery)
+			} else {
+				const firstQuery = this.dataBase.collection(eventCollection).orderBy("timeStamp").limit(amount).startAfter(last)
+				const snapshot = await firstQuery.get()
+				if (snapshot.empty) return reject("empty")
+
+				const lastDocInSnapshotQuery = snapshot.docs[snapshot.docs.length - 1]
+				last = lastDocInSnapshotQuery
+				resolve(snapshot)
+			}
 		})
 	}
 }

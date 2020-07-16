@@ -9,7 +9,6 @@ import {useNavigation} from "@react-navigation/native"
 import dataProvider from "../dataLayer/DataStore"
 
 const {width, height} = Dimensions.get("screen")
-console.log(width / height)
 
 const Feed_itemV2 = ({
 	item,

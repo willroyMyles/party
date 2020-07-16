@@ -7,10 +7,6 @@ import {auth, app} from "firebase"
 import {PROVIDER_GOOGLE} from "react-native-maps"
 import {GoogleUser} from "expo-google-app-auth"
 
-AsyncStorage.getItem("userId").then((res) => {
-	console.log(res)
-})
-
 class FireStore {
 	@action handleGoogleSignin(result: {
 		type: "success"
@@ -52,8 +48,6 @@ class FireStore {
 	ou = autorun(() => {
 		if (this.user == null) {
 			if (Fire.isLoggedIn()) {
-				console.log("getting user", Fire.auth.currentUser?.providerData[0])
-
 				this.user = Fire.auth.currentUser?.providerData[0] || null
 				this.userName = this.user?.displayName || null
 				this.userId = this.user.uid

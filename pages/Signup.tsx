@@ -44,7 +44,6 @@ const Signup = observer(() => {
 					navigation.navigate("home")
 				} else {
 					//unsucessful
-					console.log(fireSotreMob.errorMessageSignUp)
 
 					setMessage(fireSotreMob.errorMessageSignUp)
 					setToastVisible(true)

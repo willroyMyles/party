@@ -1,3 +1,5 @@
+import {firestore} from "firebase"
+
 export enum PartyType {
 	STAGE_SHOW = 0,
 	CARNIVAL = 1,
@@ -32,6 +34,8 @@ export interface FeedItemModel {
 	partyType?: PartyType
 
 	admission?: number
+
+	timeStamp?: firestore.FieldValue
 }
 
 export interface UserDatabaseModel {

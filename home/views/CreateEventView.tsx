@@ -362,7 +362,7 @@ const CreateEventView = () => {
 									setSelectedValue(item), onChange(item)
 								}}>
 								{array.map((value: string, index: number) => {
-									return <Picker.Item label={value} value={PartyType[value]} />
+									return <Picker.Item key={index} label={value} value={PartyType[value]} />
 								})}
 							</Picker>
 						)}

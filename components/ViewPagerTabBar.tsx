@@ -8,7 +8,6 @@ import {useTheme} from "styled-components"
 const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Value<number>}) => {
 	const [idx, setIdx] = useState(0)
 	const theme = useTheme()
-	// console.log(position)
 
 	return (
 		<View
@@ -52,7 +51,6 @@ const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Va
 				)
 			})}
 			{/* {names.map((obj: any, index: number) => {
-				console.log(obj)
 
 				const isFocused = idx === index
 				const {name, iconName} = obj

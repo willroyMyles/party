@@ -2,6 +2,8 @@ import {observable, action} from "mobx"
 import * as faker from "faker"
 import {FeedItemModel, PartyType} from "../universial/Models"
 import moment from "moment"
+import Fire from "./FirebaseV2"
+import {firestore} from "firebase"
 class Store {
 	@observable data: Map<string, any> = new Map()
 
@@ -9,6 +11,21 @@ class Store {
 
 	@action getDataFromServerBasedOnSection = (section: number) => {
 		return new Promise((resolve) => {})
+	}
+
+	@action getData = () => {
+		return new Promise((resolve) => {
+			Fire.getEventsInMultiplies(1)
+				.then((res: firestore.QuerySnapshot<firestore.DocumentData> | any) => {
+					res.docs.map((value: firestore.DocumentData, index: number) => {
+						this.data.set(value.data().reference, value.data())
+					})
+					resolve(true)
+				})
+				.catch((err) => {
+					resolve(false)
+				})
+		})
 	}
 
 	@action generateFakeData = () => {
