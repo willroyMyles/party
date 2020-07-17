@@ -17,7 +17,6 @@ import {decode, encode} from "base-64"
 import fireSotreMob from "./dataLayer/FireStore"
 console.ignoredYellowBox = ["Setting a timer"]
 
-import {YellowBox} from "react-native"
 import _ from "lodash"
 
 //ignores a warning
@@ -63,7 +62,7 @@ export default observer(function App() {
 	}, [])
 
 	return (
-		<SafeAreaProvider style={{backgroundColor: "red"}}>
+		<SafeAreaProvider>
 			<ThemeProvider theme={uiManager.theme}>
 				<View style={styles.container}>
 					{activityLoading && (

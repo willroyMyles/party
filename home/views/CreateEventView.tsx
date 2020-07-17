@@ -366,7 +366,7 @@ const CreateEventView = () => {
 								})}
 							</Picker>
 						)}
-						name="type"
+						name="partyType"
 						rules={{required: "is required"}}
 						defaultValue=""
 					/>

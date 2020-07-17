@@ -1,14 +1,11 @@
 import React from "react"
-import {View, Card, Image, Avatar, Text, TouchableOpacity, Button, Colors} from "react-native-ui-lib"
+import {View, Image, Avatar, Text, Button, Colors} from "react-native-ui-lib"
 import dataProvider from "../../dataLayer/DataStore"
 import {FeedItemModel} from "../../universial/Models"
-import {useNavigation, useRoute} from "@react-navigation/native"
 import UseSmallMapView from "./UseSmallMapView"
 import {ScrollView} from "react-native"
 import moment from "moment"
-import DateBox from "../../components/DateBox"
-import DateAndTimeBox from "../../universial/DateAndTimeBox"
-import {SharedElement, SharedElementsComponentConfig} from "react-navigation-shared-element"
+import {SharedElement} from "react-navigation-shared-element"
 
 const EventView = ({preview}: {preview?: boolean}) => {
 	// const route = useRoute()
@@ -56,10 +53,10 @@ const EventView = ({preview}: {preview?: boolean}) => {
 				</View>
 				{preview && (
 					<View marginV-2 row style={{justifyContent: "space-around", paddingBottom: 15}}>
-						<Button onPress={(e: any) => {}} bg-primary size="large" borderRadius={2}>
+						<Button onPress={() => {}} bg-primary size="large" borderRadius={2}>
 							<Text btn>back</Text>
 						</Button>
-						<Button onPress={(e: any) => {}} bg-primary size="large" borderRadius={2}>
+						<Button onPress={() => {}} bg-primary size="large" borderRadius={2}>
 							<Text btn>proceed</Text>
 						</Button>
 					</View>
@@ -71,7 +68,7 @@ const EventView = ({preview}: {preview?: boolean}) => {
 	}
 }
 
-EventView.sharedElements = (route: any, otherRoute: any, showing: any) => {
+EventView.sharedElements = () => {
 	const item: FeedItemModel = dataProvider.currentEvent
 	const img = item.reference + "img"
 	const tit = item.reference + "title"

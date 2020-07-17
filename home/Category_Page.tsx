@@ -1,26 +1,24 @@
 import React, {useState, useEffect} from "react"
 import {View, Text, TouchableOpacity, Colors, Button} from "react-native-ui-lib"
-import {Dimensions, SectionList, FlatList} from "react-native"
+import {SectionList} from "react-native"
 import {useTheme} from "styled-components"
 import {FeedItemModel, PartyType} from "../universial/Models"
-import Feed_Item from "../components/Feed_Item"
 import {useNavigation} from "@react-navigation/native"
 import dataProvider from "../dataLayer/DataStore"
 import * as faker from "faker"
-import {eventEmitter, eventStrings} from "../universial/EventEmitter"
 import Feed_itemV2 from "../components/Feed_itemV2"
 import uiManager from "../dataLayer/UiManager"
 
 const Category_Page = () => {
 	const navigation = useNavigation()
 	const [data, setdata] = useState<any[]>()
-	const [dataFinished, setdataFinished] = useState(false)
+	const [, setdataFinished] = useState(false)
 
 	const callSome = () => {
 		dataProvider.getEvents().then((res) => {
 			if (res) {
 				const d: any = []
-				dataProvider.data.forEach((item, key) => {
+				dataProvider.data.forEach((item) => {
 					d.push(item)
 				})
 				sortData(d)
@@ -34,7 +32,7 @@ const Category_Page = () => {
 	useEffect(() => {
 		// setdata(dataProvider.data)
 		const d: any = []
-		dataProvider.data.forEach((item, key) => {
+		dataProvider.data.forEach((item) => {
 			d.push(item)
 		})
 		sortData(d)
@@ -43,7 +41,7 @@ const Category_Page = () => {
 	const sortData = (data1: FeedItemModel[]) => {
 		const obj: any = {title: "", data: []}
 		const map = new Map<string, FeedItemModel[]>()
-		data1.map((value, index) => {
+		data1.map((value) => {
 			const key = PartyType[value.partyType || PartyType.AFTER_WORK_JAM]
 
 			if (map.has(key)) {
@@ -71,12 +69,10 @@ const Category_Page = () => {
 		navigation.navigate("event")
 	}
 
-	const theme: any = useTheme()
-
 	return (
 		<View bg-background style={{borderWidth: 0}}>
 			<SectionList
-				onScroll={(e) => {}}
+				onScroll={() => {}}
 				stickySectionHeadersEnabled
 				// style={{borderWidth: 5}}
 				sections={data || []}
@@ -85,7 +81,7 @@ const Category_Page = () => {
 						<Text>hi</Text>
 					</View>
 				}
-				renderItem={({item, index, section, separators}) => {
+				renderItem={({item, index}) => {
 					// const d = section.data.slice(0, 3)
 
 					return (

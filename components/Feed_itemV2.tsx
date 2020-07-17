@@ -61,7 +61,7 @@ const Feed_itemV2 = ({
 						<View marginT-10 row style={{justifyContent: "flex-start"}}>
 							<View>
 								<Text hint>Date</Text>
-								<Text reg>{moment(item.date).format("MMM D, YYYY")}</Text>
+								<Text reg>{item.date}</Text>
 							</View>
 							<View style={{marginStart: "30%"}}>
 								<Text hint>Time</Text>

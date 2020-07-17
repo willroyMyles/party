@@ -6,7 +6,7 @@ export const SettingsAbout = () => {
 	const theme = useTheme()
 
 	return (
-		<View View>
+		<View>
 			<Text imp1 marginV-45 marginB-10>
 				About
 			</Text>

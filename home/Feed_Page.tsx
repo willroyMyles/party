@@ -1,25 +1,20 @@
 import React, {useEffect, useState} from "react"
-import {View, Card, Image, Text, TouchableOpacity, Button, FloatingButton} from "react-native-ui-lib"
-import {SafeAreaView} from "react-native-safe-area-context"
+import {View} from "react-native-ui-lib"
 import dataProvider from "../dataLayer/DataStore"
-import {FlatList, ScrollView} from "react-native"
-import moment from "moment"
-import {eventEmitter, eventStrings} from "../universial/EventEmitter"
+import {FlatList} from "react-native"
 import {useNavigation} from "@react-navigation/native"
-import Feed_Item from "../components/Feed_Item"
 import {FeedItemModel} from "../universial/Models"
 import {useTheme} from "styled-components"
-import {fake} from "faker"
 import Feed_itemV2 from "../components/Feed_itemV2"
 
 const Feed_Page = () => {
 	const navigation = useNavigation()
 	const [data, setdata] = useState([])
 	useEffect(() => {
-		dataProvider.generateFakeData().then((res) => {
+		dataProvider.generateFakeData().then(() => {
 			// setdata(dataProvider.data)
 			const d: any = []
-			dataProvider.data.forEach((item, key) => {
+			dataProvider.data.forEach((item) => {
 				d.push(item)
 			})
 			setdata(d)
@@ -31,12 +26,10 @@ const Feed_Page = () => {
 		navigation.navigate("event", item)
 	}
 
-	const theme: any = useTheme()
-
 	return (
 		<View bg-background>
 			<FlatList
-				onScroll={(e) => {}}
+				onScroll={() => {}}
 				// style={{borderWidth: 0, flex: 1}}
 				data={data}
 				renderItem={({item, index}) => {
