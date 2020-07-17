@@ -6,6 +6,7 @@ import UseSmallMapView from "./UseSmallMapView"
 import {ScrollView, Dimensions} from "react-native"
 import moment from "moment"
 import {SharedElement} from "react-navigation-shared-element"
+import BackButton from "../../components/BackButton"
 
 const EventView = ({preview}: {preview?: boolean}) => {
 	// const route = useRoute()
@@ -17,14 +18,13 @@ const EventView = ({preview}: {preview?: boolean}) => {
 				<View flex bg-background paddingB-20>
 					<SharedElement id={e.reference + "img"}>
 						<Image
-							style={{borderRadius: 6, height: 330}}
+							style={{borderRadius: 6, height: 400}}
 							source={{uri: e.flyer}}
 							resizeMethod="scale"
 							resizeMode="cover"
-							// cover
-							width={Dimensions.get("screen").width}
 						/>
 					</SharedElement>
+					<BackButton />
 					<ScrollView style={{flex: 1}} scrollEnabled>
 						<View padding-10>
 							<View padding-5 center marginV-10>
