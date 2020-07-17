@@ -1,8 +1,8 @@
-import app, {firestore, auth} from "firebase/app"
+import app, {firestore, auth, database} from "firebase/app"
 import "firebase/auth"
 import "firebase/firestore"
 import "firebase/storage"
-import {FeedItemModel} from "../universial/Models"
+import {FeedItemModel, PartyType} from "../universial/Models"
 import * as faker from "faker"
 
 console.ignoredYellowBox = ["Setting a timer"]
@@ -253,6 +253,24 @@ class FirebaseStore {
 				last = lastDocInSnapshotQuery
 				resolve(snapshot)
 			}
+		})
+	}
+
+	getEventsInCategories = (amount: number) => {
+		//will have to get a large collection and filter them down the line
+		return new Promise(async (resolve, reject) => {
+			const ref = this.dataBase
+				.collection(eventCollection)
+				// .where("partyType", "in", [0, 1, 13, 3, 4, 5, 6, 7, 8, 9])
+				.limit(amount)
+			ref
+				.get()
+				.then((values) => {
+					resolve(values)
+				})
+				.catch((err) => {
+					reject(err)
+				})
 		})
 	}
 }

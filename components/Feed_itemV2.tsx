@@ -46,6 +46,8 @@ const Feed_itemV2 = ({
 						<Image
 							source={{uri: item.flyer}}
 							style={{flex: 1, flexDirection: "row", borderRadius: 10}}
+							resizeMode="cover"
+
 							// height={height * 0.125}
 							// aspectRatio={1.33}
 						/>

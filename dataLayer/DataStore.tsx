@@ -4,6 +4,9 @@ import {FeedItemModel, PartyType} from "../universial/Models"
 import moment from "moment"
 import Fire from "./FirebaseV2"
 import {firestore} from "firebase"
+
+const amountForCategory = 50
+
 class Store {
 	@observable data: Map<string, any> = new Map()
 
@@ -16,6 +19,21 @@ class Store {
 	@action getEvents = () => {
 		return new Promise((resolve) => {
 			Fire.getEventsInMultiplies(1)
+				.then((res: firestore.QuerySnapshot<firestore.DocumentData> | any) => {
+					res.docs.map((value: firestore.DocumentData, index: number) => {
+						this.data.set(value.data().reference, value.data())
+					})
+					resolve(true)
+				})
+				.catch((err) => {
+					resolve(false)
+				})
+		})
+	}
+
+	@action getEventsForCategory = () => {
+		return new Promise((resolve) => {
+			Fire.getEventsInCategories(amountForCategory)
 				.then((res: firestore.QuerySnapshot<firestore.DocumentData> | any) => {
 					res.docs.map((value: firestore.DocumentData, index: number) => {
 						this.data.set(value.data().reference, value.data())

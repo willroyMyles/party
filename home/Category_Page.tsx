@@ -15,7 +15,7 @@ const Category_Page = () => {
 	const [, setdataFinished] = useState(false)
 
 	const callSome = () => {
-		dataProvider.getEvents().then((res) => {
+		dataProvider.getEventsForCategory().then((res) => {
 			if (res) {
 				const d: any = []
 				dataProvider.data.forEach((item) => {
@@ -39,13 +39,14 @@ const Category_Page = () => {
 	}, [dataProvider.data])
 
 	const sortData = (data1: FeedItemModel[]) => {
+		const limitInSection = 3
 		const obj: any = {title: "", data: []}
 		const map = new Map<string, FeedItemModel[]>()
-		data1.map((value) => {
+		data1.map((value, index) => {
 			const key = PartyType[value.partyType || PartyType.AFTER_WORK_JAM]
 
 			if (map.has(key)) {
-				map.get(key)?.push(value)
+				if (map.get(key)!?.length < limitInSection) map.get(key)?.push(value)
 			} else {
 				map.set(key, [value])
 			}

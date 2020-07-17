@@ -31,8 +31,6 @@ export default observer(function App() {
 	const [activityLoading, setactivityLoading] = useState(false)
 	const [showToast, setshowToast] = useState(false)
 
-	const [] = useState<ReactNode>(undefined)
-
 	useEffect(() => {
 		if (!global.btoa) {
 			global.btoa = encode
@@ -64,29 +62,31 @@ export default observer(function App() {
 	return (
 		<SafeAreaProvider>
 			<ThemeProvider theme={uiManager.theme}>
-				<View style={styles.container}>
-					{activityLoading && (
-						<View
-							center
-							style={{
-								position: "absolute",
-								height: "100%",
-								width: "100%",
-								backgroundColor: "rgba(0,0,0,.3)",
-								zIndex: 1,
-							}}>
-							<ActivityIndicator size="large" color={Colors.primary} animating={activityLoading} />
-						</View>
-					)}
-					<Navigator />
-					<Toast
-						onDismiss={() => setshowToast(false)}
-						visible={showToast}
-						position="bottom"
-						autoDismiss={3000}
-						message={fireSotreMob.errorMessage}
-					/>
-				</View>
+				{!loading && (
+					<View style={styles.container}>
+						{activityLoading && (
+							<View
+								center
+								style={{
+									position: "absolute",
+									height: "100%",
+									width: "100%",
+									backgroundColor: "rgba(0,0,0,.3)",
+									zIndex: 1,
+								}}>
+								<ActivityIndicator size="large" color={Colors.primary} animating={activityLoading} />
+							</View>
+						)}
+						<Navigator />
+						<Toast
+							onDismiss={() => setshowToast(false)}
+							visible={showToast}
+							position="bottom"
+							autoDismiss={3000}
+							message={fireSotreMob.errorMessage}
+						/>
+					</View>
+				)}
 			</ThemeProvider>
 		</SafeAreaProvider>
 	)
