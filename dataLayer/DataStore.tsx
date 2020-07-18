@@ -39,10 +39,22 @@ class Store {
 						this.data.set(value.data().reference, value.data())
 					})
 					resolve(true)
+
+					this.updateDataImages()
 				})
 				.catch((err) => {
 					resolve(false)
 				})
+		})
+	}
+
+	updateDataImages = () => {
+		this.data.forEach(async (value, key) => {
+			const element: FeedItemModel = this.data.get(key)
+			if (element.imageUrl == undefined || element.imageUrl == null || element.imageUrl == "") {
+				element.imageUrl = await Fire.getURLForEventFlyers(element.flyer || "")
+				this.data.set(key, element)
+			}
 		})
 	}
 

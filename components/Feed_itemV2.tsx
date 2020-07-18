@@ -44,7 +44,7 @@ const Feed_itemV2 = ({
 				<View row>
 					<SharedElement id={item.reference + "img"} style={{flex: 1}}>
 						<Image
-							source={{uri: item.flyer}}
+							source={{uri: item.imageUrl}}
 							style={{flex: 1, flexDirection: "row", borderRadius: 10}}
 							resizeMode="cover"
 						/>

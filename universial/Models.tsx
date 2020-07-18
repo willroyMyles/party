@@ -20,6 +20,7 @@ export enum PartyType {
 export interface FeedItemModel {
 	flyer?: string
 
+	imageUrl?: string
 	flyerBase64?: string
 	date?: Date
 	description?: string

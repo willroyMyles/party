@@ -132,7 +132,7 @@ class FirebaseStore {
 		})
 	}
 
-	uploadPhoto = (data: FeedItemModel) => {
+	uploadPhoto = (data: FeedItemModel): string | any => {
 		return new Promise(async (resolve) => {
 			const filename = data.flyer?.substring(data.flyer?.lastIndexOf("/") + 1)
 
@@ -155,10 +155,11 @@ class FirebaseStore {
 
 	uploadEvent = (data: FeedItemModel) => {
 		return new Promise((resolve, reject) => {
-			this.uploadPhoto(data).then((res) => {
+			this.uploadPhoto(data).then((res: string) => {
 				if (res) {
 					data.timeStamp = firestore.FieldValue.serverTimestamp()
 					data.reference = faker.random.uuid()
+					data.flyer = res
 					// successful upload of image
 					this.dataBase
 						.collection(eventCollection)
@@ -267,6 +268,20 @@ class FirebaseStore {
 				.get()
 				.then((values) => {
 					resolve(values)
+				})
+				.catch((err) => {
+					reject(err)
+				})
+		})
+	}
+
+	getURLForEventFlyers = (imagePath: string) => {
+		return new Promise<string>((resolve, reject): any => {
+			this.storage
+				.ref(imagePath)
+				.getDownloadURL()
+				.then((url) => {
+					resolve(url)
 				})
 				.catch((err) => {
 					reject(err)

@@ -1,13 +1,19 @@
 {
   "files.exclude": {
-    ".vscode": true,
-    ".expo-shared": true,
     ".expo": true,
-    "package-lock.json": true,
-    "babel.config.js": true,
+    "**/.expo-shared": true,
+    "**/.expo-shared.*": true,
+    "assets": true,
+    ".vscode": true,
+    ".d.ts": true,
     ".gitignore": true,
+    "babel.config.js": true,
+    "react-native-config.js": true,
     "yarn.lock": true,
-    "node_modules": true,
-    "assets": true
+    "tsconfig.json": true,
+    "package-lock.json": true,
+    "google-services.json": true,
+    "app.json": true,
+    "node_modules": true
   }
 }
