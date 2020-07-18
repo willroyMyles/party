@@ -8,6 +8,7 @@ import {useTheme} from "styled-components"
 import Feed_itemV2 from "../components/Feed_itemV2"
 import {values} from "mobx"
 import moment from "moment"
+import Feed_Item from "../components/Feed_Item"
 
 const Feed_Page = () => {
 	const navigation = useNavigation()
@@ -22,6 +23,7 @@ const Feed_Page = () => {
 	}
 
 	const getPastEvents = () => {
+		//should really fetch data and sort in data layer...
 		const d: FeedItemModel[] = []
 		dataProvider.data.forEach((val: FeedItemModel, key) => {
 			if (checkDate(val.date)) d.push(val)
@@ -47,7 +49,7 @@ const Feed_Page = () => {
 				renderItem={({item, index}) => {
 					return (
 						<View key={index}>
-							<Feed_itemV2 onClick={handleViewClick} index={index} item={item} />
+							<Feed_Item onClick={handleViewClick} index={index} item={item} />
 						</View>
 					)
 				}}

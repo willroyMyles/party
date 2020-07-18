@@ -24,6 +24,7 @@ import HomePageV2 from "../home/HomePageV2"
 import HomePageV3 from "../home/HomePageV3"
 import SocialSignIn from "../pages/SocialSignIn"
 import CategoryView from "../home/views/CategoryView"
+import PastEventView from "../home/views/PastEventView"
 // const Stack = createStackNavigator()
 const Stack = createSharedElementStackNavigator()
 
@@ -54,6 +55,7 @@ export const Navigator = observer(() => {
 				{/* sub pages */}
 				{/* <Stack.Screen options={{headerShown: true}} name="test" component={FormTest} /> */}
 				<Stack.Screen options={{headerShown: false}} name="event" component={EventView} />
+				<Stack.Screen options={{headerShown: false}} name="past-event" component={PastEventView} />
 				<Stack.Screen options={{headerShown: true}} name="previewEvent" component={PreviewEventView} />
 				<Stack.Screen options={{headerShown: true}} name="categoryView" component={CategoryView} />
 				<Stack.Screen options={{headerShown: true, headerTitle: ""}} name="create_event" component={CreateEventView} />
