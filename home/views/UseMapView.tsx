@@ -9,13 +9,16 @@ import {eventEmitter, eventStrings} from "../../universial/EventEmitter"
 import {useNavigation} from "@react-navigation/native"
 import axios from "axios"
 import themeHelper from "../../universial/ThemeHelper"
+import BackButton from "../../components/BackButton"
+import {extraFixColorsMap} from "react-native-ui-lib/generatedTypes/style/colorsPalette"
 
 const UseMapView = (props: {setValue: () => null}) => {
 	const theme = useTheme()
 	const navigation = useNavigation()
 	const [marker, setMarker] = useState<any>(null)
 	const [loc, setloc] = useState<any>(undefined)
-	const [scrollEnabled, setScrollEnabled] = useState(true)
+	// const [scrollEnabled, setScrollEnabled] = useState(false)
+	const [map, setMap] = useState<MapView>()
 
 	const useLocation = async () => {
 		const perm = await Location.getPermissionsAsync()
@@ -39,28 +42,12 @@ const UseMapView = (props: {setValue: () => null}) => {
 					},
 				}
 
-				const {width, height} = Dimensions.get("window")
-				const ASPECT_RATIO = width / height
-
-				const northeastLat = res.coords.latitude + 0.03 // for scale
-				const southwestLat = res.coords.latitude
-				const latDelta = northeastLat - southwestLat
-				const lngDelta = latDelta * ASPECT_RATIO
-
-				let region = {
-					latitude: res.coords.latitude,
-					longitude: res.coords.longitude,
-					latitudeDelta: latDelta,
-					longitudeDelta: lngDelta,
-				}
-
-				setloc(region)
-				setMarker(res.coords)
+				setLocLocation(res.coords)
 			})
 		}
 	}
 
-	const setLocLocation = (coor: LatLng) => {
+	const setLocLocation = async (coor: LatLng) => {
 		const {width, height} = Dimensions.get("window")
 		const ASPECT_RATIO = width / height
 
@@ -81,12 +68,6 @@ const UseMapView = (props: {setValue: () => null}) => {
 
 		const lat = coor.latitude
 		const lon = coor.longitude
-
-		// const url = `maps.googleapis.com/maps/api/geocode/json?&location=${lat},${lon}`
-		// console.log(lat, lon)
-		// axios.get(url).then((res) => {
-		// 	console.log(res, "called")
-		// })
 	}
 
 	const getLocationPermission = () => {
@@ -104,7 +85,11 @@ const UseMapView = (props: {setValue: () => null}) => {
 		<View flex-5 bg-background>
 			<View flex-5>
 				<MapView
+					ref={(e) => setMap(e || undefined)}
+					showsScale
+					showsMyLocationButton
 					showsUserLocation
+					// showsMyLocationButton
 					region={loc}
 					onPress={(e) => {
 						setLocLocation(e.nativeEvent.coordinate)
@@ -114,38 +99,22 @@ const UseMapView = (props: {setValue: () => null}) => {
 					}}
 					style={{width: Dimensions.get("screen").width, height: "100%"}}>
 					{marker && (
-						<Marker
-							draggable
-							onPress={(e) => setScrollEnabled(false)}
-							image={require("../../assets/marker.png")}
-							pinColor="red"
-							onDragEnd={(e) => {
-								setScrollEnabled(true)
-								setMarker(e.nativeEvent.coordinate)
-							}}
-							// title="Party"
-							// description="wildest party ever"
-							coordinate={marker}>
-							{/* <View style={{padding: 10, marginTop: -20, overflow: "visible"}}>
-								<Text>SF</Text>
-							</View> */}
-						</Marker>
+						<Marker draggable image={require("../../assets/marker.png")} pinColor="red" coordinate={marker}></Marker>
 					)}
 				</MapView>
-				<View
+				<BackButton />
+				{/* <View
 					style={{
 						position: "absolute",
 						top: 25,
-						width: "100%",
+						left: "20%",
+						width: "60%",
 						padding: 5,
 						flexDirection: "row",
-						borderWidth: 1,
+						borderWidth: 0,
 					}}>
-					<TouchableOpacity br100 marginR-10 style={{backgroundColor: "red"}}>
-						<Icon name="arrow-left" size={30} style={{backgroundColor: "green"}} />
-					</TouchableOpacity>
-					<TextInput style={[themeHelper.styles.input, {flex: 1}]} />
-				</View>
+					<TextInput placeholder="search" style={[themeHelper.styles.input, {flex: 1}]} />
+				</View> */}
 			</View>
 			<View row marginV-35 style={{justifyContent: "space-around", position: "absolute", width: "100%", bottom: 5}}>
 				<Button style={styles.btn} onPress={() => useLocation()} bg-primary size="large" borderRadius={2}>

@@ -8,7 +8,6 @@ const BackButton = () => {
 	const route = useRoute()
 	const {routes} = navigation.dangerouslyGetState()
 	const currentIndex = routes.length
-	console.log(currentIndex, routes)
 
 	const handlePress = () => navigation.navigate(routes[currentIndex - 2].name)
 

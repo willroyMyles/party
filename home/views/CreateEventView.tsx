@@ -28,7 +28,7 @@ const CreateEventView = () => {
 	const [startRef, setStartRef] = useState<any>()
 	const [endRef, setendRef] = useState<any>()
 	const [dateRef, setdateRef] = useState<any>()
-	const [selectedValue, setSelectedValue] = useState("")
+	const [selectedValue, setSelectedValue] = useState<number>()
 
 	const array = Object.keys(PartyType).filter((value, index) => isNaN(Number(value)) == true)
 
@@ -168,7 +168,9 @@ const CreateEventView = () => {
 				/>
 			)}
 			<View bg-background padding-10 paddingB-35>
-				<Text imp>Create Event</Text>
+				<Text imp marginB-35>
+					Create Event
+				</Text>
 
 				<View row>
 					<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
@@ -357,18 +359,23 @@ const CreateEventView = () => {
 						control={control}
 						render={({onChange, onBlur, value}) => (
 							<Picker
-								selectedValue={getValues("type")}
+								prompt="select party type"
+								style={style.input}
+								selectedValue={selectedValue}
 								onValueChange={(item, index) => {
-									setSelectedValue(item), onChange(item)
+									setSelectedValue(item)
+									onChange(item)
+									value = {item}
+									setValue("partyType", item)
 								}}>
-								{array.map((value: string, index: number) => {
-									return <Picker.Item key={index} label={value} value={PartyType[value]} />
+								{array.map((val: string, index: number) => {
+									return <Picker.Item key={index} label={val} value={PartyType[val]} />
 								})}
 							</Picker>
 						)}
 						name="partyType"
 						rules={{required: "is required"}}
-						defaultValue=""
+						defaultValue="select a value"
 					/>
 				</View>
 				<View>
