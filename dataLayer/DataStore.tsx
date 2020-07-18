@@ -4,6 +4,7 @@ import {FeedItemModel, PartyType} from "../universial/Models"
 import moment from "moment"
 import Fire from "./FirebaseV2"
 import {firestore} from "firebase"
+import {threadId} from "worker_threads"
 
 const amountForCategory = 50
 
@@ -36,7 +37,7 @@ class Store {
 			Fire.getEventsInCategories(amountForCategory)
 				.then((res: firestore.QuerySnapshot<firestore.DocumentData> | any) => {
 					res.docs.map((value: firestore.DocumentData, index: number) => {
-						this.data.set(value.data().reference, value.data())
+						if (!this.data.has(value.data().reference)) this.data.set(value.data().reference, value.data())
 					})
 					resolve(true)
 

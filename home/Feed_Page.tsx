@@ -1,29 +1,41 @@
 import React, {useEffect, useState} from "react"
-import {View} from "react-native-ui-lib"
+import {View, Button, Text} from "react-native-ui-lib"
 import dataProvider from "../dataLayer/DataStore"
 import {FlatList} from "react-native"
 import {useNavigation} from "@react-navigation/native"
 import {FeedItemModel} from "../universial/Models"
 import {useTheme} from "styled-components"
 import Feed_itemV2 from "../components/Feed_itemV2"
+import {values} from "mobx"
+import moment from "moment"
 
 const Feed_Page = () => {
 	const navigation = useNavigation()
-	const [data, setdata] = useState([])
+	const [data, setdata] = useState<FeedItemModel[]>([])
 	useEffect(() => {
-		dataProvider.generateFakeData().then(() => {
-			// setdata(dataProvider.data)
-			const d: any = []
-			dataProvider.data.forEach((item) => {
-				d.push(item)
-			})
-			setdata(d)
-		})
+		getPastEvents()
 	}, [])
 
 	const handleViewClick = (item: FeedItemModel) => {
 		dataProvider.currentEvent = item
 		navigation.navigate("event", item)
+	}
+
+	const getPastEvents = () => {
+		const d: FeedItemModel[] = []
+		dataProvider.data.forEach((val: FeedItemModel, key) => {
+			if (checkDate(val.date)) d.push(val)
+		})
+
+		setdata(d)
+	}
+
+	const checkDate = (d: string) => {
+		const old = Date.parse(d)
+		const comp = new Date().valueOf()
+		// console.log(d, d < comp)
+
+		return old <= comp
 	}
 
 	return (
@@ -41,6 +53,11 @@ const Feed_Page = () => {
 				}}
 				keyExtractor={(item: FeedItemModel) => item.reference || fakerStatic.random.number(20000000000).toString()}
 			/>
+			<View center>
+				<Button onPress={() => getPastEvents()}>
+					<Text btn>load feed </Text>
+				</Button>
+			</View>
 		</View>
 	)
 }

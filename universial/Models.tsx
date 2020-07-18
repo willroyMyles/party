@@ -22,7 +22,7 @@ export interface FeedItemModel {
 
 	imageUrl?: string
 	flyerBase64?: string
-	date?: Date
+	date?: string
 	description?: string
 	title?: string
 	hint?: string
