@@ -5,7 +5,6 @@
     "**/.expo-shared.*": true,
     "assets": true,
     ".vscode": true,
-    ".d.ts": true,
     ".gitignore": true,
     "babel.config.js": true,
     "react-native-config.js": true,

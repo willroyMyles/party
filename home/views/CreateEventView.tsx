@@ -67,7 +67,7 @@ const CreateEventView = () => {
 	}
 
 	const submitter = (data: FeedItemModel) => {
-		fireSotreMob.sendEvent(data).then((res) => {
+		fireSotreMob.send.Event(data).then((res) => {
 			if (res) {
 				fireSotreMob.errorMessage = "post created successfully"
 				eventEmitter.emit(eventStrings.showToast, true)
@@ -368,7 +368,7 @@ const CreateEventView = () => {
 									value = {item}
 									setValue("partyType", item)
 								}}>
-								{array.map((val: string, index: number) => {
+								{array.map((val: any, index: number) => {
 									return <Picker.Item key={index} label={val} value={PartyType[val]} />
 								})}
 							</Picker>

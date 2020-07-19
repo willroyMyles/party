@@ -153,6 +153,27 @@ class FirebaseStore {
 		})
 	}
 
+	uploadPhotoToEvent = (ref: string, url: string) => {
+		return new Promise(async (resolve) => {
+			const filename = url.substring(url?.lastIndexOf("/") + 1)
+
+			const response = await fetch(url || "")
+			const blob = await response.blob()
+
+			const operation = this.storage.ref(`images/party/${ref}/${filename}`)
+
+			operation
+				.put(blob)
+				.then((res) => {
+					// resolve( true )
+					resolve(operation.fullPath)
+				})
+				.catch((err) => {
+					resolve(false)
+				})
+		})
+	}
+
 	uploadEvent = (data: FeedItemModel) => {
 		return new Promise((resolve, reject) => {
 			this.uploadPhoto(data).then((res: string) => {

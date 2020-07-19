@@ -1,7 +1,7 @@
 import "mobx-react-lite/batchingForReactNative"
 import React, {useEffect, useState, ReactNode} from "react"
 import {View, Toast} from "react-native-ui-lib"
-import {StyleSheet, ActivityIndicator} from "react-native"
+import {StyleSheet, ActivityIndicator, Platform, UIManager, LayoutAnimation} from "react-native"
 import {Colors} from "react-native-ui-lib"
 import {SafeAreaProvider} from "react-native-safe-area-context"
 import {createStackNavigator} from "@react-navigation/stack"
@@ -25,6 +25,11 @@ console.warn = (message: any) => {
 	if (message.indexOf("Setting a timer") <= -1) {
 		_console.warn(message)
 	}
+}
+
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+	UIManager.setLayoutAnimationEnabledExperimental(true)
+	LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
 }
 export default observer(function App() {
 	const [loading, setLoading] = useState(true)

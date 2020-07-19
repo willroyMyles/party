@@ -11,7 +11,7 @@ import moment from "moment"
 import {getPermissionsAsync} from "expo-location"
 
 export const getImage = (quality?: number) => {
-	return new Promise((resolve) => {
+	return new Promise<ImagePicker.ImagePickerResult>((resolve) => {
 		getPhotopermission().then((result) => {
 			if (result) {
 				ImagePicker.launchImageLibraryAsync({

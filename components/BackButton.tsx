@@ -9,6 +9,7 @@ const BackButton = () => {
 	const {routes} = navigation.dangerouslyGetState()
 	const currentIndex = routes.length
 
+	//disrupts shared element
 	const handlePress = () => navigation.navigate(routes[currentIndex - 2].name)
 
 	return (

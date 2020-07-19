@@ -102,7 +102,7 @@ class FireStore {
 		})
 	}
 
-	@action sendEvent = (data: FeedItemModel) => {
+	@action private sendEvent = (data: FeedItemModel) => {
 		data.person = this.userName
 		data.personId = this.userId
 		return new Promise((resolve) => {
@@ -118,23 +118,28 @@ class FireStore {
 		})
 	}
 
-	// @action getEvent = () => {
-	// 	return new Promise((resolve) => {
-	// 		Fire.getEventsInMultiplies( 1 ).then( res =>
-	// 		{
-
-	// 			resolve(true)
-	// 		} ).catch( err =>
-	// 		{
-	// 			resolve(false)
-	// 		})
-	// 	})
-	// }
-
-	@action sendAvatar = (data: any) => {
+	@action private sendAvatar = (data: any) => {
 		data.id = this.userId
 
 		Fire.uploadAvatar(data)
+	}
+
+	@action private uploadPictureToEvent = (ref: string, imageUrl: string) => {
+		return new Promise((resolve) => {
+			Fire.uploadPhotoToEvent(ref, imageUrl).then((res) => {
+				if (res) {
+					resolve(true)
+				} else {
+					resolve(false)
+				}
+			})
+		})
+	}
+
+	send = {
+		PictureToEvent: this.uploadPictureToEvent,
+		Avater: this.sendAvatar,
+		Event: this.sendEvent,
 	}
 
 	@action handleGoogleSignin(result: {

@@ -19,7 +19,7 @@ const EventView = ({preview}: {preview?: boolean}) => {
 					<SharedElement id={e.reference + "img"}>
 						<Image
 							style={{borderRadius: 6, height: 400}}
-							source={{uri: e.flyer}}
+							source={{uri: e.imageUrl}}
 							resizeMethod="scale"
 							resizeMode="cover"
 						/>
