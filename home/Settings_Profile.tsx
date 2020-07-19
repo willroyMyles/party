@@ -11,6 +11,7 @@ import {TextInput, StyleSheet} from "react-native"
 import {useNavigation} from "@react-navigation/native"
 import fireSotreMob from "../dataLayer/FireStore"
 import Fire from "../dataLayer/FirebaseV2"
+import TToast from "../components/TToast"
 
 export const Settings_Profile = observer(() => {
 	const theme = useTheme()
@@ -118,8 +119,9 @@ export const Settings_Profile = observer(() => {
 					onPress={() => {
 						// uiManager.clearTheme()
 						// Fire.testAdd()
-						const hey = Fire.isLoggedIn()
-						console.log(hey)
+						// const hey = Fire.isLoggedIn()
+						// console.log(hey)
+						TToast.error("hellos", "worldx")
 					}}
 					size="small"
 					round={false}

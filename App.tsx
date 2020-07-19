@@ -8,7 +8,7 @@ import {createStackNavigator} from "@react-navigation/stack"
 import {observer} from "mobx-react"
 import uiManager from "./dataLayer/UiManager"
 import {generate} from "@ant-design/colors"
-import {ThemeProvider} from "styled-components"
+import {ThemeProvider, useTheme} from "styled-components"
 import * as Font from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
 import Navigator from "./components/Navigator"
@@ -18,6 +18,7 @@ import fireSotreMob from "./dataLayer/FireStore"
 console.ignoredYellowBox = ["Setting a timer"]
 
 import _ from "lodash"
+import TToast from "./components/TToast"
 
 //ignores a warning
 const _console = _.clone(console)
@@ -35,6 +36,7 @@ export default observer(function App() {
 	const [loading, setLoading] = useState(true)
 	const [activityLoading, setactivityLoading] = useState(false)
 	const [showToast, setshowToast] = useState(false)
+	const theme = useTheme()
 
 	useEffect(() => {
 		if (!global.btoa) {
@@ -48,7 +50,7 @@ export default observer(function App() {
 		SplashScreen.preventAutoHideAsync()
 
 		eventEmitter.addListener(eventStrings.loggingIn, setactivityLoading)
-		eventEmitter.addListener(eventStrings.showToast, setshowToast)
+		// eventEmitter.addListener(eventStrings.showToast, setshowToast)
 		Font.loadAsync({
 			Nunito_Black: require("./assets/fonts/Nunito/Nunito-Black.ttf"),
 			Nunito_Regular: require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
@@ -60,7 +62,7 @@ export default observer(function App() {
 
 		return () => {
 			eventEmitter.removeListener(eventStrings.loggingIn, () => null)
-			eventEmitter.removeListener(eventStrings.showToast, () => null)
+			// eventEmitter.removeListener(eventStrings.showToast, () => null)
 		}
 	}, [])
 
@@ -83,13 +85,7 @@ export default observer(function App() {
 							</View>
 						)}
 						<Navigator />
-						<Toast
-							onDismiss={() => setshowToast(false)}
-							visible={showToast}
-							position="bottom"
-							autoDismiss={3000}
-							message={fireSotreMob.errorMessage}
-						/>
+						<TToast />
 					</View>
 				)}
 			</ThemeProvider>

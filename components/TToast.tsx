@@ -1,6 +1,9 @@
 import React, {PureComponent} from "react"
 import {Animated, Dimensions, StyleSheet} from "react-native"
-import {View, Text} from "react-native-ui-lib"
+import {View, Text, Colors} from "react-native-ui-lib"
+import {Node} from "react-native-reanimated"
+import {observer} from "mobx-react"
+import uiManager from "../dataLayer/UiManager"
 
 const {height} = Dimensions.get("screen")
 interface CC {
@@ -10,13 +13,47 @@ interface CC {
 	icon?: any
 	timing: number
 }
+
+@observer
 class TToast extends PureComponent {
 	static toastInstance: TToast
 
-	static show(config: CC) {
-		console.log(config, this.toastInstance)
+	// static show(config: CC) {
+	// 	console.log(config, this.toastInstance)
 
-		this.toastInstance.start(config)
+	// 	this.toastInstance.start(config)
+	// }
+
+	static success(title: string, text: string) {
+		this.toastInstance.start({
+			title: title,
+			text: text,
+			color: Colors.green20,
+			timing: 3500,
+		})
+	}
+
+	static error(title: string, text: string) {
+		this.toastInstance.start({
+			title: title,
+			text: text,
+			color: Colors.red20,
+			timing: 3500,
+		})
+	}
+
+	static working(title: string, text: string) {
+		this.toastInstance.start({
+			title: title,
+			text: text,
+			color: Colors.blue20,
+			timing: 13500,
+		})
+	}
+
+	componentDidMount() {
+		TToast.toastInstance = this
+		console.log(this.props)
 	}
 
 	static hide() {
@@ -29,18 +66,18 @@ class TToast extends PureComponent {
 		TToast.toastInstance = this
 	}
 
+	getSelf = () => this
+
 	state = {
 		toast: new Animated.Value(height),
-		title: "",
-		text: "",
-		color: "",
-		icon: "",
+		title: "hello",
+		text: "test",
+		color: "red",
+		icon: Node,
 		timing: 0,
 	}
 
 	start(config: CC) {
-		console.log(config)
-
 		this.setState({
 			title: config.title,
 			text: config.text,
@@ -74,20 +111,22 @@ class TToast extends PureComponent {
 		const {title, text, icon, color} = this.state
 		return (
 			<Animated.View
-				// ref={(c : any) => (this._root = c)}
 				style={[
 					styles.toast,
 					{
 						transform: [{translateY: this.state.toast}],
+						backgroundColor: uiManager.theme.background,
 					},
 				]}>
 				<View style={[styles.timing, {backgroundColor: color || "transparent"}]} />
 				<View style={styles.content}>
 					<Text style={[styles.title, {color}]}>{title}</Text>
-					<Text style={styles.subtitle}>{text}</Text>
+					<Text style={styles.subtitle} reg>
+						{text}
+					</Text>
 				</View>
 
-				<View style={[styles.iconStatus, {backgroundColor: color || "transparent"}]}>{icon}</View>
+				{/* <View style={[styles.iconStatus, {backgroundColor: color || "transparent"}]}>{icon}</View> */}
 			</Animated.View>
 		)
 	}
@@ -98,9 +137,10 @@ export default TToast
 const styles = StyleSheet.create({
 	toast: {
 		position: "absolute",
-		width: "80%",
+		width: "90%",
 		alignSelf: "center",
 		backgroundColor: "#fff",
+		overflow: "hidden",
 		borderRadius: 10,
 		minHeight: 90,
 		shadowColor: "#ccc",
@@ -115,12 +155,12 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 	},
 	timing: {
-		borderRadius: 10,
-		height: 5,
+		// borderRadius: 10,
+		height: 15,
 		width: "100%",
 		backgroundColor: "#f1f1f1",
 		position: "absolute",
-		top: 0,
+		top: -9,
 	},
 	content: {
 		width: "90%",
