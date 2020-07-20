@@ -1,23 +1,16 @@
 import React, {useState, useEffect} from "react"
-import {View, Text, Image, ListItem, TouchableOpacity, Colors, Avatar} from "react-native-ui-lib"
-import {FlatList} from "react-native-gesture-handler"
-import dataProvider from "../dataLayer/DataStore"
+import {View, Text, Image, TouchableOpacity, Colors, Avatar} from "react-native-ui-lib"
 import {Dimensions, ActivityIndicator} from "react-native"
 import Icon from "react-native-vector-icons/Feather"
 import {useTheme} from "styled-components"
 import {getImage} from "../universial/GetImage"
 import fireSotreMob from "../dataLayer/FireStore"
-import {Toast, Popup} from "popup-ui"
 import TToast from "./TToast"
-// import async from "async"
-// import {eventEmitter, eventStrings} from "../universial/EventEmitter"
-import {observer} from "mobx-react"
 
 const width = Dimensions.get("screen").width / 3.1
 const PhotoGridV2 = ({reference}: {reference: string}) => {
 	const [data, setdata] = useState<any[]>([])
 	const [loading, setLoading] = useState(true)
-	const theme = useTheme()
 
 	useEffect(() => {
 		fireSotreMob.retrieve.picturesForEvent(reference).then((res) => {

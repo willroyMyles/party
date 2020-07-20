@@ -32,6 +32,6 @@ export const darkTheme: Theme = {
 	secondary_text: Colors.grey60,
 	teritairy_text: Colors.grey30,
 	caption: Colors.grey30,
-	background: Colors.grey20,
+	background: "rgba(27,39,49,1)",
 	bgHilight: "rgba(55,63,65,.3)",
 }

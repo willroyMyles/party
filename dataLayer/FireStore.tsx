@@ -13,75 +13,30 @@ class FireStore {
 	@observable errorMessageSignUp = "error"
 	@observable errorMessage = "error"
 
-	@observable userId = ""
+	@observable userId = Fire.auth.currentUser?.uid
 
-	@observable temp = ""
-	@observable userName = ""
+	@observable userName = Fire.auth.currentUser?.displayName
 
-	@observable userImageUri = ""
+	@observable userImageUri = Fire.auth.currentUser?.photoURL
 
-	@observable user: firebase.UserInfo | any = null
+	@observable user: firebase.UserInfo | any = Fire.auth.currentUser
 
 	@observable eventImagesMap: Map<string, any[]> = new Map()
 	@observable numberOfImages = 0
 
-	ou = autorun(() => {
-		if (this.user == null) {
-			if (Fire.isLoggedIn()) {
-				this.user = Fire.auth.currentUser?.providerData[0] || null
-				this.userName = this.user?.displayName || null
-				this.userId = this.user.uid
-				this.userImageUri = this.user.photoURL
-			}
-		} else {
-		}
-	})
-
-	v = autorun(async () => {
-		if (this.userImageUri == "") {
-			const img = await AsyncStorage.getItem("userImage")
-			this.userImageUri = img || ""
-			return
-		} else {
-			AsyncStorage.setItem("userImage", this.userImageUri)
-			return
-		}
-	})
-
-	un = autorun(async () => {
-		if (this.userName == "") {
-			const name = await AsyncStorage.getItem("userName")
-			this.userName = name || ""
-		} else {
-			AsyncStorage.setItem("userName", this.userName)
-		}
-	})
-
-	r = autorun(async () => {
-		if (this.userId == "") {
-			const id = await AsyncStorage.getItem("userId")
-			this.userId = id || ""
-			return
-		} else {
-			AsyncStorage.setItem("userImage", this.userId)
-			return
-		}
-	})
-
 	@action signUp = (data: any) => {
-		this.temp = data.username
 		return new Promise((resolve) => {
 			Fire.signUp(data)
-				.then((res: any) => {
+				.then((res) => {
 					if (res) {
 						resolve(true)
-
-						this.setUsernameAndId(this.temp, res)
+						this.user = Fire.auth.currentUser
+						this.userId = Fire.auth.currentUser?.uid
+						this.userName = Fire.auth.currentUser?.displayName
+						this.userImageUri = Fire.auth.currentUser?.photoURL
 					}
 				})
 				.catch((err) => {
-					//err = code, message, a
-					//display correct message
 					this.errorMessageSignUp = err.message
 					resolve(false)
 				})
