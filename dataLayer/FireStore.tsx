@@ -1,4 +1,4 @@
-import {action, observable, autorun} from "mobx"
+import {action, observable, autorun, computed} from "mobx"
 import Fire from "./FirebaseV2"
 import uiManager from "./UiManager"
 import {FeedItemModel} from "../universial/Models"
@@ -6,6 +6,7 @@ import {AsyncStorage} from "react-native"
 import {auth, app} from "firebase"
 import {PROVIDER_GOOGLE} from "react-native-maps"
 import {GoogleUser} from "expo-google-app-auth"
+import {eventEmitter, eventStrings} from "../universial/EventEmitter"
 
 class FireStore {
 	@observable errorMessageLogin = ""
@@ -20,6 +21,9 @@ class FireStore {
 	@observable userImageUri = ""
 
 	@observable user: firebase.UserInfo | any = null
+
+	@observable eventImagesMap: Map<string, any[]> = new Map()
+	@observable numberOfImages = 0
 
 	ou = autorun(() => {
 		if (this.user == null) {
@@ -136,10 +140,36 @@ class FireStore {
 		})
 	}
 
+	@action private picturesForEvent = (reference: string, initialUpdate: boolean = false) => {
+		this.numberOfImages = 0
+
+		if (!initialUpdate && this.eventImagesMap.has(reference)) {
+			return new Promise((resolve) => resolve(true))
+		}
+
+		return new Promise<boolean>((resolve) => {
+			Fire.getPicturesForEvent(reference)
+				.then((res) => {
+					if (res) {
+						// console.log(res)
+
+						this.eventImagesMap.set(reference, res)
+
+						resolve(true)
+					}
+				})
+				.catch((err) => resolve(false))
+		})
+	}
+
 	send = {
 		PictureToEvent: this.uploadPictureToEvent,
 		Avater: this.sendAvatar,
 		Event: this.sendEvent,
+	}
+
+	retrieve = {
+		picturesForEvent: this.picturesForEvent,
 	}
 
 	@action handleGoogleSignin(result: {

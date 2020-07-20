@@ -2,24 +2,31 @@ import React, {useState, useEffect} from "react"
 import {View, Text, Image, ListItem, TouchableOpacity, Colors, Avatar} from "react-native-ui-lib"
 import {FlatList} from "react-native-gesture-handler"
 import dataProvider from "../dataLayer/DataStore"
-import {Dimensions} from "react-native"
+import {Dimensions, ActivityIndicator} from "react-native"
 import Icon from "react-native-vector-icons/Feather"
 import {useTheme} from "styled-components"
 import {getImage} from "../universial/GetImage"
 import fireSotreMob from "../dataLayer/FireStore"
 import {Toast, Popup} from "popup-ui"
 import TToast from "./TToast"
+// import async from "async"
+// import {eventEmitter, eventStrings} from "../universial/EventEmitter"
+import {observer} from "mobx-react"
 
 const width = Dimensions.get("screen").width / 3.1
 const PhotoGridV2 = ({reference}: {reference: string}) => {
-	const [data, setdata] = useState([])
+	const [data, setdata] = useState<any[]>([])
+	const [loading, setLoading] = useState(true)
 	const theme = useTheme()
 
 	useEffect(() => {
-		dataProvider.generateFakeData().then((res: any) => {
-			setTimeout(() => {
-				setdata(res)
-			}, 250)
+		fireSotreMob.retrieve.picturesForEvent(reference).then((res) => {
+			if (res) {
+				setLoading(false)
+				setdata(fireSotreMob.eventImagesMap.get(reference) || [])
+			} else {
+				TToast.error("Error", "Something went wrong retireving images")
+			}
 		})
 	}, [])
 
@@ -28,32 +35,51 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 			if (!res.cancelled) {
 				fireSotreMob.send.PictureToEvent(reference, res.uri).then((res) => {
 					if (res) {
-						TToast.show({
-							color: "red",
-							// icon: undefined,
-							text: "hello world",
-							timing: 5000,
-							title: "this is my title",
-						})
+						TToast.success("Success", "Everythings good to go!")
 					} else {
+						TToast.error("Error", "Something went wrong")
 					}
 				})
 			}
 		})
 	}
 
+	if (loading)
+		return (
+			<View marginT-60 centerH paddingB-70>
+				<Text imp marginB-20>
+					Pictures
+				</Text>
+				<View>
+					<ActivityIndicator size="large" color={Colors.primary} animating={true} />
+					<Text imp1>Loading</Text>
+				</View>
+			</View>
+		)
+
 	return (
-		<View marginT-60 centerH paddingB-70>
+		<View marginT-60 centerH paddingB-70 style={{borderWidth: 0}}>
 			<Text imp marginB-20>
 				Pictures
 			</Text>
-			{/* <View row>
+			<View row>
 				<Avatar source={{uri: undefined}} />
-			</View> */}
-			<View row style={{flexWrap: "wrap", margin: 5, borderRadius: 15, overflow: "hidden"}}>
+			</View>
+			<View row style={{flexWrap: "wrap", margin: 0, borderRadius: 5}}>
 				{data.map((src, index) => {
 					return (
-						<TouchableOpacity activeOpacity={0.85} key={index} style={{width}}>
+						<TouchableOpacity
+							margin-2
+							activeOpacity={0.85}
+							key={index}
+							style={{
+								width,
+								elevation: 1,
+								borderWidth: 0.5,
+								borderColor: Colors.grey40,
+								borderRadius: 3,
+								overflow: "hidden",
+							}}>
 							<Image source={{uri: src}} resizeMode="cover" height={200} />
 						</TouchableOpacity>
 					)
@@ -61,10 +87,18 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 				<TouchableOpacity
 					onPress={handleUpload}
 					activeOpacity={0.85}
-					// margin-2
+					margin-2
 					center
 					backgroundColor={Colors.primary}
-					style={{width, opacity: 0.8, elevation: 10, borderRadius: 3}}>
+					style={{
+						width,
+						opacity: 0.9,
+						elevation: 0,
+						borderRadius: 3,
+						height: 200,
+						borderColor: Colors.primary,
+						borderWidth: 0.4,
+					}}>
 					<Icon name="plus-circle" size={32} />
 					<Text marginT-10 style={{fontWeight: "700"}}>
 						upload picture

@@ -9,7 +9,6 @@
     "babel.config.js": true,
     "react-native-config.js": true,
     "yarn.lock": true,
-    "tsconfig.json": true,
     "package-lock.json": true,
     "google-services.json": true,
     "app.json": true,

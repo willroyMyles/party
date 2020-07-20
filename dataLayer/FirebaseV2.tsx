@@ -4,6 +4,7 @@ import "firebase/firestore"
 import "firebase/storage"
 import {FeedItemModel, PartyType} from "../universial/Models"
 import * as faker from "faker"
+import {rejects} from "assert"
 
 console.ignoredYellowBox = ["Setting a timer"]
 
@@ -307,6 +308,31 @@ class FirebaseStore {
 				.catch((err) => {
 					reject(err)
 				})
+		})
+	}
+
+	getPicturesForEvent = (reference: string) => {
+		const arr: string[] = []
+		return new Promise<Array<string>>((resolve, reject) => {
+			this.storage
+				.ref(`images/party/${reference}`)
+				.listAll()
+				.then(async (res) => {
+					//all items in file
+
+					res.items
+
+					for (var i = 0; i < res.items.length; i++) {
+						const url = await res.items[i].getDownloadURL()
+						console.log(url)
+						arr.push(url)
+					}
+
+					console.log("things done")
+
+					resolve(arr)
+				})
+				.catch((err) => reject(err))
 		})
 	}
 }
