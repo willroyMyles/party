@@ -10,7 +10,7 @@ const BackButton = () => {
 	const currentIndex = routes.length
 
 	//disrupts shared element
-	const handlePress = () => navigation.navigate(routes[currentIndex - 2].name)
+	const handlePress = () => navigation.goBack() // navigation.navigate(routes[currentIndex - 2].name)
 
 	return (
 		<View absT marginT-40 marginL-20 bg-background br100 padding-10 style={{opacity: 1, elevation: 10}}>

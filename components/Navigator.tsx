@@ -20,6 +20,7 @@ import CategoryView from "../home/views/CategoryView"
 import PastEventView from "../home/views/PastEventView"
 import {Colors} from "react-native-ui-lib"
 import Header from "./Header"
+import {TransitionPresets} from "@react-navigation/stack"
 // const Stack = createStackNavigator()
 const Stack = createSharedElementStackNavigator()
 
@@ -27,9 +28,16 @@ export const Navigator = observer(() => {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator
+				headerMode="float"
 				screenOptions={{
+					cardOverlayEnabled: false,
+					animationTypeForReplace: "pop",
+					...TransitionPresets.ModalSlideFromBottomIOS, //play with transitions
+
 					headerShown: false,
-					headerStyle: {backgroundColor: Colors.background, elevation: 0},
+					headerStyle: {backgroundColor: "transparent", elevation: 0},
+					headerTitleStyle: {marginTop: -20},
+					headerTitleAlign: "center",
 					headerTintColor: uiManager.theme.primary_text,
 					// headerTransparent: true,
 					headerBackground: (props) => {
@@ -53,7 +61,14 @@ export const Navigator = observer(() => {
 
 				{/* sub pages */}
 				{/* <Stack.Screen options={{headerShown: true}} name="test" component={FormTest} /> */}
-				<Stack.Screen options={{headerShown: false}} name="event" component={EventView} />
+				<Stack.Screen
+					options={{
+						headerShown: true,
+						headerTransparent: true,
+					}}
+					name="event"
+					component={EventView}
+				/>
 				<Stack.Screen options={{headerShown: false}} name="past-event" component={PastEventView} />
 				<Stack.Screen options={{headerShown: true}} name="previewEvent" component={PreviewEventView} />
 				<Stack.Screen options={{headerShown: true}} name="categoryView" component={CategoryView} />

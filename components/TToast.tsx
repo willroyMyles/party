@@ -18,12 +18,6 @@ interface CC {
 class TToast extends PureComponent {
 	static toastInstance: TToast
 
-	// static show(config: CC) {
-	// 	console.log(config, this.toastInstance)
-
-	// 	this.toastInstance.start(config)
-	// }
-
 	static success(title: string, text: string) {
 		this.toastInstance.start({
 			title: title,

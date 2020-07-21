@@ -70,7 +70,7 @@ export default observer(function App() {
 		<SafeAreaProvider>
 			<ThemeProvider theme={uiManager.theme}>
 				{!loading && (
-					<View style={styles.container}>
+					<View style={[styles.container, {backgroundColor: uiManager.theme.background}]}>
 						{activityLoading && (
 							<View
 								center
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: "column",
+		// backgroundColor: uiManager.theme.background,
 	},
 	text: {
 		color: "#fff",

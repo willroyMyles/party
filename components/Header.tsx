@@ -9,11 +9,18 @@ const Header = (props: {style: StyleProp<ViewStyle>}) => {
 	console.log(props.style)
 	return (
 		<View
-			bg-background
 			marginB-30
 			paddingH-15
 			row
-			style={[{justifyContent: "space-between", position: "relative", height: headerHeight, overflow: "hidden"}]}>
+			style={[
+				{
+					justifyContent: "space-between",
+					position: "relative",
+					height: headerHeight,
+					overflow: "hidden",
+					backgroundColor: "transparent",
+				},
+			]}>
 			<LinearGradient
 				colors={[Colors.primary, "transparent"]}
 				style={{
