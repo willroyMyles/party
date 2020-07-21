@@ -30,10 +30,7 @@ class FireStore {
 				.then((res) => {
 					if (res) {
 						resolve(true)
-						this.user = Fire.auth.currentUser
-						this.userId = Fire.auth.currentUser?.uid
-						this.userName = Fire.auth.currentUser?.displayName
-						this.userImageUri = Fire.auth.currentUser?.photoURL
+						this.setUpUser()
 					}
 				})
 				.catch((err) => {
@@ -43,13 +40,20 @@ class FireStore {
 		})
 	}
 
+	private setUpUser() {
+		this.user = Fire.auth.currentUser
+		this.userId = Fire.auth.currentUser?.uid
+		this.userName = Fire.auth.currentUser?.displayName
+		this.userImageUri = Fire.auth.currentUser?.photoURL
+	}
+
 	@action signIn = (data: any) => {
 		return new Promise((resolve) => {
 			Fire.signInWithEmailAndPassword(data)
 				.then((res: {name: string; id: string} | any) => {
 					if (res) {
 						// get username and id
-						this.setUsernameAndId(res.name, res.id)
+						this.setUpUser()
 						resolve(true)
 					}
 				})
@@ -61,8 +65,19 @@ class FireStore {
 		})
 	}
 
+	@action logOut = () => {
+		return new Promise((resolve) =>
+			Fire.logOut().then((res) => {
+				if (res) {
+					resolve(true)
+					this.setUpUser()
+				} else resolve(false)
+			})
+		)
+	}
+
 	@action private sendEvent = (data: FeedItemModel) => {
-		data.person = this.userName
+		data.person = this.userName || ""
 		data.personId = this.userId
 		return new Promise((resolve) => {
 			Fire.uploadEvent(data)
@@ -137,7 +152,7 @@ class FireStore {
 		return new Promise((resolve) => {
 			Fire.HandleGoogleSignIn(result)
 				.then((res: GoogleUser | any) => {
-					this.setUsernameAndId(res.name, res.id)
+					this.setUpUser()
 
 					resolve(true)
 				})

@@ -6,8 +6,13 @@ import Category_Page from "./Category_Page"
 import ViewPagerTabBar from "../components/ViewPagerTabBar"
 import {NativeSyntheticEvent} from "react-native"
 import Animated from "react-native-reanimated"
+import {useHeaderHeight} from "@react-navigation/stack"
 
+export var headerHeight: number
 export const HomePageV3 = () => {
+	const hh = useHeaderHeight()
+	headerHeight = hh
+
 	const names = [
 		{name: "memories", iconName: "grid", press: () => null},
 		{name: "categories", iconName: "layers", press: () => null},

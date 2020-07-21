@@ -107,6 +107,17 @@ class FirebaseStore {
 		})
 	}
 
+	logOut = () => {
+		return new Promise((resolve) =>
+			this.auth
+				.signOut()
+				.then((res) => {
+					resolve(true)
+				})
+				.catch((err) => resolve(false))
+		)
+	}
+
 	HandleGoogleSignIn(result: {
 		type: "success"
 		accessToken: string | null
@@ -122,14 +133,14 @@ class FirebaseStore {
 			this.auth
 				.signInWithCredential(cred)
 				.then((res) => {
-					//upload new user to database
+					console.log("user", res.user)
+
 					this.dataBase
-						.doc(`${userCollection}/${result.user.id}`)
+						.doc(`${userCollection}/${res.user?.uid}`)
 						.set({
 							email: result.user.email,
 							avatar: result.user.photoUrl,
 							username: result.user.name,
-							provider: "google",
 						})
 						.then((res) => {
 							resolve(result.user)
@@ -193,16 +204,18 @@ class FirebaseStore {
 					data.timeStamp = firestore.FieldValue.serverTimestamp()
 					data.reference = faker.random.uuid()
 					data.flyer = res
+					data.personId = this.auth.currentUser?.uid
 					// successful upload of image
 					this.dataBase
 						.collection(eventCollection)
-						.add(data)
+						.doc(data.reference)
+						.set(data)
 						.then((res) => {
 							resolve(true)
 
 							//should update user
 							//should update array
-							this.updateUserEvents(true, res.id, data.personId || "")
+							this.updateUserEvents(true, data.reference || "")
 						})
 						.catch((err) => {
 							reject(false)
@@ -214,13 +227,15 @@ class FirebaseStore {
 		})
 	}
 
-	updateUserEvents = (add: boolean, eventId: string, personId: string) => {
+	updateUserEvents = (add: boolean, eventId: string) => {
 		if (add) {
 			this.dataBase
-				.doc(`${userCollection}/${personId}`)
+				.doc(`${userCollection}/${this.auth.currentUser?.uid}`)
 				.set({events: firestore.FieldValue.arrayUnion(eventId)}, {merge: true})
 		} else {
-			this.dataBase.doc(`${userCollection}/${personId}`).set({events: firestore.FieldValue.arrayRemove(eventId)})
+			this.dataBase
+				.doc(`${userCollection}/${this.auth.currentUser?.uid}`)
+				.set({events: firestore.FieldValue.arrayRemove(eventId)})
 		}
 	}
 

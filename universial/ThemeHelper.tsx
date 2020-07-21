@@ -26,8 +26,8 @@ class ThemeHelper {
 			},
 			important: {
 				color: manager.theme.primary_text,
-				fontSize: 25,
-				fontWeight: "700",
+				fontSize: 35,
+				// fontWeight: "700",
 				fontFamily: "Nunito_Regular",
 			},
 			check: {

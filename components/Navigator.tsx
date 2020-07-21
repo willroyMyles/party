@@ -1,10 +1,7 @@
 import React from "react"
-import {View, Text} from "react-native"
 import {NavigationContainer} from "@react-navigation/native"
-import {Colors} from "react-native/Libraries/NewAppScreen"
 import uiManager from "../dataLayer/UiManager"
 import Leftheader from "./Leftheader"
-import HomePage from "../home/HomePage"
 import AccountPage from "../pages/AccountPage"
 import LoginPage from "../pages/LoginPage"
 import Signup from "../pages/Signup"
@@ -15,16 +12,14 @@ import CreateEventView from "../home/views/CreateEventView"
 import UseMapView from "../home/views/UseMapView"
 import Profile from "../home/settings_pages/Profile"
 import Contact_About_Page from "../home/settings_pages/Contact_About_Page"
-import {createStackNavigator} from "@react-navigation/stack"
 import {observer} from "mobx-react"
 import {createSharedElementStackNavigator} from "react-navigation-shared-element"
-import {FeedItemModel} from "../universial/Models"
-import dataProvider from "../dataLayer/DataStore"
-import HomePageV2 from "../home/HomePageV2"
 import HomePageV3 from "../home/HomePageV3"
 import SocialSignIn from "../pages/SocialSignIn"
 import CategoryView from "../home/views/CategoryView"
 import PastEventView from "../home/views/PastEventView"
+import {Colors} from "react-native-ui-lib"
+import Header from "./Header"
 // const Stack = createStackNavigator()
 const Stack = createSharedElementStackNavigator()
 
@@ -34,8 +29,12 @@ export const Navigator = observer(() => {
 			<Stack.Navigator
 				screenOptions={{
 					headerShown: false,
-					headerStyle: {backgroundColor: uiManager.theme.background},
+					headerStyle: {backgroundColor: Colors.background, elevation: 0},
 					headerTintColor: uiManager.theme.primary_text,
+					// headerTransparent: true,
+					headerBackground: (props) => {
+						return <Header {...props} />
+					},
 				}}>
 				<Stack.Screen
 					options={{

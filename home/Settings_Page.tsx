@@ -17,18 +17,8 @@ const Settings_Page = () => {
 	const navigation = useNavigation()
 	const theme = useTheme()
 
-	const onLoginPressed = () => {
-		navigation.navigate("login")
-	}
-
-	const onSignUpPressed = () => {
-		navigation.navigate("signup")
-	}
-
 	const account = (props: any) => {
-		return (
-			<SettingsAccount {...props} onLoginPressed={onLoginPressed} onSignUpPressed={onSignUpPressed}></SettingsAccount>
-		)
+		return <SettingsAccount></SettingsAccount>
 	}
 
 	return (
