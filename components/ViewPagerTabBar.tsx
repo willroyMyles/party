@@ -4,7 +4,17 @@ import {TouchableOpacity, Colors} from "react-native-ui-lib"
 import Icon from "react-native-vector-icons/Feather"
 import {useTheme} from "styled-components"
 const {width} = Dimensions.get("screen")
-const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Value}) => {
+const ViewPagerTabBar = ({
+	names,
+	position,
+	page,
+	onPress,
+}: {
+	names: any[]
+	position: Animated.Value
+	page: number
+	onPress: (index: number) => void
+}) => {
 	const [idx, setIdx] = useState(0)
 	const theme = useTheme()
 
@@ -19,10 +29,10 @@ const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Va
 				flexDirection: "row",
 				justifyContent: "space-around",
 				borderTopWidth: 2,
-				borderTopColor: "rgba(200,200,200,.1)",
+				borderTopColor: "rgba(200,200,200,.01)",
 				backgroundColor: Colors.background,
 			}}>
-			<Animated.View
+			<Animated.View //indicator
 				style={{
 					position: "absolute",
 					left: XOffset,
@@ -36,11 +46,11 @@ const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Va
 					style={{
 						// backgroundColor: "rgba(0,0,0,.2)",
 						backgroundColor: Colors.primary,
-						opacity: 0.1,
+						opacity: 0.3,
 						height: "100%",
 						width: "100%",
-						borderRadius: 30,
-						elevation: 30,
+						borderRadius: 10,
+						elevation: 7,
 					}}
 				/>
 			</Animated.View>
@@ -54,26 +64,47 @@ const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Va
 				// 	outputRange: inputRange.map((i: number) => (i === index ? 1 : 0.35)),
 				// })
 
+				const opacity = position.interpolate({
+					inputRange: names.map((_, i) => i),
+					outputRange: names.map((_, i) => (i == index ? 1 : 0.3)),
+				})
+
 				return (
-					// <Animated.View key={index}>
-					<TouchableOpacity
+					<Animated.View
 						key={index}
-						onPress={() => press(index)}
-						activeOpacity={0.8}
 						style={{
 							flex: 1,
-							borderWidth: 0,
-							alignItems: "center",
-							justifyContent: "center",
-							padding: 20,
+							opacity,
 							flexDirection: "row",
 						}}>
-						<View style={{paddingEnd: 10}}>
-							<Icon name={iconName} size={20} color={Colors.primary} />
-						</View>
-						<Text style={{fontSize: 16, textTransform: "uppercase", color: Colors.primary}}>{name}</Text>
-					</TouchableOpacity>
-					// </Animated.View>
+						<TouchableOpacity
+							key={index}
+							onPress={() => onPress(index)}
+							activeOpacity={0.8}
+							style={{
+								flex: 1,
+								borderWidth: 0,
+								alignItems: "center",
+								justifyContent: "center",
+								padding: 20,
+								flexDirection: "row",
+								zIndex: 2,
+							}}>
+							<View style={{paddingEnd: 10}}>
+								<Icon name={iconName} size={17} color={Colors.primary} />
+							</View>
+							<Text
+								style={{
+									fontSize: 16,
+									textTransform: "uppercase",
+									color: Colors.primary,
+									textShadowRadius: 2,
+									// textShadowOffset: {width: 2, height: 2},
+								}}>
+								{name}
+							</Text>
+						</TouchableOpacity>
+					</Animated.View>
 				)
 			})}
 			{/* {names.map((obj: any, index: number) => {

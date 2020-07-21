@@ -28,7 +28,7 @@ export const lightTheme: Theme = {
 
 export const darkTheme: Theme = {
 	primary: light[5],
-	primary_text: Colors.white,
+	primary_text: "rgba(250,250,250,.9)",
 	secondary_text: Colors.grey60,
 	teritairy_text: Colors.grey30,
 	caption: Colors.grey30,
