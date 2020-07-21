@@ -4,8 +4,7 @@ import ViewPager, {ViewPagerOnPageScrollEventData} from "@react-native-community
 import Feed_Page from "./Feed_Page"
 import Category_Page from "./Category_Page"
 import ViewPagerTabBar from "../components/ViewPagerTabBar"
-import {NativeSyntheticEvent} from "react-native"
-import Animated from "react-native-reanimated"
+import {NativeSyntheticEvent, Animated} from "react-native"
 import {useHeaderHeight} from "@react-navigation/stack"
 
 export var headerHeight: number
@@ -18,10 +17,10 @@ export const HomePageV3 = () => {
 		{name: "categories", iconName: "layers", press: () => null},
 	]
 
-	const [offset, setOffset] = useState<Animated.Value<number>>(new Animated.Value(0))
+	const offset = new Animated.Value(0)
 
 	const handleMoved = (e: NativeSyntheticEvent<ViewPagerOnPageScrollEventData>) => {
-		setOffset(new Animated.Value(e.nativeEvent.offset))
+		offset.setValue(e.nativeEvent.offset + e.nativeEvent.position)
 	}
 
 	return (

@@ -28,7 +28,7 @@ const Header = (props: {style: StyleProp<ViewStyle>}) => {
 					left: 0,
 					right: 0,
 					top: 0,
-					height: headerHeight - 3,
+					height: headerHeight || 0 - 3,
 				}}
 			/>
 		</View>

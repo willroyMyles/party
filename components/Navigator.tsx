@@ -63,7 +63,7 @@ export const Navigator = observer(() => {
 				{/* <Stack.Screen options={{headerShown: true}} name="test" component={FormTest} /> */}
 				<Stack.Screen
 					options={{
-						headerShown: true,
+						headerShown: false,
 						headerTransparent: true,
 					}}
 					name="event"

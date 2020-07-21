@@ -11,6 +11,7 @@ import moment from "moment"
 import Feed_Item from "../components/Feed_Item"
 
 const Feed_Page = () => {
+	const theme = useTheme()
 	const navigation = useNavigation()
 	const [data, setdata] = useState<FeedItemModel[]>([])
 	useEffect(() => {

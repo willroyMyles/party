@@ -1,13 +1,17 @@
 import React, {useState} from "react"
-import {View, Text} from "react-native"
-import Animated from "react-native-reanimated"
+import {View, Text, Animated, Dimensions} from "react-native"
 import {TouchableOpacity, Colors} from "react-native-ui-lib"
 import Icon from "react-native-vector-icons/Feather"
 import {useTheme} from "styled-components"
-
-const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Value<number>}) => {
+const {width} = Dimensions.get("screen")
+const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Value}) => {
 	const [idx, setIdx] = useState(0)
 	const theme = useTheme()
+
+	const XOffset = position.interpolate({
+		inputRange: [0, names.length - 1],
+		outputRange: [0, width / names.length],
+	})
 
 	return (
 		<View
@@ -18,6 +22,28 @@ const ViewPagerTabBar = ({names, position}: {names: any[]; position: Animated.Va
 				borderTopColor: "rgba(200,200,200,.1)",
 				backgroundColor: Colors.background,
 			}}>
+			<Animated.View
+				style={{
+					position: "absolute",
+					left: XOffset,
+					top: 0,
+					height: "100%",
+					width: width / names.length,
+					paddingHorizontal: 10,
+					paddingVertical: 6,
+				}}>
+				<View
+					style={{
+						// backgroundColor: "rgba(0,0,0,.2)",
+						backgroundColor: Colors.primary,
+						opacity: 0.1,
+						height: "100%",
+						width: "100%",
+						borderRadius: 30,
+						elevation: 30,
+					}}
+				/>
+			</Animated.View>
 			{names.map((obj, index) => {
 				const {name, iconName, press} = obj
 				const isFocused = idx === index

@@ -10,9 +10,10 @@ import Feed_itemV2 from "../components/Feed_itemV2"
 import uiManager from "../dataLayer/UiManager"
 
 const Category_Page = () => {
+	const theme = useTheme()
 	const navigation = useNavigation()
 	const [data, setdata] = useState<any[]>()
-	const [, setdataFinished] = useState(false)
+	const [dataFinished, setdataFinished] = useState(false)
 
 	const callSome = () => {
 		dataProvider.getEventsForCategory().then((res) => {
