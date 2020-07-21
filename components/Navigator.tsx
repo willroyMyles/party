@@ -72,7 +72,11 @@ export const Navigator = observer(() => {
 				<Stack.Screen options={{headerShown: false}} name="past-event" component={PastEventView} />
 				<Stack.Screen options={{headerShown: true}} name="previewEvent" component={PreviewEventView} />
 				<Stack.Screen options={{headerShown: true}} name="categoryView" component={CategoryView} />
-				<Stack.Screen options={{headerShown: true, headerTitle: ""}} name="create_event" component={CreateEventView} />
+				<Stack.Screen
+					options={{headerShown: true, headerTitle: "create event"}}
+					name="create_event"
+					component={CreateEventView}
+				/>
 				<Stack.Screen name="map-view" component={UseMapView} />
 
 				<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />

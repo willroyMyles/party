@@ -167,12 +167,8 @@ const CreateEventView = () => {
 					onChange={(e, d) => onDateChange(e, d)}
 				/>
 			)}
-			<View bg-background padding-10 paddingB-35>
-				<Text imp marginB-35>
-					Create Event
-				</Text>
-
-				<View row>
+			<View bg-background padding-15 paddingB-35>
+				<View marginT-15 row>
 					<Text reg style={{opacity: 0.7, textTransform: "capitalize"}}>
 						Flyer
 					</Text>
@@ -185,8 +181,9 @@ const CreateEventView = () => {
 							source={{uri: imageUri}}
 							cover
 							style={{
-								borderWidth: 1,
+								// borderWidth: 1,
 								borderColor: Colors.primary + 55,
+
 								borderRadius: 7,
 								backgroundColor: Colors.backgroundHighlight,
 							}}
@@ -199,8 +196,10 @@ const CreateEventView = () => {
 							row
 							style={{
 								borderWidth: 1,
-								// borderStyle: "dashed",
-								borderColor: "black",
+								borderStyle: "dashed",
+								// borderColor: "black",
+								borderColor: Colors.primary + 99,
+
 								borderRadius: 7,
 								backgroundColor: "transparent",
 								elevation: 0,
@@ -209,11 +208,24 @@ const CreateEventView = () => {
 								left: 0,
 								width: "100%",
 								height: "100%",
+								justifyContent: "center",
 							}}>
-							<Icon name="plus" size={30} color={Colors.primary} style={{paddingEnd: 15}} />
-							<Text imp1 color={Colors.primary} style={{textTransform: "uppercase"}}>
-								upload flyer
-							</Text>
+							<View
+								row
+								style={{
+									backgroundColor: Colors.primary,
+									justifyContent: "center",
+									padding: 10,
+									alignItems: "center",
+									width: "50%",
+									borderRadius: 100,
+									// elevation: 10,
+								}}>
+								<Icon name="plus" size={20} color={Colors.grey10} style={{paddingEnd: 15}} />
+								<Text imp1 color={Colors.grey10} style={{textTransform: "uppercase"}}>
+									upload flyer
+								</Text>
+							</View>
 						</View>
 					</TouchableOpacity>
 					{image && (
@@ -277,7 +289,11 @@ const CreateEventView = () => {
 					<View
 						row
 						flex-1
-						style={{flexDirection: "row", flexGrow: 1, alignItems: "baseline", justifyContent: "space-between"}}>
+						style={{
+							flexDirection: "row",
+							justifyContent: "space-between",
+							padding: 0,
+						}}>
 						<Controller
 							control={control}
 							render={({onChange, onBlur, value}) => (
@@ -287,7 +303,7 @@ const CreateEventView = () => {
 									onFocus={() => setShowDate(true)}
 									onChangeText={(value) => onChange(value)}
 									value={value}
-									style={[style.input, {width: "30%", marginHorizontal: 5}]}
+									style={[style.input, {width: "33%", textAlign: "center"}]}
 									placeholder="date"
 								/>
 							)}
@@ -300,7 +316,7 @@ const CreateEventView = () => {
 							render={({onChange, onBlur, value}) => (
 								<TextInput
 									ref={setStartRef}
-									style={[style.input, {width: "30%", marginHorizontal: 5}]}
+									style={[style.input, {width: "30%", textAlign: "center", marginHorizontal: "1%"}]}
 									onBlur={onBlur}
 									onFocus={() => setShowStart(true)}
 									onChangeText={(value) => onChange(value)}
@@ -318,7 +334,7 @@ const CreateEventView = () => {
 							render={({onChange, onBlur, value}) => (
 								<TextInput
 									ref={setendRef}
-									style={[style.input, {width: "30%", marginHorizontal: 5, justifyContent: "center"}]}
+									style={[style.input, {width: "30%", textAlign: "center"}]}
 									onBlur={onBlur}
 									onFocus={() => setShowEnd(true)}
 									onChangeText={(value) => onChange(value)}
@@ -360,7 +376,7 @@ const CreateEventView = () => {
 						render={({onChange, onBlur, value}) => (
 							<Picker
 								prompt="select party type"
-								style={style.input}
+								style={[style.input, {borderWidth: 1, borderColor: Colors.primary}]}
 								selectedValue={selectedValue}
 								onValueChange={(item, index) => {
 									setSelectedValue(item)
@@ -404,7 +420,7 @@ const CreateEventView = () => {
 						defaultValue=""
 					/>
 				</View>
-				<View row style={{justifyContent: "space-around"}}>
+				<View row marginT-10 style={{justifyContent: "space-between"}}>
 					<Button
 						onPress={() => navigation.navigate("home")}
 						bg-primary
