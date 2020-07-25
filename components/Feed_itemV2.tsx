@@ -40,12 +40,12 @@ const Feed_itemV2 = ({
 				padding-9
 				bg-background
 				marginV-8
-				style={{borderWidth: 0, borderRadius: 10, elevation: 5, borderColor: Colors.grey50}}>
+				style={{borderWidth: 0, borderRadius: 10, elevation: 0, borderColor: Colors.grey50}}>
 				<View row>
 					<SharedElement id={item.reference + "img"} style={{flex: 1}}>
 						<Image
 							source={{uri: item.imageUrl}}
-							style={{flex: 1, flexDirection: "row", borderRadius: 10}}
+							style={{flex: 2, flexDirection: "row", borderRadius: 10}}
 							resizeMode="cover"
 						/>
 					</SharedElement>
@@ -53,7 +53,7 @@ const Feed_itemV2 = ({
 						padding-20
 						paddingT-3
 						paddingB-12
-						style={{flex: 2, flexDirection: "column", justifyContent: "space-between"}}>
+						style={{flex: 1, flexDirection: "column", justifyContent: "space-between"}}>
 						<SharedElement id={item.reference + "title"}>
 							<Text imp1>{item.title}</Text>
 						</SharedElement>

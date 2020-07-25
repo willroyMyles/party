@@ -19,8 +19,6 @@ export const SettingsAccount = () => {
 			if (res) {
 				TToast.success("Success", "Successfully logged out")
 			} else TToast.error("Error", "something went wrong")
-			{
-			}
 		})
 
 	return (

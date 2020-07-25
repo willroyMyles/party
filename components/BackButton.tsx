@@ -14,8 +14,11 @@ const BackButton = () => {
 
 	return (
 		<View absT marginT-40 marginL-20 bg-background br100 padding-10 style={{opacity: 1, elevation: 10}}>
-			<TouchableOpacity onPress={handlePress}>
-				<Icon name="chevron-left" size={32} color={Colors.textColor} style={{elevation: 5}} />
+			<TouchableOpacity onPress={handlePress} row style={{alignItems: "center"}}>
+				<Icon name="chevron-left" size={22} color={Colors.textColor} style={{elevation: 5}} />
+				<Text imp1 style={{fontSize: 12}}>
+					BACK
+				</Text>
 			</TouchableOpacity>
 		</View>
 	)

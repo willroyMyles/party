@@ -23,6 +23,7 @@ const Header = (props: {style: StyleProp<ViewStyle>}) => {
 			]}>
 			<LinearGradient
 				colors={[Colors.primary, "transparent"]}
+				// colors={["transparent", "transparent"]}
 				style={{
 					position: "absolute",
 					left: 0,

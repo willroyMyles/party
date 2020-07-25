@@ -30,9 +30,9 @@ export const Navigator = observer(() => {
 			<Stack.Navigator
 				headerMode="float"
 				screenOptions={{
-					cardOverlayEnabled: false,
+					// cardOverlayEnabled: false,
 					animationTypeForReplace: "pop",
-					...TransitionPresets.ModalSlideFromBottomIOS, //play with transitions
+					// ...TransitionPresets.ModalSlideFromBottomIOS, //play with transitions
 
 					headerShown: false,
 					headerStyle: {backgroundColor: "transparent", elevation: 0},
@@ -63,13 +63,18 @@ export const Navigator = observer(() => {
 				{/* <Stack.Screen options={{headerShown: true}} name="test" component={FormTest} /> */}
 				<Stack.Screen
 					options={{
-						headerShown: false,
+						headerShown: true,
 						headerTransparent: true,
+						headerLeft: () => null,
 					}}
 					name="event"
 					component={EventView}
 				/>
-				<Stack.Screen options={{headerShown: false}} name="past-event" component={PastEventView} />
+				<Stack.Screen
+					options={{headerShown: true, headerTransparent: false}}
+					name="past-event"
+					component={PastEventView}
+				/>
 				<Stack.Screen options={{headerShown: true}} name="previewEvent" component={PreviewEventView} />
 				<Stack.Screen options={{headerShown: true}} name="categoryView" component={CategoryView} />
 				<Stack.Screen
@@ -77,7 +82,16 @@ export const Navigator = observer(() => {
 					name="create_event"
 					component={CreateEventView}
 				/>
-				<Stack.Screen name="map-view" component={UseMapView} />
+				<Stack.Screen
+					options={{
+						headerShown: false,
+						headerTransparent: true,
+						headerLeft: () => null,
+						headerTitle: "",
+					}}
+					name="map-view"
+					component={UseMapView}
+				/>
 
 				<Stack.Screen options={{headerShown: true}} name="profile" component={Profile} />
 				<Stack.Screen options={{headerShown: true}} name="about" component={Contact_About_Page} />

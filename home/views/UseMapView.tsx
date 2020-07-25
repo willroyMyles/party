@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {View, Text, Button, TouchableOpacity} from "react-native-ui-lib"
+import {View, Text, Button, TouchableOpacity, Colors} from "react-native-ui-lib"
 import {useTheme} from "styled-components"
 import MapView, {Marker, LatLng} from "react-native-maps"
 import {Dimensions, StyleSheet, TextInput} from "react-native"
@@ -85,6 +85,8 @@ const UseMapView = (props: {setValue: () => null}) => {
 		<View flex-5 bg-background>
 			<View flex-5>
 				<MapView
+					// liteMode
+					mapType="standard"
 					ref={(e) => setMap(e || undefined)}
 					showsScale
 					showsMyLocationButton
@@ -117,6 +119,18 @@ const UseMapView = (props: {setValue: () => null}) => {
 				</View> */}
 			</View>
 			<View row marginV-35 style={{justifyContent: "space-around", position: "absolute", width: "100%", bottom: 5}}>
+				<Button
+					outline
+					outlineColor={Colors.primary}
+					outlineWidth={3}
+					onPress={() => navigation.goBack()}
+					bg-primary
+					size="large"
+					borderRadius={2}>
+					<Text btn color={Colors.primary} style={{fontWeight: "700"}}>
+						cancel
+					</Text>
+				</Button>
 				<Button style={styles.btn} onPress={() => useLocation()} bg-primary size="large" borderRadius={2}>
 					<Text btn>use location</Text>
 				</Button>
