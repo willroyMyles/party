@@ -3,7 +3,7 @@ import {View, Text, Animated, Dimensions} from "react-native"
 import {TouchableOpacity, Colors} from "react-native-ui-lib"
 import Icon from "react-native-vector-icons/Feather"
 import {useTheme} from "styled-components"
-const {width} = Dimensions.get("screen")
+const {width} = Dimensions.get("window")
 const ViewPagerTabBar = ({
 	names,
 	position,
@@ -20,9 +20,10 @@ const ViewPagerTabBar = ({
 
 	const XOffset = position.interpolate({
 		inputRange: [0, names.length - 1],
-		outputRange: [0, width / names.length],
+		outputRange: [0, width - width / names.length],
 	})
 
+	console.log(XOffset)
 	return (
 		<View
 			style={{
@@ -35,12 +36,14 @@ const ViewPagerTabBar = ({
 			<Animated.View //indicator
 				style={{
 					position: "absolute",
-					left: XOffset,
+					left: 0,
+					transform: [{translateX: XOffset}],
 					top: 0,
 					height: "100%",
 					width: width / names.length,
 					paddingHorizontal: 10,
 					paddingVertical: 6,
+					// backgroundColor: Colors.primary,
 				}}>
 				<View
 					style={{

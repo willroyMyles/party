@@ -6,6 +6,7 @@ import Category_Page from "./Category_Page"
 import ViewPagerTabBar from "../components/ViewPagerTabBar"
 import {NativeSyntheticEvent, Animated} from "react-native"
 import {useHeaderHeight} from "@react-navigation/stack"
+import Settings_Page from "./Settings_Page"
 
 export var headerHeight: number
 const offset = new Animated.Value(0)
@@ -17,6 +18,7 @@ export const HomePageV3 = () => {
 	const names = [
 		{name: "memories", iconName: "grid", press: () => null},
 		{name: "categories", iconName: "layers", press: () => null},
+		{name: "profile", iconName: "person", press: () => null},
 	]
 	const [page, setPage] = useState(0)
 	const [pagerRef, setPagerRef] = useState<ViewPager>()
@@ -27,6 +29,8 @@ export const HomePageV3 = () => {
 	}
 
 	const handleMoved = (e: NativeSyntheticEvent<ViewPagerOnPageScrollEventData>) => {
+		console.log(e.nativeEvent)
+
 		offset.setValue(e.nativeEvent.offset + e.nativeEvent.position)
 	}
 
@@ -35,6 +39,7 @@ export const HomePageV3 = () => {
 			<ViewPager
 				ref={(e) => setPagerRef(e)}
 				onPageScroll={handleMoved}
+				scrollEnabled={false}
 				onPageSelected={(e) => {
 					const pos = e.nativeEvent.position
 					setTimeout(() => {
@@ -44,6 +49,7 @@ export const HomePageV3 = () => {
 				style={{flex: 1}}>
 				<Feed_Page />
 				<Category_Page />
+				<Settings_Page />
 			</ViewPager>
 			<ViewPagerTabBar onPress={handlePagedSet} names={names} position={offset} page={page} />
 		</View>
