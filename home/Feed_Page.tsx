@@ -15,9 +15,6 @@ const Feed_Page = () => {
 					backgroundColor: uiManager.theme.background,
 					flex: 1,
 					padding: 10,
-					// flex: 1,
-					// borderWidth: 10,
-					// minHeight: "100%",
 				}}
 				tabBarOptions={{
 					tabStyle: {backgroundColor: uiManager.theme.background, borderWidth: 0, elevation: 10},
