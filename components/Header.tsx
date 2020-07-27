@@ -6,7 +6,6 @@ import {BlurView} from "expo-blur"
 import {headerHeight} from "../home/HomePageV3"
 import {LinearGradient} from "expo-linear-gradient"
 const Header = (props: {style: StyleProp<ViewStyle>}) => {
-	console.log(props.style)
 	return (
 		<View
 			marginB-30

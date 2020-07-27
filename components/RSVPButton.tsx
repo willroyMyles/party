@@ -2,11 +2,28 @@ import React from "react"
 import {View, TouchableOpacity, Text, Colors} from "react-native-ui-lib"
 import Icon from "react-native-vector-icons/Feather"
 import {Feather} from "@expo/vector-icons"
+import fireSotreMob from "../dataLayer/FireStore"
+import TToast from "./TToast"
 function RSVPButton({reference}: {reference: string | undefined}) {
+	const handleRsvp = () => {
+		if (reference)
+			if (fireSotreMob.isLoggedIn()) {
+				fireSotreMob.send.RSVPEvent(reference).then((res) => {
+					if (res) {
+						TToast.success("Great!", "Added to profile")
+					} else {
+						TToast.error("Oops!", "We couldn't star this party... try again later")
+					}
+				})
+			} else {
+				TToast.needTobeLoggedIn()
+			}
+	}
 	return (
 		<View center>
 			<TouchableOpacity
 				activeOpacity={0.85}
+				onPress={handleRsvp}
 				center
 				style={{
 					// position: "absolute",

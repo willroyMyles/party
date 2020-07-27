@@ -13,6 +13,7 @@ import fireSotreMob from "../dataLayer/FireStore"
 import Fire from "../dataLayer/FirebaseV2"
 import TToast from "../components/TToast"
 import {ScrollView} from "react-native-gesture-handler"
+import RSVPModule from "../components/RSVPModule"
 
 export const Settings_Profile = observer(() => {
 	const theme = useTheme()
@@ -114,7 +115,6 @@ export const Settings_Profile = observer(() => {
 						// uiManager.clearTheme()
 						// Fire.testAdd()
 						// const hey = Fire.isLoggedIn()
-						// console.log(hey)
 						TToast.error("hellos", "worldx")
 					}}
 					size="small"
@@ -122,6 +122,9 @@ export const Settings_Profile = observer(() => {
 					borderRadius={2}>
 					<Text>clear</Text>
 				</Button>
+			</Row>
+			<Row>
+				<RSVPModule />
 			</Row>
 			{/* <TouchableOpacity
 				onPress={() => {
@@ -167,8 +170,6 @@ export const Settings_Profile = observer(() => {
 				<TouchableOpacity
 					activeOpacity={0.8}
 					onPress={() => {
-						console.log(fireSotreMob.userId)
-
 						if (fireSotreMob.isLoggedIn()) {
 							Alert.alert("log in", "you need to be logged in to create an event")
 						} else {

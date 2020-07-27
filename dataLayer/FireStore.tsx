@@ -22,6 +22,8 @@ class FireStore {
 	@observable user: firebase.UserInfo | any = Fire.auth.currentUser
 
 	@observable eventImagesMap: Map<string, any[]> = new Map()
+
+	@observable rsvpParties: string[] = []
 	@observable numberOfImages = 0
 
 	@action signUp = (data: any) => {
@@ -45,6 +47,10 @@ class FireStore {
 		this.userId = Fire.auth.currentUser?.uid
 		this.userName = Fire.auth.currentUser?.displayName
 		this.userImageUri = Fire.auth.currentUser?.photoURL
+		if (this.userId)
+			Fire.getRsvpEvents(this.userId).then((res: string[]) => {
+				this.rsvpParties.push(...res)
+			})
 	}
 
 	@action signIn = (data: any) => {
@@ -121,8 +127,6 @@ class FireStore {
 			Fire.getPicturesForEvent(reference)
 				.then((res) => {
 					if (res) {
-						// console.log(res)
-
 						this.eventImagesMap.set(reference, res)
 
 						resolve(true)
@@ -132,10 +136,20 @@ class FireStore {
 		})
 	}
 
+	@action addToPinnedParty = (reference: string) => {
+		return Fire.uploadRsvpEvent(reference, true).then((res: boolean | any) => {
+			if (res) {
+				this.rsvpParties.push(reference)
+			}
+			return res
+		})
+	}
+
 	send = {
 		PictureToEvent: this.uploadPictureToEvent,
 		Avater: this.sendAvatar,
 		Event: this.sendEvent,
+		RSVPEvent: this.addToPinnedParty,
 	}
 
 	retrieve = {
@@ -168,7 +182,7 @@ class FireStore {
 	}
 
 	@action isLoggedIn = () => {
-		return !Fire.auth.currentUser
+		return Fire.isLoggedIn()
 	}
 }
 

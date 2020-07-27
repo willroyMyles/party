@@ -2,11 +2,9 @@ import app, {firestore, auth, database} from "firebase/app"
 import "firebase/auth"
 import "firebase/firestore"
 import "firebase/storage"
-import {FeedItemModel, PartyType} from "../universial/Models"
+import {FeedItemModel, PartyType, UserDatabaseModel} from "../universial/Models"
 import * as faker from "faker"
 import {rejects} from "assert"
-
-console.ignoredYellowBox = ["Setting a timer"]
 
 const eventCollection = "events"
 const userCollection = "users"
@@ -77,7 +75,6 @@ class FirebaseStore {
 			this.auth
 				.createUserWithEmailAndPassword(email, password)
 				.then((res) => {
-					console.log(res)
 					const id = res.user?.uid
 					res.user
 						?.updateProfile({
@@ -241,8 +238,6 @@ class FirebaseStore {
 
 	uploadAvatar = (data: any) => {
 		return new Promise(async (resolve) => {
-			console.log(data)
-
 			const filename = data.avatar.substring(data.avatar.lastIndexOf("/") + 1)
 			const oldFilename = data.old.substring(data.old.lastIndexOf("/") + 1)
 
@@ -269,6 +264,28 @@ class FirebaseStore {
 				.catch((err) => {
 					resolve(false)
 				})
+		})
+	}
+
+	uploadRsvpEvent = (reference: string, add: boolean) => {
+		return new Promise((resolve) => {
+			if (add) {
+				this.dataBase
+					.doc(`${userCollection}/${this.auth.currentUser?.uid}`)
+					.set({rsvp: firestore.FieldValue.arrayUnion(reference)}, {merge: true})
+					.then((res) => {
+						resolve(true)
+					})
+					.catch((e) => resolve(false))
+			} else {
+				this.dataBase
+					.doc(`${userCollection}/${this.auth.currentUser?.uid}`)
+					.set({rsvp: firestore.FieldValue.arrayRemove(reference)})
+					.then((res) => {
+						resolve(true)
+					})
+					.catch((e) => resolve(false))
+			}
 		})
 	}
 
@@ -359,6 +376,21 @@ class FirebaseStore {
 					resolve(arr)
 				})
 				.catch((err) => reject(err))
+		})
+	}
+
+	getRsvpEvents = (id: string): string[] | any => {
+		return new Promise((resolve) => {
+			this.dataBase
+				.collection(userCollection)
+				.doc(id)
+				.get()
+				.then((res: UserDatabaseModel | any) => {
+					resolve(res.data().rsvp)
+				})
+				.catch((err) => {
+					resolve(false)
+				})
 		})
 	}
 }

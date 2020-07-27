@@ -9,9 +9,11 @@ import {threadId} from "worker_threads"
 const amountForCategory = 50
 
 class Store {
-	@observable data: Map<string, any> = new Map()
+	@observable data: Map<string, FeedItemModel> = new Map()
 
 	@observable currentEvent: any = {}
+
+	@observable rsvpParties: Map<string, string> = new Map()
 
 	@action getDataFromServerBasedOnSection = (section: number) => {
 		return new Promise((resolve) => {})

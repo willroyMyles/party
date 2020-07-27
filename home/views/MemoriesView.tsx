@@ -34,7 +34,6 @@ const MemoriesView = () => {
 	const checkDate = (d: string) => {
 		const old = Date.parse(d)
 		const comp = new Date().valueOf()
-		// console.log(d, d < comp)
 
 		return old <= comp
 	}

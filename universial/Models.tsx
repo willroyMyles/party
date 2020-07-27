@@ -45,4 +45,5 @@ export interface UserDatabaseModel {
 	email: string
 	userName: string
 	flyers: FeedItemModel[] | null
+	rsvpParties: string[]
 }

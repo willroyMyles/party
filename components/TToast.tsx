@@ -27,6 +27,15 @@ class TToast extends PureComponent {
 		})
 	}
 
+	static needTobeLoggedIn() {
+		this.toastInstance.start({
+			title: "who are you?",
+			text: "you need to be logged in to complete this operation",
+			color: Colors.green20,
+			timing: 3500,
+		})
+	}
+
 	static error(title: string, text: string) {
 		this.toastInstance.start({
 			title: title,
@@ -47,7 +56,6 @@ class TToast extends PureComponent {
 
 	componentDidMount() {
 		TToast.toastInstance = this
-		console.log(this.props)
 	}
 
 	static hide() {

@@ -27,7 +27,6 @@ export const HomePageV3 = () => {
 	}
 
 	const handleMoved = (e: NativeSyntheticEvent<ViewPagerOnPageScrollEventData>) => {
-		console.log(e.nativeEvent)
 		offset.setValue(e.nativeEvent.offset + e.nativeEvent.position)
 	}
 

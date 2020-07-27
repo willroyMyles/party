@@ -4,14 +4,12 @@ import {FlatList} from "react-native-gesture-handler"
 import dataProvider from "../dataLayer/DataStore"
 import {Dimensions} from "react-native"
 import {SharedElement} from "react-navigation-shared-element"
-import ImageLayout from "react-native-image-layout"
+// import ImageLayout from "react-native-image-layout"
 const PhotoGrid = (ref: string) => {
 	const [data, setdata] = useState([])
 
 	useEffect(() => {
 		dataProvider.generateFakeData().then((res) => {
-			console.log(res)
-
 			setdata(res)
 		})
 	}, [])

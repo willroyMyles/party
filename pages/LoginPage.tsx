@@ -19,8 +19,6 @@ const LoginPage = () => {
 	const {handleSubmit, errors, control} = useForm()
 
 	const onSubmit = (data: {email: string; password: string}) => {
-		// console.log(data.email, data.password)
-
 		fireSotreMob.signIn(data).then((res) => {
 			if (res) {
 				navigation.navigate("home")

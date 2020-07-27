@@ -49,7 +49,6 @@ const PastEventView = () => {
 
 PastEventView.sharedElements = (route: ReturnType<typeof useRoute>) => {
 	const ref = route.params?.reference
-	console.log(ref, "hi")
 
 	const img = ref + "imgmem"
 	const tit = ref + "titlemem"
