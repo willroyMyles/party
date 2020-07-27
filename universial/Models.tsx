@@ -37,6 +37,8 @@ export interface FeedItemModel {
 	admission?: number
 
 	timeStamp?: firestore.FieldValue
+
+	priority?: number
 }
 
 export interface UserDatabaseModel {

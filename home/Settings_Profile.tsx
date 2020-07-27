@@ -7,11 +7,12 @@ import {useTheme} from "styled-components"
 import {getImage} from "../universial/GetImage"
 import Icon from "react-native-vector-icons/Feather"
 import {observer} from "mobx-react"
-import {TextInput, StyleSheet} from "react-native"
+import {TextInput, StyleSheet, Alert} from "react-native"
 import {useNavigation} from "@react-navigation/native"
 import fireSotreMob from "../dataLayer/FireStore"
 import Fire from "../dataLayer/FirebaseV2"
 import TToast from "../components/TToast"
+import {ScrollView} from "react-native-gesture-handler"
 
 export const Settings_Profile = observer(() => {
 	const theme = useTheme()
@@ -40,7 +41,7 @@ export const Settings_Profile = observer(() => {
 				const oldImage = fireSotreMob.userImageUri
 				fireSotreMob.userImageUri = res.uri
 				const data: any = {avatar: res.uri, old: oldImage}
-				fireSotreMob.sendAvatar(data)
+				// fireSotreMob.sendAvatar(data)
 			}
 		})
 	}
@@ -58,10 +59,11 @@ export const Settings_Profile = observer(() => {
 	]
 
 	return (
-		<View flex>
+		<ScrollView contentContainerStyle={{paddingVertical: 20, paddingBottom: 40, flex: 1}}>
 			{/* <Text imp1 marginV-35 marginB-10>
 				Profile
 			</Text> */}
+
 			<View center>
 				<TouchableOpacity
 					onPress={() => changeUserImage()}
@@ -72,6 +74,7 @@ export const Settings_Profile = observer(() => {
 					{fireSotreMob.userName}
 				</Text>
 			</View>
+
 			<Row marginT-15>
 				<View>
 					<Text hint>user-name</Text>
@@ -93,15 +96,6 @@ export const Settings_Profile = observer(() => {
 							placeholder="name"
 						/>
 						<View marginT-10 row style={{justifyContent: "flex-end", paddingRight: 10}}>
-							{/* <Button
-								outline
-								bg-primary
-								size="large"
-								borderRadius={2}
-								color={Colors.primary}
-								style={{borderColor: Colors.primary, color: Colors.primary}}>
-								<Text style={{color: Colors.primary}}>cancel</Text>
-							</Button> */}
 							<Button bg-primary size="large" borderRadius={2} onPress={() => setVisible(false)}>
 								<Text btn>confirm</Text>
 							</Button>
@@ -129,7 +123,7 @@ export const Settings_Profile = observer(() => {
 					<Text>clear</Text>
 				</Button>
 			</Row>
-			<TouchableOpacity
+			{/* <TouchableOpacity
 				onPress={() => {
 					navigation.navigate("create_event")
 				}}
@@ -168,8 +162,36 @@ export const Settings_Profile = observer(() => {
 					}}>
 					create event
 				</Text>
-			</TouchableOpacity>
-		</View>
+			</TouchableOpacity>*/}
+			<View centerH style={{position: "absolute", bottom: 0, width: "100%"}}>
+				<TouchableOpacity
+					activeOpacity={0.8}
+					onPress={() => {
+						console.log(fireSotreMob.userId)
+
+						if (fireSotreMob.isLoggedIn()) {
+							Alert.alert("log in", "you need to be logged in to create an event")
+						} else {
+							navigation.navigate("create_event")
+						}
+					}}
+					style={{
+						backgroundColor: Colors.primary,
+						borderRadius: 5,
+						borderWidth: 1,
+						width: "80%",
+						elevation: 12,
+						padding: 20,
+					}}>
+					<View row centerH>
+						<Icon name="plus-circle" size={32} color={uiManager.theme.background} />
+						<Text btn style={{fontSize: 20, fontWeight: "700", marginLeft: 8}}>
+							Create Event
+						</Text>
+					</View>
+				</TouchableOpacity>
+			</View>
+		</ScrollView>
 	)
 })
 

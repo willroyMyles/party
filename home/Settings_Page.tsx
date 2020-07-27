@@ -22,17 +22,26 @@ const Settings_Page = () => {
 	}
 
 	return (
-		<tab.Navigator
-			sceneContainerStyle={{backgroundColor: uiManager.theme.background, padding: 10}}
-			tabBarOptions={{
-				tabStyle: {backgroundColor: uiManager.theme.background},
-				activeTintColor: Colors.primary,
-				inactiveTintColor: uiManager.theme.teritairy_text,
-			}}>
-			<tab.Screen name="profile" component={Settings_Profile} />
-			<tab.Screen name="account" component={account} />
-			<tab.Screen name="about" component={SettingsAbout} />
-		</tab.Navigator>
+		<View flex>
+			<tab.Navigator
+				sceneContainerStyle={{
+					backgroundColor: uiManager.theme.background,
+					flex: 1,
+					padding: 10,
+					// flex: 1,
+					// borderWidth: 10,
+					// minHeight: "100%",
+				}}
+				tabBarOptions={{
+					tabStyle: {backgroundColor: uiManager.theme.background, borderWidth: 0, elevation: 10},
+					activeTintColor: Colors.primary,
+					inactiveTintColor: uiManager.theme.teritairy_text,
+				}}>
+				<tab.Screen name="profile" component={Settings_Profile} />
+				<tab.Screen name="account" component={account} />
+				<tab.Screen name="about" component={SettingsAbout} />
+			</tab.Navigator>
+		</View>
 	)
 }
 

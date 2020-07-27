@@ -18,25 +18,22 @@ export const HomePageV3 = () => {
 	const names = [
 		{name: "memories", iconName: "grid", press: () => null},
 		{name: "categories", iconName: "layers", press: () => null},
-		{name: "profile", iconName: "person", press: () => null},
+		{name: "profile", iconName: "user", press: () => null},
 	]
 	const [page, setPage] = useState(0)
-	const [pagerRef, setPagerRef] = useState<ViewPager>()
 
 	const handlePagedSet = (index: number) => {
 		setPage(index)
-		pagerRef?.setPage(index)
 	}
 
 	const handleMoved = (e: NativeSyntheticEvent<ViewPagerOnPageScrollEventData>) => {
 		console.log(e.nativeEvent)
-
 		offset.setValue(e.nativeEvent.offset + e.nativeEvent.position)
 	}
 
 	return (
-		<View flex-3 bg-background>
-			<ViewPager
+		<View flex bg-background>
+			{/* <ViewPager
 				ref={(e) => setPagerRef(e)}
 				onPageScroll={handleMoved}
 				scrollEnabled={false}
@@ -46,12 +43,17 @@ export const HomePageV3 = () => {
 						setPage(pos)
 					}, 500)
 				}}
-				style={{flex: 1}}>
+				style={{borderWidth: 12, borderColor: "red", backgroundColor: "red", flex: 2}}>
 				<Feed_Page />
 				<Category_Page />
 				<Settings_Page />
-			</ViewPager>
-			<ViewPagerTabBar onPress={handlePagedSet} names={names} position={offset} page={page} />
+			</ViewPager> */}
+
+			{page == 0 && <Feed_Page />}
+			{page == 1 && <Category_Page />}
+			{page == 2 && <Settings_Page />}
+
+			<ViewPagerTabBar onPress={handlePagedSet} names={names} page={page} />
 		</View>
 	)
 }

@@ -42,7 +42,7 @@ const Feed_Page = () => {
 	}
 
 	return (
-		<View bg-background>
+		<View bg-background flex>
 			<FlatList
 				onScroll={() => {}}
 				// style={{borderWidth: 0, flex: 1}}

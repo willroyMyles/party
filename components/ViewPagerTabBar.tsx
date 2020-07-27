@@ -1,29 +1,19 @@
 import React, {useState} from "react"
-import {View, Text, Animated, Dimensions} from "react-native"
-import {TouchableOpacity, Colors} from "react-native-ui-lib"
+import {Animated, Dimensions} from "react-native"
+import {TouchableOpacity, Colors, View, Text} from "react-native-ui-lib"
 import Icon from "react-native-vector-icons/Feather"
 import {useTheme} from "styled-components"
 const {width} = Dimensions.get("window")
-const ViewPagerTabBar = ({
-	names,
-	position,
-	page,
-	onPress,
-}: {
-	names: any[]
-	position: Animated.Value
-	page: number
-	onPress: (index: number) => void
-}) => {
-	const [idx, setIdx] = useState(0)
+const ViewPagerTabBar = ({names, page, onPress}: {names: any[]; page: number; onPress: (index: number) => void}) => {
+	// const [idx, setIdx] = useState(0)
 	const theme = useTheme()
 
-	const XOffset = position.interpolate({
+	const offset = new Animated.Value(page)
+	const XOffset = offset.interpolate({
 		inputRange: [0, names.length - 1],
 		outputRange: [0, width - width / names.length],
 	})
 
-	console.log(XOffset)
 	return (
 		<View
 			style={{
@@ -36,8 +26,8 @@ const ViewPagerTabBar = ({
 			<Animated.View //indicator
 				style={{
 					position: "absolute",
-					left: 0,
-					transform: [{translateX: XOffset}],
+					left: XOffset,
+					// transform: [{translateX: XOffset}],
 					top: 0,
 					height: "100%",
 					width: width / names.length,
@@ -59,7 +49,7 @@ const ViewPagerTabBar = ({
 			</Animated.View>
 			{names.map((obj, index) => {
 				const {name, iconName, press} = obj
-				const isFocused = idx === index
+				const isFocused = page === index
 
 				// const inputRange = names.map((_: any, i: number) => i)
 				// const opacity = Animated.interpolate(position, {
@@ -67,17 +57,17 @@ const ViewPagerTabBar = ({
 				// 	outputRange: inputRange.map((i: number) => (i === index ? 1 : 0.35)),
 				// })
 
-				const opacity = position.interpolate({
-					inputRange: names.map((_, i) => i),
-					outputRange: names.map((_, i) => (i == index ? 1 : 0.3)),
-				})
+				// const opacity = position.interpolate({
+				// 	inputRange: names.map((_, i) => i),
+				// 	outputRange: names.map((_, i) => (i == index ? 1 : 0.3)),
+				// })
 
 				return (
 					<Animated.View
 						key={index}
 						style={{
 							flex: 1,
-							opacity,
+							// opacity,
 							flexDirection: "row",
 						}}>
 						<TouchableOpacity

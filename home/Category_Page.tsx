@@ -72,7 +72,7 @@ const Category_Page = () => {
 	}
 
 	return (
-		<View bg-background style={{borderWidth: 0}}>
+		<View bg-background flex>
 			<SectionList
 				onScroll={() => {}}
 				stickySectionHeadersEnabled

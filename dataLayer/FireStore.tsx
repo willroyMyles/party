@@ -2,7 +2,7 @@ import {action, observable, autorun, computed} from "mobx"
 import Fire from "./FirebaseV2"
 import uiManager from "./UiManager"
 import {FeedItemModel} from "../universial/Models"
-import {AsyncStorage} from "react-native"
+import {AsyncStorage, ImageURISource} from "react-native"
 import {auth, app} from "firebase"
 import {PROVIDER_GOOGLE} from "react-native-maps"
 import {GoogleUser} from "expo-google-app-auth"
@@ -17,7 +17,7 @@ class FireStore {
 
 	@observable userName = Fire.auth.currentUser?.displayName
 
-	@observable userImageUri = Fire.auth.currentUser?.photoURL
+	@observable userImageUri: any = Fire.auth.currentUser?.photoURL
 
 	@observable user: firebase.UserInfo | any = Fire.auth.currentUser
 
@@ -165,6 +165,10 @@ class FireStore {
 	setUsernameAndId = (username: string, id: string) => {
 		this.userName = username
 		this.userId = id
+	}
+
+	@action isLoggedIn = () => {
+		return !Fire.auth.currentUser
 	}
 }
 
