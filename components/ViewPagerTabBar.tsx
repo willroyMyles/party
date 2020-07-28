@@ -87,8 +87,10 @@ const ViewPagerTabBar = ({names, page, onPress}: {names: any[]; page: number; on
 								<Icon name={iconName} size={17} color={Colors.primary} />
 							</View>
 							<Text
+								adjustsFontSizeToFit
+								allowFontScaling
 								style={{
-									fontSize: 16,
+									// fontSize: 16,
 									textTransform: "uppercase",
 									color: Colors.primary,
 									textShadowRadius: 2,

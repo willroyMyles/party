@@ -7,6 +7,7 @@ import ViewPagerTabBar from "../components/ViewPagerTabBar"
 import {NativeSyntheticEvent, Animated} from "react-native"
 import {useHeaderHeight} from "@react-navigation/stack"
 import Settings_Page from "./Settings_Page"
+import NearMeView from "./views/NearMeView"
 
 export var headerHeight: number
 const offset = new Animated.Value(0)
@@ -17,6 +18,7 @@ export const HomePageV3 = () => {
 
 	const names = [
 		{name: "memories", iconName: "grid", press: () => null},
+		{name: "near me", iconName: "map-pin", press: () => null},
 		{name: "categories", iconName: "layers", press: () => null},
 		{name: "profile", iconName: "user", press: () => null},
 	]
@@ -49,8 +51,9 @@ export const HomePageV3 = () => {
 			</ViewPager> */}
 
 			{page == 0 && <Feed_Page />}
-			{page == 1 && <Category_Page />}
-			{page == 2 && <Settings_Page />}
+			{page == 1 && <NearMeView />}
+			{page == 2 && <Category_Page />}
+			{page == 3 && <Settings_Page />}
 
 			<ViewPagerTabBar onPress={handlePagedSet} names={names} page={page} />
 		</View>

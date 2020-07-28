@@ -83,9 +83,9 @@ export const Settings_Profile = observer(() => {
 						{fireSotreMob.userName}
 					</Text>
 				</View>
-				<Button link onPress={() => setVisible(true)}>
+				{/* <Button link onPress={() => setVisible(true)}>
 					<Text style={{color: uiManager.theme.primary_text}}>change</Text>
-				</Button>
+				</Button> */}
 				<Dialog onDismiss={() => setVisible(false)} visible={visible}>
 					<View bg-background br20 padding-10>
 						<TextInput
