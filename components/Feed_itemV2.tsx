@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import {View, Text, Image, TouchableOpacity, Colors} from "react-native-ui-lib"
 import {FeedItemModel} from "../universial/Models"
 import {Dimensions} from "react-native"
@@ -25,6 +25,8 @@ const Feed_itemV2 = ({
 		navigation.navigate("event")
 	}
 
+	const [loaded, setLoaded] = useState(false)
+
 	return (
 		<View
 			style={{
@@ -45,6 +47,7 @@ const Feed_itemV2 = ({
 					<SharedElement id={item.reference + "img"} style={{flex: 1}}>
 						<Image
 							source={{uri: item.imageUrl}}
+							onLoadEnd={() => setLoaded(true)}
 							style={{flex: 2, flexDirection: "row", borderRadius: 10}}
 							resizeMode="cover"
 						/>

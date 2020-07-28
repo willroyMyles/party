@@ -1,10 +1,11 @@
-import {observable, action} from "mobx"
+import {observable, action, autorun} from "mobx"
 import * as faker from "faker"
 import {FeedItemModel, PartyType} from "../universial/Models"
 import moment from "moment"
 import Fire from "./FirebaseV2"
 import {firestore} from "firebase"
 import {threadId} from "worker_threads"
+import fireSotreMob from "./FireStore"
 
 const amountForCategory = 50
 
@@ -12,8 +13,6 @@ class Store {
 	@observable data: Map<string, FeedItemModel> = new Map()
 
 	@observable currentEvent: any = {}
-
-	@observable rsvpParties: Map<string, string> = new Map()
 
 	@action getDataFromServerBasedOnSection = (section: number) => {
 		return new Promise((resolve) => {})

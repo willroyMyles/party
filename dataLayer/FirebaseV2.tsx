@@ -379,7 +379,7 @@ class FirebaseStore {
 		})
 	}
 
-	getRsvpEvents = (id: string): string[] | any => {
+	getRsvpEvents = (id: string): any | string[] => {
 		return new Promise((resolve) => {
 			this.dataBase
 				.collection(userCollection)

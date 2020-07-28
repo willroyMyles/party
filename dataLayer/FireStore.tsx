@@ -7,6 +7,7 @@ import {auth, app} from "firebase"
 import {PROVIDER_GOOGLE} from "react-native-maps"
 import {GoogleUser} from "expo-google-app-auth"
 import {eventEmitter, eventStrings} from "../universial/EventEmitter"
+import dataProvider from "./DataStore"
 
 class FireStore {
 	@observable errorMessageLogin = ""
@@ -23,8 +24,9 @@ class FireStore {
 
 	@observable eventImagesMap: Map<string, any[]> = new Map()
 
-	@observable rsvpParties: string[] = []
 	@observable numberOfImages = 0
+
+	@observable rsvpParties: string[] = []
 
 	@action signUp = (data: any) => {
 		return new Promise((resolve) => {
@@ -47,10 +49,6 @@ class FireStore {
 		this.userId = Fire.auth.currentUser?.uid
 		this.userName = Fire.auth.currentUser?.displayName
 		this.userImageUri = Fire.auth.currentUser?.photoURL
-		if (this.userId)
-			Fire.getRsvpEvents(this.userId).then((res: string[]) => {
-				this.rsvpParties.push(...res)
-			})
 	}
 
 	@action signIn = (data: any) => {
@@ -144,6 +142,25 @@ class FireStore {
 			return res
 		})
 	}
+	@action getRsvpEvents = () =>
+		new Promise((resolve) => {
+			if (fireSotreMob.userId) {
+				this.rsvpParties = []
+				Fire.getRsvpEvents(fireSotreMob.userId).then((res: string[]) => {
+					this.rsvpParties.push(...res)
+					resolve(true)
+				})
+			}
+		})
+
+	@action removeRsvp = (id: string) =>
+		new Promise((resolve) => {
+			if (Fire.isLoggedIn()) {
+				Fire.uploadRsvpEvent(id, false).then((res) => {
+					resolve(res)
+				})
+			}
+		})
 
 	send = {
 		PictureToEvent: this.uploadPictureToEvent,
@@ -154,6 +171,7 @@ class FireStore {
 
 	retrieve = {
 		picturesForEvent: this.picturesForEvent,
+		rsvpEvents: this.getRsvpEvents,
 	}
 
 	@action handleGoogleSignin(result: {

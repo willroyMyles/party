@@ -38,7 +38,7 @@ export interface FeedItemModel {
 
 	timeStamp?: firestore.FieldValue
 
-	priority?: number
+	priority: number | 0
 }
 
 export interface UserDatabaseModel {

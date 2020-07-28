@@ -179,7 +179,7 @@ export const Settings_Profile = observer(() => {
 					style={{
 						backgroundColor: Colors.primary,
 						borderRadius: 5,
-						borderWidth: 1,
+						borderWidth: 0,
 						width: "80%",
 						elevation: 12,
 						padding: 20,
