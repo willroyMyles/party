@@ -3,6 +3,7 @@ import {View, Text} from "react-native-ui-lib"
 import MapView, {LatLng} from "react-native-maps"
 import {Dimensions} from "react-native"
 import * as Location from "expo-location"
+import {DarkMapStyleWithoutLandmarks} from "../../universial/Theme"
 const NearMeView = () => {
 	const [loc, setloc] = useState<any>(undefined)
 	const [loading, setloading] = useState(true)
@@ -58,6 +59,9 @@ const NearMeView = () => {
 	return (
 		<View flex>
 			<MapView
+				customMapStyle={DarkMapStyleWithoutLandmarks}
+				toolbarEnabled
+				liteMode={true}
 				region={loc}
 				loadingEnabled={loading}
 				showsUserLocation
