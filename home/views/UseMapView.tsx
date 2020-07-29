@@ -11,6 +11,7 @@ import axios from "axios"
 import themeHelper from "../../universial/ThemeHelper"
 import BackButton from "../../components/BackButton"
 import {extraFixColorsMap} from "react-native-ui-lib/generatedTypes/style/colorsPalette"
+import MarkerPin from "./MarkerPin"
 
 const UseMapView = (props: {setValue: () => null}) => {
 	const theme = useTheme()
@@ -99,7 +100,8 @@ const UseMapView = (props: {setValue: () => null}) => {
 					}}
 					style={{width: Dimensions.get("screen").width, height: "100%"}}>
 					{marker && (
-						<Marker draggable image={require("../../assets/marker.png")} pinColor="red" coordinate={marker}></Marker>
+						<MarkerPin marker={marker} />
+						// <Marker draggable image={require("../../assets/marker.png")} pinColor="red" coordinate={marker}></Marker>
 					)}
 				</MapView>
 				<BackButton />

@@ -31,6 +31,7 @@
 		"expo-linear-gradient": "^8.2.1",
 		"expo-location": "^8.2.1",
 		"expo-splash-screen": "^0.3.1",
+		"expo-task-manager": "^8.4.0",
 		"faker": "^4.1.0",
 		"feather-icons": "^4.28.0",
 		"firebase": "^7.15.5",
