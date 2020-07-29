@@ -170,8 +170,8 @@ export const Settings_Profile = observer(() => {
 				<TouchableOpacity
 					activeOpacity={0.8}
 					onPress={() => {
-						if (fireSotreMob.isLoggedIn()) {
-							Alert.alert("log in", "you need to be logged in to create an event")
+						if (!fireSotreMob.isLoggedIn()) {
+							TToast.error("log in", "you need to be logged in to create an event")
 						} else {
 							navigation.navigate("create_event")
 						}

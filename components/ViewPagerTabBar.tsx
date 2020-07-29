@@ -88,15 +88,16 @@ const ViewPagerTabBar = ({names, page, onPress}: {names: any[]; page: number; on
 							</View>
 							<Text
 								adjustsFontSizeToFit
-								allowFontScaling
+								// allowFontScaling
 								style={{
 									// fontSize: 16,
 									textTransform: "uppercase",
 									color: Colors.primary,
-									textShadowRadius: 2,
+									// textShadowRadius: 2,
+									flexWrap: "wrap-reverse",
 									// textShadowOffset: {width: 2, height: 2},
 								}}>
-								{name}
+								{isFocused ? name : ""}
 							</Text>
 						</TouchableOpacity>
 					</Animated.View>

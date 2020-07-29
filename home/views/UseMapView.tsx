@@ -17,13 +17,11 @@ const UseMapView = (props: {setValue: () => null}) => {
 	const navigation = useNavigation()
 	const [marker, setMarker] = useState<any>(null)
 	const [loc, setloc] = useState<any>(undefined)
-	// const [scrollEnabled, setScrollEnabled] = useState(false)
 	const [map, setMap] = useState<MapView>()
 
 	const useLocation = async () => {
 		const perm = await Location.getPermissionsAsync()
 		if (!perm.granted && perm.canAskAgain) {
-			//asl permission
 			const result = await getLocationPermission()
 		}
 

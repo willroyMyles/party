@@ -46,7 +46,7 @@ export const Navigator = observer(() => {
 				}}>
 				<Stack.Screen
 					options={{
-						headerShown: true,
+						headerShown: false,
 						headerTitle: "My #1 Party",
 						headerRight: (props) => <Leftheader {...props} />,
 					}}

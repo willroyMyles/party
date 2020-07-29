@@ -8,6 +8,7 @@ import {NativeSyntheticEvent, Animated} from "react-native"
 import {useHeaderHeight} from "@react-navigation/stack"
 import Settings_Page from "./Settings_Page"
 import NearMeView from "./views/NearMeView"
+import {SafeAreaView} from "react-native-safe-area-context"
 
 export var headerHeight: number
 const offset = new Animated.Value(0)
@@ -33,8 +34,9 @@ export const HomePageV3 = () => {
 	}
 
 	return (
-		<View flex bg-background>
-			{/* <ViewPager
+		<SafeAreaView style={{flex: 1}}>
+			<View flex bg-background>
+				{/* <ViewPager
 				ref={(e) => setPagerRef(e)}
 				onPageScroll={handleMoved}
 				scrollEnabled={false}
@@ -50,13 +52,14 @@ export const HomePageV3 = () => {
 				<Settings_Page />
 			</ViewPager> */}
 
-			{page == 0 && <Feed_Page />}
-			{page == 1 && <NearMeView />}
-			{page == 2 && <Category_Page />}
-			{page == 3 && <Settings_Page />}
+				{page == 0 && <Feed_Page />}
+				{page == 1 && <NearMeView />}
+				{page == 2 && <Category_Page />}
+				{page == 3 && <Settings_Page />}
 
-			<ViewPagerTabBar onPress={handlePagedSet} names={names} page={page} />
-		</View>
+				<ViewPagerTabBar onPress={handlePagedSet} names={names} page={page} />
+			</View>
+		</SafeAreaView>
 	)
 }
 
