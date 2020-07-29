@@ -15,10 +15,32 @@ import Navigator from "./components/Navigator"
 import {eventEmitter, eventStrings} from "./universial/EventEmitter"
 import {decode, encode} from "base-64"
 import fireSotreMob from "./dataLayer/FireStore"
+import * as TaskManager from 'expo-task-manager';
+import * as Location from 'expo-location';
 console.ignoredYellowBox = ["Setting a timer"]
 
 import _ from "lodash"
 import TToast from "./components/TToast"
+
+TaskManager.isTaskRegisteredAsync("geoLocation").then(res =>{
+	console.log("y=tasked defined?", res);
+	
+	if(!res){
+		console.log("defining tasks");
+		
+		TaskManager.defineTask("geoLocation", ({data , error} : {data : any, error : any}) => {
+			if (error) {
+				console.log(error)
+				return
+			}
+			console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
+		
+			if(data.eventType == Location.GeofencingEventType.Enter){
+				eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
+			}
+		})
+	}
+})
 
 //ignores a warning
 const _console = _.clone(console)

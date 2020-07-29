@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from "react"
+import React, {useState, useEffect, useCallback, memo} from "react"
 import {View, Text, Colors} from "react-native-ui-lib"
 import MapView, {LatLng, Circle} from "react-native-maps"
 import {Dimensions} from "react-native"
@@ -14,35 +14,38 @@ import * as faker from "faker"
 import { eventEmitter, eventStrings } from "../../universial/EventEmitter"
 
 
-TaskManager.isTaskRegisteredAsync("geoLocation").then(res =>{
-	if(!res){
-		console.log("defining tasks");
-		
-		TaskManager.defineTask("geoLocation", ({data , error} : {data : any, error : any}) => {
-			if (error) {
-				console.log(error)
-				return
-			}
-			console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
-		
-			if(data.eventType == Location.GeofencingEventType.Enter){
-				eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
-			}
-		})
-	}
-})
-
-
-
 const {width, height} = Dimensions.get("window")
+const radius = 1400
+
+const Map = memo((props : any) =>{
+
+	return <MapView
+	customMapStyle={DarkMapStyleWithoutLandmarks}
+	scrollEnabled
+	region={props.region}
+	showsUserLocation
+	style={{width: Dimensions.get("screen").width, height: "100%"}}>
+	{/* {dataHolder.map((value, index) => {
+		const gong = String(value.location).split(",")
+		const latitude = Number.parseFloat(gong[0])
+		const longitude = Number.parseFloat(gong[1])
+		const coord = {latitude: latitude, longitude: longitude}
+		return (
+			<View key={index}>
+				<MarkerPin marker={coord} />
+				<Circle radius={radius} center={coord} fillColor={Colors.primary + "22"} strokeWidth={1} />
+			</View>
+		)
+	})} */}
+</MapView>
+})
 
 const NearMeView = () => {
 	const theme = useTheme()
 	const [loc, setloc] = useState<any>(undefined)
-	const [loading, setloading] = useState(true)
 	const [dataHolder, setData] = useState<FeedItemModel[]>([])
 	const [regions, setRegions] = useState<LocationRegion[]>([])
-	const radius = 1400
+	const [ids, setIds] = useState<string[]>([])
 	useEffect( () => {
 
 
@@ -52,45 +55,69 @@ const NearMeView = () => {
 
 		// Location.stopGeofencingAsync("geoLocation").then(res =>{
 		// 	console.log("location stopped");
-			
 		// })
 
 
 		getCurrentLocation()
 		sortData()
-		// eventEmitter.addListener(eventStrings.locationEntered, (ref:string)=>{
-		// 	console.log(dataProvider.data.get(ref)?.title);
-		// })
+		eventEmitter.addListener(eventStrings.locationEntered, (ref:string)=>{
+			if(!ids.includes(ref)) setIds((ids) => ids.concat(ref))
+		})
+		console.log(eventEmitter.listeners, "listeners enter");
 		
 		
-		// return () => {
-		// 	eventEmitter.removeListener(eventStrings.locationEntered, () => null)
-		// }
+		return () => {
+			eventEmitter.removeListener(eventStrings.locationEntered, () => console.log("exiting"));
+			
+			console.log(eventEmitter.listeners.length, "listeners exit");
+
+		}
 	}, [])
 
 	useEffect(() => {
-		if(regions.length > 0)
-		geofencing()
+		if(regions.length > 0)  geofencing()
 
 	}, [regions])
 
-	const getReference = useCallback((ref:string) => {
-			if(ref) console.log(ref);
+	const getReference = useCallback((ref?:string) => {
+		console.log("hello from the other side");
+		
+			if(ref){
+
+console.log(ids);
+
+			}
+			else console.log("ref removed");
 			
+
 		},[])
 
-	
+
 
 	const geofencing = async (stop: boolean = false) => {
+		const taskname = "geoLocation"
+		const geoEnabled = await TaskManager.isTaskRegisteredAsync(taskname)
+		console.log("is sgeo location enabled", geoEnabled);
+		
+		Location.startGeofencingAsync(taskname, regions)
+Location.hasStartedGeofencingAsync(taskname).then(async (hasStarted) =>{
 
-		Location.hasStartedGeofencingAsync("geoLocation").then ( async (res) =>{
-			if(!res){
-				console.log("defining geo location");
-				await Location.startGeofencingAsync("geoLocation", regions).then(async (res) => {
-					console.log("geo")
-				})
-			}
-		})
+
+
+	// if(hasStarted){
+	// 	Location.stopGeofencingAsync(taskname).then(async res=>{
+
+	// 		await Location.startGeofencingAsync(taskname, regions)
+	// 		console.log("stop and start geo");
+	// 	})
+	// 	.catch(err => console.log("errerrrer", err))
+		
+		
+	// }else{
+	// 	await Location.startGeofencingAsync(taskname, regions)
+	// 	console.log("start geo");
+	// }
+})
 	
 
 	}
@@ -156,28 +183,14 @@ const NearMeView = () => {
 	}
 	return (
 		<View flex>
-			<MapView
-				customMapStyle={DarkMapStyleWithoutLandmarks}
-				scrollEnabled
-				// liteMode={true}
-				region={loc}
-				// loadingEnabled={loading}
-				showsUserLocation
-				style={{width: Dimensions.get("screen").width, height: "100%"}}>
-				{/* {loc && <Circle radius={radius} center={loc} fillColor={Colors.primary + "22"} strokeWidth={1} />} */}
-				{dataHolder.map((value, index) => {
-					const gong = String(value.location).split(",")
-					const latitude = Number.parseFloat(gong[0])
-					const longitude = Number.parseFloat(gong[1])
-					const coord = {latitude: latitude, longitude: longitude}
-					return (
-						<View key={index}>
-							<MarkerPin marker={coord} />
-							<Circle radius={radius} center={coord} fillColor={Colors.primary + "22"} strokeWidth={1} />
-						</View>
-					)
-				})}
-			</MapView>
+			<Map region={loc} />
+			<View absB bottom-20>
+			{ids.map((value, index)=>{
+				console.log("hey");
+				
+				return <View padding-10 bg-white key={index}><Text>{value}</Text></View>
+			})}
+			</View>
 		</View>
 	)
 }

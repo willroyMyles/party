@@ -28,7 +28,7 @@ export interface FeedItemModel {
 	hint?: string
 	person?: string
 	personId?: string
-	location?: Object
+	location?: string
 	reference?: string
 	start?: string
 	end?: string

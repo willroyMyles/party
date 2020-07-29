@@ -9,6 +9,7 @@ import {useHeaderHeight} from "@react-navigation/stack"
 import Settings_Page from "./Settings_Page"
 import NearMeView from "./views/NearMeView"
 import {SafeAreaView} from "react-native-safe-area-context"
+import NearMeV2 from "./views/NearMeV2"
 
 export var headerHeight: number
 const offset = new Animated.Value(0)
@@ -53,7 +54,7 @@ export const HomePageV3 = () => {
 			</ViewPager> */}
 
 				{page == 0 && <Feed_Page />}
-				{page == 1 && <NearMeView />}
+				{page == 1 && <NearMeV2 />}
 				{page == 2 && <Category_Page />}
 				{page == 3 && <Settings_Page />}
 

@@ -23,7 +23,7 @@ const UseMapView = (props: {setValue: () => null}) => {
 	const useLocation = async () => {
 		const perm = await Location.getPermissionsAsync()
 		if (!perm.granted && perm.canAskAgain) {
-			const result = await getLocationPermission()
+			const result = await Location.requestPermissionsAsync()
 		}
 
 		if (perm.granted) {
@@ -67,12 +67,6 @@ const UseMapView = (props: {setValue: () => null}) => {
 
 		const lat = coor.latitude
 		const lon = coor.longitude
-	}
-
-	const getLocationPermission = () => {
-		return new Promise(async (resolve) => {
-			const result = await Location.requestPermissionsAsync()
-		})
 	}
 
 	const confirm = () => {
