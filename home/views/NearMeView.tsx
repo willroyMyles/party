@@ -11,60 +11,64 @@ import {LocationRegion} from "expo-location"
 import * as TaskManager from "expo-task-manager"
 import {useTheme} from "styled-components"
 import * as faker from "faker"
+import { eventEmitter, eventStrings } from "../../universial/EventEmitter"
 
-TaskManager.defineTask("geo", ({data, error}) => {
-	console.log(data, "data")
-})
 
-TaskManager.defineTask("geoLocation", ({data, error}) => {
-	if (error) {
-		// check `error.message` for more details.
-		console.log(error)
 
-		return
-	}
 
-	console.log(data, "gl")
 
-	// if (eventType === Location.GeofencingEventType.Enter) {
-	// 	console.log("You've entered region:", region)
-	// } else if (eventType === Location.GeofencingEventType.Exit) {
-	// 	console.log("You've left region:", region)
-	// }
-})
+const {width, height} = Dimensions.get("window")
 
 const NearMeView = () => {
 	const theme = useTheme()
 	const [loc, setloc] = useState<any>(undefined)
 	const [loading, setloading] = useState(true)
-	const [data, setData] = useState<FeedItemModel[]>([])
+	const [dataHolder, setData] = useState<FeedItemModel[]>([])
 	const [regions, setRegions] = useState<LocationRegion[]>([])
-	const radius = 4600
+	const radius = 1400
 	useEffect(() => {
 		getCurrentLocation()
 		sortData()
-		geofencing()
-
-		// TaskManager.isTaskRegisteredAsync("geoLocation").then((res) => {
-		// 	console.log(res, "lgfrd")
-		// })
-		// TaskManager.getRegisteredTasksAsync().then((res) => {
-		// 	console.log(res[0])
-		// })
-
+		eventEmitter.addListener(eventStrings.locationEntered, (ref:string)=>{
+			console.log(dataProvider.data.get(ref)?.title);
+			
+		})
+		
+		
 		return () => {
-			// geofencing(true)
+			eventEmitter.removeListener(eventStrings.locationEntered, () => null)
 		}
 	}, [])
 
+	useEffect(() => {
+		if(regions.length > 0)
+		geofencing()
+
+	}, [regions])
+
+	
+
+	
+	TaskManager.defineTask("geoLocation", ({data , error} : {data : any, error : any}) => {
+		if (error) {
+			console.log(error)
+			return
+		}
+		console.log(data.eventType == Location.GeofencingEventType.Enter);
+
+		if(data.eventType == Location.GeofencingEventType.Enter){
+			eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
+		}
+		
+	})
+
 	const geofencing = async (stop: boolean = false) => {
-		const taskName = "geolocation"
-		getCurrentLocation()
-		sortData()
+
+
 		if (stop) {
 			console.log("stopping geofencing")
 
-			Location.stopGeofencingAsync(taskName)
+			// Location.stopGeofencingAsync(taskName)
 		} else {
 			if (regions.length <= 0) return
 			await Location.startGeofencingAsync("geoLocation", regions).then(async (res) => {
@@ -72,7 +76,9 @@ const NearMeView = () => {
 			})
 			// Location.startLocationUpdatesAsync("geoLocation", {accuracy: Location.Accuracy.Balanced, timeInterval: 500})
 		}
-		console.log("started", regions[0].identifier)
+
+		// console.log(await Location.reverseGeocodeAsync(regions[0]));
+
 	}
 
 	const getCurrentLocation = async () => {
@@ -93,7 +99,6 @@ const NearMeView = () => {
 	}
 
 	const setLocLocation = async (coor: LatLng) => {
-		const {width, height} = Dimensions.get("window")
 		const ASPECT_RATIO = width / height
 
 		const northeastLat = coor.latitude + 0.03 // for scale
@@ -109,13 +114,11 @@ const NearMeView = () => {
 		}
 
 		setloc(region)
-
-		const lat = coor.latitude
-		const lon = coor.longitude
 	}
 
 	const sortData = () => {
 		setRegions([])
+		const d : any[] = []
 		dataProvider.data.forEach((value, key) => {
 			setData((d) => d.concat(value))
 
@@ -126,15 +129,14 @@ const NearMeView = () => {
 				latitude: latitude,
 				longitude: longitude,
 				radius,
-				identifier: faker.random.uuid(),
+				identifier: value.reference,
 				notifyOnEnter: true,
 				notifyOnExit: true,
 			}
 
-			if (!regions.includes(coord)) {
-				setRegions((r) => r.concat(coord))
-			}
+			d.push(coord)
 		})
+		setRegions(d)
 	}
 	return (
 		<View flex>
@@ -147,7 +149,7 @@ const NearMeView = () => {
 				showsUserLocation
 				style={{width: Dimensions.get("screen").width, height: "100%"}}>
 				{/* {loc && <Circle radius={radius} center={loc} fillColor={Colors.primary + "22"} strokeWidth={1} />} */}
-				{data.map((value, index) => {
+				{dataHolder.map((value, index) => {
 					const gong = String(value.location).split(",")
 					const latitude = Number.parseFloat(gong[0])
 					const longitude = Number.parseFloat(gong[1])
