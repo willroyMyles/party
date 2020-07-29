@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useCallback} from "react"
 import {View, Text, Colors} from "react-native-ui-lib"
 import MapView, {LatLng, Circle} from "react-native-maps"
 import {Dimensions} from "react-native"
@@ -14,6 +14,23 @@ import * as faker from "faker"
 import { eventEmitter, eventStrings } from "../../universial/EventEmitter"
 
 
+TaskManager.isTaskRegisteredAsync("geoLocation").then(res =>{
+	if(!res){
+		console.log("defining tasks");
+		
+		TaskManager.defineTask("geoLocation", ({data , error} : {data : any, error : any}) => {
+			if (error) {
+				console.log(error)
+				return
+			}
+			console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
+		
+			if(data.eventType == Location.GeofencingEventType.Enter){
+				eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
+			}
+		})
+	}
+})
 
 
 
@@ -26,18 +43,29 @@ const NearMeView = () => {
 	const [dataHolder, setData] = useState<FeedItemModel[]>([])
 	const [regions, setRegions] = useState<LocationRegion[]>([])
 	const radius = 1400
-	useEffect(() => {
+	useEffect( () => {
+
+
+		// TaskManager.unregisterAllTasksAsync().then(res =>{
+		// 	console.log("tasks unregistered");
+		// })
+
+		// Location.stopGeofencingAsync("geoLocation").then(res =>{
+		// 	console.log("location stopped");
+			
+		// })
+
+
 		getCurrentLocation()
 		sortData()
-		eventEmitter.addListener(eventStrings.locationEntered, (ref:string)=>{
-			console.log(dataProvider.data.get(ref)?.title);
-			
-		})
+		// eventEmitter.addListener(eventStrings.locationEntered, (ref:string)=>{
+		// 	console.log(dataProvider.data.get(ref)?.title);
+		// })
 		
 		
-		return () => {
-			eventEmitter.removeListener(eventStrings.locationEntered, () => null)
-		}
+		// return () => {
+		// 	eventEmitter.removeListener(eventStrings.locationEntered, () => null)
+		// }
 	}, [])
 
 	useEffect(() => {
@@ -46,38 +74,24 @@ const NearMeView = () => {
 
 	}, [regions])
 
-	
+	const getReference = useCallback((ref:string) => {
+			if(ref) console.log(ref);
+			
+		},[])
 
 	
-	TaskManager.defineTask("geoLocation", ({data , error} : {data : any, error : any}) => {
-		if (error) {
-			console.log(error)
-			return
-		}
-		console.log(data.eventType == Location.GeofencingEventType.Enter);
-
-		if(data.eventType == Location.GeofencingEventType.Enter){
-			eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
-		}
-		
-	})
 
 	const geofencing = async (stop: boolean = false) => {
 
-
-		if (stop) {
-			console.log("stopping geofencing")
-
-			// Location.stopGeofencingAsync(taskName)
-		} else {
-			if (regions.length <= 0) return
-			await Location.startGeofencingAsync("geoLocation", regions).then(async (res) => {
-				console.log("geo")
-			})
-			// Location.startLocationUpdatesAsync("geoLocation", {accuracy: Location.Accuracy.Balanced, timeInterval: 500})
-		}
-
-		// console.log(await Location.reverseGeocodeAsync(regions[0]));
+		Location.hasStartedGeofencingAsync("geoLocation").then ( async (res) =>{
+			if(!res){
+				console.log("defining geo location");
+				await Location.startGeofencingAsync("geoLocation", regions).then(async (res) => {
+					console.log("geo")
+				})
+			}
+		})
+	
 
 	}
 
@@ -117,10 +131,11 @@ const NearMeView = () => {
 	}
 
 	const sortData = () => {
-		setRegions([])
+
 		const d : any[] = []
+		const r : any[] = []
 		dataProvider.data.forEach((value, key) => {
-			setData((d) => d.concat(value))
+			r.push(value)
 
 			const gong = String(value.location).split(",")
 			const latitude = Number.parseFloat(gong[0])
@@ -137,6 +152,7 @@ const NearMeView = () => {
 			d.push(coord)
 		})
 		setRegions(d)
+		setData(r)
 	}
 	return (
 		<View flex>
