@@ -7,6 +7,9 @@ import { FeedItemModel } from '../../universial/Models'
 import MarkerPin, { MarkerPinItem } from './MarkerPin'
 import dataProvider from '../../dataLayer/DataStore'
 import { LocationRegion } from 'expo-location'
+import * as Location from "expo-location"
+import * as TaskManager from "expo-task-manager"
+import { eventEmitter, eventStrings } from '../../universial/EventEmitter'
 
 
 
@@ -42,16 +45,41 @@ const NearMeV2 = () => {
 
     const [region, setRegion] = useState<Region>()
     const [geoRegions, setGeoRegions] = useState<LocationRegion[]>([])
+    const [eventCards, setEventCards] = useState<FeedItemModel[]>([])
+    const taskName = "geoLocation"
 
     useEffect(() => {
+    
+
+        sortGeoRegions()
+
         getLocation().then(async res => {
             const reg = await getRegion(res)
             setRegion(reg)
         })
 
-        sortGeoRegions()
+        
+        eventEmitter.addListener(eventStrings.locationEntered, test)
+        console.log(eventEmitter.listeners(eventStrings.locationEntered), "listeners");
 
+        return() =>{
+            eventEmitter.removeListener(eventStrings.locationEntered, test)
+            Location.hasStartedGeofencingAsync(taskName).then(res=>{
+                if(res){
+                   // Location.stopGeofencingAsync(taskName)
+                }
+            })
+
+        }
     }, [])
+
+    const test = (refr:string) =>{
+
+        console.log(refr);
+        
+    }
+
+
 
     const sortGeoRegions = () =>{
         const d : any = []
@@ -70,13 +98,35 @@ const NearMeV2 = () => {
         })
 
         setGeoRegions(d)
+
+        console.log("regions set",geoRegions.length);
+        
+
+        if( TaskManager.isTaskDefined(taskName)){
+            console.log("task is defined");
+            
+            Location.hasStartedGeofencingAsync("geoLocation").then(async res=>{
+                console.log("started?", res);
+                if(!res && geoRegions.length > 0){
+                    await Location.startGeofencingAsync("geoLocation", geoRegions)
+                    console.log("geo started");
+                    
+                }
+                
+            })
+    
+           }
     }
 
 
     return (
         <View flex>
             <Map region={region} />
-            <Text>hi</Text>
+            <View bg-background padding-10 center style={{position:"absolute", minHeight:10, minWidth:"100%", bottom:3}}>
+                {eventCards.map((value, index)=>{
+                    return <View key={index}><Text>{value.title}</Text></View>
+                })}
+            </View>
         </View>
     )
 }

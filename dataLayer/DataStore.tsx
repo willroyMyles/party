@@ -14,9 +14,11 @@ class Store {
 
 	@observable currentEvent: any = {}
 
+
 	@action getDataFromServerBasedOnSection = (section: number) => {
 		return new Promise((resolve) => {})
 	}
+
 
 	@action getEvents = () => {
 		return new Promise((resolve) => {

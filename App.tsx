@@ -21,11 +21,12 @@ console.ignoredYellowBox = ["Setting a timer"]
 
 import _ from "lodash"
 import TToast from "./components/TToast"
+import dataProvider from "./dataLayer/DataStore"
 
 TaskManager.isTaskRegisteredAsync("geoLocation").then(res =>{
-	console.log("y=tasked defined?", res);
+	const t = TaskManager.isTaskDefined("geoLocation")
 	
-	if(!res){
+	if(!t){
 		console.log("defining tasks");
 		
 		TaskManager.defineTask("geoLocation", ({data , error} : {data : any, error : any}) => {
@@ -33,10 +34,13 @@ TaskManager.isTaskRegisteredAsync("geoLocation").then(res =>{
 				console.log(error)
 				return
 			}
-			console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
+			// console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
 		
 			if(data.eventType == Location.GeofencingEventType.Enter){
 				eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
+				console.log("emitting data");
+
+				
 			}
 		})
 	}
