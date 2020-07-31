@@ -13,7 +13,13 @@ class Store {
 
     register = (username: string, email: string, password: string) => new Promise((resolve, reject) => {
         auth().createUserWithEmailAndPassword(email, password).then(res => {
-            resolve(res.user.uid)
+            auth().currentUser?.updateProfile({
+                displayName: username,
+
+            }).then(eh => {
+
+                resolve(res.user.uid)
+            }).catch(err => reject(err))
         }).catch(err => reject(err))
     })
 
