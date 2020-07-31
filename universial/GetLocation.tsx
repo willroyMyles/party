@@ -24,7 +24,7 @@ export const getRegion = (coords: LatLng) => new Promise<Region>((resolve, rejec
     const {width, height} = Dimensions.get("window")
     const ASPECT_RATIO = width / height
 
-    const latDelta = .03
+    const latDelta = .05
     const lngDelta = latDelta * ASPECT_RATIO
 
     let region = {

@@ -1,6 +1,6 @@
-import React, { useEffect, useState, memo } from 'react'
-import { View, Text, Colors } from 'react-native-ui-lib'
-import MapView, { Region, Circle } from 'react-native-maps'
+import React, { useEffect, useState, memo, createRef, useRef } from 'react'
+import { View, Text, Colors, Button } from 'react-native-ui-lib'
+import MapView, { Region, Circle, LatLng, EventUserLocation } from 'react-native-maps'
 import { getLocation, getRegion, getLatitudeLongitudeFromString } from '../../universial/GetLocation'
 import { Dimensions } from 'react-native'
 import { FeedItemModel } from '../../universial/Models'
@@ -15,17 +15,35 @@ import { eventEmitter, eventStrings } from '../../universial/EventEmitter'
 
 const radius = 1600
 
-const Map = memo(({ region }: { region?: Region }) => {
-    console.log("map render");
+const Map = memo(({ region, coord }: { region?: Region, coord? :Coordinates }) => {
+    const map = useRef<MapView | null>()
+
+    
+    useEffect(() => {
+            if(region) {
+                map.current?.animateToRegion(region)
+            }
+    }, [region])
+
+
+
+    const handleLocChanged = async (loc : EventUserLocation) =>{
+
+
+    }
+    
 
     if (region) return <MapView
+    ref={map}
         // liteMode
 
+        followsUserLocation
         showsScale
         showsMyLocationButton
         showsUserLocation
+        onUserLocationChange={handleLocChanged}
         // showsMyLocationButton
-        region={region}
+        // region={region}
         style={{ width: Dimensions.get("screen").width, height: "100%" }}>
         <Circle radius={radius} center={region} fillColor={Colors.primary + "22"} strokeWidth={1} strokeColor={Colors.grey50} />
 
@@ -44,6 +62,7 @@ const Map = memo(({ region }: { region?: Region }) => {
 const NearMeV2 = () => {
 
     const [region, setRegion] = useState<Region>()
+    const [mockCoords, setMockCoords] = useState<Coordinates>()
     const [geoRegions, setGeoRegions] = useState<LocationRegion[]>([])
     const [eventCards, setEventCards] = useState<FeedItemModel[]>([])
     const taskName = "geoLocation"
@@ -54,13 +73,12 @@ const NearMeV2 = () => {
         sortGeoRegions()
 
         getLocation().then(async res => {
-            const reg = await getRegion(res)
+            const reg = await getRegion(res)            
             setRegion(reg)
         })
 
         
         eventEmitter.addListener(eventStrings.locationEntered, test)
-        console.log(eventEmitter.listeners(eventStrings.locationEntered), "listeners");
 
         return() =>{
             eventEmitter.removeListener(eventStrings.locationEntered, test)
@@ -99,14 +117,11 @@ const NearMeV2 = () => {
 
         setGeoRegions(d)
 
-        console.log("regions set",geoRegions.length);
         
 
         if( TaskManager.isTaskDefined(taskName)){
-            console.log("task is defined");
             
             Location.hasStartedGeofencingAsync("geoLocation").then(async res=>{
-                console.log("started?", res);
                 if(!res && geoRegions.length > 0){
                     await Location.startGeofencingAsync("geoLocation", geoRegions)
                     console.log("geo started");
@@ -121,12 +136,13 @@ const NearMeV2 = () => {
 
     return (
         <View flex>
-            <Map region={region} />
+            <Map region={region} coord={mockCoords} />
             <View bg-background padding-10 center style={{position:"absolute", minHeight:10, minWidth:"100%", bottom:3}}>
                 {eventCards.map((value, index)=>{
                     return <View key={index}><Text>{value.title}</Text></View>
                 })}
             </View>
+          
         </View>
     )
 }
