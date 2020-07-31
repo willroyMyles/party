@@ -2,23 +2,64 @@ import React from 'react'
 import { View, Text, TextField, TouchableOpacity, Button } from 'react-native-ui-lib'
 import { ScrollView } from 'react-native-gesture-handler'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native'
+import { useForm, Controller } from "react-hook-form";
 
 const Login = () => {
+
+    const { handleSubmit, errors, control, clearErrors } = useForm();
+
+    const onSubmit = (data: { email: string; password: string }) => {
+        console.log(data);
+
+    };
+
     return (
         <ScrollView scrollEnabled={false} contentContainerStyle={{ justifyContent: "center", alignItems: "center", padding: 20 }}>
             <Text>Welcome</Text>
             <View br50 marginT-90 padding-10 bg-white style={{ width: "100%", elevation: 0 }}>
                 <View marginT-10 padding-10 centerV style={{}}>
-                    <TextField floatOnFocus floatingPlaceholder style={style.input} placeholder="email" />
-                    <TextField floatOnFocus floatingPlaceholder style={style.input} placeholder="password" />
-                    <TouchableOpacity right>
+                    <Controller
+                        name="email"
+                        control={control}
+                        rules={{ required: "email required" }}
+                        render={({ onChange, onBlur, value }) => {
+                            return (<TextField hideUnderline error={errors.email ? errors.email.message : ""} maxLength={16}
+                                onChangeText={(e: any) => onChange(e)} onBlur={() => {
+                                    onBlur()
+                                    clearErrors("email")
+                                }} value={value} floatOnFocus floatingPlaceholder style={style.input} floatingPlaceholderStyle={style.floater} placeholder="email" />
+                            )
+                        }}
+                    />
+                    <Controller
+                        name="password"
+                        control={control}
+                        rules={{ required: "password required" }}
+                        render={({ onChange, onBlur, value }) => {
+                            return (<TextField hideUnderline error={errors.password ? errors.password.message : ""}
+                                maxLength={16}
+                                secureTextEntry={true}
+                                onChangeText={(e: any) => onChange(e)}
+                                onBlur={onBlur()}
+                                value={value}
+                                floatOnFocus
+                                floatingPlaceholder
+                                style={style.input}
+                                floatingPlaceholderStyle={style.floater}
+                                placeholder="password" />
+                            )
+                        }}
+                    />
+                    <TouchableOpacity right marginT-8>
                         <Text>Forgot Password?</Text>
                     </TouchableOpacity>
                 </View>
 
             </View>
             <View marginT-20 style={{ width: "100%" }}>
-                <TouchableOpacity center style={[style.btn, { elevation: 10 }]}>
+                <TouchableOpacity onPress={(e: any) => {
+                    return handleSubmit(onSubmit)()
+                }} center style={[style.btn, { elevation: 10 }]}>
                     <Text>Login</Text>
                 </TouchableOpacity>
                 <TouchableOpacity center style={[style.btn]}>
@@ -43,7 +84,18 @@ const style = StyleSheet.create({
         padding: 10,
     },
     input: {
-        marginVertical: 8
+
+        backgroundColor: "rgba(100,100,100,.1)",
+        marginTop: -7,
+        padding: 5,
+        borderRadius: 7,
+        paddingStart: 12
+
+    },
+    floater: {
+        marginStart: 12,
+        opacity: .5,
+        color: "grey"
     },
     btn: {
         backgroundColor: "white",
