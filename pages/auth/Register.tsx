@@ -12,11 +12,16 @@ const Register = () => {
     const { handleSubmit, errors, control, clearErrors } = useForm();
     const navigation = useNavigation()
     const onSubmit = (data: { username: string, email: string, password: string }) => {
+        console.log(data);
+
         TToast.working("Working", "Talking with our people")
         FireStore.register(data.username, data.email, data.password).then(res => {
-            //login successful
+            TToast.success("Great!", "Your all good to go!")
+            navigation.navigate("home")
         }).catch(err => HandleFirebaseErrors(err.code))
     }
+
+    const handleLoginPressed = () => navigation.navigate("login")
 
 
     return (
@@ -79,7 +84,7 @@ const Register = () => {
             </View>
             <View marginV-50 row center>
                 <Text>Already have an account?</Text>
-                <TouchableOpacity><Text> Login</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => handleLoginPressed()}><Text> Login</Text></TouchableOpacity>
             </View>
             <TouchableOpacity><Text> skip</Text></TouchableOpacity>
         </ScrollView>

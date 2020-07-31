@@ -21,6 +21,8 @@ export const eventStrings = {
 export const HandleFirebaseErrors = (code: string) => {
 
 
+    console.log(code);
+
     let es = "Something went wrong"
 
 

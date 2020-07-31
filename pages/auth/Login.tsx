@@ -6,6 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import FireStore from '../../data_layer/FireStore';
 import { HandleFirebaseErrors } from '../../universal/EventEmitter';
 import { useNavigation } from '@react-navigation/native';
+import TToast from '../../components/TToast';
 
 const Login = () => {
 
@@ -15,7 +16,8 @@ const Login = () => {
     const onSubmit = (data: { email: string; password: string }) => {
         FireStore.login(data.email, data.password).then(res => {
             console.log("log in success");
-
+            TToast.success("Great!", "Your all good to go!")
+            navigation.navigate("home")
         }).catch(err => HandleFirebaseErrors(err.code))
 
     };
