@@ -1,4 +1,4 @@
-package com.p4;
+package com.fowler.party;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "p4";
+    return "party";
   }
 }

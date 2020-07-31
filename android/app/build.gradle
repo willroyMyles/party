@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services' // enable google services
 
 import com.android.build.OutputFile
 
@@ -129,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.p4"
+        applicationId "com.fowler.party"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -181,6 +182,9 @@ android {
 }
 
 dependencies {
+
+implementation 'com.google.firebase:firebase-analytics:17.2.2'
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

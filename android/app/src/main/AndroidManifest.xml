@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.p4">
+  package="com.fowler.party">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
