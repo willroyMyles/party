@@ -74,14 +74,14 @@ const LoginPage = () => {
         </View>
       </View>
       <View
-        padding-20
+        padding-40
         centerV
         bg-background
         flex-3
         top
         style={{ borderTopEndRadius: 25, borderTopStartRadius: 25 }}
       >
-        <View row>
+        <View row marginT-20>
           <Text reg style={{ opacity: 0.7, textTransform: "capitalize" }}>
             email
           </Text>
