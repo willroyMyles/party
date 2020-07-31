@@ -2,18 +2,16 @@ import React, { useState } from 'react'
 import { View, Text, Avatar, Switch } from 'react-native-ui-lib'
 import auth from '@react-native-firebase/auth'
 import ProfilePiece from '../../pieces/ProfilePiece'
+import { changeTheme } from '../../universal/Theme'
+import tm from '../../universal/UiManager'
 
 const Profile = () => {
 
     const [darkTheme, setdarkTheme] = useState(false)
 
-    const user = auth().currentUser
-
-
-
     return (
-        <View padding-10>
-            {user && <ProfilePiece image={user.photoURL || ""} name={user.displayName || ""} />}
+        <View padding-10 bg-background style={{ minHeight: "100%" }}>
+            <ProfilePiece />
             <View>
                 <View row spread>
                     <Text>Change Theme</Text>
@@ -26,6 +24,7 @@ const Profile = () => {
                         // style={{backgroundColor: uiManager.theme.bgHilight, borderWidth: 1, borderColor: Colors.primary}}
                         onValueChange={(val: boolean) => {
                             setdarkTheme(val)
+                            tm.setThemeType(val)
                         }}></Switch>
                 </View>
             </View>

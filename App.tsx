@@ -24,19 +24,25 @@ import { eventEmitter } from './universal/EventEmitter';
 import StackNavigator from './pages/StackNavigator';
 import FireStore from './data_layer/FireStore';
 import TToast from './components/TToast';
+import { ThemeProvider, useTheme } from "styled-components"
+import { themehelper } from './universal/Theme';
+import tm from './universal/UiManager';
+import { observer } from 'mobx-react';
+import { observe } from 'mobx';
+
 
 declare const global: { HermesInternal: null | {} };
 
 const App = () => {
+  return (
+    <ThemeProvider theme={tm.theme} >
+      <View flex bg-background>
+        <StackNavigator />
+        <TToast />
 
-
-  console.log(FireStore.isLoggedIn());
-
-  return (<View flex>
-    <StackNavigator />
-    <TToast />
-
-  </View>)
+      </View>
+    </ThemeProvider>
+  )
 
 
 
@@ -45,44 +51,7 @@ const App = () => {
     <>
       <StatusBar barStyle="default" />
       <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes really?</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
+
       </SafeAreaView>
     </>
   );
@@ -127,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default observer(App);

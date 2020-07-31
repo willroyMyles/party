@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text } from 'react-native-ui-lib'
+import { useTheme } from 'styled-components'
 
 const NearMe = () => {
+    const theme = useTheme()
     return (
-        <View>
+        <View style={{ backgroundColor: theme.background }}>
             <Text>near me</Text>
         </View>
     )

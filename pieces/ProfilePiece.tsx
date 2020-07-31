@@ -1,11 +1,28 @@
-import React from 'react'
-import { View, Text, Avatar } from 'react-native-ui-lib'
+import React, { useState } from 'react'
+import { View, Text, Avatar, TouchableOpacity } from 'react-native-ui-lib'
+import auth from '@react-native-firebase/auth'
+const ProfilePiece = () => {
 
-const ProfilePiece = ({ name, image }: { name: string, image: string }) => {
+
+    const [name, setName] = useState("")
+    const [image, setImage] = useState("")
+
+    auth().onAuthStateChanged((user) => {
+        if (user) {
+            setName(user.displayName || "")
+            setImage(user.photoURL || "")
+        }
+
+    })
+
+
+
     return (
         <View marginV-20>
             <View center>
-                <Avatar animate source={{ uri: image }} size={82} containerStyle={{ elevation: 5 }} />
+                <TouchableOpacity>
+                    <Avatar animate source={{ uri: image }} size={82} containerStyle={{ elevation: 5 }} />
+                </TouchableOpacity>
                 <Text marginT-5>{name}</Text>
             </View>
         </View>
