@@ -22,13 +22,14 @@ import {
 import Feed from 'pages/Feed';
 import { eventEmitter } from './universal/EventEmitter';
 import StackNavigator from './pages/StackNavigator';
+import FireStore from './data_layer/FireStore';
 
 declare const global: { HermesInternal: null | {} };
 
 const App = () => {
 
 
-  console.log(eventEmitter);
+  console.log(FireStore.isLoggedIn());
 
   return <StackNavigator />
 
