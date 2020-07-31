@@ -1,4 +1,5 @@
 import { EventEmitter } from "events"
+import TToast from "../components/TToast"
 
 export const eventEmitter = new EventEmitter()
 
@@ -15,4 +16,24 @@ export const eventStrings = {
         success: "used when an operation is successful",
         error: "used when some thing went wrong",
     },
+}
+
+export const HandleFirebaseErrors = (code: string) => {
+
+
+    let es = "Something went wrong"
+
+
+    switch (code) {
+        case "auth/user-not-found":
+            es = "No user by that name"
+            break;
+        case "auth/wrong-password":
+            es = "invalid username or password"
+            break;
+        case "auth/invalid-email":
+            es = "invalid username or password"
+            break;
+    }
+    TToast.error("Opps", es)
 }

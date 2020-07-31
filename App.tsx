@@ -23,6 +23,7 @@ import Feed from 'pages/Feed';
 import { eventEmitter } from './universal/EventEmitter';
 import StackNavigator from './pages/StackNavigator';
 import FireStore from './data_layer/FireStore';
+import TToast from './components/TToast';
 
 declare const global: { HermesInternal: null | {} };
 
@@ -31,7 +32,11 @@ const App = () => {
 
   console.log(FireStore.isLoggedIn());
 
-  return <StackNavigator />
+  return (<View flex>
+    <StackNavigator />
+    <TToast />
+
+  </View>)
 
 
 

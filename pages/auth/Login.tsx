@@ -3,15 +3,24 @@ import { View, Text, TextField, TouchableOpacity, Button } from 'react-native-ui
 import { ScrollView } from 'react-native-gesture-handler'
 import { KeyboardAvoidingView, StyleSheet } from 'react-native'
 import { useForm, Controller } from "react-hook-form";
+import FireStore from '../../data_layer/FireStore';
+import { HandleFirebaseErrors } from '../../universal/EventEmitter';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
 
     const { handleSubmit, errors, control, clearErrors } = useForm();
+    const navigation = useNavigation()
 
     const onSubmit = (data: { email: string; password: string }) => {
-        console.log(data);
+        FireStore.login(data.email, data.password).then(res => {
+            console.log("log in success");
+
+        }).catch(err => HandleFirebaseErrors(err.code))
 
     };
+
+    const handleRegisterPressed = () => navigation.navigate("register")
 
     return (
         <ScrollView scrollEnabled={false} contentContainerStyle={{ justifyContent: "center", alignItems: "center", padding: 20 }}>
@@ -71,7 +80,7 @@ const Login = () => {
             </View>
             <View marginV-50 row center>
                 <Text>Don't have an account?</Text>
-                <TouchableOpacity><Text> Register</Text></TouchableOpacity>
+                <TouchableOpacity onPress={handleRegisterPressed}><Text> Register</Text></TouchableOpacity>
             </View>
             <TouchableOpacity><Text> skip</Text></TouchableOpacity>
         </ScrollView>
