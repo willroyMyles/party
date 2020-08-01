@@ -90,7 +90,7 @@ const Login = () => {
 }
 
 export default Login
-const style = StyleSheet.create({
+export const style = StyleSheet.create({
     cont: {
         padding: 10,
     },

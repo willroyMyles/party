@@ -243,7 +243,8 @@ class ThemeHelper {
 
 		Colors.loadColors({
 			background: t.background,
-			foreground: t.foreground
+			foreground: t.foreground,
+			primary: t.primary
 		})
 	})
 }
