@@ -7,7 +7,7 @@ const { width, height } = Dimensions.get("screen")
 const BackDrop = () => {
     const theme = useTheme()
     return (
-        <View style={{
+        <View bg-background style={{
             position: "absolute",
             width: "100%",
             height,

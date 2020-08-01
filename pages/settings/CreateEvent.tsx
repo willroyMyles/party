@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet } from 'react-native'
+import React, { useState, useRef, createRef } from 'react'
+import { StyleSheet, Keyboard } from 'react-native'
 import { View, Text, TouchableOpacity, Colors, TextField } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -7,16 +7,48 @@ import BackDrop from '../../components/BackDrop'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
+import DateTimePicker from "@react-native-community/datetimepicker"
+
 
 const CreateEvent = () => {
     const theme = useTheme()
     const col = Colors.grey30
-    const { handleSubmit, errors, control, clearErrors } = useForm();
+    const { handleSubmit, errors, control, clearErrors, setValue } = useForm();
     const navigation = useNavigation()
+    let startRef = useRef()
+    let dateRef = useRef()
+
+
+    const [dateShown, setDateShown] = useState(false)
+    const [timeShown, settimeShown] = useState(false)
+
+    const onStartChange = (event: any, selectedDate: Date | undefined) => {
+        startRef.blur()
+        setValue("start", selectedDate)
+        settimeShown(false)
+    }
+
+    const onDateChange = (event: any, selectedDate: Date | undefined) => {
+        Keyboard.dismiss()
+        console.dir(dateRef);
+
+        setValue("date", selectedDate)
+        setDateShown(false)
+    }
+
     return (
         <ScrollView contentContainerStyle={{ minHeight: "100%" }}>
 
+
+
             <View center >
+                {dateShown && <DateTimePicker onChange={(e, d) => {
+                    onDateChange(e, d)
+                }} mode="date" value={new Date()} />}
+
+                {timeShown && <DateTimePicker onChange={(e, d) => {
+                    onStartChange(e, d)
+                }} mode="time" value={new Date()} />}
                 <BackDrop />
                 <TouchableOpacity center style={[style.upload, { backgroundColor: Colors.background }]}>
                     <View marginB-15>
@@ -81,18 +113,18 @@ const CreateEvent = () => {
                         rules={{ required: "date required" }}
                         render={({ onChange, onBlur, value }) => {
                             return (<TextField
+                                ref={dateRef}
+                                allowFontScaling
                                 hideUnderline
                                 error={errors.date ? errors.date.message : ""}
                                 maxLength={16}
-
-                                onChangeText={(e: any) => onChange(e)} onBlur={() => {
-                                    onBlur()
-                                    clearErrors("date")
-                                }}
+                                onFocus={() => setDateShown(true)}
+                                onChangeText={(value: any) => onChange(value)}
                                 value={value}
                                 floatOnFocus
                                 floatingPlaceholder
-                                style={style.input}
+                                autoGrow
+                                style={[style.input, { width: "40%" }]}
                                 floatingPlaceholderStyle={style.floater}
                                 placeholder="Date" />)
                         }}
@@ -103,6 +135,7 @@ const CreateEvent = () => {
                         rules={{ required: "start required" }}
                         render={({ onChange, onBlur, value }) => {
                             return (<TextField
+                                ref={startRef}
                                 hideUnderline
                                 error={errors.start ? errors.start.message : ""}
                                 maxLength={16}

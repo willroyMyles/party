@@ -26,6 +26,7 @@
     "faker": "^4.1.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.5",
+    "moment": "^2.27.0",
     "react": "16.13.1",
     "react-hook-form": "^6.2.0",
     "react-native": "0.63.0",
