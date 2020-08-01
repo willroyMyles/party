@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
-import { View, Text, Avatar, Switch } from 'react-native-ui-lib'
+import { View, Text, Avatar, Switch, TouchableOpacity, Colors } from 'react-native-ui-lib'
 import auth from '@react-native-firebase/auth'
 import ProfilePiece from '../../pieces/ProfilePiece'
-import { changeTheme } from '../../universal/Theme'
 import tm from '../../universal/UiManager'
+import { StyleSheet } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 const Profile = () => {
 
+    const navigation = useNavigation()
     const [darkTheme, setdarkTheme] = useState(false)
+    const handleCreateEvent = () => navigation.navigate("create event")
 
     return (
         <View padding-10 bg-background style={{ minHeight: "100%" }}>
@@ -28,6 +31,12 @@ const Profile = () => {
                         }}></Switch>
                 </View>
             </View>
+            <View center marginT-40>
+                <TouchableOpacity onPress={handleCreateEvent} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>
+                    <Text>create event</Text>
+
+                </TouchableOpacity>
+            </View>
         </View>
     )
 
@@ -35,3 +44,16 @@ const Profile = () => {
 }
 
 export default Profile
+
+const style = StyleSheet.create({
+    create: {
+        padding: 20,
+        // borderWidth: .1,
+        // borderColor: Colors.red80,
+        borderRadius: 7,
+        width: "100%",
+        elevation: 5,
+
+
+    }
+})

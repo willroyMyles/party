@@ -12,6 +12,7 @@ export interface Theme {
 	caption: string
 	primary: string
 	bgHilight: string
+	foreground: string
 }
 
 const storm = "#112432"
@@ -24,6 +25,7 @@ export const lightTheme: Theme = {
 	teritairy_text: Colors.grey50,
 	caption: Colors.grey60,
 	background: Colors.grey80,
+	foreground: "rgba(253,253,253,1)",
 	bgHilight: "rgba(240,243,245,1)",
 }
 
@@ -34,6 +36,7 @@ export const darkTheme: Theme = {
 	teritairy_text: Colors.grey30,
 	caption: Colors.grey30,
 	background: "rgba(27,39,49,1)",
+	foreground: "rgba(47,59,69,1)",
 	bgHilight: "rgba(55,63,65,.3)",
 }
 
@@ -239,7 +242,8 @@ class ThemeHelper {
 	reviseLoading = (t: Theme) => new Promise(resolve => {
 
 		Colors.loadColors({
-			background: t.background
+			background: t.background,
+			foreground: t.foreground
 		})
 	})
 }

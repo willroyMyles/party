@@ -1,4 +1,5 @@
 import React from 'react'
+import "mobx-react-lite/batchingForReactNative"
 import { View, Text } from 'react-native-ui-lib'
 import RowButton from '../../components/RowButton'
 import { useTheme } from 'styled-components'

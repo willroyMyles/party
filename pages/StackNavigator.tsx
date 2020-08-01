@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeNavigator from './HomeNavigator';
 import Login from './auth/Login';
 import Register from './auth/Register';
+import CreateEvent from './settings/CreateEvent';
 
 const Stack = createStackNavigator()
 
@@ -16,6 +17,7 @@ const StackNavigator = () => {
                     <Stack.Screen name="home" component={HomeNavigator} />
                     <Stack.Screen name="login" component={Login} />
                     <Stack.Screen name="register" component={Register} />
+                    <Stack.Screen name="create event" component={CreateEvent} />
                 </Stack.Navigator>
             </NavigationContainer>
         </View>
