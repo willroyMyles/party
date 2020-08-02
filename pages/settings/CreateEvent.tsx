@@ -194,7 +194,6 @@ const CreateEvent = () => {
                                     clearErrors("duration")
                                 }}
                                 value={value}
-                                rightButtonProps
                                 floatOnFocus
                                 floatingPlaceholder
                                 keyboardType="numeric"
@@ -219,6 +218,7 @@ const CreateEvent = () => {
                                 hideUnderline
                                 error={errors.location ? errors.location.message : ""}
                                 maxLength={16}
+                                onFocus={() => navigation.navigate("useMap")}
 
                                 onChangeText={(e: any) => onChange(e)} onBlur={() => {
                                     onBlur()
