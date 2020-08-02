@@ -10,6 +10,16 @@ import { useForm, Controller } from 'react-hook-form'
 import DateTimePicker from "@react-native-community/datetimepicker"
 import moment from 'moment'
 
+interface Flyer {
+    flyer: string
+    title: string
+    description: string
+    date: Date
+    start: Date
+    duration: number
+    location: string
+}
+
 const CreateEvent = () => {
     const theme = useTheme()
     const col = Colors.grey30
@@ -48,7 +58,6 @@ const CreateEvent = () => {
 
     const onSubmit = (data: any) => {
         console.log(data);
-
     }
 
     return (
@@ -185,7 +194,7 @@ const CreateEvent = () => {
                                     clearErrors("duration")
                                 }}
                                 value={value}
-
+                                rightButtonProps
                                 floatOnFocus
                                 floatingPlaceholder
                                 keyboardType="numeric"
