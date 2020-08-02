@@ -1,6 +1,6 @@
 import React, { useState, useRef, createRef } from 'react'
 import { StyleSheet, Keyboard } from 'react-native'
-import { View, Text, TouchableOpacity, Colors, TextField } from 'react-native-ui-lib'
+import { View, Text, TouchableOpacity, Colors, TextField, Image } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import BackDrop from '../../components/BackDrop'
@@ -9,6 +9,9 @@ import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import DateTimePicker from "@react-native-community/datetimepicker"
 import moment from 'moment'
+import { Region } from 'react-native-maps'
+import { getImage } from '../../universal/GetImage'
+import { GS } from '../../universal/GS'
 
 interface Flyer {
     flyer: string
@@ -23,14 +26,14 @@ interface Flyer {
 const CreateEvent = () => {
     const theme = useTheme()
     const col = Colors.grey30
-    const { handleSubmit, errors, control, clearErrors, setValue } = useForm();
+    const { handleSubmit, errors, control, clearErrors, setValue } = useForm<Flyer>();
     const navigation = useNavigation()
-    let startRef = useRef()
-    let dateRef = useRef()
+
+    const [image, setImage] = useState<string>()
+
 
     const [dateValue, setDateValue] = useState<string>()
     const [timeValue, setTimeValue] = useState<string>()
-
     const [dateShown, setDateShown] = useState(false)
     const [timeShown, settimeShown] = useState(false)
 
@@ -60,11 +63,22 @@ const CreateEvent = () => {
         console.log(data);
     }
 
+    const onLocation = (loc: Region) => {
+        setValue("location", [loc?.latitude, loc?.longitude].toString())
+    }
+
+    const getFlyer = async () => {
+        getImage().then((res: any) => {
+            if (!res.cancelled) {
+                setImage(res.uri)
+                setValue("flyer", res.uri)
+                clearErrors("flyer")
+            }
+        })
+    }
+
     return (
         <ScrollView contentContainerStyle={{ minHeight: "100%" }}>
-
-
-
             <View center >
                 {dateShown && <DateTimePicker onChange={(e, d) => {
                     onDateChange(e, d)
@@ -74,13 +88,30 @@ const CreateEvent = () => {
                     onStartChange(e, d)
                 }} mode="time" value={new Date()} />}
                 <BackDrop />
-                <TouchableOpacity center style={[style.upload, { backgroundColor: Colors.background }]}>
-                    <View marginB-15>
+                <TouchableOpacity onPress={getFlyer} center style={[style.upload, { backgroundColor: Colors.background, overflow: "hidden" }]}>
+                    <Controller
+                        control={control}
+                        name="flyer"
+                        rules={{ required: "A flyer is required" }}
+                    />
+                    <View marginV-15>
                         <Icon name="image" color={col} size={43} />
                         <Icon name="plus" color={col} size={16} style={{ position: "absolute", bottom: -5, right: -8, backgroundColor: Colors.background, padding: 3, borderRadius: 50 }} />
                     </View>
-                    <Text>upload image</Text>
+                    <Text marginB-25>upload image</Text>
+                    {image && <View absT style={{ width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,.3)" }}>
+                        <Image source={{ uri: image }} resizeMode="cover" cover />
+
+                    </View>}
                 </TouchableOpacity>
+                {errors.flyer && <Text>{errors.flyer.message}</Text>}
+                {Image && <View style={{ justifyContent: "flex-end", alignItems: "flex-end", width: "90%", zIndex: 5 }}>
+                    <TouchableOpacity onPress={() => {
+                        setImage(undefined)
+                    }}
+                        row padding-5 marginV-5 bg-background style={{ elevation: 2, borderRadius: 4 }}>
+                        <Text>clear image</Text>
+                    </TouchableOpacity></View>}
                 <View bg-background style={style.cont}>
                     <Controller
                         name="title"
@@ -99,8 +130,8 @@ const CreateEvent = () => {
                                 value={value}
                                 floatOnFocus
                                 floatingPlaceholder
-                                style={style.input}
-                                floatingPlaceholderStyle={style.floater}
+                                style={GS.input}
+                                floatingPlaceholderStyle={GS.floater}
                                 placeholder="Party name" />)
                         }}
                     />
@@ -122,8 +153,8 @@ const CreateEvent = () => {
                                 value={value}
                                 floatOnFocus
                                 floatingPlaceholder
-                                style={style.input}
-                                floatingPlaceholderStyle={style.floater}
+                                style={GS.input}
+                                floatingPlaceholderStyle={GS.floater}
                                 placeholder="Description" />)
                         }}
                     />
@@ -137,7 +168,6 @@ const CreateEvent = () => {
                         rules={{ required: "date required" }}
                         render={({ onChange, onBlur, value }) => {
                             return (<TextField
-                                ref={dateRef}
                                 allowFontScaling
                                 hideUnderline
                                 error={errors.date ? errors.date.message : ""}
@@ -148,8 +178,8 @@ const CreateEvent = () => {
                                 floatOnFocus
                                 floatingPlaceholder
                                 autoGrow
-                                style={[style.input, { width: "40%" }]}
-                                floatingPlaceholderStyle={style.floater}
+                                style={[GS.input, { width: "40%" }]}
+                                floatingPlaceholderStyle={GS.floater}
                                 placeholder="Date" />)
                         }}
                     />
@@ -159,7 +189,6 @@ const CreateEvent = () => {
                         rules={{ required: "start required" }}
                         render={({ onChange, onBlur, value }) => {
                             return (<TextField
-                                ref={startRef}
                                 hideUnderline
                                 error={errors.start ? errors.start.message : ""}
                                 maxLength={16}
@@ -173,8 +202,8 @@ const CreateEvent = () => {
                                 value={timeValue}
                                 floatOnFocus
                                 floatingPlaceholder
-                                style={style.input}
-                                floatingPlaceholderStyle={style.floater}
+                                style={GS.input}
+                                floatingPlaceholderStyle={GS.floater}
                                 placeholder="Start Time" />)
                         }}
                     />
@@ -197,8 +226,8 @@ const CreateEvent = () => {
                                 floatOnFocus
                                 floatingPlaceholder
                                 keyboardType="numeric"
-                                style={[style.input, { width: "70%", marginStart: 0, textAlign: "right", paddingEnd: 10 }]}
-                                floatingPlaceholderStyle={[style.floater]}
+                                style={[GS.input, { width: "70%", marginStart: 0, textAlign: "center", paddingEnd: 10 }]}
+                                floatingPlaceholderStyle={[GS.floater]}
                                 placeholder="Duration" />
                                 <Text style={{ color: Colors.grey40, margin: 5 }}>Hr</Text>
 
@@ -218,7 +247,7 @@ const CreateEvent = () => {
                                 hideUnderline
                                 error={errors.location ? errors.location.message : ""}
                                 maxLength={16}
-                                onFocus={() => navigation.navigate("useMap")}
+                                onFocus={() => navigation.navigate("useMap", { set: onLocation })}
 
                                 onChangeText={(e: any) => onChange(e)} onBlur={() => {
                                     onBlur()
@@ -227,8 +256,8 @@ const CreateEvent = () => {
                                 value={value}
                                 floatOnFocus
                                 floatingPlaceholder
-                                style={style.input}
-                                floatingPlaceholderStyle={style.floater}
+                                style={GS.input}
+                                floatingPlaceholderStyle={GS.floater}
                                 placeholder="Location" />)
                         }}
                     />
@@ -254,8 +283,8 @@ const style = StyleSheet.create({
         borderStyle: "dashed",
         borderColor: Colors.grey40,
         elevation: 10,
-        padding: 20,
-        paddingVertical: 30,
+        // padding: 20,
+        // paddingVertical: 30,
         borderRadius: 7,
         marginTop: 20,
         width: "90%",
@@ -267,26 +296,13 @@ const style = StyleSheet.create({
         width: "90%",
         elevation: 3
     },
-    input: {
 
-        backgroundColor: "rgba(100,100,150,.03)",
-        marginTop: -7,
-        padding: 5,
-        borderRadius: 7,
-        paddingStart: 12,
-        marginBottom: -15,
-        width: "30%"
-    },
-    floater: {
-        marginStart: 12,
-        opacity: .5,
-        color: Colors.grey30
-    },
     btn: {
         padding: 14,
         width: "90%",
         borderRadius: 7,
         elevation: 15,
-        marginTop: 20
+        marginTop: 20,
+        marginBottom: 20
     }
 })
