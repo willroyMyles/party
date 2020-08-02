@@ -8,7 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import DateTimePicker from "@react-native-community/datetimepicker"
-
+import moment from 'moment'
 
 const CreateEvent = () => {
     const theme = useTheme()
@@ -18,22 +18,37 @@ const CreateEvent = () => {
     let startRef = useRef()
     let dateRef = useRef()
 
+    const [dateValue, setDateValue] = useState<string>()
+    const [timeValue, setTimeValue] = useState<string>()
 
     const [dateShown, setDateShown] = useState(false)
     const [timeShown, settimeShown] = useState(false)
 
     const onStartChange = (event: any, selectedDate: Date | undefined) => {
-        startRef.blur()
-        setValue("start", selectedDate)
         settimeShown(false)
+        setValue("start", selectedDate)
+        setTimeValue(moment(selectedDate).format("hh:mm A"))
     }
 
     const onDateChange = (event: any, selectedDate: Date | undefined) => {
-        Keyboard.dismiss()
-        console.dir(dateRef);
-
-        setValue("date", selectedDate)
         setDateShown(false)
+        setDateValue(moment(selectedDate).format("MMM D, yy"))
+        setValue("date", selectedDate)
+    }
+
+    const handleShowDate = () => {
+        Keyboard.dismiss()
+        setDateShown(true)
+    }
+
+    const handleShowTime = () => {
+        Keyboard.dismiss()
+        settimeShown(true)
+    }
+
+    const onSubmit = (data: any) => {
+        console.log(data);
+
     }
 
     return (
@@ -118,9 +133,9 @@ const CreateEvent = () => {
                                 hideUnderline
                                 error={errors.date ? errors.date.message : ""}
                                 maxLength={16}
-                                onFocus={() => setDateShown(true)}
-                                onChangeText={(value: any) => onChange(value)}
-                                value={value}
+                                onFocus={handleShowDate}
+                                // onChangeText={(value: any) => onChange(value)}
+                                value={dateValue}
                                 floatOnFocus
                                 floatingPlaceholder
                                 autoGrow
@@ -140,12 +155,13 @@ const CreateEvent = () => {
                                 error={errors.start ? errors.start.message : ""}
                                 maxLength={16}
                                 showsMaxLength
+                                onFocus={handleShowTime}
 
-                                onChangeText={(e: any) => onChange(e)} onBlur={() => {
-                                    onBlur()
-                                    clearErrors("start")
-                                }}
-                                value={value}
+                                // onChangeText={(e: any) => onChange(e)} onBlur={() => {
+                                //     onBlur()
+                                //     clearErrors("start")
+                                // }}
+                                value={timeValue}
                                 floatOnFocus
                                 floatingPlaceholder
                                 style={style.input}
@@ -158,7 +174,7 @@ const CreateEvent = () => {
                         control={control}
                         rules={{ required: "duration required" }}
                         render={({ onChange, onBlur, value }) => {
-                            return (<TextField
+                            return (<View center row style={{ width: "30%" }}><TextField
                                 hideUnderline
                                 error={errors.duration ? errors.duration.message : ""}
                                 maxLength={16}
@@ -169,12 +185,16 @@ const CreateEvent = () => {
                                     clearErrors("duration")
                                 }}
                                 value={value}
+
                                 floatOnFocus
                                 floatingPlaceholder
                                 keyboardType="numeric"
-                                style={style.input}
+                                style={[style.input, { width: "70%", marginStart: 0, textAlign: "right", paddingEnd: 10 }]}
                                 floatingPlaceholderStyle={[style.floater]}
-                                placeholder="Duration" />)
+                                placeholder="Duration" />
+                                <Text style={{ color: Colors.grey40, margin: 5 }}>Hr</Text>
+
+                            </View>)
                         }}
                     />
 
@@ -206,7 +226,9 @@ const CreateEvent = () => {
 
                 </View>
 
-                <TouchableOpacity activeOpacity={.8} bg-primary center style={style.btn}>
+                <TouchableOpacity onPress={() => {
+                    handleSubmit(onSubmit)()
+                }} activeOpacity={.8} bg-primary center style={style.btn}>
                     <Text>create party</Text>
                 </TouchableOpacity>
 
