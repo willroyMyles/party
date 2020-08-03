@@ -84,12 +84,13 @@ const CreateEvent = () =>
 
     const onSubmit = ( data: FeedItemModel ) =>
     {
-        console.log( typeof data.duration );
         if ( typeof data.duration == typeof '' )
         {
             const str: string = data.duration + '';
             data.duration = Number.parseFloat( str );
         }
+
+        data.partyType = PartyType[data.partyType]
         FireStore.send
             .sendEvent( data )
             .then( ( res ) => { } )

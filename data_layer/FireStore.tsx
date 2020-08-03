@@ -1,11 +1,13 @@
 import { observable, action } from 'mobx';
 import FBS from './FireBaseClient';
 import uuidv4 from 'uuid';
-import { FeedItemModel } from '../universal/Models';
+import { FeedItemModel, PartyType } from '../universal/Models';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 class Store
 {
   @observable data: Map<string, FeedItemModel> = new Map();
+  @observable categorizedData: Map<string, FeedItemModel[]> = new Map()
+  @observable previewedData: any[] = []
   @observable userName: string | null = null;
 
   @action isLoggedIn = () => FBS.isLoggedIn();
@@ -43,6 +45,58 @@ class Store
     } );
   };
 
+  private sortCategorizedData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) =>
+  {
+    // docs.map( ( docr, index ) =>
+    // {
+    //   const doc: FeedItemModel = docr as unknown as FeedItemModel
+    //   const key = PartyType[doc.partyType || PartyType.AFTER_WORK_JAM]
+    //   if ( this.categorizedData.has( key ) )
+    //   {
+    //     this.categorizedData.get( key )?.push( doc )
+    //   } else
+    //   {
+    //     this.categorizedData.set( key, [doc] )
+    //   }
+    // } )
+
+    for ( let index = 0; index < docs.length; index++ )
+    {
+      const key = PartyType[docs[index].data().partyType]
+      const element = docs[index]
+
+      console.log( key );
+
+      if ( this.categorizedData.has( key ) )
+      {
+        this.categorizedData.get( key )?.push( docs[index].data() )
+      } else
+      {
+        this.categorizedData.set( key, [docs[index].data()] )
+      }
+    }
+
+    this.sortFeedItemDocs()
+  }
+
+  @action sortFeedItemDocs = () =>
+  {
+    console.log( "loading", this.categorizedData.size );
+
+    const limitInSection = 2 // equates to 3 items
+    const obj: any = { title: "", data: [] }
+    const arr: any = []
+    this.categorizedData.forEach( ( value, key ) =>
+    {
+      obj.title = key
+      obj.data = value.slice( 0, 2 )
+      this.previewedData.push( obj )
+    } )
+
+
+  }
+
+
   @action private getEvents = () => new Promise( ( resolve, reject ) =>
   {
     FBS.getEventsInMultiplies( 20 ).then( ( res: any ) =>
@@ -56,6 +110,7 @@ class Store
       } )
 
       resolve( true )
+      this.sortCategorizedData( result.docs )
     } ).catch( err =>
     {
       reject( "unable to get events" )
