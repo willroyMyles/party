@@ -25,10 +25,23 @@ class Store {
     data.priority = data.priority || 0;
     data.reference = uuidv4.v4();
     data.timeStamp = new Date();
+
+    return new Promise((resolve, reject) => {
+      FBS.events
+        .uploadEvent(data)
+        .then((res) => {
+          resolve(true);
+        })
+        .catch((err) => reject(err));
+    });
   };
 
   retrieve = {
     isLoggedIn: this.isLoggedIn,
+  };
+
+  send = {
+    sendEvent: this.sendEvent,
   };
 
   auth = {

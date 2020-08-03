@@ -1,13 +1,17 @@
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
-import firestore from '@react-native-firebase/firestore';
-import {FeedItemModel} from 'universal/Models';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import {FeedItemModel} from '../universal/Models';
+import {errorStrings} from '../universal/EventEmitter';
 
 const eventCollection = 'events';
 const userCollection = 'users';
+let last: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
 
 class Store {
-  isLoggedIn = () => auth().currentUser == undefined;
+  isLoggedIn = () => auth().currentUser != undefined || null;
 
   login = (email: string, password: string) =>
     new Promise((resolve, reject) => {
@@ -57,6 +61,10 @@ class Store {
 
   uploadEvent = (data: FeedItemModel) =>
     new Promise((resolve, reject) => {
+      if (!this.isLoggedIn()) {
+        //not logged in
+        reject(errorStrings.notLoggedIn);
+      }
       this.uploadPhoto(data).then((res: string) => {
         if (res) {
           firestore()
@@ -91,7 +99,47 @@ class Store {
   getUsername = () => auth().currentUser?.displayName;
   getUserId = () => auth().currentUser?.uid;
 
-  events = {};
+  getEventsInMultiplies = (amount: number) => {
+    const order = 'date';
+    return new Promise(async (resolve, reject) => {
+      if (last == null) {
+        console.log('new');
+
+        const firstQuery = firestore()
+          .collection(eventCollection)
+          .orderBy(order)
+          .limit(amount);
+        const snapshotQuery = await firstQuery.get();
+
+        if (snapshotQuery.empty) return reject('empty');
+
+        //get the last document
+        const lastDocInSnapshotQuery =
+          snapshotQuery.docs[snapshotQuery.docs.length - 1];
+        last = lastDocInSnapshotQuery;
+        resolve(snapshotQuery);
+      } else {
+        console.log('old', last.id);
+
+        const firstQuery = firestore()
+          .collection(eventCollection)
+          .orderBy(order)
+          .limit(amount)
+          .startAfter(last);
+        const snapshot = await firstQuery.get();
+        if (snapshot.empty) return reject('empty');
+
+        const lastDocInSnapshotQuery = snapshot.docs[snapshot.docs.length - 1];
+        last = lastDocInSnapshotQuery;
+        resolve(snapshot);
+      }
+    });
+  };
+
+  events = {
+    uploadEvent: this.uploadEvent,
+    getEventsByMultiple: this.getEventsInMultiplies,
+  };
 }
 
 const FBS = new Store();
