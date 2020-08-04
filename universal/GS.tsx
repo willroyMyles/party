@@ -1,7 +1,18 @@
-import { StyleSheet } from "react-native";
-import { Colors } from "react-native-ui-lib";
-import { useTheme } from "styled-components";
 
+import React, { useEffect } from 'react'
+import { StyleSheet } from "react-native";
+import { Colors, View } from "react-native-ui-lib";
+import { useTheme } from "styled-components";
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { style } from 'pages/auth/Login';
+
+
+export const GetIcon = ({ name }: { name: string }) => {
+    const theme = useTheme()
+    return <View center paddingH-5 br100 bg-secondary style={{ width: 34, height: 34, elevation: 1 }}>
+        <Icon name={name} size={16} style={GS.icon} />
+    </View>
+}
 
 
 export const GS = StyleSheet.create({
@@ -28,4 +39,15 @@ export const GS = StyleSheet.create({
         opacity: .5,
         color: Colors.grey30
     },
+    icon: {
+
+        alignItems: "center",
+        justifyContent: "center",
+        alignSelf: "center",
+        color: Colors.primary,
+        elevation: 5,
+        textShadowRadius: 3,
+        textDecorationLine: "underline",
+        zIndex: 2
+    }
 })

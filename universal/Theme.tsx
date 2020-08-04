@@ -11,6 +11,7 @@ export interface Theme {
 	muted: string
 	caption: string
 	primary: string
+	secondary: string
 	bgHilight: string
 	foreground: string
 }
@@ -20,8 +21,9 @@ const light = generate(Colors.violet40)
 
 export const lightTheme: Theme = {
 	primary: light[5],
+	secondary: light[2],
 	text1: Colors.grey10,
-	text2: Colors.grey30,
+	text2: "rgba(85,85,85,1)",
 	muted: Colors.grey50,
 	caption: Colors.grey60,
 	background: Colors.grey80,
@@ -31,6 +33,7 @@ export const lightTheme: Theme = {
 
 export const darkTheme: Theme = {
 	primary: light[5],
+	secondary: light[7],
 	text1: "rgba(250,250,250,.9)",
 	text2: Colors.grey60,
 	muted: Colors.grey30,
@@ -248,41 +251,55 @@ class ThemeHelper {
 			text1: t.text1,
 			text2: t.text2,
 			muted: t.muted,
-			light: t.caption
+			light: t.caption,
+			secondary: t.secondary
 		})
 
 		const style = StyleSheet.create({
 			textOne: {
 				fontWeight: "700",
-				fontSize: 16,
+				fontSize: 17,
 				color: Colors.text1,
-				textShadowRadius: 1
+				textShadowRadius: 1,
+				textTransform: "capitalize"
 			},
 			textTwo: {
 				fontWeight: "600",
 				fontSize: 14,
 				color: Colors.text2
 			},
+			textThree: {
+				fontWeight: "600",
+				fontSize: 13,
+				color: Colors.muted
+			},
 			indicator: {
 				fontWeight: "700",
 				fontSize: 16,
 				color: Colors.muted,
 				textTransform: "uppercase",
-
 				paddingHorizontal: 7,
 				borderRadius: 1,
-				// borderWidth: 1,
 				borderColor: Colors.light
 				, backgroundColor: Colors.background,
 				alignContent: "center",
 				alignItems: "center",
+			},
+			regular: {
+				fontWeight: "600",
+				fontSize: 16,
+				color: Colors.text1,
+				textShadowOffset: { width: 0.2, height: 0.2 },
+				textShadowRadius: 0.01
 			}
 		})
 
 		Typography.loadTypographies({
 			lvl1: style.textOne,
 			lvl2: style.textTwo,
-			indicator: style.indicator
+			lvl3: style.textThree,
+			indicator: style.indicator,
+			regular: style.regular
 		})
 
 
