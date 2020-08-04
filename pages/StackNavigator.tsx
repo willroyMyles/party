@@ -7,6 +7,7 @@ import Login from './auth/Login';
 import Register from './auth/Register';
 import CreateEvent from './settings/CreateEvent';
 import UseMapView from './UseMapView';
+import EventView from './EventView';
 
 const Stack = createStackNavigator()
 
@@ -19,6 +20,7 @@ const StackNavigator = () => {
                     <Stack.Screen name="login" component={Login} />
                     <Stack.Screen name="register" component={Register} />
                     <Stack.Screen name="create event" component={CreateEvent} />
+                    <Stack.Screen name="view event" component={EventView} />
                     <Stack.Screen name="useMap" component={UseMapView} />
                 </Stack.Navigator>
             </NavigationContainer>

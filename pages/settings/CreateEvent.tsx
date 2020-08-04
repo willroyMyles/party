@@ -1,15 +1,14 @@
 import React, { useState, useRef, createRef } from 'react';
 import { StyleSheet, Keyboard } from 'react-native';
-import
-{
-    View,
-    Text,
-    TouchableOpacity,
-    Colors,
-    TextField,
-    Image,
-    Picker,
-    Dialog,
+import {
+View,
+Text,
+TouchableOpacity,
+Colors,
+TextField,
+Image,
+Picker,
+Dialog,
 } from 'react-native-ui-lib';
 import { useTheme } from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -26,8 +25,7 @@ import FireStore from '../../data_layer/FireStore';
 import { FeedItemModel, PartyType } from '../../universal/Models';
 import TToast from '../../components/TToast';
 
-interface Flyer
-{
+interface Flyer {
     flyer: string;
     title: string;
     description: string;
@@ -39,8 +37,7 @@ interface Flyer
     partyType: PartyType
 }
 
-const CreateEvent = () =>
-{
+const CreateEvent = () => {
     const theme = useTheme();
     const col = Colors.grey30;
     const { handleSubmit, errors, control, clearErrors, setValue } = useForm<
@@ -48,84 +45,74 @@ const CreateEvent = () =>
     >();
     const navigation = useNavigation();
 
-    const [image, setImage] = useState<string | null>( null );
-    const [dialogVisible, setdialogVisible] = useState( true )
+    const [image, setImage] = useState<string | null>(null);
+    const [dialogVisible, setdialogVisible] = useState(true)
 
     const [dateValue, setDateValue] = useState<string>();
     const [timeValue, setTimeValue] = useState<string>();
-    const [dateShown, setDateShown] = useState( false );
-    const [timeShown, settimeShown] = useState( false );
+    const [dateShown, setDateShown] = useState(false);
+    const [timeShown, settimeShown] = useState(false);
 
-    const onStartChange = ( event: any, selectedDate: Date | undefined ) =>
-    {
-        settimeShown( false );
-        setValue( 'start', selectedDate );
-        setTimeValue( moment( selectedDate ).format( 'hh:mm A' ) );
+    const onStartChange = (event: any, selectedDate: Date | undefined) => {
+        settimeShown(false);
+        setValue('start', selectedDate);
+        setTimeValue(moment(selectedDate).format('hh:mm A'));
     };
 
-    const onDateChange = ( event: any, selectedDate: Date | undefined ) =>
-    {
-        setDateShown( false );
-        setDateValue( moment( selectedDate ).format( 'MMM D, yy' ) );
-        setValue( 'date', selectedDate );
+    const onDateChange = (event: any, selectedDate: Date | undefined) => {
+        setDateShown(false);
+        setDateValue(moment(selectedDate).format('MMM D, yy'));
+        setValue('date', selectedDate);
     };
 
-    const handleShowDate = () =>
-    {
+    const handleShowDate = () => {
         Keyboard.dismiss();
-        setDateShown( true );
+        setDateShown(true);
     };
 
-    const handleShowTime = () =>
-    {
+    const handleShowTime = () => {
         Keyboard.dismiss();
-        settimeShown( true );
+        settimeShown(true);
     };
 
-    const onSubmit = ( data: FeedItemModel ) =>
-    {
-        if ( typeof data.duration == typeof '' )
-        {
+    const onSubmit = (data: FeedItemModel) => {
+        if (typeof data.duration == typeof '') {
             const str: string = data.duration + '';
-            data.duration = Number.parseFloat( str );
+            data.duration = Number.parseFloat(str);
         }
 
         data.partyType = PartyType[data.partyType]
+        data.date = data.date?.toString()
+        data.start = data.start?.toString()
         FireStore.send
-            .sendEvent( data )
-            .then( ( res ) => { } )
-            .catch( ( err ) => TToast.error( 'oh my!', err ) );
+            .sendEvent(data)
+            .then((res) => { })
+            .catch((err) => TToast.error('oh my!', err));
     };
 
-    const onLocation = ( loc: Region ) =>
-    {
-        setValue( 'location', [loc?.latitude, loc?.longitude].toString() );
+    const onLocation = (loc: Region) => {
+        setValue('location', [loc?.latitude, loc?.longitude].toString());
     };
 
-    const getFlyer = async () =>
-    {
-        getImage().then( ( res: any ) =>
-        {
-            if ( !res.cancelled )
-            {
-                setImage( res.uri );
-                setValue( 'flyer', res.uri );
-                clearErrors( 'flyer' );
+    const getFlyer = async () => {
+        getImage().then((res: any) => {
+            if (!res.cancelled) {
+                setImage(res.uri);
+                setValue('flyer', res.uri);
+                clearErrors('flyer');
             }
-        } );
+        });
     };
 
-    const p = Object.values( PartyType ).filter( ( value ) => typeof 9 != typeof value )
-    const showDialog = () =>
-    {
-        setdialogVisible( true )
+    const p = Object.values(PartyType).filter((value) => typeof 9 != typeof value)
+    const showDialog = () => {
+        setdialogVisible(true)
         Keyboard.dismiss()
     }
 
-    const setParty = ( index: number ) =>
-    {
-        setValue( "partyType", PartyType[index] )
-        setdialogVisible( false )
+    const setParty = (index: number) => {
+        setValue("partyType", PartyType[index])
+        setdialogVisible(false)
 
     }
 
@@ -134,30 +121,28 @@ const CreateEvent = () =>
             <View center>
 
 
-                <Dialog onDismiss={() => setdialogVisible( false )} visible={dialogVisible} containerStyle={{
+                <Dialog onDismiss={() => setdialogVisible(false)} visible={dialogVisible} containerStyle={{
                     backgroundColor: Colors.background,
                     padding: 10,
                     borderRadius: 7,
                 }}>
                     <ScrollView style={{ height: "90%" }}>
                         <Text margin-9 >Party type options</Text>
-                        {p.map( ( value, index ) =>
-                        {
-                            const name = value.toString().replace( '_', " " ).toLowerCase()
-                            return <TouchableOpacity onPress={() => setParty( index )} padding-9 marginV-2 style={{ borderWidth: .5, borderRadius: 3, borderColor: Colors.grey50 }}>
+                        {p.map((value, index) => {
+                            const name = value.toString().replace('_', " ").toLowerCase()
+                            return <TouchableOpacity onPress={() => setParty(index)} padding-9 marginV-2 style={{ borderWidth: .5, borderRadius: 3, borderColor: Colors.grey50 }}>
                                 <Text>{name}</Text>
                             </TouchableOpacity>
 
-                        } )}
+                        })}
                         <View paddingV-10 />
                     </ScrollView>
                 </Dialog>
 
                 {dateShown && (
                     <DateTimePicker
-                        onChange={( e, d ) =>
-                        {
-                            onDateChange( e, d );
+                        onChange={(e, d) => {
+                            onDateChange(e, d);
                         }}
                         mode="date"
                         value={new Date()}
@@ -168,9 +153,8 @@ const CreateEvent = () =>
 
                 {timeShown && (
                     <DateTimePicker
-                        onChange={( e, d ) =>
-                        {
-                            onStartChange( e, d );
+                        onChange={(e, d) => {
+                            onStartChange(e, d);
                         }}
                         mode="time"
                         value={new Date()}
@@ -230,11 +214,10 @@ const CreateEvent = () =>
                             top: image ? 0 : '-300%',
                         }}>
                         <TouchableOpacity
-                            onPress={() =>
-                            {
-                                console.log( image );
+                            onPress={() => {
+                                console.log(image);
 
-                                setImage( null );
+                                setImage(null);
                             }}
                             row
                             padding-5
@@ -250,18 +233,16 @@ const CreateEvent = () =>
                         name="title"
                         control={control}
                         rules={{ required: 'title required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
+                        render={({ onChange, onBlur, value }) => {
                             return (
                                 <TextField
                                     hideUnderline
                                     error={errors.title ? errors.title.message : ''}
                                     maxLength={16}
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
-                                    {
+                                    onChangeText={(e: any) => onChange(e)}
+                                    onBlur={() => {
                                         onBlur();
-                                        clearErrors( 'title' );
+                                        clearErrors('title');
                                     }}
                                     value={value}
                                     floatOnFocus
@@ -277,19 +258,17 @@ const CreateEvent = () =>
                         name="description"
                         control={control}
                         rules={{ required: 'description required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
+                        render={({ onChange, onBlur, value }) => {
                             return (
                                 <TextField
                                     hideUnderline
                                     error={errors.description ? errors.description.message : ''}
                                     maxLength={16}
                                     showsMaxLength
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
-                                    {
+                                    onChangeText={(e: any) => onChange(e)}
+                                    onBlur={() => {
                                         onBlur();
-                                        clearErrors( 'description' );
+                                        clearErrors('description');
                                     }}
                                     value={value}
                                     floatOnFocus
@@ -306,8 +285,7 @@ const CreateEvent = () =>
                         name="partyType"
                         control={control}
                         rules={{ required: 'party type required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
+                        render={({ onChange, onBlur, value }) => {
                             return (
                                 <TextField
                                     hideUnderline
@@ -316,12 +294,11 @@ const CreateEvent = () =>
                                     showsMaxLength
                                     onFocus={() => showDialog()}
 
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
-                                    {
-                                        setdialogVisible( true )
+                                    onChangeText={(e: any) => onChange(e)}
+                                    onBlur={() => {
+                                        setdialogVisible(true)
                                         onBlur();
-                                        clearErrors( 'partyType' );
+                                        clearErrors('partyType');
                                     }}
                                     value={value}
                                     floatOnFocus
@@ -340,8 +317,7 @@ const CreateEvent = () =>
                         name="date"
                         control={control}
                         rules={{ required: 'date required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
+                        render={({ onChange, onBlur, value }) => {
                             const ref = useRef()
                             return (
                                 <TextField
@@ -366,8 +342,7 @@ const CreateEvent = () =>
                         name="start"
                         control={control}
                         rules={{ required: 'start required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
+                        render={({ onChange, onBlur, value }) => {
                             return (
                                 <TextField
                                     hideUnderline
@@ -393,8 +368,7 @@ const CreateEvent = () =>
                         name="duration"
                         control={control}
                         rules={{ required: 'duration required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
+                        render={({ onChange, onBlur, value }) => {
                             return (
                                 <View center row style={{ width: '30%' }}>
                                     <TextField
@@ -402,11 +376,10 @@ const CreateEvent = () =>
                                         error={errors.duration ? errors.duration.message : ''}
                                         maxLength={16}
                                         showsMaxLength
-                                        onChangeText={( e: any ) => onChange( e )}
-                                        onBlur={() =>
-                                        {
+                                        onChangeText={(e: any) => onChange(e)}
+                                        onBlur={() => {
                                             onBlur();
-                                            clearErrors( 'duration' );
+                                            clearErrors('duration');
                                         }}
                                         value={value}
                                         floatOnFocus
@@ -436,21 +409,19 @@ const CreateEvent = () =>
                         name="location"
                         control={control}
                         rules={{ required: 'location required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
+                        render={({ onChange, onBlur, value }) => {
                             return (
                                 <TextField
                                     hideUnderline
                                     error={errors.location ? errors.location.message : ''}
                                     maxLength={16}
                                     onFocus={() =>
-                                        navigation.navigate( 'useMap', { set: onLocation } )
+                                        navigation.navigate('useMap', { set: onLocation })
                                     }
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
-                                    {
+                                    onChangeText={(e: any) => onChange(e)}
+                                    onBlur={() => {
                                         onBlur();
-                                        clearErrors( 'location' );
+                                        clearErrors('location');
                                     }}
                                     value={value}
                                     floatOnFocus
@@ -465,9 +436,8 @@ const CreateEvent = () =>
                 </View>
 
                 <TouchableOpacity
-                    onPress={() =>
-                    {
-                        handleSubmit( onSubmit )();
+                    onPress={() => {
+                        handleSubmit(onSubmit)();
                     }}
                     activeOpacity={0.8}
                     bg-primary
@@ -482,7 +452,7 @@ const CreateEvent = () =>
 
 export default CreateEvent;
 
-const style = StyleSheet.create( {
+const style = StyleSheet.create({
     upload: {
         borderWidth: 0,
         borderStyle: 'dashed',
@@ -510,4 +480,4 @@ const style = StyleSheet.create( {
         marginTop: 20,
         marginBottom: 20,
     },
-} );
+});
