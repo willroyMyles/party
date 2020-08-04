@@ -9,6 +9,7 @@ import { PartyType } from '../universal/Models'
 import tm from '../universal/UiManager'
 import { GS, GetIcon } from '../universal/GS'
 import Organizer from '../components/Organizer'
+import UseSmallMapView from './UseSmallMapView'
 
 const EventView = () => {
 
@@ -26,8 +27,8 @@ const EventView = () => {
 
 
     if (item) return (
-        <ScrollView contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%" }}>
-            <View style={{ maxHeight: 200, overflow: "hidden" }}>
+        <ScrollView contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%", paddingBottom: 40 }}>
+            <View style={{ maxHeight: 300, overflow: "hidden" }}>
                 <Image source={require("../assets/images/splash.jpg")} resizeMode="cover" style={{ height: "100%", width: "100%" }} />
                 <Text center style={{ position: "absolute", right: 10, bottom: 20, backgroundColor: Colors.background, borderWidth: 3, borderColor: Colors.grey10, borderRadius: 20, padding: 7, paddingHorizontal: 13, elevation: 5 }}>{pt}</Text>
             </View>
@@ -52,7 +53,7 @@ const EventView = () => {
                 </View>
             </View>
             <View>
-                <Text>{item.location}</Text>
+                <UseSmallMapView loc={item.location} />
             </View>
 
             <Organizer org name={item.person || ""} reference={item.reference || ""} />
