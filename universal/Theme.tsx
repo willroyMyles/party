@@ -1,14 +1,14 @@
 // import styled, {createGlobalStyle} from "styled-components"
 import { generate } from "@ant-design/colors"
-import { Colors } from "react-native-ui-lib"
+import { Colors, Typography } from "react-native-ui-lib"
 import { StyleSheet } from "react-native"
 import { observable } from 'mobx'
 
 export interface Theme {
 	background: string
-	primary_text: string
-	secondary_text: string
-	teritairy_text: string
+	text1: string
+	text2: string
+	muted: string
 	caption: string
 	primary: string
 	bgHilight: string
@@ -20,9 +20,9 @@ const light = generate(Colors.violet40)
 
 export const lightTheme: Theme = {
 	primary: light[5],
-	primary_text: Colors.grey10,
-	secondary_text: Colors.grey40,
-	teritairy_text: Colors.grey50,
+	text1: Colors.grey10,
+	text2: Colors.grey30,
+	muted: Colors.grey50,
 	caption: Colors.grey60,
 	background: Colors.grey80,
 	foreground: "rgba(253,253,253,1)",
@@ -31,9 +31,9 @@ export const lightTheme: Theme = {
 
 export const darkTheme: Theme = {
 	primary: light[5],
-	primary_text: "rgba(250,250,250,.9)",
-	secondary_text: Colors.grey60,
-	teritairy_text: Colors.grey30,
+	text1: "rgba(250,250,250,.9)",
+	text2: Colors.grey60,
+	muted: Colors.grey30,
 	caption: Colors.grey30,
 	background: "rgba(27,39,49,1)",
 	foreground: "rgba(47,59,69,1)",
@@ -244,8 +244,48 @@ class ThemeHelper {
 		Colors.loadColors({
 			background: t.background,
 			foreground: t.foreground,
-			primary: t.primary
+			primary: t.primary,
+			text1: t.text1,
+			text2: t.text2,
+			muted: t.muted,
+			light: t.caption
 		})
+
+		const style = StyleSheet.create({
+			textOne: {
+				fontWeight: "700",
+				fontSize: 16,
+				color: Colors.text1,
+				textShadowRadius: 1
+			},
+			textTwo: {
+				fontWeight: "600",
+				fontSize: 14,
+				color: Colors.text2
+			},
+			indicator: {
+				fontWeight: "700",
+				fontSize: 16,
+				color: Colors.muted,
+				textTransform: "uppercase",
+
+				paddingHorizontal: 7,
+				borderRadius: 1,
+				// borderWidth: 1,
+				borderColor: Colors.light
+				, backgroundColor: Colors.background,
+				alignContent: "center",
+				alignItems: "center",
+			}
+		})
+
+		Typography.loadTypographies({
+			lvl1: style.textOne,
+			lvl2: style.textTwo,
+			indicator: style.indicator
+		})
+
+
 	})
 }
 

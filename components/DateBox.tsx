@@ -10,17 +10,17 @@ const DateBox = ({ date }: { date: string }) => {
             position: "absolute",
             right: 10,
             top: -30,
-            padding: 6,
+            padding: 4,
             paddingHorizontal: 10,
             elevation: 2,
             borderRadius: 7,
             borderWidth: 1,
-            borderBottomWidth: 6,
+            borderBottomWidth: 4,
             borderTopWidth: 0,
             borderColor: Colors.grey60
         }}>
-            <Text>{month}</Text>
-            <Text>{day}</Text>
+            <Text lvl2 primary >{month}</Text>
+            <Text lvl1 style={{ fontSize: 18, marginTop: -2 }}>{day}</Text>
 
         </View>
     )

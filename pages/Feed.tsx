@@ -8,29 +8,25 @@ import { FeedItemModel } from 'universal/Models'
 import { SectionList, FlatList, Dimensions } from 'react-native'
 import FeedItemVersionOne from '../components/FeedItemVersionOne'
 
-const { width, height } = Dimensions.get( "screen" )
-const Feed = () =>
-{
+const { width, height } = Dimensions.get("screen")
+const Feed = () => {
     const theme = useTheme()
     const [data, setdata] = useState<string[]>()
 
-    useEffect( () =>
-    {
+    useEffect(() => {
         loadData
-    }, [FireStore.data] )
+    }, [FireStore.data])
 
-    const loadData = () =>
-    {
+    const loadData = () => {
         // FireStore.sortFeedItemDocs()
         const keyss = [...FireStore.categorizedData.keys()]
-        setdata( keyss )
+        setdata(keyss)
 
 
     }
 
 
-    const handleLoad = () =>
-    {
+    const handleLoad = () => {
         FireStore.retrieve.events().then()
     }
 
@@ -38,29 +34,27 @@ const Feed = () =>
     return (
         <ScrollView contentContainerStyle={{ backgroundColor: Colors.background }} >
             <Text>feed</Text>
-            {data?.map( ( value, idx ) =>
-            {
-                console.log( typeof value );
+            {data?.map((value, idx) => {
+                console.log(typeof value);
 
-                const name = value.replace( "_", " " ).toLowerCase()
+                const name = value.replace("_", " ").toLowerCase()
                 return <View padding-10 marginV-17 key={idx}>
                     <View row spread >
-                        <Text>{name}</Text>
+                        <Text indicator>{name}</Text>
                         <TouchableOpacity>
                             <Text color={Colors.primary}>view all</Text>
                         </TouchableOpacity>
                     </View>
                     <FlatList
                         horizontal
-                        data={FireStore.categorizedData.get( value )}
-                        renderItem={( { item, index } ) =>
-                        {
+                        data={FireStore.categorizedData.get(value)}
+                        renderItem={({ item, index }) => {
 
                             return <FeedItemVersionOne item={item} key={index} />
                         }}
                     />
                 </View>
-            } )}
+            })}
             <TouchableOpacity onPress={handleLoad}>
                 <Text>load</Text>
             </TouchableOpacity>
