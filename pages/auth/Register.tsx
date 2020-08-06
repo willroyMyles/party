@@ -113,7 +113,7 @@ const Register = () =>
                                     error={errors.password ? errors.password.message : ''}
                                     maxLength={16}
                                     secureTextEntry={true}
-                                    onChangeText={( e: any ) => onChange( e )}
+                                    onChangeText={onChange}
                                     onBlur={onBlur()}
                                     value={value}
                                     floatOnFocus

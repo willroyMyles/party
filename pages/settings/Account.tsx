@@ -7,7 +7,7 @@ import { useTheme } from 'styled-components'
 const Account = () => {
     const theme = useTheme()
     return (
-        <View bg-background>
+        <View bg-background flex>
             <Text>account</Text>
             <View>
                 <RowButton text="Login" where="login" />

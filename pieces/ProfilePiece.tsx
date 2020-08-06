@@ -7,7 +7,10 @@ const ProfilePiece = () => {
     const [name, setName] = useState("")
     const [image, setImage] = useState("")
 
-    auth().onAuthStateChanged((user) => {
+    auth().onAuthStateChanged( ( user ) =>
+    {
+        console.log("use changed");
+        
         if (user) {
             setName(user.displayName || "")
             setImage(user.photoURL || "")

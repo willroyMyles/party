@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { FeedItemModel } from 'universal/Models'
 import { SectionList, FlatList, Dimensions } from 'react-native'
 import FeedItemVersionOne from '../components/FeedItemVersionOne'
+import FBS from '../data_layer/FireBaseClient'
 
 const { width, height } = Dimensions.get("screen")
 const Feed = () => {
@@ -21,8 +22,13 @@ const Feed = () => {
         // FireStore.sortFeedItemDocs()
         const keyss = [...FireStore.categorizedData.keys()]
         setdata(keyss)
+    }
 
-
+    const resetBackend = () =>
+    {
+        FBS.resetLast()
+        handleLoad()
+        loadData()
     }
 
 
@@ -47,19 +53,22 @@ const Feed = () => {
                     </View>
                     <FlatList
                         horizontal
-                        data={FireStore.categorizedData.get(value)}
+                        data={FireStore.categorizedData.get( value )}
+                        keyExtractor={(item, index) => item.reference + "item" + index}
                         renderItem={({ item, index }) => {
-
-                            return <FeedItemVersionOne item={item} key={index} />
+                            return <FeedItemVersionOne reference={item.reference}  />
                         }}
                     />
                 </View>
             })}
             <TouchableOpacity onPress={handleLoad}>
-                <Text>load</Text>
+                <Text>load from backend</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={loadData}>
-                <Text>load</Text>
+                <Text>load from store</Text>
+            </TouchableOpacity>
+                        <TouchableOpacity onPress={resetBackend}>
+                <Text>reset backend</Text>
             </TouchableOpacity>
         </ScrollView>
     )

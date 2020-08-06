@@ -46,7 +46,7 @@ const CreateEvent = () => {
     const navigation = useNavigation();
 
     const [image, setImage] = useState<string | null>(null);
-    const [dialogVisible, setdialogVisible] = useState(true)
+    const [dialogVisible, setdialogVisible] = useState(false)
 
     const [dateValue, setDateValue] = useState<string>();
     const [timeValue, setTimeValue] = useState<string>();
@@ -86,7 +86,11 @@ const CreateEvent = () => {
         data.start = data.start?.toString()
         FireStore.send
             .sendEvent(data)
-            .then((res) => { })
+            .then( ( res ) =>
+            { 
+                TToast.success( "Great!", 'Event Created' )
+                navigation.navigate("home")
+            })
             .catch((err) => TToast.error('oh my!', err));
     };
 

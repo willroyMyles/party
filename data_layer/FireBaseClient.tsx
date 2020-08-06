@@ -10,7 +10,10 @@ const eventCollection = 'events';
 const userCollection = 'users';
 let last: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
 
-class Store {
+class Store
+{
+  
+  resetLast = () => last = null
   isLoggedIn = () => auth().currentUser != undefined || null;
 
   login = (email: string, password: string) =>
@@ -66,7 +69,9 @@ class Store {
         reject(errorStrings.notLoggedIn);
       }
       this.uploadPhoto(data).then((res: string) => {
-        if (res) {
+        if ( res )
+        {
+          data.flyer = res
           firestore()
             .collection(eventCollection)
             .doc(data.reference)
@@ -136,9 +141,43 @@ class Store {
     });
   };
 
+private getURLForEventFlyers = (imagePath: string) => {
+		return new Promise<string>((resolve, reject): any => {
+			// return reject(false)
+			storage()
+				.ref(imagePath)
+				.getDownloadURL()
+				.then((url) => {
+					resolve(url)
+				})
+				.catch((err) => {
+					reject(err)
+				})
+		})
+}
+  
+  private getEventsInCategories = (amount: number) => {
+		//will have to get a large collection and filter them down the line
+		return new Promise(async (resolve, reject) => {
+			const ref = firestore()
+				.collection(eventCollection)
+				// .where("partyType", "in", [0, 1, 13, 3, 4, 5, 6, 7, 8, 9])
+				.limit(amount)
+			ref
+				.get()
+				.then((values) => {
+					resolve(values)
+				})
+				.catch((err) => {
+					reject(err)
+				})
+		})
+	}
   events = {
     uploadEvent: this.uploadEvent,
     getEventsByMultiple: this.getEventsInMultiplies,
+    getUrlForFlyers: this.getURLForEventFlyers,
+    getEventsInCategories : this.getEventsInCategories,
   };
 }
 

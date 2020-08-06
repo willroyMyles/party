@@ -47,19 +47,6 @@ class Store
 
   private sortCategorizedData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) =>
   {
-    // docs.map( ( docr, index ) =>
-    // {
-    //   const doc: FeedItemModel = docr as unknown as FeedItemModel
-    //   const key = PartyType[doc.partyType || PartyType.AFTER_WORK_JAM]
-    //   if ( this.categorizedData.has( key ) )
-    //   {
-    //     this.categorizedData.get( key )?.push( doc )
-    //   } else
-    //   {
-    //     this.categorizedData.set( key, [doc] )
-    //   }
-    // } )
-
     for ( let index = 0; index < docs.length; index++ )
     {
       const key = PartyType[docs[index].data().partyType]
@@ -110,12 +97,22 @@ class Store
       } )
 
       resolve( true )
+      this.updateDataImages()
       this.sortCategorizedData( result.docs )
     } ).catch( err =>
     {
       reject( "unable to get events" )
     } )
   } )
+
+  private updateDataImages = () => {
+		this.data.forEach(async (value, key) => {
+        if (value.imageUrl == undefined || value.imageUrl == null || value.imageUrl == "") {
+          value.imageUrl = await FBS.events.getUrlForFlyers(value.flyer || "")
+          this.data.set(key, value)
+        }
+		})
+	}
 
   retrieve = {
     isLoggedIn: this.isLoggedIn,
