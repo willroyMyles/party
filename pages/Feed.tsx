@@ -38,7 +38,7 @@ const Feed = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={{ backgroundColor: Colors.background }} >
+        <ScrollView contentContainerStyle={{ backgroundColor: Colors.background, minHeight:"100%" }} >
             <Text>feed</Text>
             {data?.map((value, idx) => {
                 console.log(typeof value);
@@ -53,6 +53,8 @@ const Feed = () => {
                     </View>
                     <FlatList
                         horizontal
+                        pagingEnabled
+                        snapToInterval={width}
                         data={FireStore.categorizedData.get( value )}
                         keyExtractor={(item, index) => item.reference + "item" + index}
                         renderItem={({ item, index }) => {

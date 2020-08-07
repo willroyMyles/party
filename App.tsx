@@ -1,40 +1,86 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'react-native-gesture-handler';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
-
   StatusBar,
+  UIManager,
+  Platform,
+  LayoutAnimation,
 } from 'react-native';
 
 import {
-  View,
-  Text,
+  View, LoaderScreen,
 } from 'react-native-ui-lib'
 import {
-  Header,
-  LearnMoreLinks,
   Colors,
-  DebugInstructions,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import Feed from 'pages/Feed';
-import { eventEmitter } from './universal/EventEmitter';
 import StackNavigator from './pages/StackNavigator';
-import FireStore from './data_layer/FireStore';
 import TToast from './components/TToast';
-import { ThemeProvider, useTheme } from "styled-components"
-import { themehelper } from './universal/Theme';
+import { ThemeProvider } from "styled-components"
 import tm from './universal/UiManager';
 import { observer } from 'mobx-react';
-import { observe } from 'mobx';
+import * as Font from 'expo-font'
+import * as TaskManager from 'expo-task-manager'
+import * as Location from 'expo-location'
+import { eventEmitter, eventStrings } from './universal/EventEmitter';
 
+TaskManager.isTaskRegisteredAsync("geoLocation").then(res =>{
+	const t = TaskManager.isTaskDefined("geoLocation")
+	
+	if(!t){
+		console.log("defining tasks");
+		
+		TaskManager.defineTask("geoLocation", ({data , error} : {data : any, error : any}) => {
+			if (error) {
+				console.log(error)
+				return
+			}
+			// console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
+		
+			if(data.eventType == Location.GeofencingEventType.Enter){
+				eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
+				console.log("emitting data");
 
-declare const global: { HermesInternal: null | {} };
+				
+			}
+		})
+	}
+} )
 
-const App = () => {
-  return (
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+	UIManager.setLayoutAnimationEnabledExperimental(true)
+	LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+}
+
+const App = () =>
+{
+  const [loading, setLoading] = useState(true)
+  
+  useEffect( () =>
+  {
+    tm.setThemeType(false)
+    Font.loadAsync({
+			Nunito_Black: require("./assets/fonts/Nunito/Nunito-Black.ttf"),
+			Nunito_Regular: require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
+      Nunito_Semi_Bold: require( "./assets/fonts/Nunito/Nunito-SemiBold.ttf" ),
+      RR:require("./assets/fonts/Red_Rose/RedRose-Regular.ttf")
+		}).then(() => {
+			setLoading(false)
+			// SplashScreen.hideAsync()
+		})
+    return () => {
+    }
+  }, [])
+
+  if ( loading )
+  {
+    return <View flex center>
+      <LoaderScreen />
+    </View>
+  }
+
+  if(!loading)return (
     <ThemeProvider theme={tm.theme} >
       <View flex bg-background>
         <StackNavigator />
@@ -57,43 +103,5 @@ const App = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default observer(App);

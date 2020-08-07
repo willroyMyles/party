@@ -17,7 +17,7 @@ const DateBox = ({ date }: { date: string }) => {
             borderWidth: 1,
             borderBottomWidth: 4,
             borderTopWidth: 0,
-            borderColor: Colors.grey60
+            borderColor: Colors.secondary
         }}>
             <Text lvl2 primary >{month}</Text>
             <Text lvl1 style={{ fontSize: 18, marginTop: -2 }}>{day}</Text>

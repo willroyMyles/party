@@ -1,13 +1,16 @@
-import React from "react"
-import { View, Text } from "react-native-ui-lib"
+import React, { useState, useEffect } from "react"
+import { View, Text, LoaderScreen } from "react-native-ui-lib"
 import MapView, { Marker } from "react-native-maps"
 import { Dimensions } from "react-native"
 import { LocationData } from "expo-location"
 
-const UseSmallMapView = ({ loc }: { loc?: any }) => {
-	if (!loc) return <View></View>
-
-	const gong = String(loc).split(",")
+const UseSmallMapView = ( { loc }: { loc?: any } ) =>
+{
+	
+	const [loading, setLoading] = useState( true )
+	const [region, setRegion] = useState<any>()
+	useEffect(() => {
+		const gong = String(loc).split(",")
 	const latitude = Number.parseFloat(gong[0])
 	const longitude = Number.parseFloat(gong[1])
 
@@ -25,16 +28,37 @@ const UseSmallMapView = ({ loc }: { loc?: any }) => {
 		latitudeDelta: latDelta,
 		longitudeDelta: lngDelta,
 	}
+		setRegion( region )
+		setLoading(false)
+	}, [] )
+	
+
+	if ( loading ) return <View style={{ width: "100%", height: 250, elevation: 2 }}>
+				<Text marginL-10  lvl3>location</Text>
+	
+		<LoaderScreen   />
+	</View>
+
+	
+
+
+
+
 	return (
-		<View bg-background>
-			<View>
+		<View bg-background marginT-10>
+				<Text marginL-12 marginB-5 lvl3>location</Text>
+			
+			<View margin-10 br20 style={{ elevation: 2, overflow: "hidden", marginTop:0 }}>
 				<MapView
 					scrollEnabled={false}
 					showsUserLocation={false}
 					loadingEnabled
+					loadingBackgroundColor="red"
+					loadingIndicatorColor="blue"
 					region={region}
 					zoomEnabled={false}
 					toolbarEnabled
+					
 					onPoiClick={(e) => { }}
 					onPress={(e) => {
 						// setloc(null)

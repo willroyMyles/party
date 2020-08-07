@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 import { Colors, View } from "react-native-ui-lib";
 import { useTheme } from "styled-components";
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { style } from 'pages/auth/Login';
+import { PartyType } from './Models';
 
 
 export const GetIcon = ({ name }: { name: string }) => {
@@ -12,6 +12,17 @@ export const GetIcon = ({ name }: { name: string }) => {
     return <View center paddingH-5 br100 bg-secondary style={{ width: 34, height: 34, elevation: 1 }}>
         <Icon name={name} size={16} style={GS.icon} />
     </View>
+}
+
+export const GetPartytypeString = ( type: PartyType ) =>
+{
+    if(!type) return ""
+    
+    const ty = PartyType[type]
+    console.log(ty);
+    
+    const str = ty.replace( "_", " " ).toLowerCase()
+    return str
 }
 
 

@@ -7,30 +7,32 @@ import { ScrollView } from 'react-native'
 import moment from 'moment'
 import { PartyType } from '../universal/Models'
 import tm from '../universal/UiManager'
-import { GS, GetIcon } from '../universal/GS'
+import { GS, GetIcon, GetPartytypeString } from '../universal/GS'
 import Organizer from '../components/Organizer'
 import UseSmallMapView from './UseSmallMapView'
+import PartyTypeBadge from '../components/PartyTypeBadge'
 
 const EventView = () => {
 
     useEffect(() => {
-        tm.setThemeType(false)
+        // tm.setThemeType(true)
     }, [])
 
     const navigation = useNavigation()
     const theme = useTheme()
     const route = useRoute()
     const reference = route.params?.reference
-    const item = FireStore.data.get(reference)
-    let pt: string = PartyType[item?.partyType]
-    pt = pt.replace("_", " ").toLowerCase()
+    const item = FireStore.data.get( reference )
+    
+    console.log(item?.imageUrl);
+    
 
 
     if (item) return (
         <ScrollView contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%", paddingBottom: 40 }}>
             <View style={{ maxHeight: 300, overflow: "hidden" }}>
-                <Image source={{uri:item.imageUrl}} resizeMode="cover" style={{ height: "100%", width: "100%" }} />
-                <Text center style={{ position: "absolute", right: 10, bottom: 20, backgroundColor: Colors.background, borderWidth: 3, borderColor: Colors.grey10, borderRadius: 20, padding: 7, paddingHorizontal: 13, elevation: 5 }}>{pt}</Text>
+                <Image source={{ uri: item.imageUrl }} resizeMode="cover" style={{ height: "100%", width: "100%" }} />
+                <PartyTypeBadge type={item?.partyType}/>
             </View>
             <View bg-background padding-20 style={{ marginTop: -10 }}>
                 <View marginB-5 row spread>

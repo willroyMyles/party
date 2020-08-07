@@ -6,25 +6,23 @@ import MapView, {
   LatLng,
   EventUserLocation,
 } from "react-native-maps";
-import {
-  getLocation,
-  getRegion,
-  getLatitudeLongitudeFromString,
-} from "../../universial/GetLocation";
+
 import { Dimensions } from "react-native";
-import { FeedItemModel } from "../../universial/Models";
-import MarkerPin, { MarkerPinItem } from "./MarkerPin";
-import dataProvider from "../../dataLayer/DataStore";
+
 import { LocationRegion } from "expo-location";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
-import { eventEmitter, eventStrings } from "../../universial/EventEmitter";
-import Mapcard from "../../components/Mapcard";
+import { MarkerPinItem } from "../components/MarkerPin";
+import FireStore from "../data_layer/FireStore";
+import { FeedItemModel } from "../universal/Models";
+import { getLocation, getRegion, getLatitudeLongitudeFromString } from "../universal/GetLocation";
+import { eventEmitter, eventStrings } from "../universal/EventEmitter";
+import Mapcard from "../components/Mapcard";
 
 const radius = 1600;
 
 const Map = memo(
-  ({ region, coord }: { region?: Region; coord?: Coordinates }) => {
+  ({ region, coord }: { region?: Region; coord?: LatLng }) => {
     const map = useRef<MapView | null>();
 
     useEffect(() => {
@@ -39,8 +37,6 @@ const Map = memo(
       return (
         <MapView
           ref={map}
-          // liteMode
-
           followsUserLocation
           showsScale
           showsMyLocationButton
@@ -58,9 +54,11 @@ const Map = memo(
             strokeColor={Colors.grey50}
           />
 
-          {[...dataProvider.data.values()].map((value, index) => {
+          {[...FireStore.data.values()].map((value, index) => {
             return <MarkerPinItem key={index} value={value} />;
-          })}
+          } )}
+          
+          
         </MapView>
       );
     else
@@ -74,7 +72,7 @@ const Map = memo(
 
 const NearMeV2 = () => {
   const [region, setRegion] = useState<Region>();
-  const [mockCoords, setMockCoords] = useState<Coordinates>();
+  const [mockCoords, setMockCoords] = useState<LatLng>();
   const [geoRegions, setGeoRegions] = useState<LocationRegion[]>([]);
   const [eventCards, setEventCards] = useState<FeedItemModel[]>([]);
   const taskName = "geoLocation";
@@ -100,7 +98,7 @@ const NearMeV2 = () => {
   }, []);
 
   const addEvent = (refr: string) => {
-    const event = dataProvider.data.get(refr);
+    const event = FireStore.data.get(refr);
     if (event) {
       if (!eventCards.includes(event)) {
         setEventCards((list) => list.concat(event));
@@ -110,7 +108,7 @@ const NearMeV2 = () => {
 
   const sortGeoRegions = () => {
     const d: any = [];
-    dataProvider.data.forEach((value, key) => {
+    FireStore.data.forEach((value, key) => {
       const coord = getLatitudeLongitudeFromString(value.location);
       if (coord) {
         const c: LocationRegion = {

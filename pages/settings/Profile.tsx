@@ -5,9 +5,11 @@ import ProfilePiece from '../../pieces/ProfilePiece'
 import tm from '../../universal/UiManager'
 import { StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useTheme } from 'styled-components'
 
 const Profile = () => {
 
+    const theme = useTheme()
     const navigation = useNavigation()
     const [darkTheme, setdarkTheme] = useState(false)
     const handleCreateEvent = () => navigation.navigate("create event")
@@ -17,14 +19,14 @@ const Profile = () => {
             <ProfilePiece />
             <View>
                 <View row spread>
-                    <Text>Change Theme</Text>
+                    <Text lvl2>Dark Theme</Text>
                     <Switch
-                        // offColor={Colors.text}
-                        // onColor={Colors.background_secondary}
+                        offColor={Colors.secondary}
+                        onColor={Colors.secondary}
                         value={darkTheme}
-                        // thumbColor={Colors.primary}
-                        // thumbStyle={{backgroundColor: Colors.primary}}
-                        // style={{backgroundColor: uiManager.theme.bgHilight, borderWidth: 1, borderColor: Colors.primary}}
+                        thumbColor={Colors.background}
+                        thumbStyle={{backgroundColor: Colors.background, borderWidth:1, borderColor:Colors.primary+"60"}}
+                        style={{ borderWidth: 1, borderColor: Colors.primary+"68", elevation:1}}
                         onValueChange={(val: boolean) => {
                             setdarkTheme(val)
                             tm.setThemeType(val)

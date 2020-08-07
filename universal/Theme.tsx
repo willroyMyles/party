@@ -257,21 +257,27 @@ class ThemeHelper {
 
 		const style = StyleSheet.create({
 			textOne: {
-				fontWeight: "700",
+				// fontWeight: "700",
 				fontSize: 17,
 				color: Colors.text1,
 				textShadowRadius: 1,
-				textTransform: "capitalize"
+				textTransform: "capitalize",
+				fontFamily: "RR"
 			},
 			textTwo: {
 				fontWeight: "600",
 				fontSize: 14,
-				color: Colors.text2
+				color: Colors.text2,
+				fontFamily: "RR"
+
 			},
 			textThree: {
 				fontWeight: "600",
-				fontSize: 13,
-				color: Colors.muted
+				fontSize: 11,
+				color: Colors.muted,
+				textTransform: "uppercase",
+				fontFamily: "RR"
+				
 			},
 			indicator: {
 				fontWeight: "700",
@@ -284,13 +290,17 @@ class ThemeHelper {
 				, backgroundColor: Colors.background,
 				alignContent: "center",
 				alignItems: "center",
+				fontFamily: "RR"
+
 			},
 			regular: {
 				fontWeight: "600",
 				fontSize: 16,
 				color: Colors.text1,
 				textShadowOffset: { width: 0.2, height: 0.2 },
-				textShadowRadius: 0.01
+				textShadowRadius: 0.01,
+				fontFamily: "RR"
+
 			}
 		})
 

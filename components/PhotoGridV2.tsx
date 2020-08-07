@@ -3,9 +3,10 @@ import {View, Text, Image, TouchableOpacity, Colors, Avatar} from "react-native-
 import {Dimensions, ActivityIndicator} from "react-native"
 import Icon from "react-native-vector-icons/Feather"
 import {useTheme} from "styled-components"
-import {getImage} from "../universial/GetImage"
-import fireSotreMob from "../dataLayer/FireStore"
+
 import TToast from "./TToast"
+import FireStore from "../data_layer/FireStore"
+import { getImage } from "../universal/GetImage"
 
 const width = Dimensions.get("screen").width / 3.1
 const PhotoGridV2 = ({reference}: {reference: string}) => {
@@ -13,26 +14,26 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		fireSotreMob.retrieve.picturesForEvent(reference).then((res) => {
-			if (res) {
-				setLoading(false)
-				setdata(fireSotreMob.eventImagesMap.get(reference) || [])
-			} else {
-				TToast.error("Error", "Something went wrong retireving images")
-			}
-		})
+		// FireStore.retrieve.picturesForEvent(reference).then((res) => {
+		// 	if (res) {
+		// 		setLoading(false)
+		// 		setdata(fireSotreMob.eventImagesMap.get(reference) || [])
+		// 	} else {
+		// 		TToast.error("Error", "Something went wrong retireving images")
+		// 	}
+		// })
 	}, [])
 
 	const handleUpload = () => {
 		getImage().then((res) => {
 			if (!res.cancelled) {
-				fireSotreMob.send.PictureToEvent(reference, res.uri).then((res) => {
-					if (res) {
-						TToast.success("Success", "Everythings good to go!")
-					} else {
-						TToast.error("Error", "Something went wrong")
-					}
-				})
+				// FireStore.send.PictureToEvent(reference, res.uri).then((res) => {
+				// 	if (res) {
+				// 		TToast.success("Success", "Everythings good to go!")
+				// 	} else {
+				// 		TToast.error("Error", "Something went wrong")
+				// 	}
+				// })
 			}
 		})
 	}

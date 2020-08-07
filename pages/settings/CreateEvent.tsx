@@ -134,8 +134,8 @@ const CreateEvent = () => {
                         <Text margin-9 >Party type options</Text>
                         {p.map((value, index) => {
                             const name = value.toString().replace('_', " ").toLowerCase()
-                            return <TouchableOpacity onPress={() => setParty(index)} padding-9 marginV-2 style={{ borderWidth: .5, borderRadius: 3, borderColor: Colors.grey50 }}>
-                                <Text>{name}</Text>
+                            return <TouchableOpacity key={index} onPress={() => setParty(index)} padding-9 marginV-2 style={{ borderWidth: .5, borderRadius: 3, borderColor: Colors.text2 }}>
+                                <Text lvl1>{name}</Text>
                             </TouchableOpacity>
 
                         })}
@@ -251,7 +251,7 @@ const CreateEvent = () => {
                                     value={value}
                                     floatOnFocus
                                     floatingPlaceholder
-                                    style={GS.input}
+                                    style={[GS.input, {color:Colors.text1}]}
                                     floatingPlaceholderStyle={GS.floater}
                                     placeholder="Party name"
                                 />
@@ -277,7 +277,7 @@ const CreateEvent = () => {
                                     value={value}
                                     floatOnFocus
                                     floatingPlaceholder
-                                    style={GS.input}
+                                    style={[GS.input, {color:Colors.text1}]}
                                     floatingPlaceholderStyle={GS.floater}
                                     placeholder="Description"
                                 />
@@ -307,7 +307,7 @@ const CreateEvent = () => {
                                     value={value}
                                     floatOnFocus
                                     floatingPlaceholder
-                                    style={GS.input}
+                                    style={[GS.input, {color:Colors.text1}]}
                                     floatingPlaceholderStyle={GS.floater}
                                     placeholder="Party type"
                                 />
@@ -335,7 +335,7 @@ const CreateEvent = () => {
                                     floatOnFocus
                                     floatingPlaceholder
                                     autoGrow
-                                    style={[GS.input, { width: '40%' }]}
+                                    style={[[GS.input, {color:Colors.text1}], { width: '40%' }]}
                                     floatingPlaceholderStyle={GS.floater}
                                     placeholder="Date"
                                 />
@@ -361,7 +361,7 @@ const CreateEvent = () => {
                                     value={timeValue}
                                     floatOnFocus
                                     floatingPlaceholder
-                                    style={GS.input}
+                                    style={[GS.input, {color:Colors.text1}]}
                                     floatingPlaceholderStyle={GS.floater}
                                     placeholder="Start Time"
                                 />
@@ -390,7 +390,7 @@ const CreateEvent = () => {
                                         floatingPlaceholder
                                         keyboardType="numeric"
                                         style={[
-                                            GS.input,
+                                            [GS.input, {color:Colors.text1}],
                                             {
                                                 width: '70%',
                                                 marginStart: 0,
@@ -430,7 +430,7 @@ const CreateEvent = () => {
                                     value={value}
                                     floatOnFocus
                                     floatingPlaceholder
-                                    style={GS.input}
+                                    style={[GS.input, {color:Colors.text1}]}
                                     floatingPlaceholderStyle={GS.floater}
                                     placeholder="Location"
                                 />
@@ -467,13 +467,16 @@ const style = StyleSheet.create({
         borderRadius: 7,
         marginTop: 20,
         width: '90%',
+         
     },
     cont: {
         padding: 20,
         borderRadius: 7,
         marginTop: 20,
         width: '90%',
-        elevation: 3,
+        elevation: 5,
+        borderWidth: 2,
+        borderColor:Colors.white+"22"
     },
 
     btn: {
