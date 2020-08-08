@@ -221,6 +221,8 @@ private getURLForEventFlyers = (imagePath: string) => {
 	}
   
 
+
+
   events = {
     uploadEvent: this.uploadEvent,
     uploadPhotoToEvent : this.uploadPhotoToEvent,

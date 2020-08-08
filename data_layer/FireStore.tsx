@@ -133,7 +133,19 @@ class Store
 				})
 				.catch((err) => resolve(false))
 		})
-	} 
+  } 
+  
+  @action private uploadPictureToEvent = (ref: string, imageUrl: string) => {
+		return new Promise((resolve) => {
+			FBS.events.uploadPhotoToEvent(ref, imageUrl).then((res) => {
+				if (res) {
+					resolve(true)
+				} else {
+					resolve(false)
+				}
+			})
+		})
+	}
 
   retrieve = {
     isLoggedIn: this.isLoggedIn,
@@ -143,6 +155,7 @@ class Store
 
   send = {
     sendEvent: this.sendEvent,
+    sendPicturesToEvent : this.uploadPictureToEvent
   };
 
   auth = {

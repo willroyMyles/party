@@ -27,13 +27,13 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 	const handleUpload = () => {
 		getImage().then((res) => {
 			if (!res.cancelled) {
-				// FireStore.send.PictureToEvent(reference, res.uri).then((res) => {
-				// 	if (res) {
-				// 		TToast.success("Success", "Everythings good to go!")
-				// 	} else {
-				// 		TToast.error("Error", "Something went wrong")
-				// 	}
-				// })
+				FireStore.send.sendPicturesToEvent(reference, res.uri).then((res) => {
+					if (res) {
+						TToast.success("Success", "Everythings good to go!")
+					} else {
+						TToast.error("Error", "Something went wrong")
+					}
+				})
 			}
 		})
 	}
