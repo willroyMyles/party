@@ -9,6 +9,7 @@ class Store
   @observable categorizedData: Map<string, FeedItemModel[]> = new Map()
   @observable previewedData: any[] = []
   @observable userName: string | null = null;
+  	@observable eventImagesMap: Map<string, string[]> = new Map()
 
   @action isLoggedIn = () => FBS.isLoggedIn();
   @action login = ( email: string, password: string ) =>
@@ -112,11 +113,32 @@ class Store
           this.data.set(key, value)
         }
 		})
-	}
+  }
+  
+  @action private picturesForEvent = (reference: string, initialUpdate: boolean = false) => {
+		// this.numberOfImages = 0
+
+		if (!initialUpdate && this.eventImagesMap.has(reference)) {
+			return new Promise((resolve) => resolve(true))
+		}
+
+		return new Promise<boolean>((resolve) => {
+			FBS.events.getPastPictures(reference)
+				.then((res) => {
+					if (res) {
+						this.eventImagesMap.set(reference, res)
+
+						resolve(true)
+					}
+				})
+				.catch((err) => resolve(false))
+		})
+	} 
 
   retrieve = {
     isLoggedIn: this.isLoggedIn,
-    events: this.getEvents
+    events: this.getEvents,
+    picturesForEvent : this.picturesForEvent
   };
 
   send = {

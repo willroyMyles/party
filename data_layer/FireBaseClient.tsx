@@ -172,12 +172,62 @@ private getURLForEventFlyers = (imagePath: string) => {
 					reject(err)
 				})
 		})
+  }
+
+  private getPicturesForEvent = (reference: string) => {
+		const arr: string[] = []
+		return new Promise<Array<string>>((resolve, reject) => {
+			storage()
+				.ref(`images/party/${reference}`)
+				.listAll()
+				.then(async (res) => {
+					//all items in file
+
+					res.items
+
+					for (var i = 0; i < res.items.length; i++) {
+						const url = await res.items[i].getDownloadURL()
+						console.log(url)
+						arr.push(url)
+					}
+
+					console.log("things done")
+
+					resolve(arr)
+				})
+				.catch((err) => reject(err))
+		})
+  }
+  
+  private uploadPhotoToEvent = (ref: string, url: string) => {
+		return new Promise(async (resolve) => {
+			const filename = url.substring(url?.lastIndexOf("/") + 1)
+
+			const response = await fetch(url || "")
+			const blob = await response.blob()
+
+			const operation = storage().ref(`images/party/${ref}/${filename}`)
+
+			operation
+				.put(blob)
+				.then((res) => {
+					// resolve( true )
+					resolve(operation.fullPath)
+				})
+				.catch((err) => {
+					resolve(false)
+				})
+		})
 	}
+  
+
   events = {
     uploadEvent: this.uploadEvent,
+    uploadPhotoToEvent : this.uploadPhotoToEvent,
     getEventsByMultiple: this.getEventsInMultiplies,
     getUrlForFlyers: this.getURLForEventFlyers,
-    getEventsInCategories : this.getEventsInCategories,
+    getEventsInCategories: this.getEventsInCategories,
+    getPastPictures : this.getPicturesForEvent
   };
 }
 

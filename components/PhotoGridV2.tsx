@@ -14,14 +14,14 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		// FireStore.retrieve.picturesForEvent(reference).then((res) => {
-		// 	if (res) {
-		// 		setLoading(false)
-		// 		setdata(fireSotreMob.eventImagesMap.get(reference) || [])
-		// 	} else {
-		// 		TToast.error("Error", "Something went wrong retireving images")
-		// 	}
-		// })
+		FireStore.retrieve.picturesForEvent(reference).then((res) => {
+			if (res) {
+				setLoading(false)
+				setdata(FireStore.eventImagesMap.get(reference) || [])
+			} else {
+				TToast.error("Error", "Something went wrong retireving images")
+			}
+		})
 	}, [])
 
 	const handleUpload = () => {
@@ -83,7 +83,7 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 					activeOpacity={0.85}
 					margin-2
 					center
-					backgroundColor={Colors.primary}
+					// backgroundColor={Colors.primary}
 					style={{
 						width,
 						opacity: 0.9,
@@ -91,10 +91,11 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 						borderRadius: 3,
 						height: 200,
 						borderColor: Colors.primary,
-						borderWidth: 0.4,
+						borderWidth: 2,
+						borderStyle:"dashed"
 					}}>
-					<Icon name="plus-circle" size={32} />
-					<Text marginT-10 style={{fontWeight: "700"}}>
+					<Icon name="plus-circle" size={32} color={Colors.primary} />
+					<Text marginT-10 regular primary style={{fontWeight: "700"}}>
 						upload picture
 					</Text>
 				</TouchableOpacity>
