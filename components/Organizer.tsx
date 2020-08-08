@@ -6,7 +6,7 @@ const Organizer = ({ org, name, reference }: { org: boolean, name: string, refer
     const theme = useTheme()
     return (
         <View row padding-10 marginT-15>
-            <Avatar animate label={GetInitials(name)} containerStyle={{ elevation: 3 }} />
+            <Avatar animate label={GetInitials(name)}  />
             <View marginL-10>
                 <Text regular>{name}</Text>
                 {org && <Text lvl3>organizer</Text>}

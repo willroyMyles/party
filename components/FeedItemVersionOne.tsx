@@ -14,7 +14,7 @@ const FeedItemVersionOne = ({ reference }: { reference: string }) => {
     const navigation = useNavigation()
     const item = FireStore.data.get(reference)
     if(item)return (
-        <View margin-10 marginV-20 style={{ width: width * .8, height: 200, overflow: "hidden", borderRadius: 7, elevation: 6, borderWidth: .3, borderColor:Colors.secondary }}>
+        <View margin-10 marginV-20 style={{ width: width * .8, height: 200, overflow: "hidden", borderRadius: 7, borderWidth: 1, borderColor:Colors.primary, }}>
             <TouchableOpacity onPress={() => navigation.navigate("view event", { reference: item.reference })} activeOpacity={.8} style={{ width: "100%", height: "100%" }}>
                 <Image source={{ uri: item.imageUrl }} cover />
                 <View absB padding-10 bg-background style={{ width: "100%", bottom: -1 }}>
@@ -22,7 +22,7 @@ const FeedItemVersionOne = ({ reference }: { reference: string }) => {
                     <Text lvl2>{item.description}</Text>
                     <View row>
                         <Text lvl2>start - </Text>
-                        <Text lvl2>{moment(item.start).format("hh:mm A")} for {item.duration} hrs</Text>
+                        <Text lvl2>{moment(new Date(item.start || "")).format("hh:mm A")} for {item.duration} hrs</Text>
                     </View>
                     <DateBox date={item.date || ""} />
                 </View>

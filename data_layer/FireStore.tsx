@@ -124,7 +124,9 @@ class Store
 
 		return new Promise<boolean>((resolve) => {
 			FBS.events.getPastPictures(reference)
-				.then((res) => {
+        .then( ( res ) =>
+        {
+          console.dir(res)
 					if (res) {
 						this.eventImagesMap.set(reference, res)
 

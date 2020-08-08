@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo, createRef, useRef } from "react";
-import { View, Text, Colors, Button } from "react-native-ui-lib";
+import { View, Text, Colors, Button, LoaderScreen } from "react-native-ui-lib";
 import MapView, {
   Region,
   Circle,
@@ -19,68 +19,19 @@ import { getLocation, getRegion, getLatitudeLongitudeFromString } from "../unive
 import { eventEmitter, eventStrings } from "../universal/EventEmitter";
 import Mapcard from "../components/Mapcard";
 
-const radius = 1600;
-
-const Map = memo(
-  ({ region, coord }: { region?: Region; coord?: LatLng }) => {
-    const map = useRef<MapView | null>();
-
-    useEffect(() => {
-      if (region) {
-        map.current?.animateToRegion(region);
-      }
-    }, [region]);
-
-    const handleLocChanged = async (loc: EventUserLocation) => {};
-
-    if (region)
-      return (
-        <MapView
-          ref={map}
-          followsUserLocation
-          showsScale
-          showsMyLocationButton
-          showsUserLocation
-          onUserLocationChange={handleLocChanged}
-          // showsMyLocationButton
-          // region={region}
-          style={{ width: Dimensions.get("screen").width, height: "100%" }}
-        >
-          <Circle
-            radius={radius}
-            center={region}
-            fillColor={Colors.primary + "22"}
-            strokeWidth={1}
-            strokeColor={Colors.grey50}
-          />
-
-          {[...FireStore.data.values()].map((value, index) => {
-            return <MarkerPinItem key={index} value={value} />;
-          } )}
-          
-          
-        </MapView>
-      );
-    else
-      return (
-        <View center>
-          <Text>getting location</Text>
-        </View>
-      );
-  }
-);
+const radius = 600;
 
 const NearMeV2 = () => {
   const [region, setRegion] = useState<Region>();
   const [mockCoords, setMockCoords] = useState<LatLng>();
   const [geoRegions, setGeoRegions] = useState<LocationRegion[]>([]);
-  const [eventCards, setEventCards] = useState<FeedItemModel[]>([]);
+  const [eventCards, setEventCards] = useState<FeedItemModel>();
   const taskName = "geoLocation";
 
   useEffect(() => {
     sortGeoRegions();
-
-    getLocation().then(async (res) => {
+    getLocation().then( async ( res ) =>
+    {      
       const reg = await getRegion(res);
       setRegion(reg);
     });
@@ -95,22 +46,33 @@ const NearMeV2 = () => {
         }
       });
     };
-  }, []);
+  }, [] );
+  
+   const map = useRef<MapView | null>();
+
+    useEffect(() => {
+      if (region) {
+        map.current?.animateToRegion(region);
+      }
+    }, [region] );
+
+  const handleLocChanged = async ( loc: EventUserLocation ) => { };
 
   const addEvent = (refr: string) => {
     const event = FireStore.data.get(refr);
     if (event) {
-      if (!eventCards.includes(event)) {
-        setEventCards((list) => list.concat(event));
-      }
+      setEventCards(event)
     }
   };
 
-  const sortGeoRegions = () => {
+  const sortGeoRegions = () =>
+  {
     const d: any = [];
-    FireStore.data.forEach((value, key) => {
-      const coord = getLatitudeLongitudeFromString(value.location);
-      if (coord) {
+    FireStore.data.forEach( ( value, key ) =>
+    {
+      const coord = getLatitudeLongitudeFromString( value.location );
+      if ( coord )
+      {
         const c: LocationRegion = {
           latitude: coord.latitude,
           longitude: coord.longitude,
@@ -118,27 +80,51 @@ const NearMeV2 = () => {
           identifier: value.reference,
         };
 
-        d.push(c);
+        d.push( c );
       }
-    });
+    } );
+    
+    setGeoRegions( d );
+  }
 
-    setGeoRegions(d);
-
-    if (TaskManager.isTaskDefined(taskName)) {
-      Location.hasStartedGeofencingAsync("geoLocation").then(async (res) => {
-        if (!res && geoRegions.length > 0) {
-          await Location.startGeofencingAsync("geoLocation", geoRegions);
-          console.log("geo started");
-        }
-      });
-    }
-  };
+  const onMarkerPressed = ( ref: string ) =>
+  {
+    console.log(ref);
+    addEvent(ref)
+  }
 
   return (
     <View flex>
-      <Map region={region} coord={mockCoords} />
+      {region && <MapView
+        ref={map}
+        followsUserLocation
+        showsScale
+        showsMyLocationButton
+        showsUserLocation
+        onUserLocationChange={handleLocChanged}
+        style={{ width: "100%", height: "100%" }}
+        onTouchEnd={() =>
+        {
+          if(eventCards) setEventCards(undefined)
+        }
+        }
+      >
+        <Circle
+          radius={radius}
+          center={region}
+          fillColor={Colors.primary + "22"}
+          strokeWidth={1}
+          strokeColor={Colors.grey50}
+        />
+
+        {[...FireStore.data.values()].map( ( value, index ) =>
+        {
+          return <MarkerPinItem key={index} value={value} onPressed={onMarkerPressed}/>
+        } )}
+          
+          
+      </MapView>}
       <View
-        bg-background
         padding-10
         center
         style={{
@@ -148,9 +134,9 @@ const NearMeV2 = () => {
           bottom: 3,
         }}
       >
-        {eventCards.map((value, index) => {
-          return <Mapcard key={index} item={value} />;
-        })}
+        {eventCards && region &&
+           <Mapcard  item={eventCards} currentPosition={region} />
+        }
       </View>
     </View>
   );

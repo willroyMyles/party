@@ -16,7 +16,7 @@ const FeedItemMemoryVersionOne = ({ reference }: { reference: string }) => {
     const item = FireStore.data.get( reference )
     
     if(item)return (
-        <View margin-10 marginV-20 style={{ width: width * .8, height: 200, overflow: "hidden", borderRadius: 7, elevation: 6, borderWidth: .3, borderColor:Colors.secondary }}>
+        <View margin-10 marginV-20 style={{ width: width * .8, height: 200, overflow: "hidden", borderRadius: 7,  borderWidth: 1, borderColor:Colors.primary }}>
             <TouchableOpacity onPress={() => navigation.navigate("view past event", { reference: item.reference })} activeOpacity={.8} style={{ width: "100%", height: "100%" }}>
                 <Image source={{ uri: item.imageUrl }} cover />
                 {/* <PartyTypeBadge type={item.partyType} /> */}

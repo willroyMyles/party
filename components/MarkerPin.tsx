@@ -11,12 +11,12 @@ const MarkerPin = (props: { marker?: LatLng }) => {
 	else return <View />
 }
 
-export const MarkerPinItem = (props: { value: FeedItemModel }) => {
+export const MarkerPinItem = (props: { value: FeedItemModel, onPressed? : (reference:string) => void }) => {
 
 
 	const coord: LatLng | undefined = getLatitudeLongitudeFromString(props.value.location)
 	if (coord)
-		return <Marker image={require("../assets/images/marker.png")} pinColor="green" coordinate={coord}></Marker>
+		return <Marker image={require("../assets/images/marker.png")} pinColor="green" coordinate={coord} onPress={e => props.onPressed? props.onPressed(props.value.reference||"") : null}></Marker>
 	else return <View />
 }
 export default MarkerPin

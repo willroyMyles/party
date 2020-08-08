@@ -37,16 +37,13 @@ TaskManager.isTaskRegisteredAsync("geoLocation").then(res =>{
 				return
 			}
 			// console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
-		
 			if(data.eventType == Location.GeofencingEventType.Enter){
 				eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
 				console.log("emitting data");
-
-				
 			}
 		})
 	}
-} )
+} ).catch(err=> console.log("didnt check if task is registered"))
 
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
 	UIManager.setLayoutAnimationEnabledExperimental(true)

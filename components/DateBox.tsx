@@ -12,7 +12,6 @@ const DateBox = ({ date }: { date: string }) => {
             top: -30,
             padding: 4,
             paddingHorizontal: 10,
-            elevation: 2,
             borderRadius: 7,
             borderWidth: 1,
             borderBottomWidth: 4,
