@@ -8,6 +8,7 @@ import { FeedItemModel } from 'universal/Models'
 import { SectionList, FlatList, Dimensions } from 'react-native'
 import FeedItemVersionOne from '../components/FeedItemVersionOne'
 import FBS from '../data_layer/FireBaseClient'
+import { eventEmitter, eventStrings } from '../universal/EventEmitter'
 
 const { width, height } = Dimensions.get("screen")
 const Feed = () => {
@@ -21,7 +22,8 @@ const Feed = () => {
     const loadData = () => {
         // FireStore.sortFeedItemDocs()
         const keyss = [...FireStore.categorizedData.keys()]
-        setdata(keyss)
+        setdata( keyss )
+        eventEmitter.emit(eventStrings.dataFromProviderFinishedLoad)
     }
 
     const resetBackend = () =>

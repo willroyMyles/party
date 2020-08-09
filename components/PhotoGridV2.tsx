@@ -8,7 +8,8 @@ import TToast from "./TToast"
 import FireStore from "../data_layer/FireStore"
 import { getImage } from "../universal/GetImage"
 
-const width = Dimensions.get("screen").width / 3.1
+const width = Dimensions.get( "screen" ).width / 3.1
+const height = 150
 const PhotoGridV2 = ({reference}: {reference: string}) => {
 	const [data, setdata] = useState<any[]>([])
 	const [loading, setLoading] = useState(true)
@@ -60,7 +61,8 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 				<Avatar source={{uri: undefined}} />
 			</View>
 			<View row style={{flexWrap: "wrap", margin: 0, borderRadius: 5}}>
-				{data.map((src, index) => {
+				{data.map( ( src, index ) =>
+				{					
 					return (
 						<TouchableOpacity
 							margin-2
@@ -74,7 +76,10 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 								borderRadius: 3,
 								overflow: "hidden",
 							}}>
-							<Image source={{uri: src}} resizeMode="cover" height={200} />
+							<Image source={{ uri: src }} resizeMode="cover" 
+								style={{width:"100%", height}}
+				
+							/>
 						</TouchableOpacity>
 					)
 				})}
@@ -89,7 +94,7 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 						opacity: 0.9,
 						elevation: 0,
 						borderRadius: 3,
-						height: 200,
+						height,
 						borderColor: Colors.primary,
 						borderWidth: 2,
 						borderStyle:"dashed"

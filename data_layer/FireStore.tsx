@@ -116,12 +116,6 @@ class Store
   }
   
   @action private picturesForEvent = (reference: string, initialUpdate: boolean = false) => {
-		// this.numberOfImages = 0
-
-		if (!initialUpdate && this.eventImagesMap.has(reference)) {
-			return new Promise((resolve) => resolve(true))
-		}
-
 		return new Promise<boolean>((resolve) => {
 			FBS.events.getPastPictures(reference)
         .then( ( res ) =>

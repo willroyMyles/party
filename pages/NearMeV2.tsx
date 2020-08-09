@@ -55,6 +55,20 @@ const NearMeV2 = () => {
         map.current?.animateToRegion(region);
       }
     }, [region] );
+  
+  useEffect(() => {
+    eventEmitter.addListener(eventStrings.dataFromProviderFinishedLoad, dataChanged)
+    return () => {
+    eventEmitter.removeListener(eventStrings.dataFromProviderFinishedLoad, dataChanged)
+    }
+  }, [])
+  
+  const dataChanged = () =>
+  {
+    setEventCards( undefined )
+    console.log("map updated");
+    
+  }
 
   const handleLocChanged = async ( loc: EventUserLocation ) => { };
 
