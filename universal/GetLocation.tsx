@@ -47,8 +47,6 @@ export const getRegion = (coords: LatLng) => new Promise<Region>((resolve, rejec
     }
 
     resolve(region)
-    console.log("region resolved");
-
 
 })
 

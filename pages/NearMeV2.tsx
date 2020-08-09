@@ -1,10 +1,11 @@
-import React, { useEffect, useState, memo, createRef, useRef } from "react";
+import React, { useEffect, useState, memo, createRef, useRef, PureComponent } from "react";
 import { View, Text, Colors, Button, LoaderScreen } from "react-native-ui-lib";
 import MapView, {
   Region,
   Circle,
   LatLng,
   EventUserLocation,
+  PROVIDER_GOOGLE,
 } from "react-native-maps";
 
 import { Dimensions } from "react-native";
@@ -20,66 +21,64 @@ import { eventEmitter, eventStrings } from "../universal/EventEmitter";
 import Mapcard from "../components/Mapcard";
 
 const radius = 600;
+const taskName = "geoLocation";
 
-const NearMeV2 = () => {
-  const [region, setRegion] = useState<Region>();
-  const [mockCoords, setMockCoords] = useState<LatLng>();
-  const [geoRegions, setGeoRegions] = useState<LocationRegion[]>([]);
-  const [eventCards, setEventCards] = useState<FeedItemModel>();
-  const taskName = "geoLocation";
+class NearMeV2 extends PureComponent
+{
+  map = createRef<MapView>();
+  state = {
+    region: undefined,
+    eventCard: undefined,
+    geoRegions:undefined
+  }
 
-  useEffect(() => {
-    sortGeoRegions();
+  componentWillUnmount()
+  {
+    eventEmitter.removeListener( eventStrings.locationEntered, this.addEvent );
+    eventEmitter.removeListener(eventStrings.dataFromProviderFinishedLoad, this.dataChanged)
+  }
+
+  componentDidMount()
+  {
+    this.sortGeoRegions();
     getLocation().then( async ( res ) =>
     {      
       const reg = await getRegion(res);
-      setRegion(reg);
+      this.setState( { region: reg } )
+      this.dataChanged()   
+      
     });
 
-    eventEmitter.addListener(eventStrings.locationEntered, addEvent);
-
+  eventEmitter.addListener(eventStrings.locationEntered, this.addEvent);
+  eventEmitter.addListener(eventStrings.dataFromProviderFinishedLoad, this.dataChanged)
     return () => {
-      eventEmitter.removeListener(eventStrings.locationEntered, addEvent);
       Location.hasStartedGeofencingAsync(taskName).then((res) => {
         if (res) {
           // Location.stopGeofencingAsync(taskName)
         }
       });
     };
-  }, [] );
-  
-   const map = useRef<MapView | null>();
-
-    useEffect(() => {
-      if (region) {
-        map.current?.animateToRegion(region);
-      }
-    }, [region] );
-  
-  useEffect(() => {
-    eventEmitter.addListener(eventStrings.dataFromProviderFinishedLoad, dataChanged)
-    return () => {
-    eventEmitter.removeListener(eventStrings.dataFromProviderFinishedLoad, dataChanged)
-    }
-  }, [])
-  
-  const dataChanged = () =>
-  {
-    setEventCards( undefined )
-    console.log("map updated");
-    
   }
 
-  const handleLocChanged = async ( loc: EventUserLocation ) => { };
+  dataChanged = () =>
+  {
+    this.forceUpdate()
+      this.map.current?.animateToRegion( this.state.region, 2000 );      
 
-  const addEvent = (refr: string) => {
+  }
+
+   handleLocChanged = async ( loc: EventUserLocation ) => { };
+
+   addEvent = (refr: string) => {
     const event = FireStore.data.get(refr);
     if (event) {
-      setEventCards(event)
+      this.setState( {
+        eventCard : event
+      })
     }
   };
 
-  const sortGeoRegions = () =>
+  sortGeoRegions = () =>
   {
     const d: any = [];
     FireStore.data.forEach( ( value, key ) =>
@@ -98,62 +97,63 @@ const NearMeV2 = () => {
       }
     } );
     
-    setGeoRegions( d );
+    this.setState({geoRegion:d})
   }
 
-  const onMarkerPressed = ( ref: string ) =>
+  onMarkerPressed = ( ref: string ) =>
   {
-    console.log(ref);
-    addEvent(ref)
+    this.addEvent(ref)
   }
 
-  return (
-    <View flex>
-      {region && <MapView
-        ref={map}
-        followsUserLocation
-        showsScale
-        showsMyLocationButton
-        showsUserLocation
-        onUserLocationChange={handleLocChanged}
-        style={{ width: "100%", height: "100%" }}
-        onTouchEnd={() =>
-        {
-          if(eventCards) setEventCards(undefined)
-        }
-        }
-      >
-        <Circle
-          radius={radius}
-          center={region}
-          fillColor={Colors.primary + "22"}
-          strokeWidth={1}
-          strokeColor={Colors.grey50}
-        />
+  render()
+  {
+    return (
+      <View flex>
+        {this.state.region && <MapView
+          ref={this.map}
+          followsUserLocation
+          showsScale
+          showsMyLocationButton
+          showsUserLocation
+          provider={PROVIDER_GOOGLE}
+          onUserLocationChange={this.handleLocChanged}
+          style={{ width: "100%", height: "100%" }}
+          onTouchEnd={() =>
+          {
+            if ( this.state.eventCard ) this.setState({eventCard:undefined})
+          }
+          }
+        >
+          <Circle
+            radius={radius}
+            center={this.state.region}
+            fillColor={Colors.primary + "22"}
+            strokeWidth={1}
+            strokeColor={Colors.grey50}
+          />
 
-        {[...FireStore.data.values()].map( ( value, index ) =>
-        {
-          return <MarkerPinItem key={index} value={value} onPressed={onMarkerPressed}/>
-        } )}
-          
-          
-      </MapView>}
-      <View
-        padding-10
-        center
-        style={{
-          position: "absolute",
-          minHeight: 10,
-          minWidth: "100%",
-          bottom: 3,
-        }}
-      >
-        {eventCards && region &&
-           <Mapcard  item={eventCards} currentPosition={region} />
-        }
+          {[...FireStore.data.values()].map( ( value, index ) =>
+          {
+            return <MarkerPinItem key={index} value={value} onPressed={this.onMarkerPressed} />
+          } )}
+        </MapView>}
+        <View
+          padding-10
+          center
+          style={{
+            position: "absolute",
+            minHeight: 10,
+            minWidth: "100%",
+            bottom: 3,
+          }}
+        >
+          {this.state.eventCard && this.state.region &&
+            <Mapcard item={this.state.eventCard} currentPosition={this.state.region} />
+          }
+        </View>
       </View>
-    </View>
-  );
+    )
+  }
 };
 
 export default NearMeV2;
