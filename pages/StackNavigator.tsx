@@ -13,6 +13,8 @@ import { presetDarkPalettes } from '@ant-design/colors';
 import { TransitionSpec } from '@react-navigation/stack/lib/typescript/src/types';
 import { Dimensions, Animated } from 'react-native';
 import ImageView from '../components/ImageView';
+import SearchComponent from '../components/SearchComponent';
+import SearchPage from './SearchPage';
 
 const Stack = createStackNavigator()
 const prest = TransitionPresets.SlideFromRightIOS
@@ -55,6 +57,7 @@ const StackNavigator = () => {
                     <Stack.Screen name="view event" component={EventView}   options={{cardStyleInterpolator:forFade}} />
                     <Stack.Screen name="view past event" component={PastEventView} />
                     <Stack.Screen name="useMap" component={UseMapView} />
+                    <Stack.Screen name="search" component={SearchPage} />
                     <Stack.Screen options={{...scaleTransition, cardStyleInterpolator:forFade}} name="image view" component={ImageView} />
                 </Stack.Navigator>
             </NavigationContainer>

@@ -51,7 +51,12 @@ class Store
             .catch((err) => reject(err));
         })
         .catch((err) => reject(err));
-    });
+    } );
+  
+  resetPassword = () =>
+  {
+    // auth().
+  }
 
   logout = () => auth().signOut();
 
@@ -294,6 +299,13 @@ private getURLForEventFlyers = (imagePath: string) => {
   social = {
     GooglsSignIn: this.googleSignIN,
     Facebook: this.facebookSignIn
+  }
+
+  auth = {
+    login: this.login,
+    register: this.register,
+    logout:this.logout,
+    resetPassword : this.resetPassword,
   }
 
 
