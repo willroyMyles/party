@@ -12,9 +12,11 @@ import PastEventView from './PastEventView';
 import { presetDarkPalettes } from '@ant-design/colors';
 import { TransitionSpec } from '@react-navigation/stack/lib/typescript/src/types';
 import { Dimensions, Animated } from 'react-native';
+import ImageView from '../components/ImageView';
 
 const Stack = createStackNavigator()
 const prest = TransitionPresets.SlideFromRightIOS
+const scaleTransition = TransitionPresets.ScaleFromCenterAndroid
 
 const config : TransitionSpec = {
   animation: 'spring',
@@ -29,14 +31,12 @@ const config : TransitionSpec = {
 };
 
 const forFade = ( { current }: { current: any } ) =>
-{
-    const offset = new Animated.Value(current.progress * Dimensions.get("screen").width)
-    
+{    
     return {
         cardStyle: {
             opacity: current.progress,
-            // scaleY: current.progress,
-            // scaleX: current.progress,
+            scaleY: current.progress,
+            scaleX: current.progress,
 
         }
     }
@@ -55,6 +55,7 @@ const StackNavigator = () => {
                     <Stack.Screen name="view event" component={EventView}   options={{cardStyleInterpolator:forFade}} />
                     <Stack.Screen name="view past event" component={PastEventView} />
                     <Stack.Screen name="useMap" component={UseMapView} />
+                    <Stack.Screen options={{...scaleTransition, cardStyleInterpolator:forFade}} name="image view" component={ImageView} />
                 </Stack.Navigator>
             </NavigationContainer>
         </View>

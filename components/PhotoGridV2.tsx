@@ -7,12 +7,20 @@ import {useTheme} from "styled-components"
 import TToast from "./TToast"
 import FireStore from "../data_layer/FireStore"
 import { getImage } from "../universal/GetImage"
+import { useNavigation } from "@react-navigation/native"
 
 const width = Dimensions.get( "screen" ).width / 3.1
 const height = 150
 const PhotoGridV2 = ({reference}: {reference: string}) => {
 	const [data, setdata] = useState<any[]>([])
-	const [loading, setLoading] = useState(true)
+	const [loading, setLoading] = useState( true )
+	
+	const navigation = useNavigation()
+
+	const handleImagePressed = (uri:string) =>
+	{
+		navigation.navigate("image view", {uri:uri})
+	}
 
 	useEffect(() => {
 		FireStore.retrieve.picturesForEvent(reference).then((res) => {
@@ -65,6 +73,7 @@ const PhotoGridV2 = ({reference}: {reference: string}) => {
 				{					
 					return (
 						<TouchableOpacity
+							onPress={() => handleImagePressed(src)}
 							margin-2
 							activeOpacity={0.85}
 							key={index}
