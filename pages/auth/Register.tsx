@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextField, TouchableOpacity } from 'react-native-ui-lib';
+import { View, Text, TextField, TouchableOpacity, Colors } from 'react-native-ui-lib';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import FireStore from '../../data_layer/FireStore';
 import { HandleFirebaseErrors } from '../../universal/EventEmitter';
 import TToast from '../../components/TToast';
 import SkipButton from '../../components/SkipButton';
+import BackDrop from '../../components/BackDrop';
 
 const Register = () =>
 {
@@ -34,18 +35,22 @@ const Register = () =>
 
     return (
         <ScrollView
+            style={{backgroundColor:"transparent"}}
             contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: 20,
+                minHeight:"100%"
             }}>
+            <BackDrop />
+            
             <Text>Register</Text>
             <View
                 br50
                 marginT-90
                 padding-10
-                bg-white
-                style={{ width: '100%', elevation: 0 }}>
+                bg-background
+                style={{ width: '100%', elevation: 3 }}>
                 <View marginT-10 padding-10 centerV style={{}}>
                     <Controller
                         name="username"
@@ -129,9 +134,10 @@ const Register = () =>
             </View>
             <View marginT-20 style={{ width: '100%' }}>
                 <TouchableOpacity
+                    
                     onPress={() => handleSubmit( onSubmit )()}
                     center
-                    style={[style.btn, { elevation: 10 }]}>
+                    style={[style.btn, { elevation: 10, backgroundColor:Colors.foreground }]}>
                     <Text>Register</Text>
                 </TouchableOpacity>
             </View>

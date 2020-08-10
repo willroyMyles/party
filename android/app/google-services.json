@@ -8,44 +8,19 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:562995348940:android:bdd403ad576ca18633c969",
-        "android_client_info": {
-          "package_name": "com.fowler.my1party"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "562995348940-m3tbop4chvrp86ba3k7sf4g8pfkmmf3m.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDT_iPWmm34yL704gCgOnAssfL59cNVACQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "562995348940-m3tbop4chvrp86ba3k7sf4g8pfkmmf3m.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:562995348940:android:e25f16068af69d3433c969",
+        "mobilesdk_app_id": "1:562995348940:android:417ad56d2efdcf2f33c969",
         "android_client_info": {
           "package_name": "com.fowler.party"
         }
       },
       "oauth_client": [
         {
-          "client_id": "562995348940-m3tbop4chvrp86ba3k7sf4g8pfkmmf3m.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "562995348940-slh1c41vv4q3lp2ign921vgu0h43v84c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fowler.party",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
         }
       ],
       "api_key": [
@@ -55,12 +30,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "562995348940-m3tbop4chvrp86ba3k7sf4g8pfkmmf3m.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

@@ -57,18 +57,27 @@ const App = () =>
   useEffect( () =>
   {
     tm.setThemeType(false)
-    Font.loadAsync({
-			Nunito_Black: require("./assets/fonts/Nunito/Nunito-Black.ttf"),
-			Nunito_Regular: require("./assets/fonts/Nunito/Nunito-Regular.ttf"),
-      Nunito_Semi_Bold: require( "./assets/fonts/Nunito/Nunito-SemiBold.ttf" ),
-      RR:require("./assets/fonts/Red_Rose/RedRose-Regular.ttf")
-		}).then(() => {
-			setLoading(false)
-			// SplashScreen.hideAsync()
-		})
-    return () => {
-    }
-  }, [])
+    Font.loadAsync( {
+      Nunito_Black: require( "./assets/fonts/Nunito/Nunito-Black.ttf" ),
+      RR: require( "./assets/fonts/Red_Rose/RedRose-Regular.ttf" )
+    } ).then( () =>
+    {
+      setLoading( false )
+      // SplashScreen.hideAsync()
+            
+      if(Location.PermissionStatus.DENIED)
+      Location.requestPermissionsAsync().then( res =>
+      {
+        if ( res.granted )  eventEmitter.emit(eventStrings.locationGranted)
+        
+        if(!res.granted) eventEmitter.emit(eventStrings.locationNotGranted)
+        
+      } ).catch( err =>
+      {
+      console.log(err);
+    })
+    })
+    }, [])
 
   if ( loading )
   {

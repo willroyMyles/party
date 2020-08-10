@@ -27,13 +27,40 @@ const Login = () =>
             .then( ( res ) =>
             {
                 console.log( 'log in success' );
-                TToast.success( 'Great!', 'Your all good to go!' );
-                navigation.navigate( 'home' );
+                goHome()
             } )
             .catch( ( err ) => HandleFirebaseErrors( err.code ) );
     };
 
     const handleRegisterPressed = () => navigation.navigate( 'register' );
+
+    const handleGoogleLogin = () => FireStore.auth.google().then( res =>
+    {
+        if ( res )
+        {
+            goHome()
+        } else
+        {
+            
+        }
+    } )
+
+    // const handleFaceBookLogin = () => FireStore.auth.facebook().then( res =>
+    // {
+    //     if ( res )
+    //     {
+    //         goHome()
+    //     } else
+    //     {
+            
+    //     }
+    // } )
+    
+    const goHome = () =>
+    {
+        TToast.success( 'Great!', 'Your all good to go!' );
+                navigation.navigate( 'home' );
+    }
 
     return (
         <ScrollView
@@ -116,12 +143,12 @@ const Login = () =>
                     style={[style.btn, { elevation: 10 }]}>
                     <Text>Login</Text>
                 </TouchableOpacity>
-                <TouchableOpacity center style={[style.btn]}>
+                <TouchableOpacity onPress={handleGoogleLogin} center style={[style.btn]}>
                     <Text>Continue with Google</Text>
                 </TouchableOpacity>
-                <TouchableOpacity center style={[style.btn]}>
+                {/* <TouchableOpacity onPress={handleFaceBookLogin} center style={[style.btn]}>
                     <Text>Continue with Facebook</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <View marginT-30 row center>
                 <Text>Don't have an account?</Text>

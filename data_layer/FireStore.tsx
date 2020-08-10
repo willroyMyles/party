@@ -141,7 +141,23 @@ class Store
 				}
 			})
 		})
-	}
+  }
+  
+  @action private GoogleLogin = () => new Promise( resolve =>
+  {
+    FBS.social.GooglsSignIn().then(res=> resolve(true)).catch(err=>resolve(false))
+  } )
+  @action private FacebookLogin = () => new Promise( resolve =>
+  {
+        FBS.social.Facebook().then(res=> resolve(true)).catch(err=>resolve(false))
+
+  } )
+  @action private TwitterLogin = () => new Promise( resolve =>
+  {
+    
+  } )
+  
+  @action LogOut = () => FBS.logout()
 
   retrieve = {
     isLoggedIn: this.isLoggedIn,
@@ -157,6 +173,10 @@ class Store
   auth = {
     login: this.login,
     register: this.register,
+    google: this.GoogleLogin,
+    facebook: this.FacebookLogin,
+    twitter: this.TwitterLogin,
+    logout: this.LogOut
   };
 }
 

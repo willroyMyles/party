@@ -6,6 +6,8 @@ export const eventEmitter = new EventEmitter();
 export const eventStrings = {
   themeChanged: 'theme changed enuh pawdi',
   eventClicked: 'event clicked',
+  locationNotGranted: "when user denies location",
+  locationGranted: "when user grants location",
   locationConfirmed:
     'used when confirmed is pressed to relay location to create pot view',
   dataFromProviderFinishedLoad: 'used to signal data finished loading',

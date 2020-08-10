@@ -5,6 +5,16 @@ import firestore, {
 } from '@react-native-firebase/firestore';
 import { FeedItemModel } from '../universal/Models';
 import { errorStrings } from '../universal/EventEmitter';
+import { GoogleSignin } from '@react-native-community/google-signin';
+// import { LoginManager, AccessToken } from 'react-native-fbsdk';
+
+
+ GoogleSignin.isSignedIn().then( res =>
+{
+  console.log(res, "user");
+  
+})
+
 
 const eventCollection = 'events';
 const userCollection = 'users';
@@ -66,7 +76,7 @@ class Store
     new Promise((resolve, reject) => {
       if (!this.isLoggedIn()) {
         //not logged in
-        reject(errorStrings.notLoggedIn);
+        return reject(errorStrings.notLoggedIn);
       }
       this.uploadPhoto(data).then((res: string) => {
         if ( res )
@@ -218,9 +228,73 @@ private getURLForEventFlyers = (imagePath: string) => {
 					resolve(false)
 				})
 		})
-	}
+  }
   
+  private googleSignIN = () => new Promise( ( resolve, reject ) =>
+  {
+    GoogleSignin.configure( {
+      webClientId: "562995348940-misphpo9doc010508icpohr2sirco00d.apps.googleusercontent.com",
+    } )
+    
+    
+    GoogleSignin.signIn().then( ( user ) =>
+    {
+      console.log(user.idToken, "his token");
+      
+       const googleCredential = auth.GoogleAuthProvider.credential(user.idToken);
 
+      auth().signInWithCredential( googleCredential ).then( res =>
+      {
+        console.log( res.user );
+        console.log(auth().currentUser);
+        
+        
+         resolve(res.user.uid)
+       }).catch(err=>reject(err))
+    } ).catch( err =>
+    {
+      reject( err )
+      
+      console.log(err, "err");
+      
+    })
+  } )
+  
+  private facebookSignIn = () => new Promise( async( resolve, reject ) =>
+  {
+  //   try
+  //   {
+  //     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+  // if (result.isCancelled) {
+  //   throw 'User cancelled the login process';
+  // }
+
+  // // Once signed in, get the users AccesToken
+  // const data = await AccessToken.getCurrentAccessToken();
+
+  // if (!data) {
+  //   throw 'Something went wrong obtaining access token';
+  // }
+
+  // // Create a Firebase credential with the AccessToken
+  // const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+  // // Sign-in the user with the credential
+  // return auth().signInWithCredential(facebookCredential);
+  //   }
+  //   catch ( err )
+  //   {
+  //     console.log( err );
+  //     reject(err)
+      
+  //   }
+  })
+  
+  social = {
+    GooglsSignIn: this.googleSignIN,
+    Facebook: this.facebookSignIn
+  }
 
 
   events = {

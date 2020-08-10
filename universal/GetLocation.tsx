@@ -2,6 +2,8 @@
 import * as Location from "expo-location"
 import { LatLng, Region } from "react-native-maps";
 import { Dimensions } from "react-native";
+import { eventEmitter, eventStrings } from "./EventEmitter";
+import { event } from "react-native-reanimated";
 
 
 export const getLocation = () => new Promise<any>(async (resolve, reject) => {
@@ -11,12 +13,22 @@ export const getLocation = () => new Promise<any>(async (resolve, reject) => {
 
 
         const perm = await Location.getPermissionsAsync()        
-        if (!perm.granted && perm.canAskAgain) {
+        if ( !perm.granted && perm.canAskAgain )
+        {
+            //should request permission first?
             const result = await Location.requestPermissionsAsync()
-
+            if ( !result.granted )
+            {
+            eventEmitter.emit(eventStrings.locationGranted)
+                
+            }
         }
 
-        if (!perm.granted) reject("not granted")
+        if ( !perm.granted )
+        {
+            reject( "not granted" )
+            eventEmitter.emit(eventStrings.locationGranted)
+        }
 
         if (perm.granted) {
             Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }).then(res => {
