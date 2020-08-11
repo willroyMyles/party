@@ -26,7 +26,7 @@ export const lightTheme: Theme = {
 	text2: "rgba(85,85,85,1)",
 	muted: Colors.grey50,
 	caption: Colors.grey60,
-	background: Colors.grey80,
+	background: "rgba(245,245,250,1)",
 	foreground: "rgba(253,253,253,1)",
 	bgHilight: "rgba(240,243,245,1)",
 }

@@ -159,6 +159,11 @@ class Store
   
   @action LogOut = () => FBS.logout()
 
+  @action getSpecificParties = ( type: number ) => new Promise( ( resolve, reject ) =>
+  {
+    
+  })
+
   retrieve = {
     isLoggedIn: this.isLoggedIn,
     events: this.getEvents,

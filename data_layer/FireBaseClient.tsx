@@ -19,11 +19,13 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 const eventCollection = 'events';
 const userCollection = 'users';
 let last: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
+let lastType: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
 
 class Store
 {
   
   resetLast = () => last = null
+  restLastType =() => lastType = null
   isLoggedIn = () => auth().currentUser != undefined || null;
 
   login = (email: string, password: string) =>
@@ -155,6 +157,49 @@ class Store
       }
     });
   };
+
+  getEventsByType = (type:number) =>
+  {
+    const order = "partyType"
+    const amount = 20
+    return new Promise( async ( resolve, reject ) =>
+    {
+if (lastType == null) {
+        console.log('new');
+
+        const firstQuery = firestore()
+          .collection(eventCollection)
+          .orderBy(order)
+          .limit( amount )
+  .where("partyType", "==", type)
+        const snapshotQuery = await firstQuery.get();
+
+        if (snapshotQuery.empty) return reject('empty');
+
+        //get the last document
+        const lastDocInSnapshotQuery =
+          snapshotQuery.docs[snapshotQuery.docs.length - 1];
+        last = lastDocInSnapshotQuery;
+        resolve(snapshotQuery);
+      } else {
+        console.log('old', lastType.id);
+
+        const firstQuery = firestore()
+          .collection(eventCollection)
+          .orderBy(order)
+          .limit(amount)
+          .startAfter( last )
+  .where("partyType", "==", type)
+  
+        const snapshot = await firstQuery.get();
+        if (snapshot.empty) return reject('empty');
+
+        const lastDocInSnapshotQuery = snapshot.docs[snapshot.docs.length - 1];
+        last = lastDocInSnapshotQuery;
+        resolve(snapshot);
+      }
+    } )
+  }
 
 private getURLForEventFlyers = (imagePath: string) => {
 		return new Promise<string>((resolve, reject): any => {

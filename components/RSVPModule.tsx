@@ -1,26 +1,10 @@
 import React, {useEffect} from "react"
 import {View, Text, TouchableOpacity, Colors} from "react-native-ui-lib"
-import fireSotreMob from "../dataLayer/FireStore"
-import dataProvider from "../dataLayer/DataStore"
-import uiManager from "../dataLayer/UiManager"
-import Row from "./Row"
-import {Feather} from "@expo/vector-icons"
+
 import TToast from "./TToast"
 
 const RSVPModule = () => {
-	useEffect(() => {
-		fireSotreMob.retrieve.rsvpEvents()
-	}, [])
-
-	const handleRemovePinned = (value: string) => {
-		fireSotreMob.removeRsvp(value).then((res) => {
-			if (res) {
-				TToast.success("Great!", "event removed")
-			} else {
-				TToast.error("Oops!", "something went wrong")
-			}
-		})
-	}
+	
 
 	return (
 		<View marginT-30 style={{width: "100%"}}>

@@ -11,10 +11,12 @@ import { eventEmitter, eventStrings } from '../universal/EventEmitter'
 import Animated from 'react-native-reanimated'
 import SearchComponent from '../components/SearchComponent'
 import FeedFabButtons from '../components/FeedFabButtons'
+import { useNavigation } from '@react-navigation/native'
 
 const { width, height } = Dimensions.get("screen")
 const Feed = () => {
     const theme = useTheme()
+    const navigation = useNavigation()
     const [data, setdata] = useState<string[]>()
     const [offset, setoffset] = useState(0)
 
@@ -41,6 +43,8 @@ const Feed = () => {
         FireStore.retrieve.events().then()
     }
 
+    const handleViewAll = (route:string) => navigation.navigate("category", {type:route})
+
 
     return (
 
@@ -60,7 +64,7 @@ const Feed = () => {
                 return <View padding-10 marginV-17 key={idx}>
                     <View row spread >
                         <Text indicator>{name}</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> handleViewAll(value)}>
                             <Text color={Colors.primary}>view all</Text>
                         </TouchableOpacity>
                     </View>

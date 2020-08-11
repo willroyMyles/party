@@ -15,6 +15,7 @@ import { Dimensions, Animated } from 'react-native';
 import ImageView from '../components/ImageView';
 import SearchComponent from '../components/SearchComponent';
 import SearchPage from './SearchPage';
+import CategoryView from './CategoryView';
 
 const Stack = createStackNavigator()
 const prest = TransitionPresets.SlideFromRightIOS
@@ -54,10 +55,11 @@ const StackNavigator = () => {
                     <Stack.Screen name="login" component={Login} />
                     <Stack.Screen name="register" component={Register} />
                     <Stack.Screen name="create event" component={CreateEvent} />
-                    <Stack.Screen name="view event" component={EventView}   options={{cardStyleInterpolator:forFade}} />
+                    <Stack.Screen name="view event" component={EventView} />
                     <Stack.Screen name="view past event" component={PastEventView} />
                     <Stack.Screen name="useMap" component={UseMapView} />
                     <Stack.Screen name="search" component={SearchPage} />
+                    <Stack.Screen name="category" component={CategoryView} />
                     <Stack.Screen options={{...scaleTransition, cardStyleInterpolator:forFade}} name="image view" component={ImageView} />
                 </Stack.Navigator>
             </NavigationContainer>

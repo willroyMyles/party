@@ -18,8 +18,8 @@ const ImageView = () =>
     if ( imageUri )
     {
         return (
-            <View flex>
-                <Image source={{ uri: imageUri }} cover />
+            <View flex center style={{borderWidth:3, backgroundColor:"transparent"}}>
+                <Image source={{ uri: imageUri }} style={{ height:"50%"}} resizeMode="contain"  cover />
                 <TouchableOpacity
                     onPress={onClose}
                     style={{
@@ -29,7 +29,7 @@ const ImageView = () =>
                         backgroundColor:Colors.background
                     
                 }}>
-                    <Icon name="X-circle" />
+                    <Icon name="x" />
                 </TouchableOpacity>
             </View>
         )
