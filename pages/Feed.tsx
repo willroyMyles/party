@@ -51,7 +51,7 @@ const Feed = () => {
 
 
       
-        <View bg-background style={{minHeight:"100%", width:"100%"}}>
+        <View bg-background paddingV-50 style={{minHeight:"100%", width:"100%"}}>
 
             <ScrollView
                 onMomentumScrollEnd={(e) => setoffset(e.nativeEvent.contentOffset)

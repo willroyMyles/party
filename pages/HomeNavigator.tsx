@@ -7,6 +7,7 @@ import Feed from './Feed';
 import Settings from './Settings';
 import NearMeV2 from './NearMeV2';
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
+import CustomTabBar from '../components/CustomTabBar';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -46,11 +47,15 @@ const HomeNavigator = () =>
             //     elevation:10
             // },
 
-        }}>
-            <Tab.Screen name="ml" component={MemoryLeaderBoard} />
-            {shouldShowNearMe && <Tab.Screen name="nearme" component={NearMeV2} />}
-            <Tab.Screen name="feed" component={Feed} />
-            <Tab.Screen name="settings" component={Settings} />
+            
+
+        }}
+        tabBar={props => <CustomTabBar {...props} />}
+        >
+            <Tab.Screen name="ml" options={{tabBarIcon : () => "trophy" }} component={MemoryLeaderBoard} />
+            {shouldShowNearMe && <Tab.Screen options={{tabBarIcon : () => "map" }} name="near me" component={NearMeV2} />}
+            <Tab.Screen name="feed" options={{tabBarIcon : () => "th-large" }} component={Feed} />
+            <Tab.Screen name="settings" options={{tabBarIcon : () => "user-cog" }} component={Settings} />
         </Tab.Navigator>
     )
 }
