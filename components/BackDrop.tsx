@@ -9,15 +9,15 @@ const BackDrop = () => {
     return (
         <View bg-background style={{
             position: "absolute",
-            width: "100%",
+            width,
             height,
             top: 0,
             zIndex: -1
         }}>
 
-            <View bg-green30 style={{
+            <View bg-green20 style={{
                 position: "absolute",
-                width: "100%",
+                width,
                 height: 400,
                 left: "-50%",
                 top: "-10%",

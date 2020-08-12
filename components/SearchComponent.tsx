@@ -36,7 +36,7 @@ const SearchComponent = () =>
     }
 
     return (
-         <View flex style={{borderWidth:0, justifyContent:"center"}}>
+         <View bg-background flex style={{borderWidth:0, justifyContent:"center"}}>
                 <View marginH-10 marginT-15 marginB-0 padding-2>
                 <TextField placeholder="search" onBlur={onBlur} onChangeText={onChange} value={value}
                 />

@@ -12,13 +12,14 @@ import Animated from 'react-native-reanimated'
 import SearchComponent from '../components/SearchComponent'
 import FeedFabButtons from '../components/FeedFabButtons'
 import { useNavigation } from '@react-navigation/native'
+import Feed_Item from '../components/Feed_Item'
 
 const { width, height } = Dimensions.get("screen")
 const Feed = () => {
     const theme = useTheme()
     const navigation = useNavigation()
     const [data, setdata] = useState<string[]>()
-    const [offset, setoffset] = useState(0)
+    const [offset, setoffset] = useState<{x:number,y:number}>({x:0,y:0})
 
     useEffect(() => {
         loadData
@@ -50,18 +51,16 @@ const Feed = () => {
 
 
       
-        <View flex>
+        <View bg-background style={{minHeight:"100%", width:"100%"}}>
 
             <ScrollView
                 onMomentumScrollEnd={(e) => setoffset(e.nativeEvent.contentOffset)
                 }
-                contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%" }} >
-            <Text>feed</Text>
+                // contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%" }}
+            >
             {data?.map((value, idx) => {
-                console.log(typeof value);
-
                 const name = value.replace("_", " ").toLowerCase()
-                return <View padding-10 marginV-17 key={idx}>
+                return <View key={idx}>
                     <View row spread >
                         <Text indicator>{name}</Text>
                         <TouchableOpacity onPress={()=> handleViewAll(value)}>
@@ -69,13 +68,14 @@ const Feed = () => {
                         </TouchableOpacity>
                     </View>
                     <FlatList
+                        // style={{ width: "100%", borderWidth: 5, borderColor: Colors.blue20 }}
+                        // contentContainerStyle={{borderColor:Colors.red20, borderWidth:13, padding:0}}
                         horizontal
-                        pagingEnabled
-                        snapToInterval={width}
                         data={FireStore.categorizedData.get( value )}
                         keyExtractor={(item, index) => item.reference + "item" + index}
                         renderItem={({ item, index }) => {
-                            return <FeedItemVersionOne reference={item.reference}  />
+                            return  <Feed_Item reference={item.reference||""}  />
+  
                         }}
                     />
                 </View>
