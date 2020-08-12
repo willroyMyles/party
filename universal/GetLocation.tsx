@@ -16,24 +16,36 @@ export const getLocation = () => new Promise<any>(async (resolve, reject) => {
         if ( !perm.granted && perm.canAskAgain )
         {
             //should request permission first?
-            const result = await Location.requestPermissionsAsync()
-            if ( !result.granted )
+            Location.requestPermissionsAsync().then( result =>
+            {
+                           if ( !result.granted )
             {
             eventEmitter.emit(eventStrings.locationGranted)
                 
             }
+            } ).catch( err =>
+            {
+               eventEmitter.emit(eventStrings.locationNotGranted)
+           })
+
         }
 
         if ( !perm.granted )
         {
             reject( "not granted" )
-            eventEmitter.emit(eventStrings.locationGranted)
+            eventEmitter.emit(eventStrings.locationNotGranted)
         }
 
         if (perm.granted) {
             Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }).then(res => {
 
                 resolve(res.coords)
+            } ).catch( err =>
+            {
+                console.log("somthing bad happened, could not get location");
+                
+            eventEmitter.emit(eventStrings.locationNotGranted)
+                
             })
         }
     }

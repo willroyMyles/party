@@ -6,6 +6,7 @@ import firestore, {
 import { FeedItemModel } from '../universal/Models';
 import { errorStrings } from '../universal/EventEmitter';
 import { GoogleSignin } from '@react-native-community/google-signin';
+import { event } from 'react-native-reanimated';
 // import { LoginManager, AccessToken } from 'react-native-fbsdk';
 
 
@@ -158,47 +159,41 @@ class Store
     });
   };
 
-  getEventsByType = (type:number) =>
+  private getEventsByType = async (type:number, referenceNumber:string) =>
   {
-    const order = "partyType"
-    const amount = 20
-    return new Promise( async ( resolve, reject ) =>
+
+    if ( !referenceNumber )
     {
-if (lastType == null) {
-        console.log('new');
+      return new Promise((rs,rj)=> rj("reference number is null"))
+    }
+    try
+    {
+      const order = "partyType"
+      const amount = 20
+      const lastReference = firestore().collection( eventCollection ).doc( referenceNumber )
+      const snapshot1 = await lastReference.get()
 
+      return new Promise( async ( resolve, reject ) =>
+      {
         const firstQuery = firestore()
-          .collection(eventCollection)
-          .orderBy(order)
+          .collection( eventCollection )
+          .orderBy( order )
+          .startAfter( snapshot1 )
           .limit( amount )
-  .where("partyType", "==", type)
-        const snapshotQuery = await firstQuery.get();
-
-        if (snapshotQuery.empty) return reject('empty');
-
-        //get the last document
-        const lastDocInSnapshotQuery =
-          snapshotQuery.docs[snapshotQuery.docs.length - 1];
-        last = lastDocInSnapshotQuery;
-        resolve(snapshotQuery);
-      } else {
-        console.log('old', lastType.id);
-
-        const firstQuery = firestore()
-          .collection(eventCollection)
-          .orderBy(order)
-          .limit(amount)
-          .startAfter( last )
-  .where("partyType", "==", type)
+          // .where( "partyType", "==", type )
   
         const snapshot = await firstQuery.get();
-        if (snapshot.empty) return reject('empty');
-
-        const lastDocInSnapshotQuery = snapshot.docs[snapshot.docs.length - 1];
-        last = lastDocInSnapshotQuery;
-        resolve(snapshot);
-      }
-    } )
+        console.log("snapshot", snapshot.size);
+        
+        if ( snapshot.empty ) return reject( 'empty' );
+        resolve( snapshot );
+      
+      } )
+    } catch ( err) {
+      console.log(err, "error my guy");
+      return new Promise((rs,rj)=> rj(err))
+      
+    }
   }
 
 private getURLForEventFlyers = (imagePath: string) => {
@@ -360,7 +355,8 @@ private getURLForEventFlyers = (imagePath: string) => {
     getEventsByMultiple: this.getEventsInMultiplies,
     getUrlForFlyers: this.getURLForEventFlyers,
     getEventsInCategories: this.getEventsInCategories,
-    getPastPictures : this.getPicturesForEvent
+    getPastPictures: this.getPicturesForEvent,
+    getEventByType : this.getEventsByType
   };
 }
 

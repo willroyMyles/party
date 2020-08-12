@@ -5,10 +5,10 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { FeedItemModel } from '../universal/Models'
 import FireStore from '../data_layer/FireStore'
 import FeedItemMemoryVersionOne from './FeedItemMemoryVersionOne copy'
+import Feed_Item from './Feed_Item'
 
 const SearchComponent = () =>
 {
-    const [visible, setVisible] = useState( false )
     const [value, setValue] = useState<string>( "" )
     const [data, setdata] = useState<FeedItemModel[] |undefined>(undefined)
     
@@ -35,27 +35,22 @@ const SearchComponent = () =>
         setdata(d)
     }
 
-    const onClose = () => setVisible( false )
     return (
-         <Animated.View style={{borderWidth:1, justifyContent:"center"}}>
+         <View flex style={{borderWidth:0, justifyContent:"center"}}>
                 <View marginH-10 marginT-15 marginB-0 padding-2>
-                <TextField placeholder="search" onBlur={onBlur} onFocus={() => setVisible( true )} onChangeText={onChange} value={value}
+                <TextField placeholder="search" onBlur={onBlur} onChangeText={onChange} value={value}
                 />
             </View>
-           {visible &&  <View center style={{minHeight:"40%", margin:1, marginTop:-5,  borderRadius:10, borderWidth:3, borderColor:Colors.grey50, padding:10}}>
+            <View  flex style={{margin:1, borderColor:Colors.grey50, padding:0}}>
                 <ScrollView>
                     {data?.map( ( value, index ) =>
                     {
-                    return <FeedItemMemoryVersionOne reference={value.reference || ""} />
+                    return <Feed_Item item={value} />
                 })}
                 </ScrollView>
-                <View absT absR margin-5>
-                    <TouchableOpacity onPress={onClose}>
-                    <Text>close</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>}
-            </Animated.View>
+              
+            </View>
+            </View>
     )
 }
 

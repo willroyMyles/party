@@ -48,8 +48,8 @@ const HomeNavigator = () =>
 
         }}>
             <Tab.Screen name="ml" component={MemoryLeaderBoard} />
-            <Tab.Screen name="nearme" component={NearMeV2} />
-            {shouldShowNearMe && <Tab.Screen name="feed" component={Feed} />}
+            {shouldShowNearMe && <Tab.Screen name="nearme" component={NearMeV2} />}
+            <Tab.Screen name="feed" component={Feed} />
             <Tab.Screen name="settings" component={Settings} />
         </Tab.Navigator>
     )

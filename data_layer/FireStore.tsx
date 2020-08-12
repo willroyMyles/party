@@ -85,21 +85,30 @@ class Store
   }
 
 
-  @action private getEvents = () => new Promise( ( resolve, reject ) =>
+
+  sortDataFromFireBase = ( data: any ) =>
   {
-    FBS.getEventsInMultiplies( 20 ).then( ( res: any ) =>
-    {
-      const result: FirebaseFirestoreTypes.QuerySnapshot = res
+    return new Promise( ( resolve, reject ) => {
+       const result: FirebaseFirestoreTypes.QuerySnapshot = data
 
       result.docs.forEach( ( doc, index ) =>
       {
-        this.data.set( doc.id, doc.data() )
-
+        if(!this.data.has(doc.id)) this.data.set( doc.id, doc.data() )
       } )
-
       resolve( true )
       this.updateDataImages()
       this.sortCategorizedData( result.docs )
+   })
+  }
+
+  @action private getEvents = () => new Promise( ( resolve, reject ) =>
+  {
+    FBS.getEventsInMultiplies( 5 ).then( ( res: any ) =>
+    {
+      this.sortDataFromFireBase( res ).then( res =>
+      {
+       resolve(true)
+     })
     } ).catch( err =>
     {
       reject( "unable to get events" )
@@ -159,15 +168,28 @@ class Store
   
   @action LogOut = () => FBS.logout()
 
-  @action getSpecificParties = ( type: number ) => new Promise( ( resolve, reject ) =>
-  {
-    
+   @action private getSpecificParties = ( type: number, lastReference:string ) => new Promise( ( resolve, reject ) =>
+   {
+     
+    FBS.events.getEventByType( type, lastReference ).then( res =>
+    {
+      this.sortDataFromFireBase( res ).then( res =>
+      {
+        console.log("resolving data");
+
+          resolve(true)
+        })
+    } ).catch( err =>
+    {
+        reject(false)
+      })
   })
 
   retrieve = {
     isLoggedIn: this.isLoggedIn,
     events: this.getEvents,
-    picturesForEvent : this.picturesForEvent
+    picturesForEvent: this.picturesForEvent,
+    specificParties: this.getSpecificParties
   };
 
   send = {

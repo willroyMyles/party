@@ -1,10 +1,10 @@
 import React, {useState} from "react"
 import {View, Text, TouchableOpacity, Image, Colors} from "react-native-ui-lib"
-import {FeedItemModel} from "../universial/Models"
-import moment from "moment"
-import {SharedElement} from "react-navigation-shared-element"
-import uiManager from "../dataLayer/UiManager"
+
 import {useNavigation} from "@react-navigation/native"
+import { FeedItemModel } from "../universal/Models"
+import { useTheme } from "styled-components"
+import moment from "moment"
 // import * as faker from "faker"
 
 const Feed_Item = ({
@@ -13,63 +13,57 @@ const Feed_Item = ({
 	onClick,
 }: {
 	item: FeedItemModel
-	index: number
-	onClick: (item: FeedItemModel) => void
-}) => {
-	const [uri, setUri] = useState("")
+	index?: number
+	onClick?: (item: FeedItemModel) => void
+	} ) =>
+{
+	const theme = useTheme()
 	const navigation = useNavigation()
 	const handleClick = () => {
-		navigation.navigate("past-event", {reference: item.reference})
+		navigation.navigate("view event", {reference: item.reference})
 	}
 
 	return (
 		<View
+			margin-10
 			style={{
 				borderTopWidth: 0,
 				borderBottomWidth: 0,
 				paddingVertical: 5,
 				marginVertical: -1,
-				borderColor: uiManager.theme.bgHilight,
 			}}>
 			<TouchableOpacity
 				onPress={() => handleClick()}
 				activeOpacity={0.85}
 				padding-9
-				bg-background
 				marginV-8
-				style={{borderWidth: 0, borderRadius: 10, elevation: 5, borderColor: Colors.grey50}}>
+			bg-foreground
+
+				style={{borderWidth: 0, borderRadius: 4, elevation: 0, borderColor: Colors.grey50}}>
 				<View>
-					<SharedElement id={item.reference + "imgmem"} style={{flex: 1}}>
 						<Image
 							source={{uri: item.imageUrl}}
-							style={{flex: 1, flexDirection: "row", borderRadius: 10, height: 150}}
+							style={{flex: 1, flexDirection: "row", borderRadius: 3, height: 150}}
 							resizeMode="cover"
 						/>
-					</SharedElement>
 					<View
 						row
-						padding-20
+						padding-2
 						paddingT-3
 						paddingB-12
+						marginV-15
 						style={{flex: 2, flexDirection: "column", justifyContent: "space-between"}}>
-						<SharedElement id={item.reference + "titlemem"}>
-							<Text imp1>{item.title}</Text>
-						</SharedElement>
-						<View marginT-10 row style={{justifyContent: "flex-start"}}>
+							<Text lvl1>{item.title}</Text>
+						<View row spread >
 							<View>
-								<Text hint>Date</Text>
-								<Text reg>{item.date}</Text>
+								<Text muted>Date</Text>
+								<Text regular>{moment(item.date).format("ddd MMM DD, YYYY")}</Text>
 							</View>
-							<View style={{marginStart: "30%"}}>
+							<View >
 								<Text hint>Rating</Text>
-								<Text reg>random stars?</Text>
+								<Text regular>random stars?</Text>
 							</View>
 						</View>
-					</View>
-				</View>
-				<View row>
-					<View>
-						<Text>amount of pictures?</Text>
 					</View>
 				</View>
 			</TouchableOpacity>
