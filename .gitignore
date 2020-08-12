@@ -61,3 +61,6 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+#large files android dumps
+android/java_pid*
