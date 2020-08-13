@@ -1,12 +1,13 @@
 import React from 'react'
-import { View, Text, Avatar } from 'react-native-ui-lib'
+import { View, Text, Avatar, Colors } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 
-const Organizer = ({ org, name, reference }: { org: boolean, name: string, reference: string }) => {
+const Organizer = ( { org, name, reference }: { org: boolean, name: string, reference: string } ) =>
+{
     const theme = useTheme()
     return (
         <View row padding-10 marginT-15>
-            <Avatar animate label={GetInitials(name)}  />
+            <Avatar animate label={GetInitials( name )} containerStyle={{ borderWidth: 2, borderColor: Colors.foreground }} />
             <View marginL-10>
                 <Text regular>{name}</Text>
                 {org && <Text lvl3>organizer</Text>}
@@ -15,9 +16,10 @@ const Organizer = ({ org, name, reference }: { org: boolean, name: string, refer
     )
 }
 
-const GetInitials = (name: string) => {
-    var initials = name.match(/\b\w/g) || [];
-    let n = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+const GetInitials = ( name: string ) =>
+{
+    var initials = name.match( /\b\w/g ) || [];
+    let n = ( ( initials.shift() || '' ) + ( initials.pop() || '' ) ).toUpperCase();
     return n
 }
 

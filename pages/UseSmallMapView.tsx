@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react"
-import { View, Text, LoaderScreen } from "react-native-ui-lib"
+import { View, Text, LoaderScreen, Colors } from "react-native-ui-lib"
 import MapView, { Marker } from "react-native-maps"
 import { Dimensions } from "react-native"
 import { LocationData } from "expo-location"
+import { useTheme } from "styled-components"
 
 const UseSmallMapView = ( { loc }: { loc?: any } ) =>
 {
+
+	const theme = useTheme()
 	
 	const [loading, setLoading] = useState( true )
 	const [region, setRegion] = useState<any>()
@@ -48,7 +51,7 @@ const UseSmallMapView = ( { loc }: { loc?: any } ) =>
 		<View bg-background marginT-10>
 				<Text marginL-12 marginB-5 lvl3>location</Text>
 			
-			<View margin-10 br20 style={{ elevation: 2, overflow: "hidden", marginTop:0 }}>
+			<View margin-10 br20 style={{ overflow: "hidden", marginTop:0, borderWidth:2, borderColor:Colors.foreground }}>
 				<MapView
 					scrollEnabled={false}
 					showsUserLocation={false}

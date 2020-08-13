@@ -1,53 +1,58 @@
 import React from "react"
-import {View, TouchableOpacity, Text, Colors} from "react-native-ui-lib"
+import { View, TouchableOpacity, Text, Colors } from "react-native-ui-lib"
 import Icon from "react-native-vector-icons/Feather"
-import {Feather} from "@expo/vector-icons"
-import fireSotreMob from "../dataLayer/FireStore"
 import TToast from "./TToast"
-function RSVPButton({reference}: {reference: string | undefined}) {
-	const handleRsvp = () => {
-		if (reference)
-			if (fireSotreMob.isLoggedIn()) {
-				fireSotreMob.send.RSVPEvent(reference).then((res) => {
-					if (res) {
-						TToast.success("Great!", "Added to profile")
-					} else {
-						TToast.error("Oops!", "We couldn't star this party... try again later")
-					}
-				})
-			} else {
-				TToast.needTobeLoggedIn()
+import FireStore from "../data_layer/FireStore"
+import BackDrop, { BackDropV2, BackDropV3 } from "./BackDrop"
+import { Alert } from "react-native"
+function RSVPButton( { reference }: { reference: string | undefined } )
+{
+	const handleRsvp = () =>
+	{
+		if ( reference )
+			if ( FireStore.isLoggedIn() )
+			{
+				// FireStore.send.RSVPEvent(reference).then((res) => {
+				// 	if (res) {
+				// 		TToast.success("Great!", "Added to profile")
+				// 	} else {
+				// 		TToast.error("Oops!", "We couldn't star this party... try again later")
+				// 	}
+				// })
+			} else
+			{
+				// TToast.needTobeLoggedIn()
+				Alert.alert( "who are you?", "you need to be logged in to complete this action" )
 			}
 	}
+
+
 	return (
-		<View center>
+		<View center row>
+
 			<TouchableOpacity
+				row
 				activeOpacity={0.85}
 				onPress={handleRsvp}
 				center
 				style={{
-					// position: "absolute",
-					top: -30,
-					zIndex: 3,
-					// elevation: 3,
-					backgroundColor: Colors.background,
+					borderRadius: 5,
+					paddingHorizontal: 8,
+					paddingVertical: 2,
+					// backgroundColor: Colors.primary,
+					// elevation: 5,
+					marginTop: -10,
+					overflow: "hidden",
 					borderWidth: 1,
-					borderColor: Colors.grey50,
-					// marginBottom: 10,
-					borderRadius: 500,
-					padding: 20,
+					borderBottomWidth: 2,
+					borderRightWidth: 2,
+					borderColor: Colors.foreground
 				}}>
-				<Icon
-					size={30}
-					name="star"
-					color={Colors.primary}
-					style={{
-						fontWeight: "600",
-						textShadowRadius: 1,
-						textShadowOffset: {width: 5, height: 5},
-						textShadowColor: Colors.grey50,
-					}}
-				/>
+				<Icon name="star" size={14} color={Colors.text1} />
+
+				<Text marginL-4
+					btn uppercase adjustsFontSizeToFit style={{ textShadowRadius: 2, textShadowOffset: { height: 1, width: 1 } }}>rsvp</Text>
+				<BackDropV3 />
 			</TouchableOpacity>
 		</View>
 	)

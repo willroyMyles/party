@@ -63,7 +63,7 @@ const Feed_Item = ({reference}: {reference :string} ) =>
 							<View>
 								<View marginV-3>
 									<Text muted>Date</Text>
-								<Text regular>{moment(item.date).format("ddd MMM DD, YYYY")}</Text>
+								{/* <Text regular>{moment(item.date).format("ddd MMM DD, YYYY")}</Text> */}
 								</View>
 								<View marginV-3>
 									<Text muted>Starts at</Text>

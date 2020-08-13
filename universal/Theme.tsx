@@ -301,6 +301,14 @@ class ThemeHelper {
 				textShadowRadius: 0.01,
 				fontFamily: "RR"
 
+			}, 
+			button: {
+				fontWeight: "700",
+				fontSize: 16,
+				color: Colors.text1,
+				// textShadowOffset: { width: 0.2, height: 0.2 },
+				textShadowRadius: 0.2,
+				fontFamily: "RR"
 			}
 		})
 
@@ -309,7 +317,8 @@ class ThemeHelper {
 			lvl2: style.textTwo,
 			lvl3: style.textThree,
 			indicator: style.indicator,
-			regular: style.regular
+			regular: style.regular,
+			btn :style.button
 		})
 
 

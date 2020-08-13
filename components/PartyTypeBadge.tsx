@@ -1,17 +1,34 @@
-import React from 'react'
-import { View, Text, Colors } from 'react-native-ui-lib'
-import { PartyType } from '../universal/Models'
-import { GetPartytypeString } from '../universal/GS'
+import React from 'react';
+import { View, Text, Colors } from 'react-native-ui-lib';
+import { PartyType } from '../universal/Models';
+import { GetPartytypeString } from '../universal/GS';
+import { useTheme } from 'styled-components';
 
-const PartyTypeBadge = ({type}: {type: PartyType}) => {
+const PartyTypeBadge = ( { type }: { type: PartyType } ) =>
+{
+    const theme = useTheme()
     return (
-        <View center style={{
-            position: "absolute", right: -10, bottom: 5, backgroundColor: Colors.background, borderWidth: 0, borderColor: Colors.grey40, borderTopLeftRadius: 8, padding: 3, paddingHorizontal: 20
-        }}>
-            <Text regular>{GetPartytypeString(type)}</Text>
+        <View
+            center
+            style={{
+                marginTop: 4,
+                backgroundColor: Colors.background,
+                borderWidth: 3,
+                borderColor: Colors.foreground,
+                borderRadius: 45,
+                paddingHorizontal: 20,
+                elevation: 1,
+                zIndex: 5,
+                padding: 3
+                // , width: "100%"
+            }}>
+
+            <Text lvl2 primary>{GetPartytypeString( type )}</Text>
+
         </View>
 
-    )
-}
 
-export default PartyTypeBadge
+    );
+};
+
+export default PartyTypeBadge;

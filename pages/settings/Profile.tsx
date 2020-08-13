@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { View, Text, Avatar, Switch, TouchableOpacity, Colors } from 'react-native-ui-lib'
-import auth from '@react-native-firebase/auth'
 import ProfilePiece from '../../pieces/ProfilePiece'
 import tm from '../../universal/UiManager'
 import { StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'styled-components'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import BackDrop, { BackDropV2 } from '../../components/BackDrop'
 
 const Profile = () => {
 
@@ -34,9 +35,11 @@ const Profile = () => {
                 </View>
             </View>
             <View center marginT-40>
-                <TouchableOpacity onPress={handleCreateEvent} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>
-                    <Text>create event</Text>
-
+                <TouchableOpacity row onPress={handleCreateEvent} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>
+                   
+                    <Icon name="plus" size={18} color={Colors.text1} />
+                    <Text btn uppercase marginH-10 >create event</Text>
+                        <BackDropV2 />
                 </TouchableOpacity>
             </View>
         </View>
@@ -54,7 +57,9 @@ const style = StyleSheet.create({
         // borderColor: Colors.red80,
         borderRadius: 7,
         width: "100%",
-        elevation: 5,
+        elevation: 10,
+        minHeight: 160,
+        overflow:"hidden"
 
 
     }

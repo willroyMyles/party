@@ -9,8 +9,8 @@ import { PartyType } from './Models';
 
 export const GetIcon = ({ name }: { name: string }) => {
     const theme = useTheme()
-    return <View center paddingH-5 br100 bg-secondary style={{ width: 34, height: 34, elevation: 1 }}>
-        <Icon name={name} size={16} style={GS.icon} />
+    return <View center padding-5 br100  style={{ width: 29, height: 29, elevation: 0 }}>
+        <Icon name={name} size={16} style={GS.icon} color={Colors.primary}/>
     </View>
 }
 
@@ -55,10 +55,8 @@ export const GS = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         alignSelf: "center",
-        color: Colors.primary,
-        elevation: 5,
-        textShadowRadius: 3,
-        textDecorationLine: "underline",
+        // textShadowRadius: 3,
+        // textDecorationLine: "underline",
         zIndex: 2
     },
     textOne: {

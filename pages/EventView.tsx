@@ -11,45 +11,57 @@ import { GS, GetIcon, GetPartytypeString } from '../universal/GS'
 import Organizer from '../components/Organizer'
 import UseSmallMapView from './UseSmallMapView'
 import PartyTypeBadge from '../components/PartyTypeBadge'
+import RSVPButton from '../components/RSVPButton'
 
-const EventView = () => {
+const EventView = () =>
+{
 
-    useEffect(() => {
+    useEffect( () =>
+    {
         // tm.setThemeType(true)
-    }, [])
+    }, [] )
 
     const navigation = useNavigation()
     const theme = useTheme()
     const route = useRoute()
     const reference = route.params?.reference
     const item = FireStore.data.get( reference )
-    
-    console.log(item?.imageUrl);
-    
+
+    console.log( item?.imageUrl );
 
 
-    if (item) return (
+
+    if ( item ) return (
         <ScrollView contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%", paddingBottom: 40 }}>
             <View style={{ maxHeight: 300, overflow: "hidden" }}>
                 <Image source={{ uri: item.imageUrl }} resizeMode="cover" style={{ height: "100%", width: "100%" }} />
-                <PartyTypeBadge type={item?.partyType}/>
+            </View>
+            <View centerH>
+                <PartyTypeBadge type={item?.partyType} />
             </View>
             <View bg-background padding-20 style={{ marginTop: -10 }}>
-                <View marginB-5 row spread>
+                <View marginV-5 centerV row spread>
                     <Text lvl1>{item.title}</Text>
-                    <GetIcon name="heart" />
+                    <RSVPButton reference={item.reference} />
                 </View>
                 <View marginT-8 row>
                     <GetIcon name="calendar" />
                     <View marginL-10>
-                        <Text regular>{moment(item.date).format("ddd - MMM DD, YYYY")}</Text>
-                        <Text lvl2>{moment(item.start).format("hh:mm A")} for {item.duration} hrs</Text>
+                        <Text lvl3 text3>Date</Text>
+                        <Text regular>{moment( item.date ).format( "ddd - MMM DD, YYYY" )}</Text>
                     </View>
                 </View>
-                <View marginT-20 row>
+                <View marginT-8 row>
+                    <GetIcon name="clock" />
+                    <View marginL-10>
+                        <Text lvl3 text3>Time</Text>
+                        <Text lvl2>{moment( item.start ).format( "hh:mm A" )} for {item.duration} hrs</Text>
+                    </View>
+                </View>
+                <View marginT-8 row>
                     <GetIcon name="info" />
                     <View marginL-10>
-                        <Text marginT-7 marginB-3 regular>About</Text>
+                        <Text marginT-7 marginB-3 lvl3 text3>About</Text>
                         <Text lvl2>{item.description}</Text>
                     </View>
                 </View>
