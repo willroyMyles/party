@@ -9,7 +9,7 @@ class Store
   @observable categorizedData: Map<string, FeedItemModel[]> = new Map()
   @observable previewedData: any[] = []
   @observable userName: string | null = null;
-  	@observable eventImagesMap: Map<string, string[]> = new Map()
+  @observable eventImagesMap: Map<string, string[]> = new Map()
 
   @action isLoggedIn = () => FBS.isLoggedIn();
   @action login = ( email: string, password: string ) =>
@@ -88,17 +88,18 @@ class Store
 
   sortDataFromFireBase = ( data: any ) =>
   {
-    return new Promise( ( resolve, reject ) => {
-       const result: FirebaseFirestoreTypes.QuerySnapshot = data
+    return new Promise( ( resolve, reject ) =>
+    {
+      const result: FirebaseFirestoreTypes.QuerySnapshot = data
 
       result.docs.forEach( ( doc, index ) =>
       {
-        if(!this.data.has(doc.id)) this.data.set( doc.id, doc.data() )
+        if ( !this.data.has( doc.id ) ) this.data.set( doc.id, doc.data() )
       } )
       resolve( true )
       this.updateDataImages()
       this.sortCategorizedData( result.docs )
-   })
+    } )
   }
 
   @action private getEvents = () => new Promise( ( resolve, reject ) =>
@@ -107,83 +108,99 @@ class Store
     {
       this.sortDataFromFireBase( res ).then( res =>
       {
-       resolve(true)
-     })
+        resolve( true )
+      } )
     } ).catch( err =>
     {
       reject( "unable to get events" )
     } )
   } )
 
-  private updateDataImages = () => {
-		this.data.forEach(async (value, key) => {
-        if (value.imageUrl == undefined || value.imageUrl == null || value.imageUrl == "") {
-          value.imageUrl = await FBS.events.getUrlForFlyers(value.flyer || "")
-          this.data.set(key, value)
-        }
-		})
+  private updateDataImages = () =>
+  {
+    this.data.forEach( async ( value, key ) =>
+    {
+      if ( value.imageUrl == undefined || value.imageUrl == null || value.imageUrl == "" )
+      {
+        value.imageUrl = await FBS.events.getUrlForFlyers( value.flyer || "" )
+        this.data.set( key, value )
+      }
+    } )
   }
-  
-  @action private picturesForEvent = (reference: string, initialUpdate: boolean = false) => {
-		return new Promise<boolean>((resolve) => {
-			FBS.events.getPastPictures(reference)
+
+  @action private picturesForEvent = ( reference: string, initialUpdate: boolean = false ) =>
+  {
+    return new Promise<boolean>( ( resolve ) =>
+    {
+      FBS.events.getPastPictures( reference )
         .then( ( res ) =>
         {
-          console.dir(res)
-					if (res) {
-						this.eventImagesMap.set(reference, res)
+          console.dir( res )
+          if ( res )
+          {
+            this.eventImagesMap.set( reference, res )
 
-						resolve(true)
-					}
-				})
-				.catch((err) => resolve(false))
-		})
-  } 
-  
-  @action private uploadPictureToEvent = (ref: string, imageUrl: string) => {
-		return new Promise((resolve) => {
-			FBS.events.uploadPhotoToEvent(ref, imageUrl).then((res) => {
-				if (res) {
-					resolve(true)
-				} else {
-					resolve(false)
-				}
-			})
-		})
+            resolve( true )
+          }
+        } )
+        .catch( ( err ) => resolve( false ) )
+    } )
   }
-  
+
+  @action private uploadPictureToEvent = ( ref: string, imageUrl: string ) =>
+  {
+    return new Promise( ( resolve ) =>
+    {
+      FBS.events.uploadPhotoToEvent( ref, imageUrl ).then( ( res ) =>
+      {
+        if ( res )
+        {
+          resolve( true )
+        } else
+        {
+          resolve( false )
+        }
+      } )
+    } )
+  }
+
   @action private GoogleLogin = () => new Promise( resolve =>
   {
-    FBS.social.GooglsSignIn().then(res=> resolve(true)).catch(err=>resolve(false))
+    FBS.social.GooglsSignIn().then( res => resolve( true ) ).catch( err => resolve( false ) )
   } )
   @action private FacebookLogin = () => new Promise( resolve =>
   {
-        FBS.social.Facebook().then(res=> resolve(true)).catch(err=>resolve(false))
+    FBS.social.Facebook().then( res => resolve( true ) ).catch( err => resolve( false ) )
 
   } )
   @action private TwitterLogin = () => new Promise( resolve =>
   {
-    
+
   } )
-  
+
   @action LogOut = () => FBS.logout()
 
-   @action private getSpecificParties = ( type: number, lastReference:string ) => new Promise( ( resolve, reject ) =>
-   {
-     
+  @action private getSpecificParties = ( type: number, lastReference: string ) => new Promise( ( resolve, reject ) =>
+  {
+
     FBS.events.getEventByType( type, lastReference ).then( res =>
     {
       this.sortDataFromFireBase( res ).then( res =>
       {
-        console.log("resolving data");
+        console.log( "resolving data" );
 
-          resolve(true)
-        })
+        resolve( true )
+      } )
     } ).catch( err =>
     {
-        reject(false)
-      })
-  })
+      reject( false )
+    } )
+  } )
+
+  @action private addRsvpEvent = ( reference: string, add = true ) => new Promise( ( resolve, reject ) =>
+  {
+    FBS.events.uploadRsvpEvents( reference, add ).then( res => resolve( true ) ).catch( err => reject( false ) )
+  } )
 
   retrieve = {
     isLoggedIn: this.isLoggedIn,
@@ -194,7 +211,8 @@ class Store
 
   send = {
     sendEvent: this.sendEvent,
-    sendPicturesToEvent : this.uploadPictureToEvent
+    sendPicturesToEvent: this.uploadPictureToEvent,
+    rsvp: this.addRsvpEvent
   };
 
   auth = {
