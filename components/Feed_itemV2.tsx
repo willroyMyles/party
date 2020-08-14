@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { View, Text, TouchableOpacity, Image, Colors } from "react-native-ui-lib"
 
 import { useNavigation } from "@react-navigation/native"
@@ -18,6 +18,19 @@ const Feed_ItemV2 = ( { reference }: { reference: string } ) =>
 
 	const theme = useTheme()
 	const navigation = useNavigation()
+	const [image, setImage] = useState<string>()
+
+	useEffect( () =>
+	{
+
+		async function getImage()
+		{
+			const d = await FireStore.retrieve.imageFromReference( item.reference )
+			setImage( d )
+		}
+
+		getImage()
+	}, [] )
 
 	const handleClick = () =>
 	{
@@ -29,41 +42,30 @@ const Feed_ItemV2 = ( { reference }: { reference: string } ) =>
 		<TouchableOpacity
 			onPress={() => handleClick()}
 			activeOpacity={0.85}
-			paddingH-12
 			marginV-15
 			marginH-15
+
 			// marginV-8
 			bg-foreground
-			style={{ borderRadius: 8, elevation: 2, width: width * .5 }}>
-			<View style={{ elevation: 5 }} center>
-				<Image
-					source={{ uri: item.imageUrl }}
-
-					style={{ flexDirection: "row", borderRadius: 3, height: 100 }}
-					resizeMode="cover"
-				/>
-			</View>
+			style={{ borderRadius: 8, elevation: 2, width: width * .5, overflow: "hidden" }}>
+			<Image
+				source={{ uri: image }}
+				style={{ flexDirection: "row", borderRadius: 3, height: 100, width: "100%", borderWidth: 2 }}
+				resizeMode="cover"
+			/>
 			<View
 				row
 				padding-2
 				paddingT-3
+				paddingH-12
 				marginV-15
 				style={{ flexDirection: "column", justifyContent: "space-between" }}>
 				<Text lvl1>{item.title}</Text>
 				<View row spread >
 					<View>
-						<View marginV-3>
+						<View>
 							<Text muted>Date</Text>
 							<Text regular>{moment( item.date ).format( "ddd MMM DD, YYYY" )}</Text>
-						</View>
-						<View marginV-3>
-							<Text muted>Starts at</Text>
-							<View row>
-								<Text regular>{moment( item.start ).format( "h:mm a" )}</Text>
-								<Text regular color={Colors.muted}> for </Text>
-								<Text regular>{item.duration}</Text>
-								<Text regular color={Colors.muted}> hrs</Text>
-							</View>
 						</View>
 					</View>
 				</View>

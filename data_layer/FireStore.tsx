@@ -10,7 +10,7 @@ class Store
   @observable categorizedData: Map<string, FeedItemModel[]> = new Map()
   @observable previewedData: any[] = []
   @observable userName: string | null = null;
-  @observable eventImagesMap: Map<string, string[]> = new Map()
+  @observable eventImagesMap: Map<string, string> = new Map()
 
   @action isLoggedIn = () => FBS.isLoggedIn();
   @action login = ( email: string, password: string ) =>
@@ -123,11 +123,34 @@ class Store
     {
       if ( value.imageUrl == undefined || value.imageUrl == null || value.imageUrl == "" )
       {
-        value.imageUrl = await FBS.events.getUrlForFlyers( value.flyer || "" )
+        value.imageUrl = await this.getEventImageForReference( key )
         this.data.set( key, value )
       }
     } )
   }
+
+  private getEventImageForReference = ( reference: string ) => new Promise<string>( async ( resolve, reject ) =>
+  {
+
+    if ( this.eventImagesMap.has( reference ) )
+    {
+      return resolve( this.eventImagesMap.get( reference ) )
+    }
+
+    try
+    {
+      const flyer = this.data.get( reference )?.flyer
+      const imageUrl = await FBS.events.getUrlForFlyers( flyer || "" )
+      console.log( imageUrl );
+
+      this.eventImagesMap.set( reference, imageUrl )
+      resolve( imageUrl )
+    } catch ( err )
+    {
+      console.log( `didnt get image for reference : ${ reference }`, err );
+
+    }
+  } )
 
   @action private picturesForEvent = ( reference: string, initialUpdate: boolean = false ) =>
   {
@@ -230,7 +253,8 @@ class Store
     events: this.getEvents,
     picturesForEvent: this.picturesForEvent,
     specificParties: this.getSpecificParties,
-    rsvpEvents: this.getRsvpEvents
+    rsvpEvents: this.getRsvpEvents,
+    imageFromReference: this.getEventImageForReference
   };
 
   send = {
