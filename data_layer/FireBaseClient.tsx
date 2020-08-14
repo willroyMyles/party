@@ -272,8 +272,7 @@ class Store
         .then( async ( res ) =>
         {
           //all items in file
-
-          res.items
+          console.log( res.items.length, "items length" );
 
           for ( var i = 0; i < res.items.length; i++ )
           {

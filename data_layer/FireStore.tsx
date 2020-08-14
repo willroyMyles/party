@@ -11,6 +11,7 @@ class Store
   @observable previewedData: any[] = []
   @observable userName: string | null = null;
   @observable eventImagesMap: Map<string, string> = new Map()
+  @observable eventImagesForPastEventsMap: Map<string, string[]> = new Map()
 
   @action isLoggedIn = () => FBS.isLoggedIn();
   @action login = ( email: string, password: string ) =>
@@ -159,10 +160,9 @@ class Store
       FBS.events.getPastPictures( reference )
         .then( ( res ) =>
         {
-          console.dir( res )
           if ( res )
           {
-            this.eventImagesMap.set( reference, res )
+            this.eventImagesForPastEventsMap.set( reference, res )
 
             resolve( true )
           }

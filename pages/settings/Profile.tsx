@@ -39,7 +39,7 @@ const Profile = () =>
                 </View>
             </View>
             <View>
-                <RSVPModule />
+                {/* <RSVPModule /> */}
             </View>
             <View center marginT-40>
                 <TouchableOpacity row onPress={handleCreateEvent} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>
