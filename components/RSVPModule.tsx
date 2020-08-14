@@ -1,43 +1,60 @@
-import React, {useEffect} from "react"
-import {View, Text, TouchableOpacity, Colors} from "react-native-ui-lib"
+import React, { useEffect, useState } from "react"
+import { View, Text, TouchableOpacity, Colors } from "react-native-ui-lib"
 
 import TToast from "./TToast"
+import { FeedItemModel } from "../universal/Models"
+import FireStore from "../data_layer/FireStore"
+import { FlatList } from "react-native-gesture-handler"
+import Feed_itemV2 from "./Feed_itemV2"
+import Feed_Item from "./Feed_Item"
 
-const RSVPModule = () => {
-	
+const RSVPModule = () =>
+{
 
-	return (
-		<View marginT-30 style={{width: "100%"}}>
+	const [data, setData] = useState<FeedItemModel[] | undefined>()
+	useEffect( () =>
+	{
+
+		FireStore.retrieve.rsvpEvents().then( res =>
+		{
+			console.log( "rsvp called" );
+
+			const d = [...FireStore.rsvpData.values()]
+			setData( d )
+			console.log( d.length );
+
+		} ).catch( err =>
+		{
+			console.log( "rsvp error", err );
+
+		} )
+		return () =>
+		{
+		}
+	}, [] )
+
+	if ( data ) return (
+		<View marginT-30 style={{ width: "100%" }}>
 			<View>
-				<Text imp1>RSVP parties</Text>
+				<Text lvl2>{data.length} RSVP parties</Text>
 			</View>
-			{fireSotreMob.rsvpParties.length > 0 &&
-				fireSotreMob.rsvpParties.map((value, index) => {
-					return (
-						<View
-							row
-							center
-							centerV
-							style={{
-								borderWidth: 0,
-								marginTop: 10,
-								width: "100%",
-								backgroundColor: uiManager.theme.bgHilight,
-								borderRadius: 7,
-								elevation: 0,
-								justifyContent: "space-between",
-							}}>
-							<TouchableOpacity activeOpacity={0.75} padding-10 key={index}>
-								<Text reg>{dataProvider.data.get(value)?.title}</Text>
-							</TouchableOpacity>
-							<TouchableOpacity activeOpacity={0.75} row onPress={() => handleRemovePinned(value)}>
-								<Feather name="x-circle" size={28} color={Colors.grey40} />
-							</TouchableOpacity>
-						</View>
-					)
-				})}
+
+			<View br20 marginT-0 style={{ borderBottomWidth: 0, borderBottomColor: Colors.foreground }}>
+				<FlatList
+					data={data}
+					horizontal
+					keyExtractor={( item, index ) => item + "" + index + ""}
+					renderItem={( { item, index } ) =>
+					{
+						return <Feed_itemV2 key={index} reference={item.reference} />
+					}}
+				/>
+			</View>
+
 		</View>
 	)
+
+	return <View />
 }
 
 export default RSVPModule

@@ -12,13 +12,19 @@ function RSVPButton( { reference }: { reference: string | undefined } )
 		if ( reference )
 			if ( FireStore.isLoggedIn() )
 			{
-				// FireStore.send.RSVPEvent(reference).then((res) => {
-				// 	if (res) {
-				// 		TToast.success("Great!", "Added to profile")
-				// 	} else {
-				// 		TToast.error("Oops!", "We couldn't star this party... try again later")
-				// 	}
-				// })
+				FireStore.send.rsvp( reference ).then( res =>
+				{
+					TToast.success( "Great!", "Event eas added to your rsvp list!" )
+				} ).catch( err =>
+				{
+
+				} )
+
+				// FireStore.retrieve.rsvpEvents().catch( err =>
+				// {
+				// 	console.log( "some err", err );
+
+				// } )
 			} else
 			{
 				// TToast.needTobeLoggedIn()

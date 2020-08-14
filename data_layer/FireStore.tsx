@@ -6,6 +6,7 @@ import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 class Store
 {
   @observable data: Map<string, FeedItemModel> = new Map();
+  @observable rsvpData: Map<string, FeedItemModel> = new Map();
   @observable categorizedData: Map<string, FeedItemModel[]> = new Map()
   @observable previewedData: any[] = []
   @observable userName: string | null = null;
@@ -202,11 +203,34 @@ class Store
     FBS.events.uploadRsvpEvents( reference, add ).then( res => resolve( true ) ).catch( err => reject( false ) )
   } )
 
+  @action private getRsvpEvents = () => new Promise( ( resolve, reject ) =>
+  {
+    FBS.events.getRsvpEvents().then( res =>
+    {
+
+
+      for ( let index = 0; index < res.docs.length; index++ )
+      {
+        const element = res.docs[index];
+        // console.log( element.data() );
+
+        const data: FeedItemModel = element.data()
+        this.rsvpData.set( data.reference || "", data )
+        this.data.set( data.reference, data )
+
+      }
+
+      resolve( true )
+
+    } ).catch( err => reject( err ) )
+  } )
+
   retrieve = {
     isLoggedIn: this.isLoggedIn,
     events: this.getEvents,
     picturesForEvent: this.picturesForEvent,
-    specificParties: this.getSpecificParties
+    specificParties: this.getSpecificParties,
+    rsvpEvents: this.getRsvpEvents
   };
 
   send = {

@@ -1,80 +1,75 @@
-import React, {useState} from "react"
-import {View, Text, Image, TouchableOpacity, Colors} from "react-native-ui-lib"
-import {FeedItemModel} from "../universial/Models"
-import {Dimensions} from "react-native"
+import React, { useState } from "react"
+import { View, Text, TouchableOpacity, Image, Colors } from "react-native-ui-lib"
+
+import { useNavigation } from "@react-navigation/native"
+import { FeedItemModel } from "../universal/Models"
+import { useTheme } from "styled-components"
 import moment from "moment"
-import uiManager from "../dataLayer/UiManager"
-import {SharedElement} from "react-navigation-shared-element"
-import {useNavigation} from "@react-navigation/native"
-import dataProvider from "../dataLayer/DataStore"
+import BackDrop from "./BackDrop"
+import FireStore from "../data_layer/FireStore"
+import { Dimensions } from "react-native"
+// import * as faker from "faker"
+const { width, height } = Dimensions.get( "screen" )
 
-const {width, height} = Dimensions.get("screen")
-
-const Feed_itemV2 = ({
-	item,
-	index,
-}: // onClick,
+const Feed_ItemV2 = ( { reference }: { reference: string } ) =>
 {
-	item: FeedItemModel
-	index: number
-	onClick?: (item: FeedItemModel) => void
-}) => {
+	const item = FireStore.data.get( reference )
+	if ( !item ) return <View />
+
+	const theme = useTheme()
 	const navigation = useNavigation()
-	const onClick1 = () => {
-		dataProvider.currentEvent = item
-		navigation.navigate("event")
+
+	const handleClick = () =>
+	{
+		navigation.navigate( "view event", { reference: item?.reference } )
 	}
 
-	const [loaded, setLoaded] = useState(false)
-
 	return (
-		<View
-			style={{
-				borderTopWidth: 0,
-				borderBottomWidth: 0,
-				paddingVertical: 5,
-				marginVertical: -1,
-				borderColor: uiManager.theme.bgHilight,
-			}}>
-			<TouchableOpacity
-				onPress={() => onClick1()}
-				activeOpacity={0.85}
-				padding-9
-				bg-background
-				marginV-8
-				style={{borderWidth: 0, borderRadius: 10, elevation: 0, borderColor: Colors.grey50}}>
-				<View row>
-					<SharedElement id={item.reference + "img"} style={{flex: 1}}>
-						<Image
-							source={{uri: item.imageUrl}}
-							onLoadEnd={() => setLoaded(true)}
-							style={{flex: 2, flexDirection: "row", borderRadius: 10}}
-							resizeMode="cover"
-						/>
-					</SharedElement>
-					<View
-						padding-20
-						paddingT-3
-						paddingB-12
-						style={{flex: 1, flexDirection: "column", justifyContent: "space-between"}}>
-						<SharedElement id={item.reference + "title"}>
-							<Text imp1>{item.title}</Text>
-						</SharedElement>
-						<View marginT-10 row style={{justifyContent: "flex-start"}}>
-							<View>
-								<Text hint>Date</Text>
-								<Text reg>{item.date}</Text>
-							</View>
-							<View style={{marginStart: "30%"}}>
-								<Text hint>Time</Text>
-								<Text reg>{item.start}</Text>
+
+		<TouchableOpacity
+			onPress={() => handleClick()}
+			activeOpacity={0.85}
+			paddingH-12
+			marginV-15
+			marginH-15
+			// marginV-8
+			bg-foreground
+			style={{ borderRadius: 8, elevation: 2, width: width * .5 }}>
+			<View style={{ elevation: 5 }} center>
+				<Image
+					source={{ uri: item.imageUrl }}
+
+					style={{ flexDirection: "row", borderRadius: 3, height: 100 }}
+					resizeMode="cover"
+				/>
+			</View>
+			<View
+				row
+				padding-2
+				paddingT-3
+				marginV-15
+				style={{ flexDirection: "column", justifyContent: "space-between" }}>
+				<Text lvl1>{item.title}</Text>
+				<View row spread >
+					<View>
+						<View marginV-3>
+							<Text muted>Date</Text>
+							<Text regular>{moment( item.date ).format( "ddd MMM DD, YYYY" )}</Text>
+						</View>
+						<View marginV-3>
+							<Text muted>Starts at</Text>
+							<View row>
+								<Text regular>{moment( item.start ).format( "h:mm a" )}</Text>
+								<Text regular color={Colors.muted}> for </Text>
+								<Text regular>{item.duration}</Text>
+								<Text regular color={Colors.muted}> hrs</Text>
 							</View>
 						</View>
 					</View>
 				</View>
-			</TouchableOpacity>
-		</View>
+			</View>
+		</TouchableOpacity>
 	)
 }
 
-export default Feed_itemV2
+export default Feed_ItemV2

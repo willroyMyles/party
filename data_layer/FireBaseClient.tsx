@@ -25,6 +25,8 @@ let lastType: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
 class Store
 {
 
+  private userData = null
+
   resetLast = () => last = null
   restLastType = () => lastType = null
   isLoggedIn = () => auth().currentUser != undefined || null;
@@ -399,6 +401,33 @@ class Store
     }
   } )
 
+  private getRsvpEvents = () =>
+  {
+    return new Promise<FirebaseFirestoreTypes.QuerySnapshot>( async ( resolve, reject ) =>
+    {
+      try
+      {
+        const d = await firestore().collection( userCollection ).doc( auth().currentUser?.uid ).get()
+        if ( d.exists )
+        {
+          const obj = d.data()
+          const arr = obj ? obj["rsvp"] : []
+          const rsvpEvents = await firestore().collection( eventCollection ).where( "reference", "in", [...arr] ).get()
+          resolve( rsvpEvents )
+
+        } else
+        {
+          reject( "no data" )
+        }
+      } catch ( err )
+      {
+        console.log( "err", err );
+        reject( err )
+
+      }
+    } )
+  }
+
   social = {
     GooglsSignIn: this.googleSignIN,
     Facebook: this.facebookSignIn
@@ -420,7 +449,9 @@ class Store
     getUrlForFlyers: this.getURLForEventFlyers,
     getEventsInCategories: this.getEventsInCategories,
     getPastPictures: this.getPicturesForEvent,
-    getEventByType: this.getEventsByType
+    getEventByType: this.getEventsByType,
+    getRsvpEvents: this.getRsvpEvents
+
   };
 }
 
