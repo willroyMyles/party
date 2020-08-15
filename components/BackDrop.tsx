@@ -98,23 +98,24 @@ export const BackDropV3 = () =>
         }}>
 
             <View bg-purple60 style={{
-                // position: "absolute",
-                width: "100%",
-                height: "100%",
-                left: "-60%",
-                top: "-10%",
+                position: "absolute",
+                width: 120,
+                height: 120,
+                left: -60,
+                top: -30,
                 borderRadius: 200,
-                elevation: 10,
+                elevation: 16,
 
             }} />
 
             <View bg-violet60 style={{
-                width: "100%",
-                height: "100%",
-                right: "-60%",
-                top: "-70%",
+                width: 160,
+                height: 160,
+                right: -50,
+                bottom: 0,
                 borderRadius: 200,
-                elevation: 10,
+                elevation: 6,
+                position: "absolute",
 
             }} />
 

@@ -96,7 +96,7 @@ const Register = () =>
                                 <TextField
                                     hideUnderline
                                     error={errors.email ? errors.email.message : ''}
-                                    maxLength={16}
+                                    maxLength={56}
                                     onChangeText={( e: any ) => onChange( e )}
                                     onBlur={() =>
                                     {

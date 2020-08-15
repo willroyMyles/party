@@ -65,10 +65,17 @@ class Store
 
   resetPassword = ( email: string ) => new Promise( ( resolve, reject ) =>
   {
+    console.log( email );
+
     auth().sendPasswordResetEmail( email ).then( res =>
     {
       resolve( true )
-    } ).catch( err => reject( err ) )
+    } ).catch( err =>
+    {
+      reject( err )
+      console.log( err );
+
+    } )
   } )
 
 
