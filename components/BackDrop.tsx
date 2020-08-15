@@ -17,7 +17,7 @@ const BackDrop = () =>
             zIndex: -1
         }}>
 
-            <View bg-green20 style={{
+            <View bg-violet60 style={{
                 position: "absolute",
                 width,
                 height: 400,
@@ -28,7 +28,7 @@ const BackDrop = () =>
 
             }} />
 
-            <View bg-red30 style={{
+            <View bg-purple40 style={{
                 position: "absolute",
                 width: 400,
                 height: 400,

@@ -211,7 +211,7 @@ const CreateEvent = () =>
                             }}
                         />
                     </View>
-                    <Text marginB-25>upload image</Text>
+                    <Text marginB-25 btn uppercase color={col}>upload image</Text>
                     {image && (
                         <View
                             absT
@@ -238,12 +238,9 @@ const CreateEvent = () =>
                         <TouchableOpacity
                             onPress={() =>
                             {
-                                console.log( image );
-
                                 setImage( null );
                             }}
                             row
-                            padding-5
                             bg-background
                             style={{ borderRadius: 4 }}>
                             <Text>clear image</Text>
@@ -460,10 +457,10 @@ const CreateEvent = () =>
                         handleSubmit( onSubmit )();
                     }}
                     activeOpacity={0.8}
-                    bg-primary
                     center
                     style={style.btn}>
-                    <Text>create party</Text>
+                    <BackDrop />
+                    <Text btn uppercase style={{ padding: 10, textShadowRadius: 0.4 }}>create party</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -476,7 +473,7 @@ const style = StyleSheet.create( {
     upload: {
         borderRadius: 7,
         width: '90%',
-        overflow: 'hidden', minHeight: "20%"
+        overflow: 'hidden', minHeight: "20%", elevation: 1
 
     },
     cont: {
@@ -484,15 +481,15 @@ const style = StyleSheet.create( {
         borderRadius: 7,
         marginTop: 20,
         width: '90%',
-        borderWidth: 2,
-        borderColor: Colors.white + "22"
+        elevation: 1
     },
 
     btn: {
         padding: 14,
         width: '90%',
         borderRadius: 7,
-
+        overflow: "hidden",
+        elevation: 15,
         marginTop: 20,
         marginBottom: 20,
     },
