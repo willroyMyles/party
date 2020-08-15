@@ -61,7 +61,7 @@ const Feed_Item = ( { reference }: { reference: string } ) =>
 						<Image
 							source={{ uri: image }}
 
-							style={{ flex: 1, flexDirection: "row", borderRadius: 3, height: 150 }}
+							style={{ flex: 1, flexDirection: "row", borderRadius: 3, height: 150, width: "100%" }}
 							resizeMode="cover"
 						// aspectRatio={height/width * 1.2}
 						/>

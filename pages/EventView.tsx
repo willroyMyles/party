@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Image, Avatar, Colors } from 'react-native-ui-lib'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useTheme } from 'styled-components'
@@ -15,11 +15,9 @@ import RSVPButton from '../components/RSVPButton'
 
 const EventView = () =>
 {
+    const [image, setImage] = useState<string>()
 
-    useEffect( () =>
-    {
-        // tm.setThemeType(true)
-    }, [] )
+
 
     const navigation = useNavigation()
     const theme = useTheme()
@@ -27,6 +25,17 @@ const EventView = () =>
     const reference = route.params?.reference
     const item = FireStore.data.get( reference )
 
+    useEffect( () =>
+    {
+        async function getImage()
+        {
+            const d = await FireStore.retrieve.imageFromReference( item.reference )
+            setImage( d )
+        }
+
+        if ( item ) getImage()
+        // tm.setThemeType(true)
+    }, [] )
     console.log( item?.imageUrl );
 
 
@@ -34,7 +43,7 @@ const EventView = () =>
     if ( item ) return (
         <ScrollView contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%", paddingBottom: 40 }}>
             <View style={{ maxHeight: 300, overflow: "hidden" }}>
-                <Image source={{ uri: item.imageUrl }} resizeMode="cover" style={{ height: "100%", width: "100%" }} />
+                <Image fadeDuration={600} source={{ uri: image }} resizeMode="cover" style={{ height: "100%", width: "100%" }} />
             </View>
             <View centerH>
                 <PartyTypeBadge type={item?.partyType} />
