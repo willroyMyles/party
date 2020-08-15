@@ -137,7 +137,7 @@ const CreateEvent = () =>
 
     return (
         <ScrollView contentContainerStyle={{ minHeight: "100%" }}>
-            <View center >
+            <View center paddingV-35>
 
 
                 <Dialog onDismiss={() => setdialogVisible( false )} visible={dialogVisible} containerStyle={{
@@ -188,7 +188,7 @@ const CreateEvent = () =>
                     center
                     style={[
                         style.upload,
-                        { backgroundColor: Colors.background, },
+                        { backgroundColor: Colors.foreground, },
                     ]}>
                     <Controller
                         control={control}
@@ -244,14 +244,13 @@ const CreateEvent = () =>
                             }}
                             row
                             padding-5
-                            marginV-5
                             bg-background
-                            style={{ elevation: 2, borderRadius: 4 }}>
+                            style={{ borderRadius: 4 }}>
                             <Text>clear image</Text>
                         </TouchableOpacity>
                     </View>
                 )}
-                <View bg-background style={style.cont}>
+                <View bg-foreground style={style.cont}>
                     <Controller
                         name="title"
                         control={control}
@@ -270,11 +269,9 @@ const CreateEvent = () =>
                                         clearErrors( 'title' );
                                     }}
                                     value={value}
-                                    floatOnFocus
-                                    floatingPlaceholder
-                                    style={[GS.input, { color: Colors.text1 }]}
-                                    floatingPlaceholderStyle={GS.floater}
-                                    placeholder="Party name"
+                                    title="Title"
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
+
                                 />
                             );
                         }}
@@ -298,11 +295,9 @@ const CreateEvent = () =>
                                         clearErrors( 'description' );
                                     }}
                                     value={value}
-                                    floatOnFocus
-                                    floatingPlaceholder
-                                    style={[GS.input, { color: Colors.text1 }]}
-                                    floatingPlaceholderStyle={GS.floater}
-                                    placeholder="Description"
+                                    title="Description"
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
+
                                 />
                             );
                         }}
@@ -330,18 +325,16 @@ const CreateEvent = () =>
                                         clearErrors( 'partyType' );
                                     }}
                                     value={value}
-                                    floatOnFocus
-                                    floatingPlaceholder
-                                    style={[GS.input, { color: Colors.text1 }]}
-                                    floatingPlaceholderStyle={GS.floater}
-                                    placeholder="Party type"
+                                    title="Party Type"
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
+
                                 />
                             );
                         }}
                     />
                 </View>
 
-                <View row spread bg-background style={style.cont}>
+                <View row spread bg-foreground style={style.cont}>
                     <Controller
                         name="date"
                         control={control}
@@ -358,12 +351,10 @@ const CreateEvent = () =>
                                     onFocus={handleShowDate}
                                     // onChangeText={(value: any) => onChange(value)}
                                     value={dateValue}
-                                    floatOnFocus
-                                    floatingPlaceholder
+                                    title="Event Date"
                                     autoGrow
-                                    style={[[GS.input, { color: Colors.text1 }], { width: '40%' }]}
-                                    floatingPlaceholderStyle={GS.floater}
-                                    placeholder="Date"
+                                    style={[[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }], { width: '40%' }]}
+
                                 />
                             );
                         }}
@@ -386,11 +377,9 @@ const CreateEvent = () =>
                                     //     clearErrors("start")
                                     // }}
                                     value={timeValue}
-                                    floatOnFocus
-                                    floatingPlaceholder
-                                    style={[GS.input, { color: Colors.text1 }]}
-                                    floatingPlaceholderStyle={GS.floater}
-                                    placeholder="Start Time"
+                                    title="Start Time"
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
+
                                 />
                             );
                         }}
@@ -415,11 +404,10 @@ const CreateEvent = () =>
                                             clearErrors( 'duration' );
                                         }}
                                         value={value}
-                                        floatOnFocus
-                                        floatingPlaceholder
+                                        title="Duration"
                                         keyboardType="numeric"
                                         style={[
-                                            [GS.input, { color: Colors.text1 }],
+                                            [GS.input, { backgroundColor: Colors.background, color: Colors.text1 }],
                                             {
                                                 width: '70%',
                                                 marginStart: 0,
@@ -427,8 +415,7 @@ const CreateEvent = () =>
                                                 paddingEnd: 10,
                                             },
                                         ]}
-                                        floatingPlaceholderStyle={[GS.floater]}
-                                        placeholder="Duration"
+
                                     />
                                     <Text style={{ color: Colors.grey40, margin: 5 }}>Hr</Text>
                                 </View>
@@ -437,7 +424,7 @@ const CreateEvent = () =>
                     />
                 </View>
 
-                <View bg-background style={style.cont}>
+                <View bg-foreground style={style.cont}>
                     <Controller
                         name="location"
                         control={control}
@@ -459,11 +446,8 @@ const CreateEvent = () =>
                                         clearErrors( 'location' );
                                     }}
                                     value={value}
-                                    floatOnFocus
-                                    floatingPlaceholder
-                                    style={[GS.input, { color: Colors.text1 }]}
-                                    floatingPlaceholderStyle={GS.floater}
-                                    placeholder="Location"
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
+                                    title="Location"
                                 />
                             );
                         }}
@@ -490,14 +474,7 @@ export default CreateEvent;
 
 const style = StyleSheet.create( {
     upload: {
-        borderWidth: 0,
-        borderStyle: 'dashed',
-        borderColor: Colors.grey40,
-        elevation: 10,
-        // padding: 20,
-        // paddingVertical: 30,
         borderRadius: 7,
-        marginTop: 20,
         width: '90%',
         overflow: 'hidden', minHeight: "20%"
 
@@ -507,7 +484,6 @@ const style = StyleSheet.create( {
         borderRadius: 7,
         marginTop: 20,
         width: '90%',
-        elevation: 5,
         borderWidth: 2,
         borderColor: Colors.white + "22"
     },
@@ -516,7 +492,7 @@ const style = StyleSheet.create( {
         padding: 14,
         width: '90%',
         borderRadius: 7,
-        elevation: 15,
+
         marginTop: 20,
         marginBottom: 20,
     },
