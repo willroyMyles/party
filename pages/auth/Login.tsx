@@ -39,6 +39,7 @@ const Login = () =>
     };
 
     const handleRegisterPressed = () => navigation.navigate( 'register' );
+    const handleResetPressed = () => navigation.navigate( "reset password" )
 
     const handleGoogleLogin = () => FireStore.auth.google().then( res =>
     {
@@ -123,7 +124,7 @@ const Login = () =>
                             );
                         }}
                     />
-                    <TouchableOpacity right marginT-8>
+                    <TouchableOpacity onPress={handleResetPressed} right marginT-8>
                         <Text muted>Forgot Password?</Text>
                     </TouchableOpacity>
                 </View>

@@ -207,6 +207,8 @@ class Store
 
   @action LogOut = () => FBS.logout()
 
+  @action private resetPassword = ( email: string ) => FBS.auth.resetPassword( email )
+
   @action private getSpecificParties = ( type: number, lastReference: string ) => new Promise( ( resolve, reject ) =>
   {
 
@@ -272,7 +274,8 @@ class Store
     google: this.GoogleLogin,
     facebook: this.FacebookLogin,
     twitter: this.TwitterLogin,
-    logout: this.LogOut
+    logout: this.LogOut,
+    resetPassword: this.resetPassword
   };
 }
 

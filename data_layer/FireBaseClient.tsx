@@ -63,10 +63,15 @@ class Store
         .catch( ( err ) => reject( err ) );
     } );
 
-  resetPassword = () =>
+  resetPassword = ( email: string ) => new Promise( ( resolve, reject ) =>
   {
-    // auth().
-  }
+    auth().sendPasswordResetEmail( email ).then( res =>
+    {
+      resolve( true )
+    } ).catch( err => reject( err ) )
+  } )
+
+
 
   logout = () => auth().signOut();
 

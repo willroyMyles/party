@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native-ui-lib'
-import { createStackNavigator , TransitionPresets, } from '@react-navigation/stack'
+import { createStackNavigator, TransitionPresets, } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native';
 import HomeNavigator from './HomeNavigator';
 import Login from './auth/Login';
@@ -16,25 +16,26 @@ import ImageView from '../components/ImageView';
 import SearchComponent from '../components/SearchComponent';
 import SearchPage from './SearchPage';
 import CategoryView from './CategoryView';
+import ResetPassword from './auth/ResetPassword';
 
 const Stack = createStackNavigator()
 const prest = TransitionPresets.SlideFromRightIOS
 const scaleTransition = TransitionPresets.ScaleFromCenterAndroid
 
-const config : TransitionSpec = {
-  animation: 'spring',
-  config: {
-    stiffness: 1000,
-    damping: 500,
-    mass: 3,
-    overshootClamping: true,
-    restDisplacementThreshold: 1.01,
-    restSpeedThreshold: 1.01,
-  },
+const config: TransitionSpec = {
+    animation: 'spring',
+    config: {
+        stiffness: 1000,
+        damping: 500,
+        mass: 3,
+        overshootClamping: true,
+        restDisplacementThreshold: 1.01,
+        restSpeedThreshold: 1.01,
+    },
 };
 
 const forFade = ( { current }: { current: any } ) =>
-{    
+{
     return {
         cardStyle: {
             opacity: current.progress,
@@ -46,11 +47,12 @@ const forFade = ( { current }: { current: any } ) =>
 }
 
 
-const StackNavigator = () => {
+const StackNavigator = () =>
+{
     return (
         <View flex>
             <NavigationContainer >
-                <Stack.Navigator  screenOptions={{ headerShown: false, ...prest }}>
+                <Stack.Navigator screenOptions={{ headerShown: false, ...prest }}>
                     <Stack.Screen name="home" component={HomeNavigator} />
                     <Stack.Screen name="login" component={Login} />
                     <Stack.Screen name="register" component={Register} />
@@ -60,7 +62,8 @@ const StackNavigator = () => {
                     <Stack.Screen name="useMap" component={UseMapView} />
                     <Stack.Screen name="search" component={SearchPage} />
                     <Stack.Screen name="category" component={CategoryView} />
-                    <Stack.Screen options={{...scaleTransition, cardStyleInterpolator:forFade}} name="image view" component={ImageView} />
+                    <Stack.Screen name="reset password" component={ResetPassword} />
+                    <Stack.Screen options={{ ...scaleTransition, cardStyleInterpolator: forFade }} name="image view" component={ImageView} />
                 </Stack.Navigator>
             </NavigationContainer>
         </View>
