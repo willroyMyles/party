@@ -157,6 +157,9 @@ class Store
   {
     return new Promise<boolean>( ( resolve ) =>
     {
+
+      //TODO: have a function  that caches images 
+
       FBS.events.getPastPictures( reference )
         .then( ( res ) =>
         {

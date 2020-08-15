@@ -4,7 +4,8 @@ import { Colors, Typography } from "react-native-ui-lib"
 import { StyleSheet } from "react-native"
 import { observable } from 'mobx'
 
-export interface Theme {
+export interface Theme
+{
 	background: string
 	text1: string
 	text2: string
@@ -17,7 +18,7 @@ export interface Theme {
 }
 
 const storm = "#112432"
-const light = generate(Colors.violet40)
+const light = generate( Colors.violet40 )
 
 export const lightTheme: Theme = {
 	primary: light[5],
@@ -241,10 +242,12 @@ export const DarkMapStyleWithoutLandmarks = [
 ]
 
 
-class ThemeHelper {
-	reviseLoading = (t: Theme) => new Promise(resolve => {
+class ThemeHelper
+{
+	reviseLoading = ( t: Theme ) => new Promise( resolve =>
+	{
 
-		Colors.loadColors({
+		Colors.loadColors( {
 			background: t.background,
 			foreground: t.foreground,
 			primary: t.primary,
@@ -253,9 +256,18 @@ class ThemeHelper {
 			muted: t.muted,
 			light: t.caption,
 			secondary: t.secondary
-		})
+		} )
 
-		const style = StyleSheet.create({
+		const style = StyleSheet.create( {
+			wlecome: {
+				fontSize: 37,
+				flexWrap: "wrap",
+				color: Colors.text2,
+				textShadowRadius: .3,
+				textTransform: "capitalize",
+				fontFamily: "RR",
+				opacity: .7
+			},
 			textOne: {
 				// fontWeight: "700",
 				fontSize: 17,
@@ -277,7 +289,7 @@ class ThemeHelper {
 				color: Colors.muted,
 				textTransform: "uppercase",
 				fontFamily: "RR"
-				
+
 			},
 			indicator: {
 				fontWeight: "700",
@@ -301,7 +313,7 @@ class ThemeHelper {
 				textShadowRadius: 0.01,
 				fontFamily: "RR"
 
-			}, 
+			},
 			button: {
 				fontWeight: "700",
 				fontSize: 16,
@@ -310,19 +322,20 @@ class ThemeHelper {
 				textShadowRadius: 0.2,
 				fontFamily: "RR"
 			}
-		})
+		} )
 
-		Typography.loadTypographies({
+		Typography.loadTypographies( {
 			lvl1: style.textOne,
 			lvl2: style.textTwo,
 			lvl3: style.textThree,
 			indicator: style.indicator,
 			regular: style.regular,
-			btn :style.button
-		})
+			btn: style.button,
+			welcome: style.wlecome
+		} )
 
 
-	})
+	} )
 }
 
 export const themehelper = new ThemeHelper()

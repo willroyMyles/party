@@ -9,7 +9,7 @@ const BackDrop = () =>
 {
     const theme = useTheme()
     return (
-        <View bg-background style={{
+        <View style={{
             position: "absolute",
             width,
             height,
@@ -51,7 +51,7 @@ export const BackDropV2 = () =>
     const [scale, setScale] = useState( new Animated.Value( 1 ) )
 
     return (
-        <View bg-background style={{
+        <View style={{
             position: "absolute",
             width,
             height: "140%",
@@ -90,7 +90,7 @@ export const BackDropV2 = () =>
 export const BackDropV3 = () =>
 {
     return (
-        <View bg-background style={{
+        <View style={{
             position: "absolute",
             width: "100%",
             height: "100%",

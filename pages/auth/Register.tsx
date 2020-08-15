@@ -7,12 +7,15 @@ import FireStore from '../../data_layer/FireStore';
 import { HandleFirebaseErrors } from '../../universal/EventEmitter';
 import TToast from '../../components/TToast';
 import SkipButton from '../../components/SkipButton';
-import BackDrop from '../../components/BackDrop';
+import BackDrop, { BackDropV2 } from '../../components/BackDrop';
+import { useTheme } from 'styled-components';
+import { GS } from '../../universal/GS';
 
 const Register = () =>
 {
     const { handleSubmit, errors, control, clearErrors } = useForm();
     const navigation = useNavigation();
+    const theme = useTheme()
     const onSubmit = ( data: {
         username: string;
         email: string;
@@ -35,21 +38,28 @@ const Register = () =>
 
     return (
         <ScrollView
-            style={{backgroundColor:"transparent"}}
+            style={{ backgroundColor: "transparent" }}
             contentContainerStyle={{
                 justifyContent: 'center',
                 alignItems: 'center',
                 padding: 20,
-                minHeight:"100%"
+                minHeight: "100%",
+                backgroundColor: Colors.background
             }}>
-            <BackDrop />
-            
-            <Text>Register</Text>
+            <View style={{
+                position: "absolute",
+                height: "60%",
+                width: "100%"
+            }}>
+                <BackDropV2 />
+            </View>
+
+            <Text welcome >Welcome</Text>
             <View
                 br50
                 marginT-90
                 padding-10
-                bg-background
+                bg-foreground
                 style={{ width: '100%', elevation: 3 }}>
                 <View marginT-10 padding-10 centerV style={{}}>
                     <Controller
@@ -70,11 +80,8 @@ const Register = () =>
                                         clearErrors( 'user-name' );
                                     }}
                                     value={value}
-                                    floatOnFocus
-                                    floatingPlaceholder
-                                    style={style.input}
-                                    floatingPlaceholderStyle={style.floater}
-                                    placeholder="user-name"
+                                    style={[GS.input, { backgroundColor: Colors.background }]}
+                                    title="user-name"
                                 />
                             );
                         }}
@@ -97,11 +104,8 @@ const Register = () =>
                                         clearErrors( 'email' );
                                     }}
                                     value={value}
-                                    floatOnFocus
-                                    floatingPlaceholder
-                                    style={style.input}
-                                    floatingPlaceholderStyle={style.floater}
-                                    placeholder="email"
+                                    style={[GS.input, { backgroundColor: Colors.background }]}
+                                    title="Email"
                                 />
                             );
                         }}
@@ -121,11 +125,8 @@ const Register = () =>
                                     onChangeText={onChange}
                                     onBlur={onBlur()}
                                     value={value}
-                                    floatOnFocus
-                                    floatingPlaceholder
-                                    style={style.input}
-                                    floatingPlaceholderStyle={style.floater}
-                                    placeholder="password"
+                                    style={[GS.input, { backgroundColor: Colors.background }]}
+                                    title="password"
                                 />
                             );
                         }}
@@ -134,17 +135,19 @@ const Register = () =>
             </View>
             <View marginT-20 style={{ width: '100%' }}>
                 <TouchableOpacity
-                    
+
                     onPress={() => handleSubmit( onSubmit )()}
                     center
-                    style={[style.btn, { elevation: 10, backgroundColor:Colors.foreground }]}>
-                    <Text>Register</Text>
+                    bg-background
+                    style={[style.btn, { borderColor: Colors.foreground }]}>
+                    <Text btn>Register</Text>
+                    <BackDrop />
                 </TouchableOpacity>
             </View>
             <View marginT-30 row center>
-                <Text>Already have an account?</Text>
+                <Text muted >Already have an account?</Text>
                 <TouchableOpacity onPress={() => handleLoginPressed()}>
-                    <Text> Login</Text>
+                    <Text btn primary> Login</Text>
                 </TouchableOpacity>
             </View>
             <SkipButton where="home" />
@@ -153,12 +156,11 @@ const Register = () =>
 };
 
 export default Register;
-const style = StyleSheet.create( {
+export const style = StyleSheet.create( {
     cont: {
         padding: 10,
     },
     input: {
-        backgroundColor: 'rgba(100,100,100,.1)',
         marginTop: -7,
         padding: 5,
         borderRadius: 7,
@@ -170,10 +172,12 @@ const style = StyleSheet.create( {
         color: 'grey',
     },
     btn: {
-        backgroundColor: 'white',
         width: '100%',
         padding: 10,
         borderRadius: 6,
         marginTop: 10,
+        overflow: "hidden",
+        elevation: 10,
+        borderWidth: 0.6
     },
 } );

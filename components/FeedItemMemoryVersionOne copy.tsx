@@ -46,6 +46,7 @@ const FeedItemMemoryVersionOne = ( { reference }: { reference: string } ) =>
                 paddingHorizontal: 10,
                 marginVertical: 10,
                 width,
+                paddingBottom: 0
             }}>
             <TouchableOpacity
                 onPress={() => handleClick()}
@@ -69,8 +70,8 @@ const FeedItemMemoryVersionOne = ( { reference }: { reference: string } ) =>
                     <View
                         row
                         padding-2
-                        paddingT-3
-                        marginV-15
+                        paddingT-7
+                        marginV-7
                         style={{ flex: 2, flexDirection: "column", justifyContent: "space-between" }}>
                         <Text lvl1>{item.title}</Text>
                         <View row spread >

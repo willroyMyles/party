@@ -272,17 +272,11 @@ class Store
         .then( async ( res ) =>
         {
           //all items in file
-          console.log( res.items.length, "items length" );
-
           for ( var i = 0; i < res.items.length; i++ )
           {
             const url = await res.items[i].getDownloadURL()
-            console.log( url )
             arr.push( url )
           }
-
-          console.log( "things done" )
-
           resolve( arr )
         } )
         .catch( ( err ) => reject( err ) )
