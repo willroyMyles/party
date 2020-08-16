@@ -141,7 +141,7 @@ class NearMeV2 extends PureComponent {
   };
 
   onMarkerPressed = (ref: string) => {
-    this.addEvent(ref);
+    this.setState({eventCard: ref});
   };
 
   render() {
@@ -190,7 +190,7 @@ class NearMeV2 extends PureComponent {
           }}>
           {this.state.eventCard && this.state.region && (
             <Mapcard
-              item={this.state.eventCard}
+              reference={this.state.eventCard}
               currentPosition={this.state.region}
             />
           )}
