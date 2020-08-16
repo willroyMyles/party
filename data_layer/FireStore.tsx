@@ -42,6 +42,7 @@ class Store
         .uploadEvent( data )
         .then( ( res ) =>
         {
+          this.data.set( data.reference || "", data )
           resolve( true );
         } )
         .catch( ( err ) => reject( err ) );
