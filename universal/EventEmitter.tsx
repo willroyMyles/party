@@ -1,4 +1,4 @@
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import TToast from '../components/TToast';
 
 export const eventEmitter = new EventEmitter();
@@ -14,7 +14,8 @@ export const eventStrings = {
   loggingIn: 'used when logging in or signing up ',
   imageGotten:
     'used to signal to past image view that a new images has been recieved',
-  locationEntered: 'used when a geo fence is breached',
+  locationEntered: 'used when a geo fence is entered',
+  locationExited: 'used when a geo fence is exited',
   showToast: {
     working: 'used when sneding data to back end',
     success: 'used when an operation is successful',
@@ -26,12 +27,14 @@ export const errorStrings = {
   notLoggedIn: 'you need to be logged in to complete this operation',
 };
 
-export const HandleFirebaseErrors = (code: string) => {
-  console.log(code);
+export const HandleFirebaseErrors = ( code: string ) =>
+{
+  console.log( code );
 
   let es = 'Something went wrong';
 
-  switch (code) {
+  switch ( code )
+  {
     case 'auth/user-not-found':
       es = 'No user by that name';
       break;
@@ -42,5 +45,5 @@ export const HandleFirebaseErrors = (code: string) => {
       es = 'invalid username or password';
       break;
   }
-  TToast.error('Opps', es);
+  TToast.error( 'Opps', es );
 };

@@ -1,14 +1,22 @@
+import { LocationRegion } from "expo-location"
 import { action, autorun, observable } from "mobx"
 import { LatLng } from "react-native-maps"
+import { eventEmitter, eventStrings } from "../universal/EventEmitter"
 import { getDistanceFromLatLonInKm, getLatitudeLongitudeFromString } from "../universal/GetLocation"
 import { FeedItemModel } from "../universal/Models"
 import FireStore from "./FireStore"
 
+export const radius = 100;
+export const taskName = 'geoLocation';
+export const threshold = 10 / radius
 class PsuedoLocationTracker
 {
-    @observable trackedData: FeedItemModel[] = [] //should hold 5
+    @observable trackedData: Map<string, number> = new Map()
     @observable userLocation: LatLng | undefined = undefined
-    @observable data: Map<string, FeedItemModel> = new Map()
+    @observable data: Map<string, LocationRegion> = new Map()
+
+    @observable entered: Map<string, number> = new Map()
+    @observable exited: Map<string, number> = new Map()
 
     init = () => null
 
@@ -19,15 +27,42 @@ class PsuedoLocationTracker
 
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
-        this.userLocation = latLng
-        this.trackedData.map( ( value, index ) =>
+        this.userLocation = latLng;
+        console.log( this.data.size );
+
+        [...this.data.entries()].map( ( value, index ) =>
         {
-            const latlng = getLatitudeLongitudeFromString( latlng )
-            const distance = getDistanceFromLatLonInKm( latlng?.latitude, latlng?.longitude, latLng.latitude, latLng.longitude )
+            const ll = getDistanceFromLatLonInKm( value[1].latitude, value[1].longitude, this.userLocation?.latitude, this.userLocation?.longitude )
+            this.trackedData.set( value[0], ll )
+
+
+            if ( ll <= threshold )
+            {
+                this.entered.set( value[0], ll )
+                eventEmitter.emit( eventStrings.locationEntered, value[0] )
+                console.log( "fence breached" );
+
+            }
+
+            if ( this.entered.has( value[0] ) && ll > threshold )
+            {
+                this.entered.delete( value[0] )
+                eventEmitter.emit( eventStrings.locationExited, value[0] )
+                console.log( "fence lefted" );
+
+            }
 
         } )
     }
 
+    @action watchTheseLocations = ( data: LocationRegion[] ) =>
+    {
+        this.data.clear()
+        data.map( ( value, index ) =>
+        {
+            this.data.set( value.identifier || "", value )
+        } )
+    }
     @action sortData = () =>
     {
 

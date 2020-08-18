@@ -27,34 +27,23 @@ import * as Font from 'expo-font'
 import * as TaskManager from 'expo-task-manager'
 import * as Location from 'expo-location'
 import { eventEmitter, eventStrings } from './universal/EventEmitter';
+import psuedoLocationTracker from './data_layer/PsuedoLocationTracker';
 
-TaskManager.isTaskRegisteredAsync( "geoLocation" ).then( res =>
+
+TaskManager.defineTask( "geoLocation", ( { data, error }: { data: any, error: any } ) =>
 {
-  const t = TaskManager.isTaskDefined( "geoLocation" )
-
-  if ( !t )
+  if ( error )
   {
-    console.log( "defining tasks" );
-
-    TaskManager.defineTask( "geoLocation", ( { data, error }: { data: any, error: any } ) =>
-    {
-      if ( error )
-      {
-        console.log( error )
-        return
-      }
-      console.log( "hello from task" );
-
-      // console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
-
-      if ( data.eventType == Location.GeofencingEventType.Enter )
-      {
-        eventEmitter.emit( eventStrings.locationEntered, data.region.identifier )
-        console.log( "emitting data" );
-      }
-    } )
+    console.log( error )
+    return
   }
+  const { longitude, latitude } = data.locations[0].coords
+  // console.log( longitude, latitude );
+  psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
+
 } )
+
+
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
 {

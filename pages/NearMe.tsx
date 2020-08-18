@@ -16,10 +16,10 @@ import { FeedItemModel } from '../universal/Models';
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
+import psuedoLocationTracker, { radius, taskName } from '../data_layer/PsuedoLocationTracker';
 
 
-const radius = 600;
-const taskName = 'geoLocation';
+
 
 const NearMe = () =>
 {
@@ -33,6 +33,7 @@ const NearMe = () =>
     useEffect( () =>
     {
         getUserRegion();
+        sortMarkers()
 
         eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
 
@@ -82,15 +83,8 @@ const NearMe = () =>
         {
             console.log( `${ taskName } is defined` );
 
-            Location.hasStartedGeofencingAsync( taskName ).then( res =>
-            {
-                console.log( `has geo started? ${ res } and data length is ${ data.length }` );
-
-                if ( data.length > 0 ) Location.startGeofencingAsync( taskName, data ).then( res =>
-                {
-                    console.log( `location started watching ${ data?.length } items` );
-                } )
-            } )
+            psuedoLocationTracker.watchTheseLocations( geoRegions )
+            Location.startLocationUpdatesAsync( taskName )
         }
     }
 
@@ -109,7 +103,7 @@ const NearMe = () =>
                 const c: LocationRegion = {
                     latitude: coord.latitude,
                     longitude: coord.longitude,
-                    radius,
+                    radius: radius,
                     identifier: element.reference,
                 };
 
