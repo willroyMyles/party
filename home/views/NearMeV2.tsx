@@ -6,7 +6,8 @@ import MapView, {
   LatLng,
   EventUserLocation,
 } from "react-native-maps";
-import {
+import
+{
   getLocation,
   getRegion,
   getLatitudeLongitudeFromString,
@@ -21,21 +22,24 @@ import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from "../../universial/EventEmitter";
 import Mapcard from "../../components/Mapcard";
 
-const radius = 1600;
+const radius = 600;
 
 const Map = memo(
-  ({ region, coord }: { region?: Region; coord?: Coordinates }) => {
+  ( { region, coord }: { region?: Region; coord?: Coordinates } ) =>
+  {
     const map = useRef<MapView | null>();
 
-    useEffect(() => {
-      if (region) {
-        map.current?.animateToRegion(region);
+    useEffect( () =>
+    {
+      if ( region )
+      {
+        map.current?.animateToRegion( region );
       }
-    }, [region]);
+    }, [region] );
 
-    const handleLocChanged = async (loc: EventUserLocation) => {};
+    const handleLocChanged = async ( loc: EventUserLocation ) => { };
 
-    if (region)
+    if ( region )
       return (
         <MapView
           ref={map}
@@ -48,7 +52,7 @@ const Map = memo(
           onUserLocationChange={handleLocChanged}
           // showsMyLocationButton
           // region={region}
-          style={{ width: Dimensions.get("screen").width, height: "100%" }}
+          style={{ width: Dimensions.get( "screen" ).width, height: "100%" }}
         >
           <Circle
             radius={radius}
@@ -58,9 +62,10 @@ const Map = memo(
             strokeColor={Colors.grey50}
           />
 
-          {[...dataProvider.data.values()].map((value, index) => {
+          {[...dataProvider.data.values()].map( ( value, index ) =>
+          {
             return <MarkerPinItem key={index} value={value} />;
-          })}
+          } )}
         </MapView>
       );
     else
@@ -72,47 +77,59 @@ const Map = memo(
   }
 );
 
-const NearMeV2 = () => {
+const NearMeV2 = () =>
+{
   const [region, setRegion] = useState<Region>();
   const [mockCoords, setMockCoords] = useState<Coordinates>();
-  const [geoRegions, setGeoRegions] = useState<LocationRegion[]>([]);
-  const [eventCards, setEventCards] = useState<FeedItemModel[]>([]);
+  const [geoRegions, setGeoRegions] = useState<LocationRegion[]>( [] );
+  const [eventCards, setEventCards] = useState<FeedItemModel[]>( [] );
   const taskName = "geoLocation";
 
-  useEffect(() => {
+  useEffect( () =>
+  {
     sortGeoRegions();
 
-    getLocation().then(async (res) => {
-      const reg = await getRegion(res);
-      setRegion(reg);
-    });
+    getLocation().then( async ( res ) =>
+    {
+      const reg = await getRegion( res );
+      setRegion( reg );
+    } );
 
-    eventEmitter.addListener(eventStrings.locationEntered, addEvent);
+    eventEmitter.addListener( eventStrings.locationEntered, addEvent );
 
-    return () => {
-      eventEmitter.removeListener(eventStrings.locationEntered, addEvent);
-      Location.hasStartedGeofencingAsync(taskName).then((res) => {
-        if (res) {
+    return () =>
+    {
+      eventEmitter.removeListener( eventStrings.locationEntered, addEvent );
+      Location.hasStartedGeofencingAsync( taskName ).then( ( res ) =>
+      {
+        if ( res )
+        {
           // Location.stopGeofencingAsync(taskName)
         }
-      });
+      } );
     };
-  }, []);
+  }, [] );
 
-  const addEvent = (refr: string) => {
-    const event = dataProvider.data.get(refr);
-    if (event) {
-      if (!eventCards.includes(event)) {
-        setEventCards((list) => list.concat(event));
+  const addEvent = ( refr: string ) =>
+  {
+    const event = dataProvider.data.get( refr );
+    if ( event )
+    {
+      if ( !eventCards.includes( event ) )
+      {
+        setEventCards( ( list ) => list.concat( event ) );
       }
     }
   };
 
-  const sortGeoRegions = () => {
+  const sortGeoRegions = () =>
+  {
     const d: any = [];
-    dataProvider.data.forEach((value, key) => {
-      const coord = getLatitudeLongitudeFromString(value.location);
-      if (coord) {
+    dataProvider.data.forEach( ( value, key ) =>
+    {
+      const coord = getLatitudeLongitudeFromString( value.location );
+      if ( coord )
+      {
         const c: LocationRegion = {
           latitude: coord.latitude,
           longitude: coord.longitude,
@@ -120,19 +137,22 @@ const NearMeV2 = () => {
           identifier: value.reference,
         };
 
-        d.push(c);
+        d.push( c );
       }
-    });
+    } );
 
-    setGeoRegions(d);
+    setGeoRegions( d );
 
-    if (TaskManager.isTaskDefined(taskName)) {
-      Location.hasStartedGeofencingAsync("geoLocation").then(async (res) => {
-        if (!res && geoRegions.length > 0) {
-          await Location.startGeofencingAsync("geoLocation", geoRegions);
-          console.log("geo started");
+    if ( TaskManager.isTaskDefined( taskName ) )
+    {
+      Location.hasStartedGeofencingAsync( "geoLocation" ).then( async ( res ) =>
+      {
+        if ( geoRegions.length > 0 )
+        {
+          await Location.startGeofencingAsync( "geoLocation", geoRegions );
+          console.log( "geo started" );
         }
-      });
+      } );
     }
   };
 
@@ -150,9 +170,10 @@ const NearMeV2 = () => {
           bottom: 3,
         }}
       >
-        {eventCards.map((value, index) => {
+        {eventCards.map( ( value, index ) =>
+        {
           return <Mapcard key={index} item={value} />;
-        })}
+        } )}
       </View>
     </View>
   );
