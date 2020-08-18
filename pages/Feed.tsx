@@ -24,15 +24,20 @@ const Feed = () =>
 
     useEffect( () =>
     {
-        loadData
-    }, [FireStore.data] )
+        eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => loadData() )
+
+        return () =>
+        {
+            eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, () => loadData() )
+        }
+    }, [] )
 
     const loadData = () =>
     {
         // FireStore.sortFeedItemDocs()
         const keyss = [...FireStore.categorizedData.keys()]
         setdata( keyss )
-        eventEmitter.emit( eventStrings.dataFromProviderFinishedLoad )
+        // eventEmitter.emit( eventStrings.dataFromProviderFinishedLoad )
     }
 
     const resetBackend = () =>

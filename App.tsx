@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'react-native-gesture-handler';
-import {
+import
+{
   SafeAreaView,
   StyleSheet,
   StatusBar,
@@ -9,10 +10,12 @@ import {
   LayoutAnimation,
 } from 'react-native';
 
-import {
+import
+{
   View, LoaderScreen,
 } from 'react-native-ui-lib'
-import {
+import
+{
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 import StackNavigator from './pages/StackNavigator';
@@ -25,38 +28,47 @@ import * as TaskManager from 'expo-task-manager'
 import * as Location from 'expo-location'
 import { eventEmitter, eventStrings } from './universal/EventEmitter';
 
-TaskManager.isTaskRegisteredAsync("geoLocation").then(res =>{
-	const t = TaskManager.isTaskDefined("geoLocation")
-	
-	if(!t){
-		console.log("defining tasks");
-		
-		TaskManager.defineTask("geoLocation", ({data , error} : {data : any, error : any}) => {
-			if (error) {
-				console.log(error)
-				return
-			}
-			// console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
-			if(data.eventType == Location.GeofencingEventType.Enter){
-				eventEmitter.emit(eventStrings.locationEntered, data.region.identifier )
-				console.log("emitting data");
-			}
-		})
-	}
-} ).catch(err=> console.log("didnt check if task is registered"))
+TaskManager.isTaskRegisteredAsync( "geoLocation" ).then( res =>
+{
+  const t = TaskManager.isTaskDefined( "geoLocation" )
 
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
-	UIManager.setLayoutAnimationEnabledExperimental(true)
-	LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+  if ( !t )
+  {
+    console.log( "defining tasks" );
+
+    TaskManager.defineTask( "geoLocation", ( { data, error }: { data: any, error: any } ) =>
+    {
+      if ( error )
+      {
+        console.log( error )
+        return
+      }
+      console.log( "hello from task" );
+
+      // console.log(data.eventType == Location.GeofencingEventType.Enter,  "taskkkkkssksks");
+
+      if ( data.eventType == Location.GeofencingEventType.Enter )
+      {
+        eventEmitter.emit( eventStrings.locationEntered, data.region.identifier )
+        console.log( "emitting data" );
+      }
+    } )
+  }
+} )
+
+if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
+{
+  UIManager.setLayoutAnimationEnabledExperimental( true )
+  LayoutAnimation.configureNext( LayoutAnimation.Presets.linear )
 }
 
 const App = () =>
 {
-  const [loading, setLoading] = useState(true)
-  
+  const [loading, setLoading] = useState( true )
+
   useEffect( () =>
   {
-    tm.setThemeType(false)
+    tm.setThemeType( false )
     Font.loadAsync( {
       Nunito_Black: require( "./assets/fonts/Nunito/Nunito-Black.ttf" ),
       RR: require( "./assets/fonts/Red_Rose/RedRose-Regular.ttf" )
@@ -64,20 +76,20 @@ const App = () =>
     {
       setLoading( false )
       // SplashScreen.hideAsync()
-            
-      if(Location.PermissionStatus.DENIED)
-      Location.requestPermissionsAsync().then( res =>
-      {
-        if ( res.granted )  eventEmitter.emit(eventStrings.locationGranted)
-        
-        if(!res.granted) eventEmitter.emit(eventStrings.locationNotGranted)
-        
-      } ).catch( err =>
-      {
-      console.log(err);
-    })
-    })
-    }, [])
+
+      if ( Location.PermissionStatus.DENIED )
+        Location.requestPermissionsAsync().then( res =>
+        {
+          if ( res.granted ) eventEmitter.emit( eventStrings.locationGranted )
+
+          if ( !res.granted ) eventEmitter.emit( eventStrings.locationNotGranted )
+
+        } ).catch( err =>
+        {
+          console.log( err );
+        } )
+    } )
+  }, [] )
 
   if ( loading )
   {
@@ -86,7 +98,7 @@ const App = () =>
     </View>
   }
 
-  if(!loading)return (
+  if ( !loading ) return (
     <ThemeProvider theme={tm.theme} >
       <View flex bg-background>
         <StackNavigator />
@@ -110,4 +122,4 @@ const App = () =>
 };
 
 
-export default observer(App);
+export default observer( App );

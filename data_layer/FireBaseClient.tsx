@@ -65,7 +65,6 @@ class Store
 
   resetPassword = ( email: string ) => new Promise( ( resolve, reject ) =>
   {
-    console.log( email );
 
     auth().sendPasswordResetEmail( email ).then( res =>
     {
@@ -329,16 +328,11 @@ class Store
 
     GoogleSignin.signIn().then( ( user ) =>
     {
-      console.log( user.idToken, "his token" );
 
       const googleCredential = auth.GoogleAuthProvider.credential( user.idToken );
 
       auth().signInWithCredential( googleCredential ).then( res =>
       {
-        console.log( res.user );
-        console.log( auth().currentUser );
-
-
         resolve( res.user.uid )
       } ).catch( err => reject( err ) )
     } ).catch( err =>

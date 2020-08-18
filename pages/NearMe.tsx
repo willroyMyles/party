@@ -1,3 +1,4 @@
+import { LocationRegion } from 'expo-location';
 import React, { useEffect, useRef, useState } from 'react';
 import MapView, {
     Circle,
@@ -10,8 +11,12 @@ import { useTheme } from 'styled-components';
 import Mapcard from '../components/Mapcard';
 import { MarkerPinItem } from '../components/MarkerPin';
 import FireStore from '../data_layer/FireStore';
-import { getLocation, getRegion } from '../universal/GetLocation';
+import { getLatitudeLongitudeFromString, getLocation, getRegion } from '../universal/GetLocation';
 import { FeedItemModel } from '../universal/Models';
+import * as Location from "expo-location";
+import * as TaskManager from "expo-task-manager";
+import { eventEmitter, eventStrings } from '../universal/EventEmitter';
+
 
 const radius = 600;
 const taskName = 'geoLocation';
@@ -23,11 +28,19 @@ const NearMe = () =>
     const [region, setRegion] = useState<Region | null>();
     const [markers, setMarkers] = useState<FeedItemModel[]>( [] );
     const [focusedEvent, setFocusedEvent] = useState<string>( '' );
+    const [geoRegions, setGeoRegions] = useState<LocationRegion[]>( [] )
 
     useEffect( () =>
     {
         getUserRegion();
-        return () => { };
+
+        eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
+
+        return () =>
+        {
+            eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
+
+        };
     }, [] );
 
     const userLocationChanged = async ( e: EventUserLocation ) =>
@@ -61,59 +74,92 @@ const NearMe = () =>
             console.log( 'err', err );
         }
     };
-    useEffect( () =>
+
+    const startGeo = ( data: any[] ) =>
     {
-        if ( FireStore.data.size > 0 )
+
+        if ( TaskManager.isTaskDefined( taskName ) )
         {
-            sortMarkers();
+            console.log( `${ taskName } is defined` );
+
+            Location.hasStartedGeofencingAsync( taskName ).then( res =>
+            {
+                console.log( `has geo started? ${ res } and data length is ${ data.length }` );
+
+                if ( data.length > 0 ) Location.startGeofencingAsync( taskName, data ).then( res =>
+                {
+                    console.log( `location started watching ${ data?.length } items` );
+                } )
+            } )
         }
-    }, [FireStore.data] );
+    }
+
     const sortMarkers = () =>
     {
         const arr = [...FireStore.data.values()];
         setMarkers( arr );
+
+        const d: any = []
+        for ( let index = 0; index < arr.length; index++ )
+        {
+            const element = arr[index];
+            const coord = getLatitudeLongitudeFromString( element.location );
+            if ( coord )
+            {
+                const c: LocationRegion = {
+                    latitude: coord.latitude,
+                    longitude: coord.longitude,
+                    radius,
+                    identifier: element.reference,
+                };
+
+                d.push( c )
+            }
+        }
+
+        setGeoRegions( d )
+        startGeo( d )
     };
 
-    if ( region )
-        return (
-            <View style={{ backgroundColor: Colors.background }}>
-                <MapView
-                    ref={map}
-                    showsUserLocation
-                    onUserLocationChange={userLocationChanged}
-                    style={{ width: '100%', height: '100%' }}
-                    provider={PROVIDER_GOOGLE}>
-                    <Circle
-                        radius={radius}
-                        center={region}
-                        fillColor={Colors.primary + '22'}
-                        strokeWidth={1}
-                        strokeColor={Colors.grey50}
-                    />
-                    {
-                        <ShowEventOnMarkerPressed
-                            markers={markers}
-                            onPress={setFocusedEvent}
-                        />
-                    }
-                    <View
-                        padding-10
-                        center
-                        style={{
-                            position: 'absolute',
-                            minHeight: 10,
-                            minWidth: '100%',
-                            bottom: 3,
-                        }}>
-                        {focusedEvent != "" && region && (
-                            <Mapcard reference={focusedEvent} currentPosition={region} />
-                        )}
-                    </View>
-                </MapView>
-            </View>
-        );
+    // if ( region )
+    return (
+        <View style={{ backgroundColor: Colors.background }}>
+            <MapView
+                ref={map}
+                showsUserLocation
+                onUserLocationChange={userLocationChanged}
+                style={{ width: '100%', height: '100%' }}
+                provider={PROVIDER_GOOGLE}>
+                {region && <Circle
+                    radius={radius}
+                    center={region}
+                    fillColor={Colors.primary + '22'}
+                    strokeWidth={1}
+                    strokeColor={Colors.grey50}
+                />}
 
-    return <LoaderScreen />;
+                <ShowEventOnMarkerPressed
+                    markers={markers}
+                    onPress={setFocusedEvent}
+                />
+
+                <View
+                    padding-10
+                    center
+                    style={{
+                        position: 'absolute',
+                        minHeight: 10,
+                        minWidth: '100%',
+                        bottom: 3,
+                    }}>
+                    {focusedEvent != "" && region && (
+                        <Mapcard reference={focusedEvent} currentPosition={region} />
+                    )}
+                </View>
+            </MapView>
+        </View>
+    );
+
 };
 
 const ShowEventOnMarkerPressed = ( {

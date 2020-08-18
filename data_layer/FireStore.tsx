@@ -3,6 +3,7 @@ import FBS from './FireBaseClient';
 import uuidv4 from 'uuid';
 import { FeedItemModel, PartyType } from '../universal/Models';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 class Store
 {
   @observable data: Map<string, FeedItemModel> = new Map();
@@ -56,8 +57,6 @@ class Store
       const key = PartyType[docs[index].data().partyType]
       const element = docs[index]
 
-      console.log( key );
-
       if ( this.categorizedData.has( key ) )
       {
         this.categorizedData.get( key )?.push( docs[index].data() )
@@ -72,8 +71,6 @@ class Store
 
   @action sortFeedItemDocs = () =>
   {
-    console.log( "loading", this.categorizedData.size );
-
     const limitInSection = 2 // equates to 3 items
     const obj: any = { title: "", data: [] }
     const arr: any = []
@@ -100,8 +97,8 @@ class Store
         if ( !this.data.has( doc.id ) ) this.data.set( doc.id, doc.data() )
       } )
       resolve( true )
-      this.updateDataImages()
       this.sortCategorizedData( result.docs )
+      eventEmitter.emit( eventStrings.dataFromProviderFinishedLoad )
     } )
   }
 
@@ -143,7 +140,6 @@ class Store
     {
       const flyer = this.data.get( reference )?.flyer
       const imageUrl = await FBS.events.getUrlForFlyers( flyer || "" )
-      console.log( imageUrl );
 
       this.eventImagesMap.set( reference, imageUrl )
       resolve( imageUrl )
@@ -217,8 +213,6 @@ class Store
     {
       this.sortDataFromFireBase( res ).then( res =>
       {
-        console.log( "resolving data" );
-
         resolve( true )
       } )
     } ).catch( err =>
@@ -241,8 +235,6 @@ class Store
       for ( let index = 0; index < res.docs.length; index++ )
       {
         const element = res.docs[index];
-        // console.log( element.data() );
-
         const data: FeedItemModel = element.data()
         this.rsvpData.set( data.reference || "", data )
         this.data.set( data.reference, data )
