@@ -19,7 +19,7 @@ const Mapcard = ( {
     currentPosition: Region
 } ) =>
 {
-    const item = FireStore.data.get( reference + "help" ) || undefined
+    const item = FireStore.data.get( reference ) || undefined
 
     const theme = useTheme()
     const navigation = useNavigation()
@@ -53,10 +53,10 @@ const Mapcard = ( {
                 <View row spread padding-5>
                     <View>
                         <Text lvl2 marginT-5>
-                            {moment( item.start ).calendar( 'dddd' )}
+                            {moment( new Date( item.date || "" ) ).calendar( 'dddd' )}
                         </Text>
                         <Text lvl2 marginT-5>
-                            {moment( item.start ).format( 'hh:MM a' )}
+                            {moment( new Date( item.start || "" ) ).format( 'hh:MM a' )}
                         </Text>
                         <Text lvl2 marginT-5>
                             {item.duration} hrs

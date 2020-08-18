@@ -143,20 +143,21 @@ const NearMe = () =>
                     onPress={setFocusedEvent}
                 />
 
-                <View
-                    padding-10
-                    center
-                    style={{
-                        position: 'absolute',
-                        minHeight: 10,
-                        minWidth: '100%',
-                        bottom: 3,
-                    }}>
-                    {focusedEvent != "" && region && (
-                        <Mapcard reference={focusedEvent} currentPosition={region} />
-                    )}
-                </View>
+
             </MapView>
+            <View
+                padding-10
+                center
+                style={{
+                    position: 'absolute',
+                    minHeight: 10,
+                    minWidth: '100%',
+                    bottom: 3,
+                }}>
+                {focusedEvent != "" && region && (
+                    <Mapcard reference={focusedEvent} currentPosition={region} />
+                )}
+            </View>
         </View>
     );
 
@@ -180,7 +181,10 @@ const ShowEventOnMarkerPressed = ( {
                     <MarkerPinItem
                         key={index}
                         value={value}
-                        onPressed={() => onPress( value.reference || '' )}
+                        onPressed={() =>
+                        {
+                            onPress( value.reference || '' )
+                        }}
                     />
                 )
             } )}
