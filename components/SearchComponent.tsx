@@ -67,7 +67,7 @@ const SearchComponent = () =>
                     </View>}
 
                     {value !== "" && data?.length === 0 && <View flex-10 center >
-                        <Text>No results...</Text>
+                        <Text lvl2>No results...</Text>
                     </View>}
                 </ScrollView>
 

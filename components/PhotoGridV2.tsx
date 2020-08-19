@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, Image, TouchableOpacity, Colors, Avatar } from "react-native-ui-lib"
+import React, { useState, useEffect, useRef } from "react"
+import { View, Text, Image, TouchableOpacity, Colors, Avatar, Modal } from "react-native-ui-lib"
 import { Dimensions, ActivityIndicator } from "react-native"
 import Icon from "react-native-vector-icons/Feather"
 import { useTheme } from "styled-components"
@@ -8,19 +8,34 @@ import TToast from "./TToast"
 import FireStore from "../data_layer/FireStore"
 import { getImage } from "../universal/GetImage"
 import { useNavigation } from "@react-navigation/native"
+import ImageViewer from "react-native-image-zoom-viewer"
 
 const width = Dimensions.get( "screen" ).width / 3.1
 const height = 150
 const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 {
 	const [data, setdata] = useState<any[]>( [] )
+	const [urldata, setUrldata] = useState<any[]>( [] )
 	const [loading, setLoading] = useState( true )
+	const [index, setIndex] = useState( 0 )
+	const [visible, setVisible] = useState( false )
 
 	const navigation = useNavigation()
+	const imgView = useRef<ImageViewer>()
 
-	const handleImagePressed = ( uri: string ) =>
+	const handleImagePressed = ( index: number ) =>
 	{
-		navigation.navigate( "image view", { uri: uri } )
+		const arr: any = []
+		data.map( ( val, idx ) =>
+		{
+			arr.push( { url: val } )
+		} )
+
+		setUrldata( arr )
+
+		setIndex( index )
+		setVisible( true )
+
 	}
 
 	useEffect( () =>
@@ -73,6 +88,9 @@ const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 
 	return (
 		<View marginT-60 centerH paddingB-70 style={{ borderWidth: 0 }}>
+			<Modal visible={visible}>
+				<ImageViewer imageUrls={urldata} index={index} enableSwipeDown swipeDownThreshold={200} onCancel={() => setVisible( false )} />
+			</Modal>
 			<View center>
 				<Icon name="camera" size={25} color={Colors.text2} />
 				<Text lvl2 marginB-20>
@@ -85,7 +103,7 @@ const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 				{
 					return (
 						<TouchableOpacity
-							onPress={() => handleImagePressed( src )}
+							onPress={() => handleImagePressed( index )}
 							margin-2
 							activeOpacity={0.85}
 							key={index}
