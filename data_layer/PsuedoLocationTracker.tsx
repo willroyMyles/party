@@ -28,7 +28,6 @@ class PsuedoLocationTracker
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
         this.userLocation = latLng;
-        console.log( this.data.size );
 
         [...this.data.entries()].map( ( value, index ) =>
         {
@@ -63,31 +62,7 @@ class PsuedoLocationTracker
             this.data.set( value.identifier || "", value )
         } )
     }
-    @action sortData = () =>
-    {
 
-        if ( this.userLocation )
-        {
-            const arr = [...FireStore.data.values()]
-            for ( let index = 0; index < arr.length; index++ )
-            {
-                const element = arr[index];
-                if ( this.data.has( element.reference ) ) continue;
-                const latlng = getLatitudeLongitudeFromString( element.location )
-                const distance = getDistanceFromLatLonInKm( latlng?.latitude, latlng?.longitude, this.userLocation.latitude, this.userLocation.longitude )
-                element.distance = distance
-                this.data.set( element.reference, element )
-            }
-
-            const arr1 = [...this.data.values()].sort( ( a, b ) => a.distance - b.distance )
-
-            for ( let index = 0; index < 4; index++ )
-            {
-                this.trackedData.push( arr1[index] )
-            }
-        }
-
-    }
 
     getTopFive = () =>
     {
