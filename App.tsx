@@ -12,16 +12,12 @@ import
 
 import
 {
-  View, LoaderScreen,
+  View, LoaderScreen, Colors
 } from 'react-native-ui-lib'
-import
-{
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
 import StackNavigator from './pages/StackNavigator';
 import TToast from './components/TToast';
 import { ThemeProvider } from "styled-components"
-import tm from './universal/UiManager';
+import tm, { ThemeType } from './universal/UiManager';
 import { observer } from 'mobx-react';
 import * as Font from 'expo-font'
 import * as TaskManager from 'expo-task-manager'
@@ -98,6 +94,7 @@ const App = () =>
 
   return (
     <ThemeProvider theme={tm.theme} >
+      <StatusBar animated translucent backgroundColor={Colors.background} barStyle={tm.themeType == ThemeType.DARK ? "light-content" : "dark-content"} />
       <View flex bg-background>
         <StackNavigator />
         <TToast />
