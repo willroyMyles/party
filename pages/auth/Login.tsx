@@ -30,9 +30,11 @@ const Login = () =>
 
     const onSubmit = ( data: { email: string; password: string } ) =>
     {
+        TToast.working( "Loggin in", "Wait a moment while we log you in..." )
         FireStore.login( data.email, data.password )
             .then( ( res ) =>
             {
+                TToast.success( "Ready!", "Logged in successfully " )
                 goHome()
             } )
             .catch( ( err ) => HandleFirebaseErrors( err.code ) );

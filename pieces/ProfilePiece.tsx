@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
 import { View, Text, Avatar, TouchableOpacity } from 'react-native-ui-lib'
 import auth from '@react-native-firebase/auth'
-const ProfilePiece = () => {
+const ProfilePiece = () =>
+{
 
 
-    const [name, setName] = useState("")
-    const [image, setImage] = useState("")
+    const [name, setName] = useState( "" )
+    const [image, setImage] = useState( "" )
 
     auth().onAuthStateChanged( ( user ) =>
-    {        
-        if (user) {
-            setName(user.displayName || "")
-            setImage(user.photoURL || "")
-        }
-
-    })
+    {
+        setName( user?.displayName || "" )
+        setImage( user?.photoURL || "" )
+    } )
 
 
 
@@ -22,7 +20,7 @@ const ProfilePiece = () => {
         <View marginV-20>
             <View center>
                 <TouchableOpacity>
-                    <Avatar animate  source={{ uri: image }} size={82} containerStyle={{ elevation: 5 }} />
+                    <Avatar animate source={{ uri: image }} size={82} containerStyle={{ elevation: 5 }} />
                 </TouchableOpacity>
                 <Text marginT-5 lvl2>{name}</Text>
             </View>

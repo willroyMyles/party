@@ -47,6 +47,7 @@
     "react-native-ui-lib": "^5.11.0",
     "react-native-unimodules": "^0.10.1",
     "react-native-vector-icons": "^7.0.0",
+    "react-native-webview": "^10.7.0",
     "styled-components": "^5.1.1",
     "uuidv4": "^6.2.1"
   },

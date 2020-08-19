@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'react-native-gesture-handler';
 import
 {
@@ -28,7 +28,7 @@ import * as TaskManager from 'expo-task-manager'
 import * as Location from 'expo-location'
 import { eventEmitter, eventStrings } from './universal/EventEmitter';
 import psuedoLocationTracker from './data_layer/PsuedoLocationTracker';
-
+import WebView from 'react-native-webview'
 
 TaskManager.defineTask( "geoLocation", ( { data, error }: { data: any, error: any } ) =>
 {
@@ -54,7 +54,7 @@ if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimenta
 const App = () =>
 {
   const [loading, setLoading] = useState( true )
-
+  let webview = useRef<WebView | null>( null )
   useEffect( () =>
   {
     tm.setThemeType( false )
@@ -80,6 +80,15 @@ const App = () =>
     } )
   }, [] )
 
+  const code = `
+        console.log("timing");
+      `
+  useEffect( () =>
+  {
+    console.log( webview.current?.state );
+
+  }, [webview] )
+
   if ( loading )
   {
     return <View flex center>
@@ -87,11 +96,19 @@ const App = () =>
     </View>
   }
 
-  if ( !loading ) return (
+  return (
     <ThemeProvider theme={tm.theme} >
       <View flex bg-background>
         <StackNavigator />
         <TToast />
+        <WebView
+          ref={webview}
+          javaScriptEnabled
+          source={{ html: '<html><body>ho</body></html>' }}
+          injectedJavaScript={code}
+          style={{ width: 0, height: 0 }}
+          containerStyle={{ width: 0, height: 0, position: "absolute" }}
+        />
 
       </View>
     </ThemeProvider>
