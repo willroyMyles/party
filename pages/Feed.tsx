@@ -13,6 +13,7 @@ import SearchComponent from '../components/SearchComponent'
 import FeedFabButtons from '../components/FeedFabButtons'
 import { useNavigation } from '@react-navigation/native'
 import Feed_Item from '../components/Feed_Item'
+import SearchBar from '../components/SearchBar'
 
 const { width, height } = Dimensions.get( "screen" )
 const Feed = () =>
@@ -60,8 +61,8 @@ const Feed = () =>
 
 
 
-        <View bg-background paddingV-50 style={{ minHeight: "100%", width: "100%" }}>
-
+        <View bg-background paddingB-50 style={{ minHeight: "100%", width: "100%" }}>
+            <SearchBar />
             <ScrollView
                 onMomentumScrollEnd={( e ) => setoffset( e.nativeEvent.contentOffset )
                 }
