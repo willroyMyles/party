@@ -12,6 +12,7 @@ import FeedItemVersionOne from '../components/FeedItemVersionOne'
 import { Dimensions } from 'react-native'
 import TToast from '../components/TToast'
 import BackDrop from '../components/BackDrop'
+import Feed_Item from '../components/Feed_Item'
 
 const { width, height } = Dimensions.get( "screen" )
 const CategoryView = () =>
@@ -115,7 +116,7 @@ const CategoryView = () =>
                     onEndReached={loadData}
                     renderItem={( { item, index } ) =>
                     {
-                        return <FeedItemVersionOne reference={item.reference || ""} />
+                        return <Feed_Item reference={item.reference || ""} />
                     }}
                 />
                 {/* <FeedFabButtons offset={offset} /> */}
