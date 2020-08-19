@@ -7,6 +7,7 @@ import FireStore from "../data_layer/FireStore"
 import PhotoGridV2 from "../components/PhotoGridV2"
 import DateBox from "../components/DateBox"
 import { Colors } from "react-native/Libraries/NewAppScreen"
+import EventHeaderImage from "../components/EventHeaderImage"
 
 
 const PastEventView = () =>
@@ -32,11 +33,8 @@ const PastEventView = () =>
 	if ( item ) return (
 		<ScrollView contentContainerStyle={{ minHeight: "100%" }}>
 			<View bg-background style={{ minHeight: "100%" }}>
-				<Image
-					source={{ uri: image }}
-					style={{ flexDirection: "row", borderRadius: 2, height: 350 }}
-					resizeMode="cover"
-				/>
+				<EventHeaderImage imageUrl={image} />
+
 				<View row padding-20 paddingT-3 paddingB-12 style={{ flexDirection: "column", justifyContent: "space-between" }}>
 					<Text lvl1>{item.title}</Text>
 					<View marginT-10 row style={{ justifyContent: "flex-start" }}>

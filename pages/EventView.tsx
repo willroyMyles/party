@@ -12,6 +12,7 @@ import Organizer from '../components/Organizer'
 import UseSmallMapView from './UseSmallMapView'
 import PartyTypeBadge from '../components/PartyTypeBadge'
 import RSVPButton from '../components/RSVPButton'
+import EventHeaderImage from '../components/EventHeaderImage'
 
 const EventView = () =>
 {
@@ -42,9 +43,7 @@ const EventView = () =>
 
     if ( item ) return (
         <ScrollView contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%", paddingBottom: 40 }}>
-            <View style={{ maxHeight: 300, overflow: "hidden" }}>
-                <Image fadeDuration={600} source={{ uri: image }} resizeMode="cover" style={{ height: "100%", width: "100%" }} />
-            </View>
+            <EventHeaderImage imageUrl={image} />
             <View centerH>
                 <PartyTypeBadge type={item?.partyType} />
             </View>
