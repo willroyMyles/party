@@ -13,69 +13,71 @@ import { Dimensions } from 'react-native'
 import TToast from '../components/TToast'
 import BackDrop from '../components/BackDrop'
 
-const {width,height} = Dimensions.get("screen")
+const { width, height } = Dimensions.get( "screen" )
 const CategoryView = () =>
 {
     const theme = useTheme()
     const route = useRoute<any>()
     const { type } = route.params
-    const partyType = Number.parseInt(PartyType[type])
-    
+    const partyType = Number.parseInt( PartyType[type] )
+
     const [data, setData] = useState<FeedItemModel[]>()
     const [offset, setOffset] = useState<any>( undefined )
     const [shouldLoadMore, setShouldLoadMore] = useState( true )
     const [lastDocument, setLastDocument] = useState<string>()
     const [loading, setLoading] = useState( true )
-    
-    
+
+
     useEffect( () =>
-    {  
-            setLast()        
+    {
+        setLast()
     }, [] )
 
-    const setLast = (shouldSetLast = true) =>
+    const setLast = ( shouldSetLast = true ) =>
     {
         return new Promise<FeedItemModel[]>( ( resolve ) =>
         {
-            console.log("enter set last");
-            
+            console.log( "enter set last" );
+
             const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
-        {
-            return value.partyType == partyType
+            {
+                return value.partyType == partyType
+            } )
+            if ( d && shouldSetLast )
+            {
+                const lastIndex = d.length - 1
+                const ref = d[lastIndex].reference
+                setLastDocument( ref )
+
+            }
+
+            console.log( "resolving d", d.length );
+
+            resolve( d )
         } )
-         if ( d && shouldSetLast)
-        {
-            const lastIndex = d.length - 1
-            const ref = d[lastIndex].reference
-            setLastDocument(ref)
-            
-         }
-        
-            console.log("resolving d", d.length);
-            
-         resolve(d)
-       })
     }
-    
+
     const sortData = async () =>
     {
         // needs to append data   
-        const d = await setLast(false)
+        const d = await setLast( false )
         setData( d )
     }
 
-    useEffect(() => {
+    useEffect( () =>
+    {
         loadData()
-        return () => {
-            
+        return () =>
+        {
+
         }
-    }, [lastDocument])
+    }, [lastDocument] )
 
     const loadData = () =>
     {
-        console.log( lastDocument, "ref" );    
-        
-        if(!lastDocument) return
+        console.log( lastDocument, "ref" );
+
+        if ( !lastDocument ) return
 
         if ( !shouldLoadMore )
         {
@@ -83,52 +85,52 @@ const CategoryView = () =>
             return
         }
 
-        setLoading(true)
-        console.log("end reached");
+        setLoading( true )
+        console.log( "end reached" );
         FireStore.retrieve.specificParties( partyType, lastDocument || "" ).then( res =>
         {
-            console.log("data recieved");
-            
+            console.log( "data recieved" );
+
             sortData()
             setShouldLoadMore( true )
-            setLoading(false)
+            setLoading( false )
         } ).catch( err =>
         {
             setLoading( false )
-            setShouldLoadMore(false)
-        })
+            setShouldLoadMore( false )
+        } )
     }
-    
+
     if ( type )
     {
-    return (
-        <View bg-background flex center>
-            <FlatList
-            
-                data={data}
-                keyExtractor={(item, index) => item.reference + "item" + index}
+        return (
+            <View bg-background flex center>
+                <FlatList
 
-                onMomentumScrollEnd={( e ) => setOffset( e.nativeEvent.contentOffset )}
-                onEndReachedThreshold={height/3}
-                onEndReached={loadData}
-                renderItem={( {item, index} ) =>
-                {
-                    return <FeedItemVersionOne reference={item.reference || ""}  />
-                }}
-            />
-            <FeedFabButtons offset={offset} />
-           {loading && <View center margin-10 style={{minHeight:40}}>
-                <LoaderScreen color={Colors.primary} />
-            </View>}
-              {!shouldLoadMore && <View center margin-10 style={{minHeight:40}}>
-                <Text muted>no more events... =[</Text>
-            </View>}
-        </View>
-    )
+                    data={data}
+                    keyExtractor={( item, index ) => item.reference + "item" + index}
+
+                    onMomentumScrollEnd={( e ) => setOffset( e.nativeEvent.contentOffset )}
+                    onEndReachedThreshold={height / 3}
+                    onEndReached={loadData}
+                    renderItem={( { item, index } ) =>
+                    {
+                        return <FeedItemVersionOne reference={item.reference || ""} />
+                    }}
+                />
+                {/* <FeedFabButtons offset={offset} /> */}
+                {loading && <View center margin-10 style={{ minHeight: 40 }}>
+                    <LoaderScreen color={Colors.primary} />
+                </View>}
+                {!shouldLoadMore && <View center margin-10 style={{ minHeight: 40 }}>
+                    <Text muted>no more events... =[</Text>
+                </View>}
+            </View>
+        )
     }
 
 
-        return (
+    return (
         <View>
             <Text></Text>
         </View>

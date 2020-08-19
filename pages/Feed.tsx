@@ -102,7 +102,7 @@ const Feed = () =>
                     <Text>reset backend</Text>
                 </TouchableOpacity>
             </ScrollView>
-            <FeedFabButtons offset={offset} />
+            {/* <FeedFabButtons offset={offset} /> */}
         </View>
     )
 }
