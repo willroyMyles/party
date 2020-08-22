@@ -297,12 +297,13 @@ class ThemeHelper
 				color: Colors.muted,
 				textTransform: "uppercase",
 				paddingHorizontal: 7,
-				borderRadius: 1,
-				borderColor: Colors.light
-				, backgroundColor: Colors.background,
+				borderRadius: 4,
+				borderColor: Colors.light,
+				backgroundColor: Colors.background,
 				alignContent: "center",
 				alignItems: "center",
-				fontFamily: "RR"
+				fontFamily: "RR",
+				// elevation: 1
 
 			},
 			regular: {

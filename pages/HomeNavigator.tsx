@@ -8,6 +8,7 @@ import Settings from './Settings';
 import NearMeV2 from './NearMeV2';
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import CustomTabBar from '../components/CustomTabBar';
+import FeedV2 from './FeedV2';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -75,7 +76,7 @@ const HomeNavigator = () =>
       <Tab.Screen
         name="feed"
         options={{ tabBarIcon: () => 'th-large' }}
-        component={Feed}
+        component={FeedV2}
       />
       <Tab.Screen
         name="settings"
