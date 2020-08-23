@@ -3,7 +3,7 @@ import { View, Text, Image, Avatar, Colors } from 'react-native-ui-lib'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useTheme } from 'styled-components'
 import FireStore from '../data_layer/FireStore'
-import { ScrollView } from 'react-native'
+import { ScrollView, StatusBar } from 'react-native'
 import moment from 'moment'
 import { PartyType } from '../universal/Models'
 import tm from '../universal/UiManager'
@@ -43,6 +43,7 @@ const EventView = () =>
 
     if ( item ) return (
         <ScrollView contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%", paddingBottom: 40 }}>
+            <StatusBar animated backgroundColor={"rgba(0,0,0,0)"} />
             <EventHeaderImage imageUrl={image} />
             <View centerH>
                 <PartyTypeBadge type={item?.partyType} />

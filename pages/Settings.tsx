@@ -7,19 +7,24 @@ import About from './settings/About'
 import { Colors } from 'react-native-ui-lib'
 import tm from '../universal/UiManager'
 import { useTheme } from 'styled-components'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Tab = createMaterialTopTabNavigator()
 const Settings = () =>
 {
     const theme = useTheme()
-   const style = {tabStyle: { backgroundColor: Colors.background, borderBottomWidth: 2, borderBottomColor: Colors.foreground }, labelStyle: { fontFamily: "RR" }, activeTintColor:Colors.primary, inactiveTintColor:Colors.muted
-}
+    const style = {
+        tabStyle: { backgroundColor: Colors.background, borderBottomWidth: 2, borderBottomColor: Colors.foreground }, labelStyle: { fontFamily: "RR" }, activeTintColor: Colors.primary, inactiveTintColor: Colors.muted
+    }
     return (
-        <Tab.Navigator tabBarOptions={style}>
-            <Tab.Screen name="profile" component={Profile} />
-            <Tab.Screen name="account" component={Account} />
-            <Tab.Screen name="about" component={About} />
-        </Tab.Navigator>
+        <SafeAreaView style={{ flex: 1 }}>
+
+            <Tab.Navigator tabBarOptions={style}>
+                <Tab.Screen name="profile" component={Profile} />
+                <Tab.Screen name="account" component={Account} />
+                <Tab.Screen name="about" component={About} />
+            </Tab.Navigator>
+        </SafeAreaView>
     )
 }
 
