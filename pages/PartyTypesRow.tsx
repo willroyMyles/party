@@ -10,7 +10,7 @@ import { PartyType } from '../universal/Models'
 const { width, height } = Dimensions.get( "screen" )
 
 
-const PartyTypesRow = () =>
+const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
 {
 
     const theme = useTheme()
@@ -35,7 +35,7 @@ const PartyTypesRow = () =>
 
 
     return (
-        <View center paddingV-10 style={{ width: "100%", height: 270 }}>
+        <View center paddingV-10 bg-background style={{ width: "100%", height: heightt, borderWidth: 0 }}>
             <Text marginT-5 marginL-10 indicator style={{ alignSelf: "flex-start" }}>Categories</Text>
             {data.length == 0 && <TouchableOpacity onPress={loadFeed}>
                 <Text>load feed</Text>
@@ -43,7 +43,7 @@ const PartyTypesRow = () =>
             {data.length != 0 && <FlatList
                 data={data}
                 horizontal
-                contentContainerStyle={{ height: "100%", padding: 10 }}
+                contentContainerStyle={{ height: "100%", paddingVertical: 10 }}
                 keyExtractor={( item, index ) => "item" + index}
                 renderItem={( { item, index } ) =>
                 {
@@ -69,6 +69,7 @@ const transitions = (
 )
 const PartyCard = memo( ( { item }: { item: string } ) =>
 {
+    const theme = useTheme()
     const text = GetPartytypeString( PartyType[item] )
     const data = FireStore.categorizedData.get( item )
     const length = data?.length
@@ -91,8 +92,6 @@ const PartyCard = memo( ( { item }: { item: string } ) =>
         newIndex = index + 1 >= length ? 0 : index + 1
         setIndex( newIndex )
         setCurrentItem( data[newIndex] )
-
-
         changeImage()
     }
 
@@ -113,13 +112,13 @@ const PartyCard = memo( ( { item }: { item: string } ) =>
 
 
     return (
-        <TouchableOpacity center bg-red50 style={{
+        <TouchableOpacity center style={{
             marginHorizontal: 10,
             height: "100%",
             width: width * .4,
             borderRadius: 12,
             overflow: "hidden",
-            elevation: 5
+            // elevation: 5
 
         }}>
             <Image fadeDuration={300} source={{ uri: image }} style={{ width: "100%", height: "100%" }} />
@@ -129,7 +128,7 @@ const PartyCard = memo( ( { item }: { item: string } ) =>
                 bottom: 0,
                 left: 0,
                 padding: 10,
-                backgroundColor: Colors.foreground + "22",
+                backgroundColor: Colors.foreground,
                 width: "100%"
             }}>
                 <Animated.View style={{ opacity: fade }}>

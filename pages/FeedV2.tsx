@@ -1,10 +1,11 @@
 import { CurrentRenderContext } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
-import { View, Text, Animated, NativeScrollEvent, NativeSyntheticEvent, Dimensions, LayoutAnimation } from 'react-native'
+import { View, Text, NativeScrollEvent, NativeSyntheticEvent, Dimensions, LayoutAnimation, FlatListProps } from 'react-native'
 import { FlatList, ScrollView } from 'react-native-gesture-handler'
-import { Transition, Transitioning, TransitioningView } from 'react-native-reanimated'
+import Animated, { Transition, Transitioning, TransitioningView } from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { Colors } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 import Feed_Item from '../components/Feed_Item'
 import FireStore from '../data_layer/FireStore'
@@ -23,13 +24,9 @@ const FeedV2 = () =>
 {
     const off = 260
     const theme = useTheme()
-    const holder = useRef<TransitioningView | any>()
-    const [visible, setVisible] = useState( true )
     const [data, setData] = useState<FeedItemModel[]>( [] )
-    const [offset, setOffset] = useState<number>( 0 )
-
-    const [headerOffset, setheaderOffset] = useState( 0 )
-    const [viewOffset, setviewOffset] = useState( 250 )
+    const scrollY = new Animated.Value( 0 )
+    const diffY = Animated.diffClamp( scrollY, 0, off )
 
     useEffect( () =>
     {
@@ -37,63 +34,59 @@ const FeedV2 = () =>
         setData( values )
     }, [FireStore.data] )
 
-    const onScroll = ( e: NativeSyntheticEvent<NativeScrollEvent> ) =>
-    {
-        var currentOffset = e.nativeEvent.contentOffset.y
-        var direction = currentOffset > offset ? hide() : show();
-        LayoutAnimation.configureNext( {
-            ...LayoutAnimation.Presets.easeInEaseOut,
-            duration: 300
-        } );
-        setOffset( currentOffset )
-    }
 
-    const hide = () =>
-    {
-        setheaderOffset( -off )
-        setviewOffset( 0 )
-    }
 
-    const show = () =>
-    {
-        setheaderOffset( 0 )
-        setviewOffset( off )
-    }
+    const headerY = Animated.interpolate( diffY, {
+        inputRange: [0, off],
+        outputRange: [0, -off]
+    } )
 
+    const AFL = Animated.createAnimatedComponent( FlatList )
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <Transitioning.View ref={holder} transition={transitions} style={{ height: "100%" }}>
-                <View bg-background style={{ height: "100%" }}>
-                    <View style={{
-                        position: "absolute",
-                        top: headerOffset,
-                        left: 0,
-                        zIndex: 2,
-                        width: "100%",
-                        // height: 200
-                    }}>
-                        <PartyTypesRow />
-                    </View>
-                    <FlatList
-                        style={{
-                            position: "absolute",
-                            top: viewOffset,
-                            width: "100%",
-                            height: Dimensions.get( "screen" ).height,
-                            paddingBottom: 20,
+        <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
+            <View bg-background style={{ height: "100%" }}>
+                <Animated.View style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 2,
+                    width: "100%",
+                    transform: [{ translateY: headerY }]
+                    // height: 200
+                }}>
+                    <PartyTypesRow heightt={off} />
+                </Animated.View>
+                <AFL
+                    scrollEventThrottle={16}
+                    bounces={false}
 
-                        }}
-                        contentContainerStyle={{ paddingBottom: 100 }}
-                        data={data}
-                        onScroll={onScroll}
-                        renderItem={( { item, index } ) =>
-                        {
-                            return <Feed_Item reference={item.reference || ""} />
-                        }}
-                    />
-                </View>
-            </Transitioning.View>
+                    style={{
+                        // position: "absolute",
+                        top: 0,
+                        width: "100%",
+                        height: "100%",
+                        paddingBottom: off,
+                        paddingTop: off
+
+                    }}
+                    contentContainerStyle={{ paddingBottom: off, backgroundColor: Colors.background }}
+                    data={data}
+
+
+                    onScroll={
+                        Animated.event<any>( [{
+                            nativeEvent: { contentOffset: { y: scrollY } }
+                        }] )
+                    }
+                    keyExtractor={( item: any, index: number ) => "item" + index}
+
+                    renderItem={( { item, index } ) =>
+                    {
+                        return <Feed_Item reference={item.reference || ""} />
+                    }}
+                />
+            </View>
         </SafeAreaView>
     )
 }
