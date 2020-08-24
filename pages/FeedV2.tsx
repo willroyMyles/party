@@ -9,6 +9,7 @@ import { Colors } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 import Feed_Item from '../components/Feed_Item'
 import FireStore from '../data_layer/FireStore'
+import { eventEmitter, eventStrings } from '../universal/EventEmitter'
 import { FeedItemModel } from '../universal/Models'
 import PartyTypesRow from './PartyTypesRow'
 
@@ -22,7 +23,7 @@ const transitions = (
 
 const FeedV2 = () =>
 {
-    const off = 260
+    const off = 320
     const theme = useTheme()
     const [data, setData] = useState<FeedItemModel[]>( [] )
     const scrollY = new Animated.Value( 0 )
@@ -30,9 +31,20 @@ const FeedV2 = () =>
 
     useEffect( () =>
     {
+        eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, loadData )
+
+        return () =>
+        {
+            eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, loadData )
+
+        }
+    }, [] )
+
+    const loadData = () =>
+    {
         const values = [...FireStore.data.values()]
         setData( values )
-    }, [FireStore.data] )
+    }
 
 
 

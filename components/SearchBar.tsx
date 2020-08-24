@@ -14,8 +14,8 @@ const SearchBar = () =>
         navigation.navigate( "search" )
     }
     return (
-        <View padding-7 marginV-4 marginB-10 paddingT-12 style={{ width: "100%" }}>
-            <TouchableOpacity onPress={handlePress} spread bg-foreground style={s.bar} >
+        <View padding-7 paddingH-15 marginV-4 marginB-10 paddingT-12 style={{ width: "100%" }}>
+            <TouchableOpacity centerV onPress={handlePress} spread bg-foreground style={s.bar} >
                 <Text lvl2>search</Text>
                 <Icon name="search" size={14} color={Colors.text2} />
             </TouchableOpacity>

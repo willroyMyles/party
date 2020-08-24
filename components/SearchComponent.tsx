@@ -10,10 +10,12 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import SearchBar from './SearchBar'
 import { StyleSheet } from 'react-native'
 import { GS } from '../universal/GS'
+import { useTheme } from 'styled-components'
 
 
 const SearchComponent = () =>
 {
+    const theme = useTheme()
     const [value, setValue] = useState<string>( "" )
     const [data, setdata] = useState<FeedItemModel[] | undefined>( undefined )
 
@@ -49,9 +51,9 @@ const SearchComponent = () =>
                 <View style={{
                     position: "absolute",
                     right: 25,
-                    top: 15
+                    top: 17
                 }}>
-                    <Icon name="search" size={14} />
+                    <Icon name="search" size={14} color={Colors.text2} />
 
                 </View>
             </View>
