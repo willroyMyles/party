@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Avatar, Switch, TouchableOpacity, Colors } from 'react-native-ui-lib'
 import ProfilePiece from '../../pieces/ProfilePiece'
-import tm from '../../universal/UiManager'
+import tm, { ThemeType } from '../../universal/UiManager'
 import { StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'styled-components'
@@ -17,6 +17,15 @@ const Profile = () =>
     const navigation = useNavigation()
     const [darkTheme, setdarkTheme] = useState( false )
     const handleCreateEvent = () => navigation.navigate( "create event" )
+    const handleCHnage = ( val: boolean ) => new Promise( resolve =>
+    {
+        setdarkTheme( val )
+        tm.setThemeType( val )
+    } )
+
+    useEffect( () =>
+        setdarkTheme( tm.themeType == ThemeType.DARK )
+        , [] )
 
     return (
         <ScrollView contentContainerStyle={{ minHeight: "100%", overflow: "scroll", padding: 10, backgroundColor: Colors.background }}>
@@ -31,15 +40,12 @@ const Profile = () =>
                         thumbColor={Colors.background}
                         thumbStyle={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.primary + "60" }}
                         style={{ borderWidth: 1, borderColor: Colors.primary + "68", elevation: 1 }}
-                        onValueChange={( val: boolean ) =>
-                        {
-                            setdarkTheme( val )
-                            tm.setThemeType( val )
-                        }}></Switch>
+
+                        onValueChange={handleCHnage}></Switch>
                 </View>
             </View>
             <View>
-                {/* <RSVPModule /> */}
+                <RSVPModule />
             </View>
             <View center marginT-40>
                 <TouchableOpacity row onPress={handleCreateEvent} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>

@@ -173,6 +173,17 @@ const PartyCard = ( { item }: { item: string } ) =>
                                 source={{ uri: image }}
                                 style={{ width: '100%', height: '100%' }}
                             />
+                            <View
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 25.5,
+                                    left: 0,
+                                    width: '100%',
+                                    zIndex: 2,
+                                    paddingLeft: 9,
+                                }}>
+                                <Text lvl2 muted>{value.title}</Text>
+                            </View>
                         </View>
                     );
             } )}
@@ -183,6 +194,7 @@ const PartyCard = ( { item }: { item: string } ) =>
                     bottom: 0,
                     left: 0,
                     padding: 10,
+                    paddingTop: 20,
                     backgroundColor: Colors.foreground,
                     width: '100%',
                 }}>

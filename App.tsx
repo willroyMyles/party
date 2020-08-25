@@ -44,7 +44,7 @@ TaskManager.defineTask( "geoLocation", ( { data, error }: { data: any, error: an
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
 {
   UIManager.setLayoutAnimationEnabledExperimental( true )
-  LayoutAnimation.configureNext( LayoutAnimation.Presets.linear )
+  // LayoutAnimation.configureNext( LayoutAnimation.Presets.linear )
 }
 
 const App = () =>
