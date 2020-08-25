@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5'
 import BackDrop, { BackDropV2 } from '../../components/BackDrop'
 import RSVPModule from '../../components/RSVPModule'
 import { ScrollView } from 'react-native-gesture-handler'
+import FireStore from '../../data_layer/FireStore'
 
 const Profile = () =>
 {
@@ -16,7 +17,16 @@ const Profile = () =>
     const theme = useTheme()
     const navigation = useNavigation()
     const [darkTheme, setdarkTheme] = useState( false )
-    const handleCreateEvent = () => navigation.navigate( "create event" )
+    const handleCreateEvent = () =>
+    {
+        FireStore.auth.needAuth().then( res =>
+        {
+            if ( res )
+            {
+                navigation.navigate( "create event" )
+            }
+        } )
+    }
     const handleCHnage = ( val: boolean ) => new Promise( resolve =>
     {
         setdarkTheme( val )
@@ -51,7 +61,7 @@ const Profile = () =>
                 <TouchableOpacity row onPress={handleCreateEvent} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>
 
                     <Icon name="plus" size={18} color={Colors.text1} />
-                    <Text btn uppercase marginH-10 >create event</Text>
+                    <Text btn uppercase marginH-10 >create party</Text>
                     <BackDropV2 />
                 </TouchableOpacity>
             </View>

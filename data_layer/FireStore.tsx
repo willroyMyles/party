@@ -4,6 +4,7 @@ import uuidv4 from 'uuid';
 import { FeedItemModel, PartyType } from '../universal/Models';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
+import { Alert } from 'react-native';
 class Store
 {
   @observable data: Map<string, FeedItemModel> = new Map();
@@ -246,6 +247,19 @@ class Store
     } ).catch( err => reject( err ) )
   } )
 
+  @action private needsToBeLoggedInToProceed = () => new Promise<boolean>( resolve =>
+  {
+    if ( this.isLoggedIn() )
+    {
+      resolve( true )
+    } else
+    {
+      resolve( false )
+      Alert.alert( "who are you?", "you need to be logged in to complete this action" )
+
+    }
+  } )
+
   retrieve = {
     isLoggedIn: this.isLoggedIn,
     events: this.getEvents,
@@ -268,7 +282,8 @@ class Store
     facebook: this.FacebookLogin,
     twitter: this.TwitterLogin,
     logout: this.LogOut,
-    resetPassword: this.resetPassword
+    resetPassword: this.resetPassword,
+    needAuth: this.needsToBeLoggedInToProceed
   };
 }
 

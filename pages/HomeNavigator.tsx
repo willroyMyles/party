@@ -74,7 +74,7 @@ const HomeNavigator = () =>
         />
       )}
       <Tab.Screen
-        name="feed"
+        name="discover"
         options={{ tabBarIcon: () => 'th-large' }}
         component={FeedV2}
       />
