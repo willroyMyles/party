@@ -5,11 +5,11 @@ import { eventEmitter, eventStrings } from "../universal/EventEmitter"
 import { getDistanceFromLatLonInKm, getLatitudeLongitudeFromString } from "../universal/GetLocation"
 import { FeedItemModel } from "../universal/Models"
 import FireStore from "./FireStore"
-
+import uuid from 'uuid'
 export const radius = 100;
 export const taskName = 'geoLocation';
 export const threshold = 10 / radius
-class PsuedoLocationTracker
+export class PsuedoLocationTracker
 {
     @observable trackedData: Map<string, number> = new Map()
     @observable userLocation: LatLng | undefined = undefined
@@ -17,6 +17,8 @@ class PsuedoLocationTracker
 
     @observable entered: Map<string, number> = new Map()
     @observable exited: Map<string, number> = new Map()
+
+    @observable id = uuid.v4()
 
     init = () => null
 
@@ -28,6 +30,8 @@ class PsuedoLocationTracker
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
         this.userLocation = latLng;
+        console.log("updateedd", this.data.size);
+        
 
         [...this.data.entries()].map( ( value, index ) =>
         {
@@ -57,10 +61,14 @@ class PsuedoLocationTracker
     @action watchTheseLocations = ( data: LocationRegion[] ) =>
     {
         this.data.clear()
+        const d = new Map()
         data.map( ( value, index ) =>
         {
-            this.data.set( value.identifier || "", value )
+            console.log(`watching ${value}`);
+            d.set( value.identifier || "", value )
         } )
+
+        this.data = d
     }
 
 
@@ -68,14 +76,6 @@ class PsuedoLocationTracker
     {
 
     }
-
-    v = autorun( () =>
-    {
-        if ( FireStore.data )
-        {
-            console.log( "data changesd" );
-        }
-    } )
 
 }
 

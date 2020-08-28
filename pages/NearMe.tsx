@@ -36,11 +36,9 @@ const NearMe = () =>
         sortMarkers()
 
         eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
-
         return () =>
         {
             eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
-
         };
     }, [] );
 
@@ -48,6 +46,8 @@ const NearMe = () =>
     {
         try
         {
+            // console.log(e);
+            
             const loc = e.nativeEvent.coordinate;
             const reg = await getRegion( loc );
             setRegion( reg );
@@ -83,11 +83,16 @@ const NearMe = () =>
         {
             console.log( `${ taskName } is defined` );
 
-            psuedoLocationTracker.watchTheseLocations( geoRegions )
+            // psuedoLocationTracker.watchTheseLocations( geoRegions )
             Location.startLocationUpdatesAsync( taskName ).then( res =>
             {
                 eventEmitter.emit(eventStrings.locationWatchStart, data)
             })
+
+            // Location.watchPositionAsync( {
+            //     accuracy:Location.Accuracy.High
+            // }, ()=>null)
+            // Location.startGeofencingAsync(taskName, geoRegions)
         }
     }
 

@@ -23,25 +23,22 @@ import * as Font from 'expo-font'
 import * as TaskManager from 'expo-task-manager'
 import * as Location from 'expo-location'
 import { eventEmitter, eventStrings } from './universal/EventEmitter';
-import psuedoLocationTracker from './data_layer/PsuedoLocationTracker';
+import psuedoLocationTracker, { PsuedoLocationTracker } from './data_layer/PsuedoLocationTracker';
 import { LocationRegion } from 'expo-location';
+import uuidv4 from 'uuid';
 
+let values = []
 
+const ps = new PsuedoLocationTracker()
+// runs with new values everytime
 const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
 {
-	let values = []
 	
-	// useEffect(() => {
-		// 	return () => {
-			// 		eventEmitter.removeListener( eventStrings.locationWatchStart, updateRecieved )
-			// 	}
-			// }, [] )
-			
-			
-			
-			const updateRecieved = (data: LocationRegion[]) =>
+			const updateRecieved = (d: LocationRegion[]) =>
 			{
-				console.log(`this is the amount on location region update ${data.length}`);
+				console.log( `this is the amount on location region update ${ d.length }` );
+				values = d
+				ps.watchTheseLocations(d)
 				
 			}
 			
@@ -53,12 +50,35 @@ const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
 		console.log( error )
 		return
 	}
-	const { longitude, latitude } = data.locations[0].coords
-	console.log( longitude, latitude );
+
+	if ( data )
+	{
+		const { longitude, latitude } = data.locations[0].coords
+
+		console.trace(  `${ps.id}` );
+		ps.updateUserLocation( { latitude, longitude } )
+	}
 	
 }
 
 TaskManager.defineTask( "geoLocation", GeoLocationUpdates)
+
+const GetRegions = ({data, error}:any) =>
+{
+	if ( data )
+	{
+		console.log(data);
+		
+	}
+
+	if ( error )
+	{
+		console.log(`this is an error ${error}`);
+		
+	}
+}
+
+// TaskManager.defineTask("geoLocation", GetRegions)
 
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
