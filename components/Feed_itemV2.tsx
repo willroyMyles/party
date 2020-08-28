@@ -65,7 +65,7 @@ const Feed_ItemV2 = ( { reference }: { reference: string } ) =>
 					<View>
 						<View>
 							<Text muted>Date</Text>
-							<Text regular>{moment( item.date ).format( "ddd MMM DD, YYYY" )}</Text>
+							<Text regular>{moment( new Date( item.date )).format( "ddd MMM DD, YYYY" )}</Text>
 						</View>
 					</View>
 				</View>

@@ -84,7 +84,10 @@ const NearMe = () =>
             console.log( `${ taskName } is defined` );
 
             psuedoLocationTracker.watchTheseLocations( geoRegions )
-            Location.startLocationUpdatesAsync( taskName )
+            Location.startLocationUpdatesAsync( taskName ).then( res =>
+            {
+                eventEmitter.emit(eventStrings.locationWatchStart, data)
+            })
         }
     }
 

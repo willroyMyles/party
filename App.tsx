@@ -24,21 +24,41 @@ import * as TaskManager from 'expo-task-manager'
 import * as Location from 'expo-location'
 import { eventEmitter, eventStrings } from './universal/EventEmitter';
 import psuedoLocationTracker from './data_layer/PsuedoLocationTracker';
-import WebView from 'react-native-webview'
+import { LocationRegion } from 'expo-location';
 
-TaskManager.defineTask( "geoLocation", ( { data, error }: { data: any, error: any } ) =>
+
+const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
 {
-  if ( error )
-  {
-    console.log( error )
-    return
-  }
-  const { longitude, latitude } = data.locations[0].coords
-  // console.log( longitude, latitude );
-  psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
+	let values = []
+	
+	// useEffect(() => {
+		// 	return () => {
+			// 		eventEmitter.removeListener( eventStrings.locationWatchStart, updateRecieved )
+			// 	}
+			// }, [] )
+			
+			
+			
+			const updateRecieved = (data: LocationRegion[]) =>
+			{
+				console.log(`this is the amount on location region update ${data.length}`);
+				
+			}
+			
+	if(!eventEmitter.eventNames().includes(eventStrings.locationWatchStart))
+			eventEmitter.addListener(eventStrings.locationWatchStart, updateRecieved)
 
-} )
+	if ( error )
+	{
+		console.log( error )
+		return
+	}
+	const { longitude, latitude } = data.locations[0].coords
+	console.log( longitude, latitude );
+	
+}
 
+TaskManager.defineTask( "geoLocation", GeoLocationUpdates)
 
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
@@ -98,14 +118,7 @@ const App = () =>
       <View flex bg-background>
         <StackNavigator />
         <TToast />
-        <WebView
-          ref={webview}
-          javaScriptEnabled
-          source={{ html: '<html><body>ho</body></html>' }}
-          injectedJavaScript={code}
-          style={{ width: 0, height: 0 }}
-          containerStyle={{ width: 0, height: 0, position: "absolute" }}
-        />
+       
 
       </View>
     </ThemeProvider>

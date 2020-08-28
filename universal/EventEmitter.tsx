@@ -10,6 +10,7 @@ export const eventStrings = {
   locationGranted: "when user grants location",
   locationConfirmed:
     'used when confirmed is pressed to relay location to create pot view',
+  locationWatchStart:"used when locations are started watcthing",
   dataFromProviderFinishedLoad: 'used to signal data finished loading',
   loggingIn: 'used when logging in or signing up ',
   imageGotten:
