@@ -80,7 +80,10 @@ const NearMe = () =>
         {
             console.log( `${ taskName } is defined` );
 
-            Location.startLocationUpdatesAsync( taskName ).then( res =>
+            Location.startLocationUpdatesAsync( taskName, {
+                timeInterval: 1000 * 60 * 20, // every 20 mins
+                accuracy: Location.Accuracy.High,
+            } ).then( res =>
             {
                 eventEmitter.emit(eventStrings.locationWatchStart, data)
             })

@@ -6,6 +6,8 @@ import { getDistanceFromLatLonInKm, getLatitudeLongitudeFromString } from "../un
 import { FeedItemModel } from "../universal/Models"
 import FireStore from "./FireStore"
 import uuid from 'uuid'
+import { GetNotificationPermission } from "../universal/GetNotification"
+import * as Notifications from 'expo-notifications'
 export const radius = 100;
 export const taskName = 'geoLocation';
 export const threshold = 10 / radius
@@ -31,7 +33,7 @@ export class PsuedoLocationTracker
     {
         this.userLocation = latLng;
         
-        [...this.data.entries()].map( ( value, index ) =>
+        [...this.data.entries()].map( async ( value, index ) =>
         {
             const ll = getDistanceFromLatLonInKm( value[1].latitude, value[1].longitude, this.userLocation?.latitude, this.userLocation?.longitude )
             this.trackedData.set( value[0], ll )
@@ -42,6 +44,31 @@ export class PsuedoLocationTracker
                 this.entered.set( value[0], ll )
                 eventEmitter.emit( eventStrings.locationEntered, value[0] )
                 console.log( "fence breached" );
+                const perm = await GetNotificationPermission()
+                if ( perm )
+                {
+                    console.log( "should sent noti" );
+
+                    Notifications.setNotificationHandler( {
+                        handleNotification: async () => ( {
+                            shouldShowAlert: true,
+                            shouldPlaySound: false,
+                            shouldSetBadge: false,
+                        } ),
+                    } );
+
+                    Notifications.scheduleNotificationAsync( {
+                        content: {
+                            title: "test notification",
+                            body: `seem your at ${ value[1].identifier }, enjoying it?`,
+                            autoDismiss: true,
+                            
+                        },
+                        trigger: {
+                            seconds: 1
+                        }
+                    } )
+                }
 
             }
 
