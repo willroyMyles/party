@@ -1,12 +1,11 @@
 import * as Notifications from 'expo-notifications';
-import { Notification } from 'react-native-ui-lib/typings';
 
 export const GetNotificationPermission = () => new Promise<boolean>( async( resolve, reject ) =>
 {
     try
     {
         const perm = await Notifications.getPermissionsAsync()
-        
+
         if ( perm.granted )
         {
             return resolve(true)
