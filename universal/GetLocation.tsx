@@ -3,37 +3,35 @@ import * as Location from "expo-location"
 import { LatLng, Region } from "react-native-maps";
 import { Dimensions } from "react-native";
 import { eventEmitter, eventStrings } from "./EventEmitter";
-import { event } from "react-native-reanimated";
 
 
 export const getLocation = () => new Promise<any>(async (resolve, reject) => {
-
-
     try {
-
-
         const perm = await Location.getPermissionsAsync()        
         if ( !perm.granted && perm.canAskAgain )
         {
             //should request permission first?
             Location.requestPermissionsAsync().then( result =>
             {
-                           if ( !result.granted )
+            if ( !result.granted )
             {
-            eventEmitter.emit(eventStrings.locationGranted)
+                eventEmitter.emit( eventStrings.locationNotGranted )
+                return reject( "not granted" )
                 
             }
             } ).catch( err =>
             {
-               eventEmitter.emit(eventStrings.locationNotGranted)
+                eventEmitter.emit( eventStrings.locationNotGranted )
+                return reject( "not granted" )
+
            })
 
         }
 
         if ( !perm.granted )
         {
-            reject( "not granted" )
             eventEmitter.emit(eventStrings.locationNotGranted)
+            reject( "not granted" )
         }
 
         if (perm.granted) {
@@ -51,7 +49,7 @@ export const getLocation = () => new Promise<any>(async (resolve, reject) => {
     }
     catch (err) {
         console.log(err);
-
+        reject( "not granted" )
     }
 
 })
@@ -102,6 +100,6 @@ export const getLatitudeLongitudeFromString = (ll?: string) => {
   return d;
 }
 
-export function deg2rad(deg) {
+export function deg2rad(deg:any) {
   return deg * (Math.PI/180)
 }

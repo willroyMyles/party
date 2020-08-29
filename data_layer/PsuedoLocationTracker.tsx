@@ -30,9 +30,7 @@ export class PsuedoLocationTracker
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
         this.userLocation = latLng;
-        console.log("updateedd", this.data.size);
         
-
         [...this.data.entries()].map( ( value, index ) =>
         {
             const ll = getDistanceFromLatLonInKm( value[1].latitude, value[1].longitude, this.userLocation?.latitude, this.userLocation?.longitude )
@@ -64,7 +62,6 @@ export class PsuedoLocationTracker
         const d = new Map()
         data.map( ( value, index ) =>
         {
-            console.log(`watching ${value}`);
             d.set( value.identifier || "", value )
         } )
 

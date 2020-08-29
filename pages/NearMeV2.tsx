@@ -70,14 +70,12 @@ class NearMeV2 extends PureComponent {
 
     if (TaskManager.isTaskDefined(taskName)) {
       Location.hasStartedGeofencingAsync('geoLocation').then(async (res) => {
-        console.log('has started', this.state.geoRegions);
 
         if (!res && this.state.geoRegions?.length > 0) {
           await Location.startGeofencingAsync(
             'geoLocation',
             this.state.geoRegions,
           );
-          console.log('geo started');
         }
       });
     }

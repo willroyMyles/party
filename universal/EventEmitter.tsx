@@ -17,6 +17,7 @@ export const eventStrings = {
     'used to signal to past image view that a new images has been recieved',
   locationEntered: 'used when a geo fence is entered',
   locationExited: 'used when a geo fence is exited',
+  locationDwell:"used when location entered and stay their for a period of time",
   showToast: {
     working: 'used when sneding data to back end',
     success: 'used when an operation is successful',
@@ -30,8 +31,6 @@ export const errorStrings = {
 
 export const HandleFirebaseErrors = ( code: string ) =>
 {
-  console.log( code );
-
   let es = 'Something went wrong';
 
   switch ( code )

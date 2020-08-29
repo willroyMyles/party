@@ -17,11 +17,8 @@ const RSVPModule = () =>
 
 		FireStore.retrieve.rsvpEvents().then( res =>
 		{
-			console.log( "rsvp called" );
-
 			const d = [...FireStore.rsvpData.values()]
 			setData( d )
-			console.log( d.length );
 
 		} ).catch( err =>
 		{

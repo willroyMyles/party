@@ -53,9 +53,6 @@ const CategoryView = () =>
                 setLastDocument( ref )
 
             }
-
-            console.log( "resolving d", d.length );
-
             resolve( d )
         } )
     }
@@ -95,8 +92,6 @@ const CategoryView = () =>
         console.log( "end reached" );
         FireStore.retrieve.specificParties( partyType, lastDocument || "" ).then( res =>
         {
-            console.log( "data recieved" );
-
             sortData()
             setShouldLoadMore( true )
             setLoading( false )

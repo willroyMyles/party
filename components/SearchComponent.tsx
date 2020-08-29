@@ -34,10 +34,8 @@ const SearchComponent = () =>
             return
         }
         const r = new RegExp( `${ v.toLowerCase() }` )
-        console.log( v, r );
 
         const d = [...FireStore.data.values()].filter( ( value, index ) => value.title?.toLowerCase().match( r ) )
-        console.log( d.length );
 
         setdata( d )
     }

@@ -37,7 +37,6 @@ const EventView = () =>
         if ( item ) getImage()
         // tm.setThemeType(true)
     }, [] )
-    console.log( item?.imageUrl );
 
 
 

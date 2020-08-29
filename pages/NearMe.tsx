@@ -45,9 +45,7 @@ const NearMe = () =>
     const userLocationChanged = async ( e: EventUserLocation ) =>
     {
         try
-        {
-            // console.log(e);
-            
+        {            
             const loc = e.nativeEvent.coordinate;
             const reg = await getRegion( loc );
             setRegion( reg );
@@ -69,7 +67,6 @@ const NearMe = () =>
                 map.current.forceUpdate();
             }
             setRegion( reg );
-            console.log( 'should be animating' );
         } catch ( err )
         {
             console.log( 'err', err );
@@ -83,16 +80,12 @@ const NearMe = () =>
         {
             console.log( `${ taskName } is defined` );
 
-            // psuedoLocationTracker.watchTheseLocations( geoRegions )
             Location.startLocationUpdatesAsync( taskName ).then( res =>
             {
                 eventEmitter.emit(eventStrings.locationWatchStart, data)
             })
 
-            // Location.watchPositionAsync( {
-            //     accuracy:Location.Accuracy.High
-            // }, ()=>null)
-            // Location.startGeofencingAsync(taskName, geoRegions)
+
         }
     }
 

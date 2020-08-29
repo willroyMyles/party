@@ -20,11 +20,6 @@ function RSVPButton( { reference }: { reference: string | undefined } )
 
 				} )
 
-				// FireStore.retrieve.rsvpEvents().catch( err =>
-				// {
-				// 	console.log( "some err", err );
-
-				// } )
 			} else
 			{
 				// TToast.needTobeLoggedIn()

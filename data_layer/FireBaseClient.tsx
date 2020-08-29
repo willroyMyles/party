@@ -12,7 +12,7 @@ import { event } from 'react-native-reanimated';
 
 GoogleSignin.isSignedIn().then( res =>
 {
-  console.log( res, "user" );
+  return res
 
 } )
 
@@ -159,7 +159,7 @@ class Store
     {
       if ( last == null )
       {
-        console.log( 'new' );
+        console.log( 'getting data' );
 
         const firstQuery = firestore()
           .collection( eventCollection )
@@ -217,8 +217,6 @@ class Store
         // .where( "partyType", "==", type )
 
         const snapshot = await firstQuery.get();
-        console.log( "snapshot", snapshot.size );
-
         if ( snapshot.empty ) return reject( 'empty' );
         resolve( snapshot );
 

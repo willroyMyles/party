@@ -36,7 +36,6 @@ const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
 	
 			const updateRecieved = (d: LocationRegion[]) =>
 			{
-				console.log( `this is the amount on location region update ${ d.length }` );
 				values = d
 				ps.watchTheseLocations(d)
 				
@@ -62,23 +61,6 @@ const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
 }
 
 TaskManager.defineTask( "geoLocation", GeoLocationUpdates)
-
-const GetRegions = ({data, error}:any) =>
-{
-	if ( data )
-	{
-		console.log(data);
-		
-	}
-
-	if ( error )
-	{
-		console.log(`this is an error ${error}`);
-		
-	}
-}
-
-// TaskManager.defineTask("geoLocation", GetRegions)
 
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
@@ -116,14 +98,6 @@ const App = () =>
     } )
   }, [] )
 
-  const code = `
-        console.log("timing");
-      `
-  useEffect( () =>
-  {
-    console.log( webview.current?.state );
-
-  }, [webview] )
 
   if ( loading )
   {

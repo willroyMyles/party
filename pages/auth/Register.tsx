@@ -22,8 +22,6 @@ const Register = () =>
         password: string;
     } ) =>
     {
-        console.log( data );
-
         TToast.working( 'Working', 'Talking with our people' );
         FireStore.register( data.username, data.email, data.password )
             .then( ( res ) =>
