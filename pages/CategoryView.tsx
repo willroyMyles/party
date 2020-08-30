@@ -25,8 +25,8 @@ const CategoryView = () =>
     const { type } = route.params
     const partyType = Number.parseInt( PartyType[type] )
 
-    const [data, setData] = useState<Set<FeedItemModel>>(new Set())
-    const [offset, setOffset] = useState<any>( undefined )
+    const [data, setData] = useState<FeedItemModel[]>([])
+    // const [offset, setOffset] = useState<any>( undefined )
     const [shouldLoadMore, setShouldLoadMore] = useState( true )
     const [lastDocument, setLastDocument] = useState<string>()
     const [loading, setLoading] = useState( true )
@@ -42,7 +42,7 @@ const CategoryView = () =>
         if ( view.current ) view.current.animateNextTransition()
         return new Promise<FeedItemModel[]>( ( resolve ) =>
         {
-            const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
+            const d: FeedItemModel[] = [...FireStore.intermediateryData.values()].filter( ( value, index ) =>
             {
                 return value.partyType == partyType
             } )
@@ -54,33 +54,11 @@ const CategoryView = () =>
 
             }
             resolve( d )
-            const set = data
-
-            for ( let i of d )
-            {
-                set.add(i)
-            } 
-            setData( set)
+           
+            setData(data => data.concat(d))
             
         } )
     }
-
-    // const sortData = async () =>
-    // {
-    //     // if ( view.current ) view.current.animateNextTransition()
-    //     // // needs to append data   
-    //     // const d = await setLast( false )
-    //     // setData( d )
-    // }
-
-    // useEffect( () =>
-    // {
-    //     loadData()
-    //     return () =>
-    //     {
-
-    //     }
-    // }, [lastDocument] )
 
     const loadData = () =>
     {
@@ -122,15 +100,15 @@ const CategoryView = () =>
     {
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <Transitioning.View ref={view} transition={transitions} style={{ flex: 1 }}>
                     <View bg-background flex center>
                         <Text marginV-12 indicator>{GetPartytypeString( partyType )}</Text>
                         <FlatList
                             data={[...data]}
                             keyExtractor={( item, index ) => item.reference + "item" + index}
-                            onMomentumScrollEnd={( e ) => setOffset( e.nativeEvent.contentOffset )}
+                            // onMomentumScrollEnd={( e ) => setOffset( e.nativeEvent.contentOffset )}
                             onEndReachedThreshold={height / 3}
-                            onEndReached={loadData}
+                        onEndReached={loadData}
+                       
                             renderItem={( { item, index } ) =>
                             {
                                 return <View>
@@ -149,7 +127,6 @@ const CategoryView = () =>
                             </View>
                         }
                     </View>
-                </Transitioning.View>
             </SafeAreaView>
         )
     }

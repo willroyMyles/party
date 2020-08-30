@@ -14,96 +14,80 @@ import FeedFabButtons from '../components/FeedFabButtons'
 import { useNavigation } from '@react-navigation/native'
 import Feed_Item from '../components/Feed_Item'
 import SearchBar from '../components/SearchBar'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import FeedTop from './feed_page/FeedTop'
+import FeedList from './feed_page/FeedList'
 
 const { width, height } = Dimensions.get( "screen" )
 const Feed = () =>
 {
-    const theme = useTheme()
-    const navigation = useNavigation()
-    const [data, setdata] = useState<string[]>()
-    const [offset, setoffset] = useState<{ x: number, y: number }>( { x: 0, y: 0 } )
+    const off = 260
+
+    const [moreData, setMoreData] = useState( true )
+
+    const scrollY = new Animated.Value( 0 )
+    const diffY = Animated.diffClamp( scrollY, 0, off )
+
+    console.log( "rendered triggered" );
 
     useEffect( () =>
     {
-        eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => loadData() )
+        eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, loadData )
 
         return () =>
         {
-            eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, () => loadData() )
+            eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, loadData )
+
         }
     }, [] )
 
     const loadData = () =>
     {
-        // FireStore.sortFeedItemDocs()
-        const keyss = [...FireStore.categorizedData.keys()]
-        setdata( keyss )
-        // eventEmitter.emit( eventStrings.dataFromProviderFinishedLoad )
+        const values = [...FireStore.intermediateryData.values()]
+        const lastIndex = values.length - 1
+        const ref = values[lastIndex].reference
+        // setLastDocument( ref )
+        setData( d => [...d, ...values] )
     }
 
-    const resetBackend = () =>
+    const loadMore = () =>
     {
-        FBS.resetLast()
-        handleLoad()
-        loadData()
+        if ( !moreData ) return
+        FireStore.retrieve.events().catch( err =>
+        {
+            setMoreData( false )
+        } )
     }
 
 
-    const handleLoad = () =>
+    const headerY = Animated.interpolate( diffY, {
+        inputRange: [0, off],
+        outputRange: [0, -off]
+    } )
+
+    const checkIfShouldLoadMore = () =>
     {
-        FireStore.retrieve.events().then()
-    }
+        console.log( "end triggered" );
 
-    const handleViewAll = ( route: string ) => navigation.navigate( "category", { type: route } )
+        // const val = Math.abs( contentHeight - yOffset )
+
+        // console.log( `called check offset: ${ yOffset }, hieght : ${ contentHeight }, val : ${val}` );
+        // if (  val < threshold )
+        // {
+        //     // loadMore()
+        // }
+    }
 
 
     return (
-
-
-
-        <View bg-background paddingB-50 style={{ minHeight: "100%", width: "100%" }}>
-            <SearchBar />
-            <ScrollView
-                onMomentumScrollEnd={( e ) => setoffset( e.nativeEvent.contentOffset )
-                }
-            // contentContainerStyle={{ backgroundColor: Colors.background, minHeight: "100%" }}
-            >
-                {data?.map( ( value, idx ) =>
-                {
-                    const name = value.replace( "_", " " ).toLowerCase()
-                    return <View key={idx}>
-                        <View row spread marginH-8>
-                            <Text indicator>{name}</Text>
-                            <TouchableOpacity marginR-5 onPress={() => handleViewAll( value )}>
-                                <Text color={Colors.primary}>view all</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <FlatList
-                            // style={{ width: "100%", borderWidth: 5, borderColor: Colors.blue20 }}
-                            // contentContainerStyle={{borderColor:Colors.red20, borderWidth:13, padding:0}}
-                            horizontal
-                            data={FireStore.categorizedData.get( value )}
-                            keyExtractor={( item, index ) => item.reference + "item" + index}
-                            renderItem={( { item, index } ) =>
-                            {
-                                return <Feed_Item reference={item.reference || ""} />
-
-                            }}
-                        />
-                    </View>
-                } )}
-                <TouchableOpacity style={[style.btn]} onPress={handleLoad}>
-                    <Text>load from backend</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[style.btn]} onPress={loadData}>
-                    <Text>load from store</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[style.btn]} onPress={resetBackend}>
-                    <Text>reset backend</Text>
-                </TouchableOpacity>
-            </ScrollView>
-            {/* <FeedFabButtons offset={offset} /> */}
-        </View>
+        <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
+            <View bg-background style={{ height: "100%" }}>
+              
+                <SearchBar />
+                <FeedTop off={off} scrollY={scrollY}/>
+                <FeedList off={off} scrollY={scrollY} />
+            </View>
+        </SafeAreaView>
     )
 }
 

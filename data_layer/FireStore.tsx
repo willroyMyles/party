@@ -8,6 +8,7 @@ import { Alert } from 'react-native';
 class Store
 {
   @observable data: Map<string, FeedItemModel> = new Map();
+  @observable intermediateryData: Map<string, FeedItemModel> = new Map();
   @observable rsvpData: Map<string, FeedItemModel> = new Map();
   @observable categorizedData: Map<string, FeedItemModel[]> = new Map()
   @observable previewedData: any[] = []
@@ -89,6 +90,7 @@ class Store
 
   sortDataFromFireBase = ( data: any ) =>
   {
+    this.intermediateryData.clear()
     return new Promise( ( resolve, reject ) =>
     {
       const result: FirebaseFirestoreTypes.QuerySnapshot = data
@@ -96,6 +98,7 @@ class Store
       result.docs.forEach( ( doc, index ) =>
       {
         if ( !this.data.has( doc.id ) ) this.data.set( doc.id, doc.data() )
+        this.intermediateryData.set(doc.id, doc.data())
       } )
       resolve( true )
       this.sortCategorizedData( result.docs )
@@ -105,7 +108,7 @@ class Store
 
   @action private getEvents = () => new Promise( ( resolve, reject ) =>
   {
-    FBS.getEventsInMultiplies( 5 ).then( ( res: any ) =>
+    FBS.getEventsInMultiplies( 2 ).then( ( res: any ) =>
     {
       this.sortDataFromFireBase( res ).then( res =>
       {

@@ -42,9 +42,9 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
         <View
             center
             paddingV-10
-            bg-background
+            bg-green20
             style={{ width: '100%', height: heightt, borderWidth: 0 }}>
-            <SearchBar />
+            {/* <SearchBar /> */}
             <Text
                 marginT-5
                 marginL-10
