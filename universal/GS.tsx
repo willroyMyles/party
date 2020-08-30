@@ -1,11 +1,15 @@
 
 import React, { useEffect } from 'react'
-import { StyleSheet } from "react-native";
+import {  StyleSheet } from "react-native";
 import { Colors, View } from "react-native-ui-lib";
 import { useTheme } from "styled-components";
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { PartyType } from './Models';
+import Animated from 'react-native-reanimated';
+import { FlatList, ScrollView } from 'react-native-gesture-handler'
 
+
+export const AFL = Animated.createAnimatedComponent( FlatList )
 
 export const GetIcon = ( { name }: { name: string } ) =>
 {

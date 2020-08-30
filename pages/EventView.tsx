@@ -56,7 +56,7 @@ const EventView = () =>
                     <GetIcon name="calendar" />
                     <View marginL-10>
                         <Text lvl3 text3>Date</Text>
-                        <Text regular>{moment( item.date ).format( "ddd - MMM DD, YYYY" )}</Text>
+                        <Text regular>{moment( new Date( item.date) ).format( "ddd - MMM DD, YYYY" )}</Text>
                     </View>
                 </View>
                 <View marginT-8 row>

@@ -42,7 +42,7 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
         <View
             center
             paddingV-10
-            bg-green20
+            bg-background
             style={{ width: '100%', height: heightt, borderWidth: 0 }}>
             {/* <SearchBar /> */}
             <Text
@@ -150,7 +150,7 @@ const PartyCard = ( { item }: { item: string } ) =>
                 width: width * 0.4,
                 borderRadius: 12,
                 overflow: 'hidden',
-                // elevation: 6,
+                elevation: 8,
             }}>
             {data?.map( ( value, idx ) =>
             {
