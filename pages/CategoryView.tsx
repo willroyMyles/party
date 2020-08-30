@@ -25,7 +25,7 @@ const CategoryView = () =>
     const { type } = route.params
     const partyType = Number.parseInt( PartyType[type] )
 
-    const [data, setData] = useState<FeedItemModel[]>()
+    const [data, setData] = useState<Set<FeedItemModel>>(new Set())
     const [offset, setOffset] = useState<any>( undefined )
     const [shouldLoadMore, setShouldLoadMore] = useState( true )
     const [lastDocument, setLastDocument] = useState<string>()
@@ -34,12 +34,12 @@ const CategoryView = () =>
 
     useEffect( () =>
     {
-        if ( view.current ) view.current.animateNextTransition()
         setLast()
     }, [] )
 
     const setLast = ( shouldSetLast = true ) =>
     {
+        if ( view.current ) view.current.animateNextTransition()
         return new Promise<FeedItemModel[]>( ( resolve ) =>
         {
             const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
@@ -54,47 +54,53 @@ const CategoryView = () =>
 
             }
             resolve( d )
+            const set = data
+
+            for ( let i of d )
+            {
+                set.add(i)
+            } 
+            setData( set)
+            
         } )
     }
 
-    const sortData = async () =>
-    {
-        if ( view.current ) view.current.animateNextTransition()
-        // needs to append data   
-        const d = await setLast( false )
-        setData( d )
-    }
+    // const sortData = async () =>
+    // {
+    //     // if ( view.current ) view.current.animateNextTransition()
+    //     // // needs to append data   
+    //     // const d = await setLast( false )
+    //     // setData( d )
+    // }
 
-    useEffect( () =>
-    {
-        loadData()
-        return () =>
-        {
+    // useEffect( () =>
+    // {
+    //     loadData()
+    //     return () =>
+    //     {
 
-        }
-    }, [lastDocument] )
+    //     }
+    // }, [lastDocument] )
 
     const loadData = () =>
     {
-        console.log( lastDocument, "ref" );
+        // console.log( lastDocument, "ref" );
         if ( view.current ) view.current.animateNextTransition()
 
-
-        if ( !lastDocument ) return
+        if ( !lastDocument ) return // last document doest exist
 
         if ( !shouldLoadMore )
         {
-            TToast.error( "Oops!", "No more events in list" )
+            // TToast.error( "Oops!", "No more events in list" )
             return
         }
 
         setLoading( true )
-        console.log( "end reached" );
         FireStore.retrieve.specificParties( partyType, lastDocument || "" ).then( res =>
         {
-            sortData()
             setShouldLoadMore( true )
             setLoading( false )
+            setLast()
         } ).catch( err =>
         {
             setLoading( false )
@@ -120,23 +126,28 @@ const CategoryView = () =>
                     <View bg-background flex center>
                         <Text marginV-12 indicator>{GetPartytypeString( partyType )}</Text>
                         <FlatList
-                            data={data}
+                            data={[...data]}
                             keyExtractor={( item, index ) => item.reference + "item" + index}
                             onMomentumScrollEnd={( e ) => setOffset( e.nativeEvent.contentOffset )}
                             onEndReachedThreshold={height / 3}
                             onEndReached={loadData}
                             renderItem={( { item, index } ) =>
                             {
-                                return <Feed_Item reference={item.reference || ""} />
+                                return <View>
+                                    
+                                   <Feed_Item reference={item.reference || ""} />
+                      
+                                </View>
                             }}
                         />
                         {/* <FeedFabButtons offset={offset} /> */}
                         {loading && <View center margin-10 style={{ minHeight: 40 }}>
                             <LoaderScreen color={Colors.primary} />
                         </View>}
-                        {!shouldLoadMore && <View center margin-10 style={{ minHeight: 40 }}>
-                            <Text muted>no more events... =[</Text>
-                        </View>}
+                        {shouldLoadMore && <View center margin-10 style={{ minHeight: 40 }}>
+                                <Text muted>no more events... =[</Text>
+                            </View>
+                        }
                     </View>
                 </Transitioning.View>
             </SafeAreaView>

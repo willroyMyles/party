@@ -23,7 +23,7 @@ import psuedoLocationTracker, { radius, taskName } from '../data_layer/PsuedoLoc
 
 const NearMe = () =>
 {
-    const map = useRef<MapView | undefined>();
+    const map = useRef<MapView | any>();
     const theme = useTheme();
     const [region, setRegion] = useState<Region | null>();
     const [markers, setMarkers] = useState<FeedItemModel[]>( [] );

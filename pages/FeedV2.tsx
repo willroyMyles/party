@@ -13,6 +13,8 @@ import { eventEmitter, eventStrings } from '../universal/EventEmitter'
 import { FeedItemModel } from '../universal/Models'
 import PartyTypesRow from './PartyTypesRow'
 
+const { width, height } = Dimensions.get( "screen" )
+
 const transitions = (
     <Transition.Sequence>
         <Transition.Out type="scale" />
@@ -26,6 +28,10 @@ const FeedV2 = () =>
     const off = 320
     const theme = useTheme()
     const [data, setData] = useState<FeedItemModel[]>( [] )
+    const [lastDocument, setLastDocument] = useState<string>()
+    const [moreData, setMoreData] = useState(true)
+
+
     const scrollY = new Animated.Value( 0 )
     const diffY = Animated.diffClamp( scrollY, 0, off )
 
@@ -43,9 +49,23 @@ const FeedV2 = () =>
     const loadData = () =>
     {
         const values = [...FireStore.data.values()]
+        const lastIndex = values.length - 1
+        const ref = values[lastIndex].reference
+        setLastDocument( ref )
         setData( values )
     }
 
+    const loadMore = () =>
+    {
+        if(!moreData) return
+        FireStore.retrieve.events().then( res =>
+        {
+            loadData()
+        } ).catch( err =>
+        {
+            setMoreData(false)
+        })
+    }
 
 
     const headerY = Animated.interpolate( diffY, {
@@ -84,7 +104,8 @@ const FeedV2 = () =>
                     }}
                     contentContainerStyle={{ paddingBottom: off, backgroundColor: Colors.background }}
                     data={data}
-
+                    onEndReachedThreshold={height / 4}
+                    onEndReached={loadMore}
 
                     onScroll={
                         Animated.event<any>( [{
