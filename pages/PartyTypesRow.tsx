@@ -11,6 +11,7 @@ import Animated, {
 import { View, Text, TouchableOpacity, Colors, Image } from 'react-native-ui-lib';
 import SearchBar from '../components/SearchBar';
 import FireStore from '../data_layer/FireStore';
+import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import { GetPartytypeString } from '../universal/GS';
 import { PartyType } from '../universal/Models';
 const { width, height } = Dimensions.get( 'screen' );
@@ -22,19 +23,30 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
     const [visible, setVisible] = useState( true );
     const [data, setData] = useState<string[]>( [] );
 
+    useEffect(() => {
+        eventEmitter.addListener(eventStrings.categorizedDataLoaded, load)
+        return () => {
+            eventEmitter.removeListener( eventStrings.categorizedDataLoaded, load )
+        }
+    }, [] )
+    
+    const load = () =>
+    {
+        const keys = [...FireStore.categorizedData.keys()];
+        setData( keys );
+    }
+
     const loadFeed = () =>
     {
         FireStore.retrieve
             .events()
             .then( ( res ) =>
             {
-                const keys = [...FireStore.categorizedData.keys()];
-                setData( keys );
+                load()
             } )
             .catch( ( err ) =>
             {
-                const keys = [...FireStore.categorizedData.keys()];
-                setData( keys );
+                load()
             } );
     };
 
@@ -93,7 +105,9 @@ const PartyCard = ( { item }: { item: string } ) =>
     const [image, setimage] = useState<string>();
     const handleViewAll = ( route: string ) =>
         navigation.navigate( 'category', { type: route } );
-    const view = useRef<TransitioningView>();
+    const view = useRef<TransitioningView>(); 
+    const amount = FireStore.categorizedData
+        .get( item )?.length
 
     useEffect( () =>
     {
@@ -131,14 +145,6 @@ const PartyCard = ( { item }: { item: string } ) =>
         LayoutAnimation.configureNext( CustomLayoutLinear )
         changeItem();
     }, 6000 );
-
-    const transitions = (
-        <Transition.Together>
-            <Transition.Out type="scale" />
-            <Transition.Change durationMs={1300} interpolation="linear" />
-            <Transition.In type="slide-top" durationMs={1600} />
-        </Transition.Together>
-    );
 
     return (
         <TouchableOpacity
@@ -189,6 +195,7 @@ const PartyCard = ( { item }: { item: string } ) =>
             } )}
 
             <View
+                row spread centerV
                 style={{
                     position: 'absolute',
                     bottom: 0,
@@ -199,6 +206,9 @@ const PartyCard = ( { item }: { item: string } ) =>
                     width: '100%',
                 }}>
                 <Text lvl2>{text}</Text>
+                <View bg-background paddingH-5 center style={{ borderRadius:3}}>
+                    <Text lvl2>{amount}</Text>
+                </View>
             </View>
         </TouchableOpacity>
     );

@@ -34,7 +34,8 @@ const CategoryView = () =>
 
     useEffect( () =>
     {
-        setLast()
+        // setLast()
+        loadData()
     }, [] )
 
     const setLast = ( shouldSetLast = true ) =>
@@ -42,20 +43,26 @@ const CategoryView = () =>
         if ( view.current ) view.current.animateNextTransition()
         return new Promise<FeedItemModel[]>( ( resolve ) =>
         {
-            const d: FeedItemModel[] = [...FireStore.intermediateryData.values()].filter( ( value, index ) =>
+            const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
             {
                 return value.partyType == partyType
             } )
-            if ( d && shouldSetLast )
+            console.log(d.length);
+            
+            if ( d && shouldSetLast && d.length > 0 )
             {
                 const lastIndex = d.length - 1
                 const ref = d[lastIndex].reference
+                console.debug( ref )
+                console.log(`refernce ${ref}`);
+                
                 setLastDocument( ref )
 
             }
             resolve( d )
            
-            setData(data => data.concat(d))
+            setData( d )
+            setLoading(false)
             
         } )
     }
@@ -106,9 +113,8 @@ const CategoryView = () =>
                             data={[...data]}
                             keyExtractor={( item, index ) => item.reference + "item" + index}
                             // onMomentumScrollEnd={( e ) => setOffset( e.nativeEvent.contentOffset )}
-                            onEndReachedThreshold={height / 3}
-                        onEndReached={loadData}
-                       
+                            onEndReachedThreshold={.1}
+                            onEndReached={loadData}
                             renderItem={( { item, index } ) =>
                             {
                                 return <View>
@@ -122,7 +128,7 @@ const CategoryView = () =>
                         {loading && <View center margin-10 style={{ minHeight: 40 }}>
                             <LoaderScreen color={Colors.primary} />
                         </View>}
-                        {shouldLoadMore && <View center margin-10 style={{ minHeight: 40 }}>
+                        {!shouldLoadMore && !loading && <View center margin-10 style={{ minHeight: 40 }}>
                                 <Text muted>no more events... =[</Text>
                             </View>
                         }

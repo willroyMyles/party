@@ -68,23 +68,23 @@ class Store
       }
     }
 
-    this.sortFeedItemDocs()
+    eventEmitter.emit(eventStrings.categorizedDataLoaded)
+
+    // this.sortFeedItemDocs()
   }
 
-  @action sortFeedItemDocs = () =>
-  {
-    const limitInSection = 2 // equates to 3 items
-    const obj: any = { title: "", data: [] }
-    const arr: any = []
-    this.categorizedData.forEach( ( value, key ) =>
-    {
-      obj.title = key
-      obj.data = value.slice( 0, 2 )
-      this.previewedData.push( obj )
-    } )
-
-
-  }
+  // @action sortFeedItemDocs = () =>
+  // {
+  //   const limitInSection = 2 // equates to 3 items
+  //   const obj: any = { title: "", data: [] }
+  //   const arr: any = []
+  //   this.categorizedData.forEach( ( value, key ) =>
+  //   {
+  //     obj.title = key
+  //     obj.data = value.slice( 0, 2 )
+  //     this.previewedData.push( obj )
+  //   } )
+  // }
 
 
 

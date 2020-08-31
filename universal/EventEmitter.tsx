@@ -23,6 +23,7 @@ export const eventStrings = {
     success: 'used when an operation is successful',
     error: 'used when some thing went wrong',
   },
+  categorizedDataLoaded:"called when data has be sorted by category"
 };
 
 export const errorStrings = {
