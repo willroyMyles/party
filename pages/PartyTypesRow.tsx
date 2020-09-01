@@ -9,6 +9,7 @@ import Animated, {
     TransitioningView,
 } from 'react-native-reanimated';
 import { View, Text, TouchableOpacity, Colors, Image } from 'react-native-ui-lib';
+import LoaderImage from '../components/LoaderImage';
 import SearchBar from '../components/SearchBar';
 import FireStore from '../data_layer/FireStore';
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
@@ -174,10 +175,10 @@ const PartyCard = ( { item }: { item: string } ) =>
                                 height: '100%',
                             }}>
                             {/* <Text>{value.title}</Text> */}
-                            <Image
-                                fadeDuration={300}
-                                source={{ uri: image }}
-                                style={{ width: '100%', height: '100%' }}
+                            <LoaderImage 
+                                height="100%" 
+                                width="100%"
+                                uri={image}
                             />
                             <View
                                 style={{

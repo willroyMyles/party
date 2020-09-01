@@ -35,12 +35,23 @@ const CategoryView = () =>
     useEffect( () =>
     {
         // setLast()
+        displayCurrentParties()
         loadData()
     }, [] )
 
+    const displayCurrentParties = () =>
+    {
+        const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
+        {
+            return value.partyType == partyType
+        } )
+
+        setData( d )
+    }
+
+
     const setLast = ( shouldSetLast = true ) =>
     {
-        if ( view.current ) view.current.animateNextTransition()
         return new Promise<FeedItemModel[]>( ( resolve ) =>
         {
             const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
@@ -70,7 +81,6 @@ const CategoryView = () =>
     const loadData = () =>
     {
         // console.log( lastDocument, "ref" );
-        if ( view.current ) view.current.animateNextTransition()
 
         if ( !lastDocument ) return // last document doest exist
 
@@ -83,8 +93,6 @@ const CategoryView = () =>
         setLoading( true )
         FireStore.retrieve.specificParties( partyType, lastDocument || "" ).then( res =>
         {
-            setShouldLoadMore( true )
-            setLoading( false )
             setLast()
         } ).catch( err =>
         {
@@ -92,16 +100,7 @@ const CategoryView = () =>
             setShouldLoadMore( false )
         } )
     }
-    const view = useRef<TransitioningView>()
 
-    const transitions = (
-        <Transition.Together>
-            {/* <Transition.Out type="scale" /> */}
-            {/* <Transition.Change durationMs={300} interpolation="linear" /> */}
-            <Transition.In type="fade" durationMs={400} />
-            <Transition.In type="slide-bottom" durationMs={300} />
-        </Transition.Together>
-    )
 
     if ( type )
     {
