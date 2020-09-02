@@ -28,8 +28,6 @@ const Feed = () =>
     const scrollY = new Animated.Value( 0 )
     const diffY = Animated.diffClamp( scrollY, 0, off )
 
-    console.log( "rendered triggered" );
-
     useEffect( () =>
     {
         eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, loadData )
@@ -65,18 +63,7 @@ const Feed = () =>
         outputRange: [0, -off]
     } )
 
-    const checkIfShouldLoadMore = () =>
-    {
-        console.log( "end triggered" );
 
-        // const val = Math.abs( contentHeight - yOffset )
-
-        // console.log( `called check offset: ${ yOffset }, hieght : ${ contentHeight }, val : ${val}` );
-        // if (  val < threshold )
-        // {
-        //     // loadMore()
-        // }
-    }
 
 
     return (

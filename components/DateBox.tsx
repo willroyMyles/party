@@ -3,8 +3,8 @@ import { View, Text, Colors } from 'react-native-ui-lib'
 import moment from 'moment'
 
 const DateBox = ({ date }: { date: string }) => {
-    const month = moment(date).format("MMM")
-    const day = moment(date).format("DD")
+    const month = moment( new Date( date || "" )).format("MMM")
+    const day = moment( new Date( date || "" )).format("DD")
     return (
         <View bg-background center style={{
             position: "absolute",

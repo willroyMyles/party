@@ -63,7 +63,7 @@ const EventView = () =>
                     <GetIcon name="clock" />
                     <View marginL-10>
                         <Text lvl3 text3>Time</Text>
-                        <Text lvl2>{moment( item.start ).format( "hh:mm A" )} for {item.duration} hrs</Text>
+                        <Text lvl2>{moment( new Date( item.start || "" ) ).format( "hh:mm A" )} for {item.duration} hrs</Text>
                     </View>
                 </View>
                 <View marginT-8 row>

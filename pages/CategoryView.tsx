@@ -17,7 +17,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { GetPartytypeString } from '../universal/GS'
 import { Transition, Transitioning, TransitioningView } from 'react-native-reanimated'
 
-const { width, height } = Dimensions.get( "screen" )
 const CategoryView = () =>
 {
     const theme = useTheme()
@@ -29,73 +28,76 @@ const CategoryView = () =>
     // const [offset, setOffset] = useState<any>( undefined )
     const [shouldLoadMore, setShouldLoadMore] = useState( true )
     const [lastDocument, setLastDocument] = useState<string>()
-    const [loading, setLoading] = useState( true )
+    const [loading, setLoading] = useState( false )
 
 
     useEffect( () =>
     {
         // setLast()
         displayCurrentParties()
-        loadData()
+        setLast().then( res =>
+        {
+            loadData()
+        })
     }, [] )
+
+    const updateParties = (data:FeedItemModel[]) =>
+    {
+        setData( data )
+        setLoading(false)
+    }
 
     const displayCurrentParties = () =>
     {
-        const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
-        {
-            return value.partyType == partyType
-        } )
-
+        const d = getValues( partyType )
         setData( d )
     }
 
-
-    const setLast = ( shouldSetLast = true ) =>
+    const setLast = () => new Promise<FeedItemModel[]>( resolve =>
     {
-        return new Promise<FeedItemModel[]>( ( resolve ) =>
-        {
-            const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
-            {
-                return value.partyType == partyType
-            } )
-            console.log(d.length);
-            
-            if ( d && shouldSetLast && d.length > 0 )
-            {
-                const lastIndex = d.length - 1
-                const ref = d[lastIndex].reference
-                console.debug( ref )
-                console.log(`refernce ${ref}`);
-                
-                setLastDocument( ref )
+        const d = getValues(partyType)
 
-            }
-            resolve( d )
-           
-            setData( d )
-            setLoading(false)
-            
+        if ( d && d.length > 0 )
+        {
+            const lastIndex = d.length - 1
+            const ref = d[lastIndex].reference
+            setLastDocument( ref )
+        }
+        resolve(d)
+    })
+
+    const getValues = ( type1: number ) =>
+    {
+        const d: FeedItemModel[] = [...FireStore.data.values()].filter( ( value, index ) =>
+        {
+            return value.partyType == type1
         } )
+
+        return d
     }
 
     const loadData = () =>
     {
-        // console.log( lastDocument, "ref" );
 
+        console.log(!!lastDocument,"is last?")
         if ( !lastDocument ) return // last document doest exist
 
-        if ( !shouldLoadMore )
-        {
-            // TToast.error( "Oops!", "No more events in list" )
-            return
-        }
+        if ( !shouldLoadMore )  return
+
 
         setLoading( true )
         FireStore.retrieve.specificParties( partyType, lastDocument || "" ).then( res =>
         {
-            setLast()
+            setLoading( false )
+            setLast().then( res =>
+            {
+                updateParties(res)
+                
+            })
         } ).catch( err =>
         {
+            console.log("error?");
+            
             setLoading( false )
             setShouldLoadMore( false )
         } )

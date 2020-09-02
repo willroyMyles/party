@@ -211,12 +211,15 @@ class Store
       {
         const firstQuery = firestore()
           .collection( eventCollection )
-          .orderBy( order )
+          .orderBy( order, "asc" )
           .startAfter( snapshot1 )
           .limit( amount )
-        // .where( "partyType", "==", type )
+          // .where( "partyType", "==", type )
+        
+        
 
         const snapshot = await firstQuery.get();
+        
         if ( snapshot.empty ) return reject( 'empty' );
         resolve( snapshot );
 
@@ -344,33 +347,7 @@ class Store
 
   private facebookSignIn = () => new Promise( async ( resolve, reject ) =>
   {
-    //   try
-    //   {
-    //     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-
-    // if (result.isCancelled) {
-    //   throw 'User cancelled the login process';
-    // }
-
-    // // Once signed in, get the users AccesToken
-    // const data = await AccessToken.getCurrentAccessToken();
-
-    // if (!data) {
-    //   throw 'Something went wrong obtaining access token';
-    // }
-
-    // // Create a Firebase credential with the AccessToken
-    // const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
-
-    // // Sign-in the user with the credential
-    // return auth().signInWithCredential(facebookCredential);
-    //   }
-    //   catch ( err )
-    //   {
-    //     console.log( err );
-    //     reject(err)
-
-    //   }
+  
   } )
 
   private rsvpEvent = ( reference: string, add = true ) => new Promise( ( resolve, reject ) =>

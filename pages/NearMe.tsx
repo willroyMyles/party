@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import MapView, {
     Circle,
     EventUserLocation,
+    LatLng,
+    Marker,
     PROVIDER_GOOGLE,
     Region,
 } from 'react-native-maps';
@@ -17,6 +19,7 @@ import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import psuedoLocationTracker, { radius, taskName } from '../data_layer/PsuedoLocationTracker';
+import { Platform } from 'react-native';
 
 
 
@@ -73,12 +76,13 @@ const NearMe = () =>
         }
     };
 
+
+
     const startGeo = ( data: any[] ) =>
     {
 
         if ( TaskManager.isTaskDefined( taskName ) )
         {
-            console.log( `${ taskName } is defined` );
 
             Location.startLocationUpdatesAsync( taskName, {
                 timeInterval: 1000 * 60 * 20, // every 20 mins
@@ -126,6 +130,8 @@ const NearMe = () =>
                 ref={map}
                 showsUserLocation
                 onUserLocationChange={userLocationChanged}
+                onPress={() => setFocusedEvent( "" )}
+                onTouchStart={()=> setFocusedEvent("")}
                 style={{ width: '100%', height: '100%' }}
                 provider={PROVIDER_GOOGLE}>
                 {region && <Circle
@@ -139,6 +145,7 @@ const NearMe = () =>
                 <ShowEventOnMarkerPressed
                     markers={markers}
                     onPress={setFocusedEvent}
+                    region={region}
                 />
 
 
@@ -150,10 +157,12 @@ const NearMe = () =>
                     position: 'absolute',
                     minHeight: 10,
                     minWidth: '100%',
-                    bottom: 3,
+                    // bottom: 3,
+                    top:"17%"
                 }}>
                 {focusedEvent != "" && region && (
-                    <Mapcard reference={focusedEvent} currentPosition={region} />
+
+                        <Mapcard reference={focusedEvent} currentPosition={region} />
                 )}
             </View>
         </View>
@@ -164,27 +173,48 @@ const NearMe = () =>
 const ShowEventOnMarkerPressed = ( {
     markers,
     onPress,
+    region
 }: {
     markers: FeedItemModel[],
-    onPress: ( ref: string ) => void
+        onPress: ( ref: string ) => void,
+    region:Region
 } ) =>
 {
     if ( markers.length <= 0 ) return <View />
+
+
+    const mark = useRef<Marker>()
+
+    useEffect(() => {
+        if ( mark.current )
+        {
+            // mark.current.props.onLayout(()=>)
+            
+        }
+      
+    }, [])
 
     return (
         <>
             {markers.map( ( value, index ) =>
             {
-                return (
-                    <MarkerPinItem
-                        key={index}
-                        value={value}
-                        onPressed={() =>
+                const coord: LatLng | undefined = getLatitudeLongitudeFromString( value.location )
+                if ( coord )
+                    return <Marker
+                        ref={mark}
+                        onLayout={e =>
                         {
-                            onPress( value.reference || '' )
+                            const { height, width, x, y } = e.nativeEvent.layout
+                            console.log(`${height}, ${width}, ${x}, ${y} \n`);
                         }}
-                    />
-                )
+                        key={value.reference}
+                        image={require( "../assets/images/marker.png" )}
+                        pinColor="green"
+                        coordinate={coord}
+                        onPress={() => onPress( value.reference || "" ) }
+                    >
+                    </Marker>
+                else return <View key={value.reference}/>
             } )}
         </>
     )

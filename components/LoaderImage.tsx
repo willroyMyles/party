@@ -11,7 +11,7 @@ const LoaderImage = ( { uri, width, height }: { uri: string | undefined, height:
        <Image
            fadeDuration={300}
            source={{ uri: uri }}
-           style={{ width: width || "100%", height: height || "100%" }}
+           style={{ width: width || "100%", height: height || "100%", borderRadius:7 }}
        />
    )
     

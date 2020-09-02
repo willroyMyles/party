@@ -93,11 +93,12 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
 
 export default PartyTypesRow;
 
-const PartyCard = ( { item }: { item: string } ) =>
+const PartyCard = memo(( { item }: { item: string } ) =>
 {
     const theme = useTheme();
     const navigation = useNavigation();
     const text = GetPartytypeString( PartyType[item] );
+    const amount = [...FireStore.data.values()].filter( ( a ) => a.partyType  == PartyType[item] ).length
     const data = FireStore.categorizedData
         .get( item )
         ?.filter( ( item, index ) => index < 3 ); //limit data to three items
@@ -106,10 +107,8 @@ const PartyCard = ( { item }: { item: string } ) =>
     const [image, setimage] = useState<string>();
     const handleViewAll = ( route: string ) =>
         navigation.navigate( 'category', { type: route } );
-    const view = useRef<TransitioningView>(); 
-    const amount = FireStore.categorizedData
-        .get( item )?.length
 
+    
     useEffect( () =>
     {
     }, [] );
@@ -135,7 +134,6 @@ const PartyCard = ( { item }: { item: string } ) =>
 
     setTimeout( () =>
     {
-        if ( view.current ) view.current.animateNextTransition();
         const CustomLayoutLinear = {
             duration: 700,
             create: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
@@ -213,4 +211,4 @@ const PartyCard = ( { item }: { item: string } ) =>
             </View>
         </TouchableOpacity>
     );
-};
+});

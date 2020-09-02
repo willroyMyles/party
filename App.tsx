@@ -54,7 +54,6 @@ const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
 	{
 		const { longitude, latitude } = data.locations[0].coords
 
-		console.trace(  `${ps.id}` );
 		ps.updateUserLocation( { latitude, longitude } )
 	}
 	
