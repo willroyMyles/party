@@ -10,8 +10,10 @@ import BackDrop, { BackDropV2 } from '../../components/BackDrop'
 import RSVPModule from '../../components/RSVPModule'
 import { ScrollView } from 'react-native-gesture-handler'
 import FireStore from '../../data_layer/FireStore'
+import { GetLocationPermission } from '../../universal/GetLocation'
+import { observer } from 'mobx-react'
 
-const Profile = () =>
+const Profile = observer(() =>
 {
 
     const theme = useTheme()
@@ -37,7 +39,15 @@ const Profile = () =>
 
     const handleLocationChanged = ( val: boolean ) =>
     {
+        console.log(`what is this? ${val}`);
         
+        if ( val )
+        {
+            GetLocationPermission()
+        } else
+        {
+            tm.setLocationGranted(val)
+        }
     }
 
     useEffect( () =>
@@ -65,7 +75,7 @@ const Profile = () =>
                     <Switch
                         offColor={Colors.secondary}
                         onColor={Colors.secondary}
-                        // value={darkTheme}
+                        value={tm.isLocationGranted}
                         thumbColor={Colors.background}
                         thumbStyle={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.primary + "60" }}
                         style={{ borderWidth: 1, borderColor: Colors.primary + "68", elevation: 1 }}
@@ -89,7 +99,7 @@ const Profile = () =>
     )
 
 
-}
+})
 
 export default Profile
 

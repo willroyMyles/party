@@ -9,13 +9,13 @@ import NearMeV2 from './NearMeV2';
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import CustomTabBar from '../components/CustomTabBar';
 import FeedV2 from './FeedV2';
+import tm from '../universal/UiManager';
+import { observer } from 'mobx-react';
 
 const Tab = createMaterialTopTabNavigator();
 
 const HomeNavigator = () =>
 {
-  const [shouldShowNearMe, setShouldShowNearMe] = useState( false );
-
   useEffect( () =>
   {
     eventEmitter.addListener( eventStrings.locationGranted, () =>
@@ -37,7 +37,7 @@ const HomeNavigator = () =>
 
   const showNearMe = ( val: boolean ) =>
   {
-    setShouldShowNearMe( val );
+    tm.setLocationGranted(val)
   };
 
   return (
@@ -66,7 +66,7 @@ const HomeNavigator = () =>
         options={{ tabBarIcon: () => 'trophy' }}
         component={MemoryLeaderBoard}
       />
-      {shouldShowNearMe && (
+      {tm.isLocationGranted && (
         <Tab.Screen
           options={{ tabBarIcon: () => 'map' }}
           name="near me"
@@ -87,4 +87,4 @@ const HomeNavigator = () =>
   );
 };
 
-export default HomeNavigator;
+export default observer(HomeNavigator);

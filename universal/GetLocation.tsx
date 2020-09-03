@@ -3,12 +3,16 @@ import * as Location from "expo-location"
 import { LatLng, Region } from "react-native-maps";
 import { Alert, Dimensions } from "react-native";
 import { eventEmitter, eventStrings } from "./EventEmitter";
+import tm from "./UiManager";
 
 
+export const RevokeLocationPermission = () => new Promise<boolean>( async resolve =>
+{
+    tm.setLocationGranted( false )
+    
+})
 export const GetLocationPermission = () => new Promise<Boolean>( async (resolve) =>
 {
-
-    console.log("something entered");
     
     try
     {
@@ -60,39 +64,9 @@ export const GetLocationPermission = () => new Promise<Boolean>( async (resolve)
 
 export const getLocation = () => new Promise<any>(async (resolve, reject) => {
     try {
-        const perm = await Location.getPermissionsAsync()     
-        console.log("something");
-        
-        if ( !perm.granted && perm.canAskAgain )
-        {
-            //should request permission first?
-            Location.requestPermissionsAsync().then( result =>
-            {
-                console.log(result.granted, "permisson asked");
-                
-            if ( !result.granted )
-            {
-                eventEmitter.emit( eventStrings.locationNotGranted )
-                
-                return reject( "not granted" )
-                
-            }
-            } ).catch( err =>
-            {
-                eventEmitter.emit( eventStrings.locationNotGranted )
-                return reject( "not granted" )
-
-           })
-
-        }
-
-        if ( !perm.granted )
-        {
-            eventEmitter.emit(eventStrings.locationNotGranted)
-            reject( "not granted" )
-        }
-
-        if (perm.granted) {
+        const perm = await GetLocationPermission()     
+       
+        if (perm) {
             Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }).then(res => {
 
                 resolve(res.coords)

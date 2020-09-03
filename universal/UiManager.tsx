@@ -11,11 +11,41 @@ export enum ThemeType
 	LIGHT = 0,
 	DARK = 1,
 }
+
+const granted = "granted"
+const notGranted = "not granted"
 export class Store
 {
+
 	@observable themeType = ThemeType.LIGHT
 	@observable theme = lightTheme
 	@observable setting: any = { theme: false }
+
+	@observable isLocationGranted: Boolean = false;
+
+	@action setLocationGranted = ( val: boolean ) =>
+	{
+		this.isLocationGranted = val
+		AsyncStorage.setItem("locationGranted", val? granted : notGranted)
+	}
+
+	l = autorun( () =>
+	{
+		AsyncStorage.getItem( "locationGranted" ).then( res =>
+		{
+			if ( res == granted )
+			{
+				this.isLocationGranted = true
+			} else
+			{
+				this.isLocationGranted = false
+			}
+
+			console.log(`is location granted? : ${this.isLocationGranted}`);
+			
+		})
+		
+	})
 
 	t = autorun( ( runner ) =>
 	{
