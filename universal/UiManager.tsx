@@ -3,6 +3,8 @@ import { lightTheme, darkTheme } from "./Theme"
 import { Colors } from "react-native-ui-lib"
 import { themehelper } from "./Theme"
 import AsyncStorage from '@react-native-community/async-storage';
+import * as TaskManager from 'expo-task-manager'
+import { GeoLocationUpdates } from "../App";
 
 
 
@@ -21,16 +23,28 @@ export class Store
 	@observable theme = lightTheme
 	@observable setting: any = { theme: false }
 
-	@observable isLocationGranted: Boolean = false;
+	@observable isLocationGranted: boolean |undefined = undefined;
 
 	@action setLocationGranted = ( val: boolean ) =>
 	{
 		this.isLocationGranted = val
-		AsyncStorage.setItem("locationGranted", val? granted : notGranted)
+		AsyncStorage.setItem( "locationGranted", val ? granted : notGranted )
+		const defined = TaskManager.isTaskDefined( "geoLocation" )
+		
+		if ( val && !defined)
+		{
+			TaskManager.defineTask( "geoLocation", GeoLocationUpdates)
+		} 
+
+		if ( !val && defined )
+		{
+			TaskManager.unregisterTaskAsync("geoLocation")
+		}
 	}
 
 	l = autorun( () =>
 	{
+		if(this.isLocationGranted == undefined)
 		AsyncStorage.getItem( "locationGranted" ).then( res =>
 		{
 			if ( res == granted )
@@ -39,10 +53,7 @@ export class Store
 			} else
 			{
 				this.isLocationGranted = false
-			}
-
-			console.log(`is location granted? : ${this.isLocationGranted}`);
-			
+			}			
 		})
 		
 	})

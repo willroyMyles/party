@@ -38,9 +38,7 @@ const Profile = observer(() =>
     }
 
     const handleLocationChanged = ( val: boolean ) =>
-    {
-        console.log(`what is this? ${val}`);
-        
+    {        
         if ( val )
         {
             GetLocationPermission()

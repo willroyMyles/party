@@ -32,7 +32,7 @@ let values = []
 
 const ps = new PsuedoLocationTracker()
 // runs with new values everytime
-const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
+export const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
 {
 	
 			const updateRecieved = (d: LocationRegion[]) =>
