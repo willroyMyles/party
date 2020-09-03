@@ -1,21 +1,79 @@
 
 import * as Location from "expo-location"
 import { LatLng, Region } from "react-native-maps";
-import { Dimensions } from "react-native";
+import { Alert, Dimensions } from "react-native";
 import { eventEmitter, eventStrings } from "./EventEmitter";
+
+
+export const GetLocationPermission = () => new Promise<Boolean>( async (resolve) =>
+{
+
+    console.log("something entered");
+    
+    try
+    {
+        const permission = await Location.getPermissionsAsync()
+
+        if ( permission.status == Location.PermissionStatus.GRANTED )
+        {
+            eventEmitter.emit( eventStrings.locationGranted )
+            return resolve( true )
+        }
+
+
+        if ( !permission.granted && permission.canAskAgain) // request permission
+        {
+            const result = await Location.requestPermissionsAsync()
+            if ( result.granted )
+            {
+                eventEmitter.emit( eventStrings.locationGranted )
+                return resolve( true )
+            }
+            else
+            {
+                //show alert
+                console.log("location denied");
+                Alert.alert(
+                    "Location",
+                    "We need your location to show you parties near you. \n\nIf at anytime you wish to change your locations preferences, look under your profile settings" )
+                eventEmitter.emit( eventStrings.locationNotGranted )
+                return resolve(false)
+            }
+        }
+
+        if ( !permission.granted && !permission.canAskAgain )
+        {
+            eventEmitter.emit( eventStrings.locationNotGranted )
+            return resolve( false )
+        }
+
+
+
+
+    } catch ( err )
+    {
+        eventEmitter.emit( eventStrings.locationNotGranted )
+        return resolve( false )
+    }
+})
 
 
 export const getLocation = () => new Promise<any>(async (resolve, reject) => {
     try {
-        const perm = await Location.getPermissionsAsync()        
+        const perm = await Location.getPermissionsAsync()     
+        console.log("something");
+        
         if ( !perm.granted && perm.canAskAgain )
         {
             //should request permission first?
             Location.requestPermissionsAsync().then( result =>
             {
+                console.log(result.granted, "permisson asked");
+                
             if ( !result.granted )
             {
                 eventEmitter.emit( eventStrings.locationNotGranted )
+                
                 return reject( "not granted" )
                 
             }

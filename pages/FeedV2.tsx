@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { Text, View } from 'react-native-ui-lib'
-import Animated, {  } from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Colors, LoaderScreen } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
@@ -13,6 +13,7 @@ import PartyTypesRow from './PartyTypesRow'
 
 
 
+const scrollY = new Animated.Value( 0 )
 const FeedV2 = () =>
 {
     const off = 260
@@ -21,7 +22,6 @@ const FeedV2 = () =>
     const [loading, setLoading] = useState(false)
 
 
-    const scrollY = new Animated.Value( 0 )
     const diffY = Animated.diffClamp( scrollY, 0, off )
 
     useEffect( () =>
@@ -87,6 +87,7 @@ const FeedV2 = () =>
                         width: "100%",
                         height: "100%",
                         paddingTop: off,
+                        paddingBottom:off
                     }}
                     contentContainerStyle={{ paddingBottom: off, backgroundColor: Colors.background }}
                     data={[...FireStore.data.values()]}

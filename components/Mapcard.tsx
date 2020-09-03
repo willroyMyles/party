@@ -75,12 +75,12 @@ const Mapcard = ({
       <Transitioning.View ref={view} transition={trans} style={{width: '80%'}}>
         {visivle && (
           <View
-            // bg-background
+            bg-background
             br40
             style={{
               width: '100%',
                 padding: 10,
-              backgroundColor:"rgba(240,240,240,.9)",
+            //   backgroundColor:"rgba(240,240,240,.9)",
 
               elevation: 10,
             }}>

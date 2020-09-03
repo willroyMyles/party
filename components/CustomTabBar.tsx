@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Colors } from 'react-native-ui-lib';
 import { NavigationState, useNavigation, NavigationContext, NavigationProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useTheme } from 'styled-components';
+import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 
 function CustomTabBar( { state, descriptors, navigation }: { state: NavigationState, descriptors: any, navigation: NavigationProp<any> } )
 {

@@ -26,6 +26,7 @@ import { eventEmitter, eventStrings } from './universal/EventEmitter';
 import psuedoLocationTracker, { PsuedoLocationTracker } from './data_layer/PsuedoLocationTracker';
 import { LocationRegion } from 'expo-location';
 import uuidv4 from 'uuid';
+import { GetLocationPermission } from './universal/GetLocation';
 
 let values = []
 
@@ -83,17 +84,7 @@ const App = () =>
       setLoading( false )
       // SplashScreen.hideAsync()
 
-      if ( Location.PermissionStatus.DENIED )
-        Location.requestPermissionsAsync().then( res =>
-        {
-          if ( res.granted ) eventEmitter.emit( eventStrings.locationGranted )
-
-          if ( !res.granted ) eventEmitter.emit( eventStrings.locationNotGranted )
-
-        } ).catch( err =>
-        {
-          console.log( err );
-        } )
+     GetLocationPermission()
     } )
   }, [] )
 

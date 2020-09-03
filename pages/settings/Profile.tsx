@@ -27,11 +27,18 @@ const Profile = () =>
             }
         } )
     }
-    const handleCHnage = ( val: boolean ) => new Promise( resolve =>
+    const handleCHnage = ( val: boolean ) =>
     {
         setdarkTheme( val )
-        tm.setThemeType( val )
-    } )
+        setTimeout(() => {
+                tm.setThemeType( val )
+        }, 300);
+    }
+
+    const handleLocationChanged = ( val: boolean ) =>
+    {
+        
+    }
 
     useEffect( () =>
         setdarkTheme( tm.themeType == ThemeType.DARK )
@@ -52,6 +59,19 @@ const Profile = () =>
                         style={{ borderWidth: 1, borderColor: Colors.primary + "68", elevation: 1 }}
 
                         onValueChange={handleCHnage}></Switch>
+                </View>
+                <View marginT-20 row spread>
+                    <Text lvl2>Location Permission</Text>
+                    <Switch
+                        offColor={Colors.secondary}
+                        onColor={Colors.secondary}
+                        // value={darkTheme}
+                        thumbColor={Colors.background}
+                        thumbStyle={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.primary + "60" }}
+                        style={{ borderWidth: 1, borderColor: Colors.primary + "68", elevation: 1 }}
+
+                    onValueChange={handleLocationChanged}
+                    ></Switch>
                 </View>
             </View>
             <View>

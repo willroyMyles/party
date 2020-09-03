@@ -16,6 +16,8 @@ class Store
   @observable eventImagesMap: Map<string, string> = new Map()
   @observable eventImagesForPastEventsMap: Map<string, string[]> = new Map()
 
+  @observable isLocationGranted: Boolean = false;
+
   @action isLoggedIn = () => FBS.isLoggedIn();
   @action login = ( email: string, password: string ) =>
     FBS.login( email, password );
