@@ -8,6 +8,7 @@ import FireStore from "./FireStore"
 import uuid from 'uuid'
 import { GetNotificationPermission } from "../universal/GetNotification"
 import * as Notifications from 'expo-notifications'
+import { AppState, AppStateStatus } from "react-native"
 export const radius = 100;
 export const taskName = 'geoLocation';
 export const threshold = 10 / radius
@@ -47,27 +48,39 @@ export class PsuedoLocationTracker
                 const perm = await GetNotificationPermission()
                 if ( perm )
                 {
-                    console.log( "should sent noti" );
 
-                    Notifications.setNotificationHandler( {
-                        handleNotification: async () => ( {
-                            shouldShowAlert: true,
-                            shouldPlaySound: false,
-                            shouldSetBadge: false,
-                        } ),
-                    } );
 
-                    Notifications.scheduleNotificationAsync( {
-                        content: {
-                            title: "test notification",
-                            body: `seem your at ${ value[1].identifier }, enjoying it?`,
-                            autoDismiss: true,
-                            
-                        },
-                        trigger: {
-                            seconds: 1
-                        }
-                    } )
+                    if ( AppState.currentState == 'active' )
+                    {
+                        eventEmitter.emit(eventStrings.ArrivedAtParty, value[0])
+                        
+                    } else
+                    {
+                        console.log( "should sent noti" );
+
+                        Notifications.setNotificationHandler( {
+                            handleNotification: async () => ( {
+                                shouldShowAlert: true,
+                                shouldPlaySound: false,
+                                shouldSetBadge: false,
+                            } ),
+                        } );
+
+                        Notifications.scheduleNotificationAsync( {
+                            content: {
+                                title: "test notification",
+                                body: `seem your at ${ value[1].identifier }, enjoying it?`,
+                                autoDismiss: true,
+
+                            },
+                            trigger: {
+                                seconds: 1
+                            }
+                        } )
+                    }
+                    
+
+                    
                 }
 
             }

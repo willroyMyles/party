@@ -17,7 +17,8 @@ export const eventStrings = {
     'used to signal to past image view that a new images has been recieved',
   locationEntered: 'used when a geo fence is entered',
   locationExited: 'used when a geo fence is exited',
-  locationDwell:"used when location entered and stay their for a period of time",
+  locationDwell: "used when location entered and stay their for a period of time",
+  ArrivedAtParty:"used when a location i sbreached and app is in foreground",
   showToast: {
     working: 'used when sneding data to back end',
     success: 'used when an operation is successful',

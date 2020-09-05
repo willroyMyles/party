@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, Text } from 'react-native-ui-lib'
+import { View, Text, TouchableOpacity } from 'react-native-ui-lib'
 import { Button } from 'react-native-ui-lib'
 import {useTheme} from 'styled-components'
 import { GetNotificationPermission } from '../universal/GetNotification'
 import * as Notifications from 'expo-notifications';
+import { SafeAreaView } from 'react-native-safe-area-context'
+import RateParty from '../components/RateParty'
 
 const LeaderBoard = () =>
 {
@@ -38,12 +40,32 @@ const LeaderBoard = () =>
 
 
     return (
+        <SafeAreaView style={{flex:1}}>
+
         <View bg-background style={{minHeight:"100%"}}>
             <Text lvl2>Leaderboard</Text>
-            <Button onPress={onPress}>
-                <Text>some text</Text>
-            </Button>
+                <Button onPress={onPress}>
+                    <Text>some text</Text>
+                </Button>
+
+                <TouchableOpacity marginT-30 bg-red40 padding-30 center onPress={() =>
+                {
+                    // RateParty.show()
+                    RateParty.rateParty.show()
+
+                }}>
+                    <Text>show</Text>
+                </TouchableOpacity>
+                <TouchableOpacity marginT-30 bg-blue40 padding-30 center onPress={() =>
+                {
+                    // RateParty.show()
+                    RateParty.rateParty.hide()
+
+                }}>
+                    <Text>hide</Text>
+                </TouchableOpacity>
         </View>
+        </SafeAreaView>
     )
 }
 

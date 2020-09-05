@@ -27,6 +27,7 @@ import psuedoLocationTracker, { PsuedoLocationTracker } from './data_layer/Psued
 import { LocationRegion } from 'expo-location';
 import uuidv4 from 'uuid';
 import { GetLocationPermission } from './universal/GetLocation';
+import RateParty from './components/RateParty';
 
 let values = []
 
@@ -102,6 +103,7 @@ const App = () =>
       <View flex bg-background>
         <StackNavigator />
         <TToast />
+        <RateParty />
        
 
       </View>

@@ -19,7 +19,7 @@ import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import psuedoLocationTracker, { radius, taskName } from '../data_layer/PsuedoLocationTracker';
-import { Platform } from 'react-native';
+import { AppState, Platform } from 'react-native';
 
 
 

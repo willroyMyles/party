@@ -246,6 +246,7 @@ class Store
       }
 
       resolve( true )
+      eventEmitter.emit(eventStrings.dataFromProviderFinishedLoad)
 
     } ).catch( err => reject( err ) )
   } )

@@ -9,6 +9,7 @@ import FireStore from '../data_layer/FireStore'
 import * as faker from 'faker'
 import FeedItemVersionOne from '../components/FeedItemVersionOne'
 import FeedItemMemoryVersionOne from '../components/FeedItemMemoryVersionOne copy'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Memories = () => {
    const theme = useTheme()
@@ -40,6 +41,8 @@ const Memories = () => {
 	}
 
 	return (
+		<SafeAreaView style={{flex:1}}>
+
 		<View bg-background flex>
 			<FlatList
 				onScroll={() => {}}
@@ -53,13 +56,14 @@ const Memories = () => {
 					)
 				}}
 				keyExtractor={(item: FeedItemModel) => item.reference || faker.random.number(20000000000).toString()}
-			/>
+				/>
 			<View center>
 				<Button onPress={() => getPastEvents()}>
 					<Text btn>load feed </Text>
 				</Button>
 			</View>
 		</View>
+				</SafeAreaView>
 	)
 }
 

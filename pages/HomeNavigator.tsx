@@ -11,6 +11,8 @@ import CustomTabBar from '../components/CustomTabBar';
 import FeedV2 from './FeedV2';
 import tm from '../universal/UiManager';
 import { observer } from 'mobx-react';
+import LeaderBoard from './LeaderBoard';
+import Memories from './Memories';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -62,9 +64,9 @@ const HomeNavigator = () =>
       }}
       tabBar={( props ) => <CustomTabBar {...props} />}>
       <Tab.Screen
-        name="ml"
+        name="memories"
         options={{ tabBarIcon: () => 'trophy' }}
-        component={MemoryLeaderBoard}
+        component={Memories}
       />
       {tm.isLocationGranted && (
         <Tab.Screen
@@ -77,6 +79,11 @@ const HomeNavigator = () =>
         name="discover"
         options={{ tabBarIcon: () => 'th-large' }}
         component={FeedV2}
+      />
+      <Tab.Screen
+        name="leaderboard"
+        options={{ tabBarIcon: () => 'trophy' }}
+        component={LeaderBoard}
       />
       <Tab.Screen
         name="settings"
