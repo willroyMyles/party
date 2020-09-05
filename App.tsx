@@ -29,40 +29,6 @@ import uuidv4 from 'uuid';
 import { GetLocationPermission } from './universal/GetLocation';
 import RateParty from './components/RateParty';
 
-let values = []
-
-const ps = new PsuedoLocationTracker()
-// runs with new values everytime
-export const GeoLocationUpdates = ( { data, error }: { data: any, error: any }) =>
-{
-	
-			const updateRecieved = (d: LocationRegion[]) =>
-			{
-				values = d
-				ps.watchTheseLocations(d)
-				
-			}
-			
-	if(!eventEmitter.eventNames().includes(eventStrings.locationWatchStart))
-			eventEmitter.addListener(eventStrings.locationWatchStart, updateRecieved)
-
-	if ( error )
-	{
-		console.log( error )
-		return
-	}
-
-	if ( data )
-	{
-		const { longitude, latitude } = data.locations[0].coords
-
-		ps.updateUserLocation( { latitude, longitude } )
-	}
-	
-}
-
-TaskManager.defineTask( "geoLocation", GeoLocationUpdates)
-
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
 {

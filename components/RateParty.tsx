@@ -1,14 +1,16 @@
 import { getStateFromPath } from '@react-navigation/native'
 import React, { Component, createRef } from 'react'
 import { useState } from 'react'
-import { Dimensions, Animated } from 'react-native'
-import  { Transition, Transitioning, TransitioningView, TransitioningViewProps } from 'react-native-reanimated'
+import { Dimensions } from 'react-native'
+import  Animated, { Transition, Transitioning, TransitioningView, TransitioningViewProps } from 'react-native-reanimated'
 import { Colors, Text, TouchableOpacity, View } from 'react-native-ui-lib'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MCI from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useTheme } from 'styled-components'
+import { eventEmitter, eventStrings } from '../universal/EventEmitter'
 
 // @refresh reset
+const conf = Animated.SpringUtils.makeDefaultConfig()
 
 const { height } = Dimensions.get( "screen" )
 const size = 25
@@ -16,14 +18,16 @@ const size = 25
 
 const trans = (
     <Transition.Sequence  >
-        <Transition.Out type="fade"  />
-    <Transition.Change interpolation="linear" durationMs={200} />
-        <Transition.In type="fade"  />
+        <Transition.Out type="fade" durationMs={100}/>
+    <Transition.Change interpolation="linear" durationMs={100} />
+        <Transition.In type="fade" durationMs={100} />
     </Transition.Sequence >
 )
 
 export default class RateParty extends Component
 {
+// @refresh reset
+
     static rateParty: RateParty
     getSelf = () => this
 
@@ -48,34 +52,40 @@ export default class RateParty extends Component
     {
         console.log( "sm" );
 
-        Animated.spring( this.state.height, {
-            toValue: (height/2.5),
-            bounciness: 10,
-            useNativeDriver: true
-
-        } ).start( () => console.log( "finished" )
-        )
+        conf.toValue = height/2.5
+     Animated.spring( this.state.height,conf ).start( )
     }
 
     hide = () =>
     {
-        Animated.spring( this.state.height, {
-            toValue: height - 50,
-            bounciness: 10,
-            useNativeDriver: true
-
-        } ).start( () => console.log( "finished" )
-        )
+        conf.toValue = height
+        Animated.spring( this.state.height, conf ).start( () =>
+        {
+            //rest value
+            this.setState({index:undefined})
+        })
     }
 
     state = {
         index: undefined,
-        height : new Animated.Value(height - 50)
+        height : new Animated.Value(height)
     }
 
     componentDidMount()
     {
-        RateParty.rateParty = this        
+        RateParty.rateParty = this 
+        eventEmitter.addListener(eventStrings.ArrivedAtParty, this.setParty)
+    }
+
+    componentWillUnmount()
+    {
+        eventEmitter.removeListener( eventStrings.ArrivedAtParty, this.setParty )
+    }
+
+    setParty = ( reference: string ) =>
+    {
+        console.log(reference);
+        
     }
 
     view = createRef<TransitioningView>()
@@ -91,7 +101,7 @@ export default class RateParty extends Component
             setTimeout(() => {
                 //animate out
                 this.hide()
-            }, 400);
+            }, 1200);
             
         }, 900);
     }

@@ -18,10 +18,53 @@ import { FeedItemModel } from '../universal/Models';
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
-import psuedoLocationTracker, { radius, taskName } from '../data_layer/PsuedoLocationTracker';
-import { AppState, Platform } from 'react-native';
+import psuedoLocationTracker, { PsuedoLocationTracker, radius } from '../data_layer/PsuedoLocationTracker';
+import { AppState, AppStateStatus, Platform } from 'react-native';
+
+let count = 0
+const foregroundTask = "online geo tasks"
+const backgroundTask = "offline geo tasks"
 
 
+export const GeoLocationUpdates = ( { data, error }: { data: any, error: any } ) =>
+{
+
+    if ( error )
+    {
+        console.log( error )
+        return
+    }
+
+    if ( data )
+    {
+        console.log( "recieved s=data", count++ );
+        const { longitude, latitude } = data.locations[0].coords
+        psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
+    }
+}
+
+export const GeoLocationUpdatesActive = ( { data, error }: { data: any, error: any } ) =>
+{
+
+
+    if ( error )
+    {
+        console.log( error )
+        return
+    }
+
+    if ( data )
+    {
+
+        if(AppState.currentState !== "active") return
+        console.log( "recieved s=data", count++ );
+        const { longitude, latitude } = data.locations[0].coords
+        psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
+    }
+}
+
+TaskManager.defineTask( backgroundTask, GeoLocationUpdates )
+TaskManager.defineTask( foregroundTask, GeoLocationUpdatesActive )
 
 
 const NearMe = () =>
@@ -37,13 +80,40 @@ const NearMe = () =>
     {
         getUserRegion();
         sortMarkers()
-
+        
+        if ( !eventEmitter.eventNames().includes( eventStrings.dataFromProviderFinishedLoad ) )
         eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
+
+        AppState.addEventListener("change", changeLocationUpdates)
         return () =>
         {
-            eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
+            AppState.removeEventListener( "change", changeLocationUpdates )
+
+            // eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
         };
     }, [] );
+
+    const changeLocationUpdates = ( state: AppStateStatus ) =>
+    {
+        if ( state == "active" )
+        {
+            stopBackgroundTask()
+            startForegroundTasks(geoRegions)
+        } else
+        {
+            stopForegroundTask()
+            startBackgroundTasks(geoRegions)
+        }
+    }
+
+    useEffect( () =>
+    {
+        console.log(`data changed within firesotr //// \n`);
+        
+        sortMarkers()
+        return () => {
+        }
+    }, [FireStore.data])
 
     const userLocationChanged = async ( e: EventUserLocation ) =>
     {
@@ -76,29 +146,40 @@ const NearMe = () =>
         }
     };
 
-
-
-    const startGeo = ( data: any[] ) =>
+    const startForegroundTasks = ( data: any[] ) =>
     {
-
-        if ( TaskManager.isTaskDefined( taskName ) )
+        console.log("foregroun tasks started");
+        
+        Location.startLocationUpdatesAsync( foregroundTask, { //runs unlimited
+            accuracy: Location.Accuracy.High,
+        } ).then( res =>
         {
+            psuedoLocationTracker.watchTheseLocations( data )
 
-            Location.startLocationUpdatesAsync( taskName, {
-                timeInterval: 1000 * 60 * 20, // every 20 mins
-                accuracy: Location.Accuracy.High,
-            } ).then( res =>
-            {
-                eventEmitter.emit(eventStrings.locationWatchStart, data)
-            })
-
-
-        }
+        } )
     }
+
+    const startBackgroundTasks = ( data: any[] ) =>
+    {
+        console.log( "backgroun tasks started" );
+
+        Location.startLocationUpdatesAsync( backgroundTask, { //runs unlimited
+            accuracy: Location.Accuracy.High,
+        } ).then( res =>
+        {
+            psuedoLocationTracker.watchTheseLocations( data )
+
+        } )
+    }
+
+    const stopForegroundTask = () => Location.stopLocationUpdatesAsync( foregroundTask )
+    const stopBackgroundTask = () =>    Location.stopLocationUpdatesAsync(backgroundTask)
+    
 
     const sortMarkers = () =>
     {
         const arr = [...FireStore.data.values()];
+        if(arr.length == 0) return
         setMarkers( arr );
 
         const d: any = []
@@ -119,8 +200,10 @@ const NearMe = () =>
             }
         }
 
+        console.log(`length of d is ${d.length}`);
+        
         setGeoRegions( d )
-        startGeo( d )
+        startForegroundTasks( d )
     };
 
     // if ( region )

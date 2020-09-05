@@ -52,6 +52,7 @@
     "react-native-unimodules": "^0.10.1",
     "react-native-vector-icons": "^7.0.0",
     "react-native-webview": "^10.7.0",
+    "react-spring": "^9.0.0-rc.3",
     "styled-components": "^5.1.1",
     "uuidv4": "^6.2.1"
   },

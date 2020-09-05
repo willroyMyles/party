@@ -9,6 +9,7 @@ import uuid from 'uuid'
 import { GetNotificationPermission } from "../universal/GetNotification"
 import * as Notifications from 'expo-notifications'
 import { AppState, AppStateStatus } from "react-native"
+
 export const radius = 100;
 export const taskName = 'geoLocation';
 export const threshold = 10 / radius
@@ -32,6 +33,10 @@ export class PsuedoLocationTracker
 
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
+
+        console.log( `the size is ${ this.data.size}\n`);
+        
+        if(this.data.size == 0) return
         this.userLocation = latLng;
         
         [...this.data.entries()].map( async ( value, index ) =>
