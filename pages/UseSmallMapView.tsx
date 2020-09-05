@@ -4,6 +4,7 @@ import MapView, { Marker } from "react-native-maps"
 import { Dimensions } from "react-native"
 import { LocationData } from "expo-location"
 import { useTheme } from "styled-components"
+import { getLatitudeLongitudeFromString } from "../universal/GetLocation"
 
 const UseSmallMapView = ( { loc }: { loc?: any } ) =>
 {
@@ -13,21 +14,20 @@ const UseSmallMapView = ( { loc }: { loc?: any } ) =>
 	const [loading, setLoading] = useState( true )
 	const [region, setRegion] = useState<any>()
 	useEffect(() => {
-		const gong = String(loc).split(",")
-	const latitude = Number.parseFloat(gong[0])
-	const longitude = Number.parseFloat(gong[1])
 
+
+	const { latitude, longitude } = getLatitudeLongitudeFromString(loc)
 	const { width, height } = Dimensions.get("window")
 	const ASPECT_RATIO = width / height
 
 	const northeastLat = latitude + 0.03 // for scale
 	const southwestLat = latitude
 	const latDelta = northeastLat - southwestLat
-	const lngDelta = latDelta * ASPECT_RATIO
-
+		const lngDelta = latDelta * ASPECT_RATIO
+		
 	const region = {
-		latitude: latitude,
-		longitude: longitude,
+		latitude,
+		longitude,
 		latitudeDelta: latDelta,
 		longitudeDelta: lngDelta,
 	}

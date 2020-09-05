@@ -104,8 +104,7 @@ export const getRegion = (coords: LatLng) => new Promise<Region>((resolve, rejec
 
 })
 
-export const getLatitudeLongitudeFromString = (ll?: string) => {
-    if (!ll) return undefined
+export const getLatitudeLongitudeFromString = (ll?: string) : LatLng => {
     const gong = String(ll).split(",")
     const latitude = Number.parseFloat(gong[0])
     const longitude = Number.parseFloat(gong[1])

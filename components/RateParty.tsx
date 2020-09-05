@@ -7,7 +7,10 @@ import { Colors, Text, TouchableOpacity, View } from 'react-native-ui-lib'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MCI from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useTheme } from 'styled-components'
+import FireStore from '../data_layer/FireStore'
+import UseSmallMapView from '../pages/UseSmallMapView'
 import { eventEmitter, eventStrings } from '../universal/EventEmitter'
+import { getLatitudeLongitudeFromString } from '../universal/GetLocation'
 
 // @refresh reset
 const conf = Animated.SpringUtils.makeDefaultConfig()
@@ -29,18 +32,16 @@ export default class RateParty extends Component
 // @refresh reset
 
     static rateParty: RateParty
-    getSelf = () => this
 
     constructor(props:any)
     {
         super(props)
         RateParty.rateParty = this
-
     }
     
-    static show = () =>
+    static show = (id:string) =>
     {
-        RateParty.rateParty.show()
+        RateParty.rateParty.show(id)
     }
 
     static hide = () =>
@@ -48,9 +49,11 @@ export default class RateParty extends Component
         RateParty.rateParty.hide()
     }
 
-    show = () =>
+    show = (id:string) =>
     {
-        console.log( "sm" );
+        const item = FireStore.data.get( id )
+        
+        this.setState( { text: item?.title, location:item?.location})
 
         conf.toValue = height/2.5
      Animated.spring( this.state.height,conf ).start( )
@@ -68,25 +71,18 @@ export default class RateParty extends Component
 
     state = {
         index: undefined,
-        height : new Animated.Value(height)
+        height: new Animated.Value( height ),
+        text: ``,
+        location:undefined
     }
 
     componentDidMount()
     {
         RateParty.rateParty = this 
-        eventEmitter.addListener(eventStrings.ArrivedAtParty, this.setParty)
     }
 
-    componentWillUnmount()
-    {
-        eventEmitter.removeListener( eventStrings.ArrivedAtParty, this.setParty )
-    }
 
-    setParty = ( reference: string ) =>
-    {
-        console.log(reference);
-        
-    }
+
 
     view = createRef<TransitioningView>()
 
@@ -125,16 +121,19 @@ export default class RateParty extends Component
                     padding:10
                 }}>
                     <View padding-4>
-                        <Text lvl1> We noticed your at this party. would you like to rate it? </Text>
+                        <Text lvl1> we noticed your at <Text primary>{this.state.text}</Text>. Would you like to rate it?  </Text>
                     </View>
                     <View>
-                       { this.state.index == undefined &&  <View row spread paddingH-25 marginV-15>
+                        {this.state.index == undefined && <View>
+                       <View row spread paddingH-25 marginV-15>
                             <Button name="thumbs-down" changeIndex={this.chnageIndex} index={0}/>
                             <Button name="emoticon-neutral" Pack={MCI} changeIndex={this.chnageIndex} index={1}/>
                             <Button name="thumbs-up" changeIndex={this.chnageIndex} index={2}/>
-                        </View>}
+                       </View>  
+                        </View>
+                        }
                         {this.state.index != undefined && <View center>
-                        <Text lvl1>Thank you for rating xxx!</Text>
+                            <Text lvl1>Thank you for rating <Text primary>{this.state.text}</Text>!</Text>
                         </View>}
                     </View>
                 </Transitioning.View>

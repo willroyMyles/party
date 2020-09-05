@@ -37,7 +37,6 @@ export const GeoLocationUpdates = ( { data, error }: { data: any, error: any } )
 
     if ( data )
     {
-        console.log( "recieved s=data", count++ );
         const { longitude, latitude } = data.locations[0].coords
         psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
     }
@@ -57,7 +56,6 @@ export const GeoLocationUpdatesActive = ( { data, error }: { data: any, error: a
     {
 
         if(AppState.currentState !== "active") return
-        console.log( "recieved s=data", count++ );
         const { longitude, latitude } = data.locations[0].coords
         psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
     }
@@ -151,7 +149,8 @@ const NearMe = () =>
         console.log("foregroun tasks started");
         
         Location.startLocationUpdatesAsync( foregroundTask, { //runs unlimited
-            accuracy: Location.Accuracy.High,
+            accuracy: Location.Accuracy.Low,
+            distanceInterval: 3000
         } ).then( res =>
         {
             psuedoLocationTracker.watchTheseLocations( data )
@@ -164,7 +163,8 @@ const NearMe = () =>
         console.log( "backgroun tasks started" );
 
         Location.startLocationUpdatesAsync( backgroundTask, { //runs unlimited
-            accuracy: Location.Accuracy.High,
+            timeInterval: 1000 * 60 * 6, //runs every 6 mins,
+            accuracy: Location.Accuracy.Balanced,
         } ).then( res =>
         {
             psuedoLocationTracker.watchTheseLocations( data )
@@ -283,7 +283,8 @@ const ShowEventOnMarkerPressed = ( {
             {
                 const coord: LatLng | undefined = getLatitudeLongitudeFromString( value.location )
                 if ( coord )
-                    return <Marker
+                    return <View>
+                        <Marker
                         ref={mark}
                         onLayout={e =>
                         {
@@ -296,7 +297,10 @@ const ShowEventOnMarkerPressed = ( {
                         coordinate={coord}
                         onPress={() => onPress( value.reference || "" ) }
                     >
-                    </Marker>
+
+                </Marker>
+                        <Circle center={coord} radius={100} fillColor={Colors.blue50} strokeColor={Colors.grey60} strokeWidth={3} />
+                </View>
                 else return <View key={value.reference}/>
             } )}
         </>
