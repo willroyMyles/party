@@ -8,6 +8,7 @@ import { Alert } from 'react-native';
 class Store
 {
   @observable data: Map<string, FeedItemModel> = new Map();
+  @observable memoryData: Map<string, FeedItemModel> = new Map();
   @observable intermediateryData: Map<string, FeedItemModel> = new Map();
   @observable rsvpData: Map<string, FeedItemModel> = new Map();
   @observable categorizedData: Map<string, FeedItemModel[]> = new Map()
@@ -52,6 +53,34 @@ class Store
     } );
   };
 
+
+  private sortAll = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) =>
+  {
+    this.sortMemoryData( docs )
+    this.sortCategorizedData( docs )
+  }
+
+  private sortMemoryData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) => new Promise( resolve =>
+  {
+    for (let index = 0; index < docs.length; index++) {
+      const element = docs[index];
+      const item : FeedItemModel = element.data()
+      const val = this.checkDate( item.date || "" )
+      if ( val )
+      { // add to memory set
+        this.memoryData.set(element.id, item)
+      }
+    }
+    resolve(true)
+  } )
+  
+
+  private checkDate = ( d: string ) =>
+  {
+    const old = Date.parse( d )
+    const comp = new Date().valueOf()
+    return old <= comp
+  }
   private sortCategorizedData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) =>
   {
     for ( let index = 0; index < docs.length; index++ )
@@ -73,21 +102,6 @@ class Store
     // this.sortFeedItemDocs()
   }
 
-  // @action sortFeedItemDocs = () =>
-  // {
-  //   const limitInSection = 2 // equates to 3 items
-  //   const obj: any = { title: "", data: [] }
-  //   const arr: any = []
-  //   this.categorizedData.forEach( ( value, key ) =>
-  //   {
-  //     obj.title = key
-  //     obj.data = value.slice( 0, 2 )
-  //     this.previewedData.push( obj )
-  //   } )
-  // }
-
-
-
   sortDataFromFireBase = ( data: any ) =>
   {
     this.intermediateryData.clear()
@@ -101,7 +115,7 @@ class Store
         this.intermediateryData.set(doc.id, doc.data())
       } )
       resolve( true )
-      this.sortCategorizedData( result.docs )
+      this.sortAll(result.docs)
       eventEmitter.emit( eventStrings.dataFromProviderFinishedLoad )
     } )
   }

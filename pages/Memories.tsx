@@ -10,6 +10,7 @@ import * as faker from 'faker'
 import FeedItemVersionOne from '../components/FeedItemVersionOne'
 import FeedItemMemoryVersionOne from '../components/FeedItemMemoryVersionOne copy'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { observer } from 'mobx-react'
 
 const Memories = () => {
    const theme = useTheme()
@@ -17,28 +18,19 @@ const Memories = () => {
 	const [data, setdata] = useState<FeedItemModel[]>([])
 	useEffect(() => {
 		getPastEvents()
-	}, [])
+		console.log("called");
+		
+	}, [FireStore.memoryData.size])
 
 	const handleViewClick = (item: FeedItemModel) => {
 		navigation.navigate("event", {reference : item.reference})
 	}
 
 	const getPastEvents = () => {
-		//should really fetch data and sort in data layer...
-		const d: FeedItemModel[] = []
-		FireStore.data.forEach((val: FeedItemModel, key) => {
-			if (checkDate(val.date || "")) d.push(val)
-		})
-
+		const d: FeedItemModel[] = [...FireStore.memoryData.values()]
 		setdata(d)
 	}
 
-	const checkDate = (d: string) => {
-		const old = Date.parse(d)
-		const comp = new Date().valueOf()
-
-		return old <= comp
-	}
 
 	return (
 		<SafeAreaView style={{flex:1}}>
@@ -67,4 +59,4 @@ const Memories = () => {
 	)
 }
 
-export default Memories
+export default observer(Memories)

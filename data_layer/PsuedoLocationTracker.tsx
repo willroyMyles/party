@@ -66,6 +66,7 @@ export class PsuedoLocationTracker
                     if ( perm )
                     {
                         console.log( "should sent noti" );
+                        this.processed.set( value[0], value[0] )
                         Notifications.setNotificationHandler( {
                             handleNotification: async () => ( {
                                 shouldShowAlert: true,
