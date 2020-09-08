@@ -242,7 +242,6 @@ class Store
         const data: FeedItemModel = element.data()
         this.rsvpData.set( data.reference || "", data )
         this.data.set( data.reference, data )
-
       }
 
       resolve( true )
@@ -251,6 +250,26 @@ class Store
     } ).catch( err => reject( err ) )
   } )
 
+  @action private sendRating = ( rating: number, reference: string) => new Promise( ( resolve, reject ) =>
+  {
+    const item = this.data.get( reference )
+    console.log(item?.rating);
+    
+    if ( item )
+    {
+      const rat = item?.rating || 0;
+      FBS.events.uploadRating( rat + rating, reference ).then( res =>
+        {
+        item.rating = rat + rating
+        this.data.set( item.reference || "", item )
+        resolve(true)
+        })
+    } 
+    else
+    {
+      reject(false)
+    }
+  })
   @action private needsToBeLoggedInToProceed = () => new Promise<boolean>( resolve =>
   {
     if ( this.isLoggedIn() )
@@ -276,7 +295,8 @@ class Store
   send = {
     sendEvent: this.sendEvent,
     sendPicturesToEvent: this.uploadPictureToEvent,
-    rsvp: this.addRsvpEvent
+    rsvp: this.addRsvpEvent,
+    rating: this.sendRating,
   };
 
   auth = {

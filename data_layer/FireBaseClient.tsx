@@ -402,6 +402,16 @@ class Store
     } )
   }
 
+  private sendRatings = ( rating: number, id: string ) => new Promise<boolean>( ( resolve, reject ) =>
+  {
+    firestore().doc( `${ eventCollection }/${ id }` ).update( { rating: rating } ).then( res =>
+    {
+      resolve(true)
+    } ).catch( err =>
+    {
+      reject(false)
+    })
+  })
   social = {
     GooglsSignIn: this.googleSignIN,
     Facebook: this.facebookSignIn
@@ -419,6 +429,7 @@ class Store
     uploadEvent: this.uploadEvent,
     uploadPhotoToEvent: this.uploadPhotoToEvent,
     uploadRsvpEvents: this.rsvpEvent,
+    uploadRating:this.sendRatings,
     getEventsByMultiple: this.getEventsInMultiplies,
     getUrlForFlyers: this.getURLForEventFlyers,
     getEventsInCategories: this.getEventsInCategories,

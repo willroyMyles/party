@@ -37,7 +37,9 @@ export interface FeedItemModel {
 
 	timeStamp?: Date
 
-	priority: number | 0
+	priority: number | 0,
+
+	rating : number | 0
 }
 
 export interface UserDatabaseModel {

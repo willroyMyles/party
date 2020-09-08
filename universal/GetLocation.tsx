@@ -86,23 +86,29 @@ export const getLocation = () => new Promise<any>(async (resolve, reject) => {
 
 })
 
-export const getRegion = (coords: LatLng) => new Promise<Region>((resolve, reject) => {
-    const { width, height } = Dimensions.get("window")
+export const getRegion = (coords: LatLng) : Region => {
+
+    return {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        latitudeDelta: getDalta().latDelta,
+        longitudeDelta: getDalta().lngDelta,
+    }
+
+    
+
+} 
+
+export const getDalta = () =>
+{
+    const { width, height } = Dimensions.get( "window" )
     const ASPECT_RATIO = width / height
 
     const latDelta = .05
     const lngDelta = latDelta * ASPECT_RATIO
 
-    let region = {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-        latitudeDelta: latDelta,
-        longitudeDelta: lngDelta,
-    }
-
-    resolve(region)
-
-})
+    return { latDelta: latDelta, lngDelta: lngDelta}
+}
 
 export const getLatitudeLongitudeFromString = (ll?: string) : LatLng => {
     const gong = String(ll).split(",")

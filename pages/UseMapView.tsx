@@ -27,7 +27,7 @@ const UseMapView = () => {
 
     const setreg = async () => {
         const coords = await getLocation();
-        const reg = await getRegion(coords)
+        const reg = getRegion(coords)
         setRegion(region)
 
         if (map) {

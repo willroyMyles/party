@@ -3,10 +3,6 @@ import { lightTheme, darkTheme } from "./Theme"
 import { Colors } from "react-native-ui-lib"
 import { themehelper } from "./Theme"
 import AsyncStorage from '@react-native-community/async-storage';
-import * as TaskManager from 'expo-task-manager'
-import { GeoLocationUpdates } from "../App";
-
-
 
 export enum ThemeType
 {
@@ -29,17 +25,6 @@ export class Store
 	{
 		this.isLocationGranted = val
 		AsyncStorage.setItem( "locationGranted", val ? granted : notGranted )
-		const defined = TaskManager.isTaskDefined( "geoLocation" )
-		
-		if ( val && !defined)
-		{
-			TaskManager.defineTask( "geoLocation", GeoLocationUpdates)
-		} 
-
-		if ( !val && defined )
-		{
-			TaskManager.unregisterTaskAsync("geoLocation")
-		}
 	}
 
 	l = autorun( () =>

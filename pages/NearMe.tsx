@@ -20,6 +20,7 @@ import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import psuedoLocationTracker, { PsuedoLocationTracker, radius } from '../data_layer/PsuedoLocationTracker';
 import { AppState, AppStateStatus, Platform } from 'react-native';
+import { observer } from 'mobx-react';
 
 let count = 0
 const foregroundTask = "online geo tasks"
@@ -61,8 +62,8 @@ export const GeoLocationUpdatesActive = ( { data, error }: { data: any, error: a
     }
 }
 
-TaskManager.defineTask( backgroundTask, GeoLocationUpdates )
-TaskManager.defineTask( foregroundTask, GeoLocationUpdatesActive )
+TaskManager.defineTask( backgroundTask, ( { data, error } ) => GeoLocationUpdates({data,error}) )
+TaskManager.defineTask( foregroundTask, ( { data, error } ) => GeoLocationUpdatesActive( { data, error } ) )
 
 
 const NearMe = () =>
@@ -74,10 +75,15 @@ const NearMe = () =>
     const [focusedEvent, setFocusedEvent] = useState<string>( '' );
     const [geoRegions, setGeoRegions] = useState<LocationRegion[]>( [] )
 
+    useEffect(() => {
+       console.log(FireStore.data.size + " my size");
+        sortMarkers()
+    }, [FireStore.data.size])
+
     useEffect( () =>
     {
         getUserRegion();
-        sortMarkers()
+        // sortMarkers()
         
         if ( !eventEmitter.eventNames().includes( eventStrings.dataFromProviderFinishedLoad ) )
         eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
@@ -93,45 +99,32 @@ const NearMe = () =>
 
     const changeLocationUpdates = ( state: AppStateStatus ) =>
     {
+        sortMarkers()
+
         if ( state == "active" )
         {
             stopBackgroundTask()
-            startForegroundTasks(geoRegions)
+            startForegroundTasks(geoRegions.length >0? geoRegions : [...psuedoLocationTracker.data.values()])
         } else
         {
             stopForegroundTask()
-            startBackgroundTasks(geoRegions)
+            startBackgroundTasks( geoRegions.length > 0 ? geoRegions : [...psuedoLocationTracker.data.values()] )
         }
     }
 
-    useEffect( () =>
-    {
-        console.log(`data changed within firesotr //// \n`);
-        
-        sortMarkers()
-        return () => {
-        }
-    }, [FireStore.data])
-
     const userLocationChanged = async ( e: EventUserLocation ) =>
-    {
-        try
-        {            
+    {        
             const loc = e.nativeEvent.coordinate;
-            const reg = await getRegion( loc );
+            const reg = getRegion( loc );
             setRegion( reg );
-        } catch ( err )
-        {
-            console.log( 'err', err );
-        }
-    };
+    }
 
     const getUserRegion = async () =>
     {
         try
         {
             const coor = await getLocation();
-            const reg = await getRegion( coor );
+            const reg = getRegion( coor );
             if ( map.current )
             {
                 map.current.animateToRegion( reg );
@@ -144,9 +137,9 @@ const NearMe = () =>
         }
     };
 
-    const startForegroundTasks = ( data: any[] ) =>
+    function startForegroundTasks( data: any[] )
     {
-        console.log("foregroun tasks started");
+        console.log(`\nforegroun tasks started with size ${data.length} \n`);
         
         Location.startLocationUpdatesAsync( foregroundTask, { //runs unlimited
             accuracy: Location.Accuracy.Low,
@@ -158,7 +151,8 @@ const NearMe = () =>
         } )
     }
 
-    const startBackgroundTasks = ( data: any[] ) =>
+    
+    function startBackgroundTasks( data: any[] )
     {
         console.log( "backgroun tasks started" );
 
@@ -179,7 +173,8 @@ const NearMe = () =>
     const sortMarkers = () =>
     {
         const arr = [...FireStore.data.values()];
-        if(arr.length == 0) return
+        if ( arr.length == 0 ) return
+        if ( arr.length == markers.length ) return
         setMarkers( arr );
 
         const d: any = []
@@ -283,7 +278,7 @@ const ShowEventOnMarkerPressed = ( {
             {
                 const coord: LatLng | undefined = getLatitudeLongitudeFromString( value.location )
                 if ( coord )
-                    return <View>
+                    return <View key={index}>
                         <Marker
                         ref={mark}
                         onLayout={e =>
@@ -306,4 +301,4 @@ const ShowEventOnMarkerPressed = ( {
         </>
     )
 };
-export default NearMe;
+export default  observer(NearMe);

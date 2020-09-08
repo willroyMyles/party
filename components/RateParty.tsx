@@ -53,7 +53,7 @@ export default class RateParty extends Component
     {
         const item = FireStore.data.get( id )
         
-        this.setState( { text: item?.title, location:item?.location})
+        this.setState( { text: item?.title, location:item?.location, id: id})
 
         conf.toValue = height/2.5
      Animated.spring( this.state.height,conf ).start( )
@@ -73,7 +73,8 @@ export default class RateParty extends Component
         index: undefined,
         height: new Animated.Value( height ),
         text: ``,
-        location:undefined
+        location: undefined,
+        id:""
     }
 
     componentDidMount()
@@ -86,13 +87,16 @@ export default class RateParty extends Component
 
     view = createRef<TransitioningView>()
 
-    chnageIndex = (index:number) =>
+    chnageIndex = (num:number) =>
     {
+
+        //send data to firebase
+        FireStore.send.rating(num,this.state.id)
         
         setTimeout( () =>
         {
             if(this.view.current) this.view.current.animateNextTransition()
-            this.setState( { index: index } )
+            this.setState( { index: num } )
 
             setTimeout(() => {
                 //animate out
@@ -126,9 +130,9 @@ export default class RateParty extends Component
                     <View>
                         {this.state.index == undefined && <View>
                        <View row spread paddingH-25 marginV-15>
-                            <Button name="thumbs-down" changeIndex={this.chnageIndex} index={0}/>
-                            <Button name="emoticon-neutral" Pack={MCI} changeIndex={this.chnageIndex} index={1}/>
-                            <Button name="thumbs-up" changeIndex={this.chnageIndex} index={2}/>
+                            <Button name="thumbs-down" changeIndex={this.chnageIndex} index={-1}/>
+                            <Button name="emoticon-neutral" Pack={MCI} changeIndex={this.chnageIndex} index={0}/>
+                            <Button name="thumbs-up" changeIndex={this.chnageIndex} index={1}/>
                        </View>  
                         </View>
                         }

@@ -95,7 +95,7 @@ class NearMeV2 extends PureComponent {
 
   showMyLocationPressed = async () => {
     getLocation().then(async (res) => {
-      const reg = await getRegion(res);
+      const reg = getRegion(res);
       this.setState({region: reg});
       this.dataChanged();
     });

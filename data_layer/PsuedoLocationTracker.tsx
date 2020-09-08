@@ -16,44 +16,41 @@ export const taskName = 'geoLocation';
 export const threshold = 10 / radius
 export class PsuedoLocationTracker
 {
-    @observable trackedData: Map<string, number> = new Map()
     @observable userLocation: LatLng | undefined = undefined
     @observable data: Map<string, LocationRegion> = new Map()
 
     @observable entered: Map<string, number> = new Map()
     @observable processed: Map<string, string> = new Map()
 
-    @observable id = uuid.v4()
-
-    init = () => null
-
-    @action getObservationalData = () =>
-    {
-
-    }
 
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
 
-        console.log( `the size is ${ this.data.size}\n`);
         
         if(this.data.size == 0) return
         this.userLocation = latLng;        
+
+        console.log(`this is processed size ${this.processed.size} \n this is data size ${this.data.size} \n`);
+        
         
         [...this.data.entries()].map( async ( value, index ) =>
-        {
+        {            
+            if ( this.processed.has( value[0] ) ) return
+
             const ll = getDistanceFromLatLonInKm( value[1].latitude, value[1].longitude, this.userLocation?.latitude, this.userLocation?.longitude )
-            this.trackedData.set( value[0], ll )
 
-
-            if ( ll <= threshold )
+            console.log(`\nthis is distance and threshold ${ll} : ${threshold} : ${value[0]} \n`);
+            
+            if ( ll <= threshold)
             {
-                this.entered.set( value[0], ll )
-                eventEmitter.emit( eventStrings.locationEntered, value[0] )
-                console.log( "fence breached" );
-
                 if ( AppState.currentState == "active" )
                 {
+
+                    this.entered.set( value[0], ll )
+                    eventEmitter.emit( eventStrings.locationEntered, value[0] )
+                    console.log( "fence breached" );
+
+
                     // check if already asked
                     if ( this.processed.has( value[0] ) ) return
                     
@@ -105,6 +102,8 @@ export class PsuedoLocationTracker
 
     @action watchTheseLocations = ( data: LocationRegion[] ) =>
     {
+        console.log("watched updated");
+        
         this.data.clear()
         const d = new Map()
         data.map( ( value, index ) =>
