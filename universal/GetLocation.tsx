@@ -72,7 +72,8 @@ export const getLocation = () => new Promise<any>(async (resolve, reject) => {
                 resolve(res.coords)
             } ).catch( err =>
             {
-                console.log("somthing bad happened, could not get location");
+                console.log( "somthing bad happened, could not get location" );
+                //TODO: show oast that couldnt get location
                 
             eventEmitter.emit(eventStrings.locationNotGranted)
                 

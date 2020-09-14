@@ -8,21 +8,26 @@ import PhotoGridV2 from "../components/PhotoGridV2"
 import DateBox from "../components/DateBox"
 import { Colors } from "react-native/Libraries/NewAppScreen"
 import EventHeaderImage from "../components/EventHeaderImage"
+import { observer } from "mobx-react"
 
 
 const PastEventView = () =>
 {
 	const route = useRoute()
-	const referenceNumber = route.params?.reference
-	const item = FireStore.data.get( referenceNumber )
+	const referenceNumber : string = route.params?.reference
+
+	const item = FireStore.memoryData.get( referenceNumber )
+	console.log(`item found? ${ FireStore.memoryData.has(referenceNumber)}, ${ referenceNumber}, ${ [...FireStore.memoryData.keys()][0]}`);
+
 	const [image, setimage] = useState<string>()
 
+	
 	if ( !item ) return <View />
 	useEffect( () =>
 	{
 		async function getImage()
 		{
-			const d = await FireStore.retrieve.imageFromReference( item.reference )
+			const d = await FireStore.retrieve.imageFromReference( item.reference , item.flyer)
 			setimage( d )
 		}
 
@@ -52,4 +57,4 @@ const PastEventView = () =>
 }
 
 
-export default PastEventView
+export default observer(PastEventView)

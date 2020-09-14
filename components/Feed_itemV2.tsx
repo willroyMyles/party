@@ -25,7 +25,7 @@ const Feed_ItemV2 = ( { reference }: { reference: string } ) =>
 
 		async function getImage()
 		{
-			const d = await FireStore.retrieve.imageFromReference( item.reference )
+			const d = await FireStore.retrieve.imageFromReference( item.reference , item.flyer)
 			setImage( d )
 		}
 

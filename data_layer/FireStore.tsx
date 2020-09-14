@@ -9,6 +9,7 @@ class Store
 {
   @observable data: Map<string, FeedItemModel> = new Map();
   @observable memoryData: Map<string, FeedItemModel> = new Map();
+  @observable ratingsData: FeedItemModel[] = []
   @observable intermediateryData: Map<string, FeedItemModel> = new Map();
   @observable rsvpData: Map<string, FeedItemModel> = new Map();
   @observable categorizedData: Map<string, FeedItemModel[]> = new Map()
@@ -47,6 +48,7 @@ class Store
         .then( ( res ) =>
         {
           this.data.set( data.reference || "", data )
+          eventEmitter.emit(eventStrings.dataFromProviderFinishedLoad)
           resolve( true );
         } )
         .catch( ( err ) => reject( err ) );
@@ -56,32 +58,38 @@ class Store
 
   private sortAll = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) =>
   {
-    this.sortMemoryData( docs )
     this.sortCategorizedData( docs )
   }
 
   private sortMemoryData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) => new Promise( resolve =>
   {
-    for (let index = 0; index < docs.length; index++) {
+    for ( let index = 0; index < docs.length; index++ )
+    {
       const element = docs[index];
-      const item : FeedItemModel = element.data()
+      const item: FeedItemModel = element.data()
       const val = this.checkDate( item.date || "" )
       if ( val )
       { // add to memory set
-        this.memoryData.set(element.id, item)
+        this.memoryData.set( item.reference , item )
+        // FBS.events.moveEventsAround( element.id, item )
       }
     }
-    resolve(true)
-  } )
-  
+    resolve( true )
+  } )  
 
+  /**
+   * 
+   * @param d which is a string date
+   * 
+   * if d is less than current date, will return true
+   */
   private checkDate = ( d: string ) =>
   {
     const old = Date.parse( d )
     const comp = new Date().valueOf()
     return old <= comp
   }
-  private sortCategorizedData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) =>
+  private sortCategorizedData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) => new Promise( resolve =>
   {
     for ( let index = 0; index < docs.length; index++ )
     {
@@ -97,10 +105,10 @@ class Store
       }
     }
 
-    eventEmitter.emit(eventStrings.categorizedDataLoaded)
+    eventEmitter.emit( eventStrings.categorizedDataLoaded )
+    resolve(true)
+  })
 
-    // this.sortFeedItemDocs()
-  }
 
   sortDataFromFireBase = ( data: any ) =>
   {
@@ -111,7 +119,7 @@ class Store
 
       result.docs.forEach( ( doc, index ) =>
       {
-        if ( !this.data.has( doc.id ) ) this.data.set( doc.id, doc.data() )
+        if ( !this.data.has( doc.id ) && !this.checkDate(doc.data().date)) this.data.set( doc.id, doc.data() )
         this.intermediateryData.set(doc.id, doc.data())
       } )
       resolve( true )
@@ -122,8 +130,10 @@ class Store
 
   @action private getEvents = () => new Promise( ( resolve, reject ) =>
   {
-    FBS.getEventsInMultiplies( 2 ).then( ( res: any ) =>
+    FBS.getEventsInMultiplies( 10 ).then( ( res: any ) =>
     {
+      this.sortMemoryData( res.docs )
+
       this.sortDataFromFireBase( res ).then( res =>
       {
         resolve( true )
@@ -133,6 +143,42 @@ class Store
       reject( "unable to get events" )
     } )
   } )
+
+  @action private getPastEvents = ( reference: string ) => new Promise( ( resolve, reject ) =>
+  {
+    const amount = 5
+    FBS.events.getPastEvents( amount, reference ).then( res =>
+    {
+      this.sortMemoryData(res.docs)
+      resolve( true )
+    } ).catch( err =>
+    {
+      reject(err)
+    })
+  } )
+
+  @action private getEventsByRatings = () => new Promise < FeedItemModel[]>( ( resolve, reject ) =>
+  {
+    const amount = 50
+
+    FBS.events.getEventsByRatings( amount ).then( res =>
+    {
+      const d: FeedItemModel[] = []
+
+      res.docs.forEach( ( value, index ) =>
+      {
+        d.push(value.data())
+      })
+
+      // this.ratingsData = this.ratingsData.concat( ...d )
+      resolve(d)
+    } ).catch( err =>
+    {
+      reject("no more data")
+    })
+  } )
+
+
 
   private updateDataImages = () =>
   {
@@ -146,9 +192,10 @@ class Store
     } )
   }
 
-  private getEventImageForReference = ( reference: string ) => new Promise<string>( async ( resolve, reject ) =>
+  private getEventImageForReference = ( reference: string, flyer:string ) => new Promise<string>( async ( resolve, reject ) =>
   {
 
+    
     if ( this.eventImagesMap.has( reference ) )
     {
       return resolve( this.eventImagesMap.get( reference ) )
@@ -156,10 +203,7 @@ class Store
 
     try
     {
-      const flyer = this.data.get( reference )?.flyer
-      const imageUrl = await FBS.events.getUrlForFlyers( flyer || "" )
-
-      this.eventImagesMap.set( reference, imageUrl )
+      const imageUrl = await FBS.events.getUrlForFlyers( flyer)
       resolve( imageUrl )
     } catch ( err )
     {
@@ -297,13 +341,42 @@ class Store
     }
   } )
 
+  @action private moveData = () =>
+  {
+    const arr = [...this.data.values()]
+    console.log(arr.length);
+    
+
+      for (let index = 0; index < arr.length; index++) {
+        const element = arr[index];
+
+        const goAhead = this.checkDate( element.date )
+        console.log(`${goAhead}, ${element.title}`);
+
+        if(goAhead) FBS.events.moveEventsAround( element.reference, element ).then( res =>
+        {
+          if ( res )
+          {
+            this.data.delete( element.reference )
+            this.memoryData.set( element.reference, element)
+          } else
+          {
+            
+          }
+        })
+        
+      }
+  }
+
   retrieve = {
     isLoggedIn: this.isLoggedIn,
     events: this.getEvents,
     picturesForEvent: this.picturesForEvent,
     specificParties: this.getSpecificParties,
     rsvpEvents: this.getRsvpEvents,
-    imageFromReference: this.getEventImageForReference
+    imageFromReference: this.getEventImageForReference,
+    getPastEvents: this.getPastEvents,
+    getEventsByRatings: this.getEventsByRatings
   };
 
   send = {
@@ -311,6 +384,7 @@ class Store
     sendPicturesToEvent: this.uploadPictureToEvent,
     rsvp: this.addRsvpEvent,
     rating: this.sendRating,
+    moveDataAround: this.moveData
   };
 
   auth = {

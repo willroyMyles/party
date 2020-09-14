@@ -10,7 +10,7 @@ const { width, height } = Dimensions.get( "screen" )
 
 const MarkerPin = (props: { marker?: LatLng }) => {
 	if (props.marker)
-		return <Marker image={require( "../assets/images/splash.jpg" )} pinColor="green" coordinate={props.marker}>
+		return <Marker image={require( "../assets/images/marker.png" )} pinColor="green" coordinate={props.marker}>
 			<Circle center={props.marker} radius={100} fillColor={Colors.grey30} />
 		</Marker>
 	else return <View />

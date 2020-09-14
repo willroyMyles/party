@@ -10,11 +10,16 @@ import { useNavigation } from '@react-navigation/native'
 import FireStore from '../data_layer/FireStore'
 import PartyTypeBadge from './PartyTypeBadge'
 const { width, height } = Dimensions.get( "screen" )
-const FeedItemMemoryVersionOne = ( { reference }: { reference: string } ) =>
+
+
+
+const FeedItemMemoryVersionOne = ( { item }: { item: FeedItemModel } ) =>
 {
 
-    const item = FireStore.data.get( reference )
-    if ( !item ) return <View />
+    if ( !item )
+    {
+        return <View />
+    }
 
     const theme = useTheme()
     const navigation = useNavigation()
@@ -24,7 +29,7 @@ const FeedItemMemoryVersionOne = ( { reference }: { reference: string } ) =>
     {
         async function getImage()
         {
-            const d = await FireStore.retrieve.imageFromReference( item.reference )
+            const d = await FireStore.retrieve.imageFromReference( item.reference, item.flyer )
             setimage( d )
         }
 

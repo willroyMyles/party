@@ -40,6 +40,7 @@ const FeedV2 = () =>
         setLoading( false )
         const values = [...FireStore.intermediateryData.values()]
         const lastIndex = values.length - 1
+        if(lastIndex < 0) return
         const ref = values[lastIndex].reference
         setLastDocument( ref )
         

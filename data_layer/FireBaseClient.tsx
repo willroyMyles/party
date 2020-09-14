@@ -18,6 +18,7 @@ GoogleSignin.isSignedIn().then( res =>
 
 
 const eventCollection = 'events';
+const pastEventCollection = 'past events';
 const userCollection = 'users';
 let last: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
 let lastType: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
@@ -63,7 +64,7 @@ class Store
         .catch( ( err ) => reject( err ) );
     } );
 
-  resetPassword = ( email: string ) => new Promise( ( resolve, reject ) =>
+   private resetPassword = ( email: string ) => new Promise( ( resolve, reject ) =>
   {
 
     auth().sendPasswordResetEmail( email ).then( res =>
@@ -81,7 +82,37 @@ class Store
 
   logout = () => auth().signOut();
 
-  uploadPhoto = ( data: FeedItemModel ): string | any =>
+
+  private moveEventsAround = ( id: string, item: FeedItemModel ) => new Promise( async resolve =>
+  {
+
+    console.log("entering move events around");
+    
+    //check if it exsists in 
+    const result = await firestore().doc( `${ eventCollection }/${ id }` ).get()
+    if ( result.exists )
+    {
+      console.log("exsists");
+      firestore().doc( `${ eventCollection }/${ id }` ).delete()
+    } 
+    
+    
+    //check if it is in pastEventCollection
+    const pastResult = await firestore().doc( `${ pastEventCollection }/${ id }` ).get()
+    if ( !pastResult.exists ) // perfect
+    {
+      //if it doesnt add it
+      const add = await firestore().collection( `${ pastEventCollection }` ).add( item )
+      if (  add.id ) resolve( true )
+      else resolve( false )
+      
+    }
+
+    resolve(true)
+  })
+
+
+  private uploadPhoto = ( data: FeedItemModel ): string | any =>
     new Promise( async ( resolve ) =>
     {
       const filename = data.flyer?.substring( data.flyer?.lastIndexOf( '/' ) + 1 );
@@ -101,7 +132,7 @@ class Store
         } );
     } );
 
-  uploadEvent = ( data: FeedItemModel ) =>
+  private uploadEvent = ( data: FeedItemModel ) =>
     new Promise( ( resolve, reject ) =>
     {
       if ( !this.isLoggedIn() )
@@ -134,7 +165,7 @@ class Store
       } );
     } );
 
-  updateUserEvents = ( add: boolean, eventId: string ) =>
+  private updateUserEvents = ( add: boolean, eventId: string ) =>
   {
     if ( add )
     {
@@ -193,9 +224,58 @@ class Store
     } );
   };
 
+  private getPastEvents = ( amount: number, reference: string ) => new Promise<FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>>( async ( resolve, reject ) =>
+  {
+    try
+    {
+      const orderBy = "date"
+      let fq = firestore()
+        .collection( `${ pastEventCollection }` )
+        .orderBy( orderBy )
+        .limit( amount )
+
+      if ( reference != "" )
+      {
+        const snapshot = await firestore().doc( `${ pastEventCollection }/${ reference }` ).get()
+        fq = fq.startAfter( snapshot )
+      }
+
+      const result = await fq.get()
+      if ( result.empty ) return reject( 'empty' );
+      resolve( result );
+
+    } catch ( err )
+    {
+      console.log( "err" );
+      reject( err )
+    }
+  } )
+
+  private getEventsByRatings = ( amount: number ) => new Promise<FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>>( async ( resolve, reject ) =>
+  {
+    try
+    {
+      const orderBy = "rating"
+      let fq = firestore()
+        .collection( `${ pastEventCollection }` )
+        .orderBy( orderBy )
+        .limit( amount )
+      
+      const result = await fq.get()
+      if ( result.empty ) return reject( 'empty' );
+      resolve( result );
+
+    } catch ( err )
+    {
+      console.log( "err" );
+      reject( err )
+    }
+  } )
+  
+
+
   private getEventsByType = async ( type: number, referenceNumber: string ) =>
   {
-
     if ( !referenceNumber )
     {
       return new Promise( ( rs, rj ) => rj( "reference number is null" ) )
@@ -215,9 +295,6 @@ class Store
           .startAfter( snapshot1 )
           .limit( amount )
           // .where( "partyType", "==", type )
-        
-        
-
         const snapshot = await firstQuery.get();
         
         if ( snapshot.empty ) return reject( 'empty' );
@@ -435,8 +512,10 @@ class Store
     getEventsInCategories: this.getEventsInCategories,
     getPastPictures: this.getPicturesForEvent,
     getEventByType: this.getEventsByType,
-    getRsvpEvents: this.getRsvpEvents
-
+    getRsvpEvents: this.getRsvpEvents,
+    getPastEvents: this.getPastEvents,
+    getEventsByRatings:this.getEventsByRatings,
+    moveEventsAround : this.moveEventsAround
   };
 }
 

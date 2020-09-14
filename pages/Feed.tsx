@@ -42,8 +42,8 @@ const Feed = () =>
     const loadData = () =>
     {
         const values = [...FireStore.intermediateryData.values()]
-        const lastIndex = values.length - 1
-        const ref = values[lastIndex].reference
+        // const lastIndex = values.length - 1
+        // const ref = values[lastIndex].reference
         // setLastDocument( ref )
         setData( d => [...d, ...values] )
     }

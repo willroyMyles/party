@@ -7,7 +7,16 @@ import * as Notifications from 'expo-notifications';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import RateParty from '../components/RateParty'
 import { animated, useSpring } from 'react-spring/native'
-import { Dimensions } from 'react-native'
+import { Dimensions, Easing } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import { FlatList } from 'react-native-gesture-handler'
+import { FeedItemModel } from '../universal/Models'
+import { useState } from 'react'
+import FireStore from '../data_layer/FireStore'
+import { useEffect } from 'react'
+import { observer } from 'mobx-react'
+import LeaderBoardTiles from '../components/LeaderBoardTiles'
+import * as faker from 'faker'
 
 // @refresh reset
 
@@ -17,12 +26,39 @@ const LeaderBoard = () =>
 {
     // @refresh reset
 
-    const [props, set, stop] = useSpring( () => ( {
-        opacity: 9, width: width, position: "absolute", top: 10, backgroundColor:"rgba(100,200,250,1)", config: {
-        tension : 100
-        }
-    } ) )
+    // const [props, set, stop] = useSpring( () => ( {
+    //     opacity: 9, width: width, position: "absolute", top: 10, backgroundColor: "rgba(100,200,250,1)",
+    //     from:{top:0},
+    //     to: {top:450, opacity:.4},
+    //     loop: { reverse: true }, config: {
+    //         duration: 3000,
+    //         easing: Easing.bounce,
+            
+    //     }
+    // } ) )
     
+    const [data, setData] = useState<Map<string, FeedItemModel>>( new Map() )
+    
+    useEffect(() => {
+        FireStore.retrieve.getEventsByRatings().then( res =>
+        {   
+            if ( res.length > 0 )
+            {
+                setData( d =>
+                {
+                    res.map( ( value: FeedItemModel, index ) =>
+                    {
+                        d.set(value.reference, value)
+                    } )
+                    
+                    return d
+                })  
+            }
+        } ).catch( err =>
+        {
+            //could not get events
+        })
+    }, [])
 
     const theme = useTheme()
     const TouchButton = animated(View)
@@ -55,53 +91,29 @@ const LeaderBoard = () =>
 
 
     return (
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{flex:1, backgroundColor:Colors.background}}>
+        <View bg-background>
+                <View center padding-10 bg-background style={{ minHeight: "10%" }}>
+                    <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
+                </View>
 
-        <View bg-background style={{minHeight:"100%"}}>
-            <Text lvl2>Leaderboard</Text>
-                <Button onPress={onPress}>
-                    <Text>some text</Text>
-                </Button>
-
-                <TouchableOpacity marginT-30 bg-red40 padding-30 center onPress={() =>
-                {
-                    // RateParty.show()
-                    RateParty.rateParty.show()
-
-                }}>
-                    <Text>show</Text>
-                </TouchableOpacity>
-                <TouchableOpacity marginT-30 bg-blue40 padding-30 center onPress={() =>
-                {
-                    RateParty.rateParty.hide()
-
-                }}>
-                    <Text>hide</Text>
-                </TouchableOpacity>
-
-                <TouchButton center style={{
-                    ...props, backgroundColor: props.top.to( val =>
+                {/* <View row spread>
+                    <Text>rank</Text>
+                    <Text>name</Text>
+                    <Text>score</Text>
+                </View> */}
+                <FlatList
+                    data={[...data.values()]}
+                    keyExtractor={( item: FeedItemModel ) => item.reference || faker.random.number( 200 ).toString()}
+                    renderItem={( { item, index } ) =>
                     {
-                        let r = val / 450 * 255
-                    let g = val / 450 * 255
-                        let b = val / 450 * 255
-                        return `rgba(${r}, ${b}, ${b}, 1)`
-                }) }}>
-                    <TouchableOpacity activeOpacity={1} marginT-30  padding-30 center onPress={() =>
-                    {
-                        
-                        set( { top: 450, width:width/10, backgroundColor:"rgba(0,0,0,1)" } ).then( res =>
-                        {
-                            set({top:20, width:width, backgroundColor:"rgba(100,200,300,1)"})
-                            
-                        })
-                    }}>
-                        <Text>rest</Text>
-                    </TouchableOpacity>
-</TouchButton>
+                    return <LeaderBoardTiles index={index} item={item} />
+                }}    
+                    />
+
         </View>
         </SafeAreaView>
     )
 }
 
-export default LeaderBoard
+export default observer(LeaderBoard)

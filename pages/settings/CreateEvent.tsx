@@ -25,6 +25,7 @@ import { GS } from '../../universal/GS';
 import FireStore from '../../data_layer/FireStore';
 import { FeedItemModel, PartyType } from '../../universal/Models';
 import TToast from '../../components/TToast';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface Flyer
 {
@@ -136,10 +137,8 @@ const CreateEvent = () =>
     }
 
     return (
+        <SafeAreaView>
         <ScrollView contentContainerStyle={{ minHeight: "100%" }}>
-            <View center paddingV-35>
-
-
                 <Dialog onDismiss={() => setdialogVisible( false )} visible={dialogVisible} containerStyle={{
                     backgroundColor: Colors.background,
                     padding: 10,
@@ -154,35 +153,39 @@ const CreateEvent = () =>
                                 <Text lvl1>{name}</Text>
                             </TouchableOpacity>
 
-                        } )}
+} )}
                         <View paddingV-10 />
                     </ScrollView>
-                </Dialog>
+            </Dialog>
+            
 
                 {dateShown && (
                     <DateTimePicker
-                        onChange={( e, d ) =>
+                    onChange={( e, d ) =>
                         {
                             onDateChange( e, d );
                         }}
                         mode="date"
                         value={new Date()}
-                    />
-                )}
-
-
-
+                        />
+                        )}
+            
                 {timeShown && (
                     <DateTimePicker
-                        onChange={( e, d ) =>
+                    onChange={( e, d ) =>
                         {
                             onStartChange( e, d );
                         }}
                         mode="time"
                         value={new Date()}
-                    />
-                )}
+                        />
+                        )}
+
                 <BackDrop />
+
+
+
+            <View center paddingV-90>
                 <TouchableOpacity
                     onPress={getFlyer}
                     center
@@ -191,10 +194,11 @@ const CreateEvent = () =>
                         { backgroundColor: Colors.foreground, },
                     ]}>
                     <Controller
+                        defaultValue=""
                         control={control}
                         name="flyer"
                         rules={{ required: 'A flyer is required' }}
-                    />
+                        />
                     <View marginV-15>
                         <Icon name="image" color={col} size={43} />
                         <Icon
@@ -209,17 +213,17 @@ const CreateEvent = () =>
                                 padding: 3,
                                 borderRadius: 50,
                             }}
-                        />
+                            />
                     </View>
                     <Text marginB-25 btn uppercase color={col}>upload image</Text>
                     {image && (
                         <View
-                            absT
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                backgroundColor: 'rgba(0,0,0,.3)',
-                            }}>
+                        absT
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'rgba(0,0,0,.3)',
+                        }}>
                             <Image source={{ uri: image }} resizeMode="cover" cover />
                         </View>
                     )}
@@ -228,27 +232,29 @@ const CreateEvent = () =>
                 {Image != null && (
                     //TODO animte in future
                     <View
-                        style={{
-                            justifyContent: 'flex-end',
-                            alignItems: 'flex-end',
-                            width: '90%',
-                            zIndex: 5,
-                            top: image ? 0 : '-300%',
-                        }}>
+                    style={{
+                        justifyContent: 'flex-end',
+                        alignItems: 'flex-end',
+                        width: '90%',
+                        zIndex: 5,
+                        top: image ? 0 : '-300%',
+                    }}>
                         <TouchableOpacity
                             onPress={() =>
-                            {
-                                setImage( null );
-                            }}
-                            row
-                            bg-background
-                            style={{ borderRadius: 4 }}>
+                                {
+                                    setImage( null );
+                                }}
+                                row
+                                bg-background
+                                style={{ borderRadius: 4 }}>
                             <Text>clear image</Text>
                         </TouchableOpacity>
                     </View>
                 )}
                 <View bg-foreground style={style.cont}>
                     <Controller
+                        defaultValue=""
+                        
                         name="title"
                         control={control}
                         rules={{ required: 'title required' }}
@@ -256,24 +262,26 @@ const CreateEvent = () =>
                         {
                             return (
                                 <TextField
-                                    hideUnderline
-                                    error={errors.title ? errors.title.message : ''}
-                                    maxLength={16}
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
+                                hideUnderline
+                                error={errors.title ? errors.title.message : ''}
+                                maxLength={16}
+                                onChangeText={( e: any ) => onChange( e )}
+                                onBlur={() =>
                                     {
                                         onBlur();
                                         clearErrors( 'title' );
                                     }}
                                     value={value}
                                     title="Title"
-                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
-
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
+                                    
+                                    />
+                                    );
+                                }}
                                 />
-                            );
-                        }}
-                    />
                     <Controller
+                        defaultValue=""
+                        
                         name="description"
                         control={control}
                         rules={{ required: 'description required' }}
@@ -281,41 +289,42 @@ const CreateEvent = () =>
                         {
                             return (
                                 <TextField
-                                    hideUnderline
-                                    error={errors.description ? errors.description.message : ''}
-                                    maxLength={16}
-                                    showsMaxLength
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
+                                hideUnderline
+                                error={errors.description ? errors.description.message : ''}
+                                showsMaxLength
+                                onChangeText={( e: any ) => onChange( e )}
+                                onBlur={() =>
                                     {
                                         onBlur();
                                         clearErrors( 'description' );
                                     }}
                                     value={value}
                                     title="Description"
-                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
-
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
+                                    
+                                    />
+                                    );
+                                }}
                                 />
-                            );
-                        }}
-                    />
 
                     <Controller
                         name="partyType"
+                        defaultValue=""
+                        
                         control={control}
                         rules={{ required: 'party type required' }}
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
                                 <TextField
-                                    hideUnderline
-                                    error={errors.partyType ? errors.partyType.message : ''}
-                                    maxLength={16}
-                                    showsMaxLength
-                                    onFocus={() => showDialog()}
-
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
+                                hideUnderline
+                                error={errors.partyType ? errors.partyType.message : ''}
+                                maxLength={16}
+                                showsMaxLength
+                                onFocus={() => showDialog()}
+                                
+                                onChangeText={( e: any ) => onChange( e )}
+                                onBlur={() =>
                                     {
                                         setdialogVisible( true )
                                         onBlur();
@@ -323,16 +332,18 @@ const CreateEvent = () =>
                                     }}
                                     value={value}
                                     title="Party Type"
-                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
-
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
+                                    
+                                    />
+                                    );
+                                }}
                                 />
-                            );
-                        }}
-                    />
                 </View>
 
                 <View row spread bg-foreground style={style.cont}>
                     <Controller
+                        defaultValue=""
+                        
                         name="date"
                         control={control}
                         rules={{ required: 'date required' }}
@@ -341,48 +352,52 @@ const CreateEvent = () =>
                             const ref = useRef()
                             return (
                                 <TextField
-                                    allowFontScaling
-                                    hideUnderline
-                                    error={errors.date ? errors.date.message : ''}
-                                    maxLength={16}
-                                    onFocus={handleShowDate}
-                                    // onChangeText={(value: any) => onChange(value)}
-                                    value={dateValue}
-                                    title="Event Date"
+                                allowFontScaling
+                                hideUnderline
+                                error={errors.date ? errors.date.message : ''}
+                                maxLength={16}
+                                onFocus={handleShowDate}
+                                // onChangeText={(value: any) => onChange(value)}
+                                value={dateValue}
+                                title="Event Date"
                                     autoGrow
-                                    style={[[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }], { width: '40%' }]}
-
+                                    style={[[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }], { width: '40%' }]}
+                                    
+                                    />
+                                    );
+                                }}
                                 />
-                            );
-                        }}
-                    />
                     <Controller
                         name="start"
                         control={control}
                         rules={{ required: 'start required' }}
+                        defaultValue=""
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
                                 <TextField
-                                    hideUnderline
-                                    error={errors.start ? errors.start.message : ''}
-                                    maxLength={16}
-                                    showsMaxLength
-                                    onFocus={handleShowTime}
-                                    // onChangeText={(e: any) => onChange(e)} onBlur={() => {
+                                hideUnderline
+                                error={errors.start ? errors.start.message : ''}
+                                maxLength={16}
+                                showsMaxLength
+                                defaultValue=""
+                                
+                                onFocus={handleShowTime}
+                                // onChangeText={(e: any) => onChange(e)} onBlur={() => {
                                     //     onBlur()
                                     //     clearErrors("start")
                                     // }}
                                     value={timeValue}
                                     title="Start Time"
                                     style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
-
+                                    
+                                    />
+                                    );
+                                }}
                                 />
-                            );
-                        }}
-                    />
                     <Controller
                         name="duration"
+                        defaultValue=""
                         control={control}
                         rules={{ required: 'duration required' }}
                         render={( { onChange, onBlur, value } ) =>
@@ -394,31 +409,32 @@ const CreateEvent = () =>
                                         error={errors.duration ? errors.duration.message : ''}
                                         maxLength={16}
                                         showsMaxLength
+                                        
                                         onChangeText={( e: any ) => onChange( e )}
                                         onBlur={() =>
-                                        {
-                                            onBlur();
-                                            clearErrors( 'duration' );
-                                        }}
-                                        value={value}
-                                        title="Duration"
-                                        keyboardType="numeric"
-                                        style={[
-                                            [GS.input, { backgroundColor: Colors.background, color: Colors.text1 }],
                                             {
-                                                width: '70%',
-                                                marginStart: 0,
-                                                textAlign: 'center',
-                                                paddingEnd: 10,
-                                            },
-                                        ]}
-
-                                    />
+                                                onBlur();
+                                                clearErrors( 'duration' );
+                                            }}
+                                            value={value}
+                                            title="Duration"
+                                            keyboardType="numeric"
+                                            style={[
+                                                [GS.input, { backgroundColor: Colors.background, color: Colors.text1 }],
+                                                {
+                                                    width: '70%',
+                                                    marginStart: 0,
+                                                    textAlign: 'center',
+                                                    paddingEnd: 10,
+                                                },
+                                            ]}
+                                            
+                                            />
                                     <Text style={{ color: Colors.grey40, margin: 5 }}>Hr</Text>
                                 </View>
                             );
                         }}
-                    />
+                        />
                 </View>
 
                 <View bg-foreground style={style.cont}>
@@ -426,44 +442,47 @@ const CreateEvent = () =>
                         name="location"
                         control={control}
                         rules={{ required: 'location required' }}
+                        defaultValue=""
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
                                 <TextField
-                                    hideUnderline
-                                    error={errors.location ? errors.location.message : ''}
-                                    maxLength={16}
-                                    onFocus={() =>
-                                        navigation.navigate( 'useMap', { set: onLocation } )
-                                    }
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
+                                hideUnderline
+                                error={errors.location ? errors.location.message : ''}
+                                maxLength={16}
+                                onFocus={() =>
+                                    navigation.navigate( 'useMap', { set: onLocation } )
+                                }
+                                onChangeText={( e: any ) => onChange( e )}
+                                onBlur={() =>
                                     {
                                         onBlur();
                                         clearErrors( 'location' );
                                     }}
                                     value={value}
-                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
+                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width:"100%" }]}
                                     title="Location"
+                                    />
+                                    );
+                                }}
                                 />
-                            );
-                        }}
-                    />
                 </View>
 
-                <TouchableOpacity
+                    <TouchableOpacity
+                        bg-background
                     onPress={() =>
-                    {
-                        handleSubmit( onSubmit )();
-                    }}
-                    activeOpacity={0.8}
-                    center
-                    style={style.btn}>
+                        {
+                            handleSubmit( onSubmit )();
+                        }}
+                        activeOpacity={0.8}
+                        center
+                        style={style.btn}>
                     <BackDrop />
                     <Text btn uppercase style={{ padding: 10, textShadowRadius: 0.4 }}>create party</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
+</SafeAreaView>
     );
 };
 

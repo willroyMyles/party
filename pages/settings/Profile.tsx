@@ -12,6 +12,8 @@ import { ScrollView } from 'react-native-gesture-handler'
 import FireStore from '../../data_layer/FireStore'
 import { GetLocationPermission } from '../../universal/GetLocation'
 import { observer } from 'mobx-react'
+import FBS from '../../data_layer/FireBaseClient'
+import auth from '@react-native-firebase/auth';
 
 const Profile = observer(() =>
 {
@@ -48,6 +50,11 @@ const Profile = observer(() =>
         }
     }
 
+    const checButton = () =>
+    {
+       
+        FireStore.send.moveDataAround()
+    }
     useEffect( () =>
         setdarkTheme( tm.themeType == ThemeType.DARK )
         , [] )
@@ -93,6 +100,13 @@ const Profile = observer(() =>
                     <BackDropV2 />
                 </TouchableOpacity>
             </View>
+            { auth().currentUser?.email == 'myleswillroy@gmail.com' &&   <View center marginT-40>
+                    <TouchableOpacity row onPress={checButton} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>
+                        <Text btn uppercase marginH-10 >check backend</Text>
+                        <BackDropV2 />
+                    </TouchableOpacity>
+                </View>
+           }
         </ScrollView>
     )
 

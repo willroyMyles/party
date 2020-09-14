@@ -8,6 +8,7 @@ import { GS } from '../universal/GS'
 import { useTheme } from 'styled-components'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import BackDrop from '../components/BackDrop'
 
 const { width, height } = Dimensions.get("screen")
 const UseMapView = () => {
@@ -67,8 +68,9 @@ const UseMapView = () => {
                 <View absB style={{ width: "100%", bottom: 15 }}>
 
                     {marker &&
-                        <TouchableOpacity onPress={onConfirm} center style={[GS.button]}>
-                            <Text>confirm</Text>
+                        <TouchableOpacity onPress={onConfirm} center style={[GS.button, { backgroundColor: Colors.background, overflow:"hidden", elevation:7,  }]}>
+                        <BackDrop />
+                            <Text btn uppercase>confirm</Text>
                         </TouchableOpacity>}
                 </View>
             </View>
