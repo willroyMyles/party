@@ -53,10 +53,10 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
 
     return (
         <View
-            center
+            centerH
             paddingV-10
             bg-background
-            style={{ width: '100%', height: heightt, borderWidth: 0 }}>
+            style={{ width: '100%', height: heightt, borderWidth: 2 }}>
             {/* <SearchBar /> */}
             <Text
                 marginT-5
@@ -67,7 +67,7 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
                 Categories
       </Text>
             {data.length == 0 && (
-                <TouchableOpacity onPress={loadFeed}>
+                <TouchableOpacity marginT-50 padding-10 style={{borderWidth:2}} onPress={loadFeed}>
                     <Text>load feed</Text>
                 </TouchableOpacity>
             )}

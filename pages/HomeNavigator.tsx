@@ -68,7 +68,7 @@ const HomeNavigator = () =>
         options={{ tabBarIcon: () => 'trophy' }}
         component={Memories}
       />
-      {tm.isLocationGranted && (
+      {/* {tm.isLocationGranted && (
         <Tab.Screen
           options={{ tabBarIcon: () => 'map' }}
           name="near me"
@@ -89,7 +89,7 @@ const HomeNavigator = () =>
         name="settings"
         options={{ tabBarIcon: () => 'user-cog' }}
         component={Settings}
-      />
+      /> */}
     </Tab.Navigator>
   );
 };

@@ -26,8 +26,18 @@ const FeedV2 = () =>
 
     useEffect( () =>
     {
+        setLoading(true)
         eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, loadData )
+        FireStore.retrieve.events().then( res =>
+        {
+            setLoading( false )
 
+        } ).catch( err =>
+        {
+            setLoading( false )
+            setMoreData(false)
+
+        })
         return () =>
         {
             eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, loadData )

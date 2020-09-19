@@ -274,13 +274,13 @@ class ThemeHelper
 				color: Colors.text1,
 				textShadowRadius: 1,
 				textTransform: "capitalize",
-				fontFamily: "RR"
+				// fontFamily: "RR"
 			},
 			textTwo: {
 				fontWeight: "600",
 				fontSize: 14,
 				color: Colors.text2,
-				fontFamily: "RR"
+				// fontFamily: "RR"
 
 			},
 			textThree: {
@@ -288,7 +288,7 @@ class ThemeHelper
 				fontSize: 11,
 				color: Colors.muted,
 				textTransform: "uppercase",
-				fontFamily: "RR"
+				// fontFamily: "RR"
 
 			},
 			indicator: {
@@ -312,7 +312,7 @@ class ThemeHelper
 				color: Colors.text1,
 				textShadowOffset: { width: 0.2, height: 0.2 },
 				textShadowRadius: 0.01,
-				fontFamily: "RR"
+				// fontFamily: "RR"
 
 			},
 			button: {
@@ -321,7 +321,7 @@ class ThemeHelper
 				color: Colors.text1,
 				// textShadowOffset: { width: 0.2, height: 0.2 },
 				textShadowRadius: 0.2,
-				fontFamily: "RR"
+				// fontFamily: "RR"
 			}
 		} )
 

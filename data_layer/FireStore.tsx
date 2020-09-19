@@ -146,7 +146,7 @@ class Store
 
   @action private getPastEvents = ( reference: string ) => new Promise( ( resolve, reject ) =>
   {
-    const amount = 5
+    const amount = 15
     FBS.events.getPastEvents( amount, reference ).then( res =>
     {
       this.sortMemoryData(res.docs)
