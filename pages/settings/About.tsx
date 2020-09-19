@@ -5,6 +5,7 @@ import { useTheme } from 'styled-components'
 
 const About = () =>
 {
+    const theme = useTheme()
     return (
         <View bg-background style={{ minHeight: "100%" }}>
             {/* <Text marginT-20 lvl2>about</Text> */}
