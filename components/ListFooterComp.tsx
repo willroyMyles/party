@@ -3,7 +3,7 @@ import { View, Text, LoaderScreen } from 'react-native-ui-lib'
 
 const ListFooterComp = ({loading, loadMore} : {loading:boolean, loadMore:boolean}) => {
     return (
-        <View center>
+        <View center padding-10 paddingB-18>
             {loading && loadMore && <View>
                 <LoaderScreen />
                 <Text>loading</Text>

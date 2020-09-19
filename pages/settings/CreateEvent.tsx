@@ -10,6 +10,7 @@ import
     Image,
     Picker,
     Dialog,
+    TextArea,
 } from 'react-native-ui-lib';
 import { useTheme } from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -137,8 +138,10 @@ const CreateEvent = () =>
     }
 
     return (
-        <SafeAreaView>
-        <ScrollView contentContainerStyle={{ minHeight: "100%" }}>
+        <SafeAreaView style={{ backgroundColor: Colors.background }}>
+            <BackDrop />
+
+        <ScrollView contentContainerStyle={{ minHeight: "100%" }} >
                 <Dialog onDismiss={() => setdialogVisible( false )} visible={dialogVisible} containerStyle={{
                     backgroundColor: Colors.background,
                     padding: 10,
@@ -181,7 +184,6 @@ const CreateEvent = () =>
                         />
                         )}
 
-                <BackDrop />
 
 
 
