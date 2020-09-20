@@ -10,6 +10,8 @@ import FireStore from '../data_layer/FireStore'
 import { eventEmitter, eventStrings } from '../universal/EventEmitter'
 import { AFL } from '../universal/GS'
 import PartyTypesRow from './PartyTypesRow'
+import ListheaderComp from '../components/ListheaderComp'
+import ListFooterComp from '../components/ListFooterComp'
 
 
 
@@ -77,7 +79,7 @@ const FeedV2 = () =>
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
             <View bg-background style={{ height: "100%" }}>
-                <Animated.View style={{
+                {/* <Animated.View style={{
                     position: "absolute",
                     top: 0,
                     left: 0,
@@ -87,13 +89,14 @@ const FeedV2 = () =>
                     // height: 200
                 }}>
                     <PartyTypesRow heightt={off} />
-                </Animated.View>
+                </Animated.View> */}
                 <AFL
                     scrollEventThrottle={16}
                     bounces={false}
-                    
+                    // ListHeaderComponent={<ListheaderComp header="discover" />}
                     style={{
                         // position: "absolute",
+                        flex:1,
                         top: 0,
                         width: "100%",
                         height: "100%",
@@ -118,14 +121,9 @@ const FeedV2 = () =>
                     {
                         return <Feed_Item reference={item.reference || ""} />
                     }}
-                />
-                {loading && <View marginV-10 paddingB-10 >
-                    <LoaderScreen />
-                </View>}
+                    ListFooterComponent={<ListFooterComp loadMore={moreData} loading={loading} />}
 
-                {!loading && !moreData && <View marginV-10 paddingB-10 center>
-                    <Text lvl3 indicator> no more parties</Text>
-                </View>}
+                />
             </View>
         </SafeAreaView>
     )
