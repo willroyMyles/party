@@ -165,10 +165,11 @@ class Store
     {
       const d: FeedItemModel[] = []
 
-      res.docs.forEach( ( value, index ) =>
-      {
-        d.push(value.data())
-      })
+      for (let index = 0; index < res.docs.length; index++) {
+        const element = res.docs[index];
+        d.push( element.data() )
+
+      }
 
       // this.ratingsData = this.ratingsData.concat( ...d )
       resolve(d)

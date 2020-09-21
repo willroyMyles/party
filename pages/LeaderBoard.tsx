@@ -38,10 +38,14 @@ const LeaderBoard = () =>
     // } ) )
     
     const [data, setData] = useState<Map<string, FeedItemModel>>( new Map() )
+    const [loading, setLoading] = useState(false)
     
     useEffect(() => {
+setLoading(true)
         FireStore.retrieve.getEventsByRatings().then( res =>
         {   
+            console.log(`res returned ${res.length}`);
+            
             if ( res.length > 0 )
             {
                 setData( d =>
@@ -54,11 +58,20 @@ const LeaderBoard = () =>
                     return d
                 })  
             }
+            setLoading(false)
         } ).catch( err =>
         {
+            console.log("error in leaderboard");
+            setLoading( false )
+
             //could not get events
         })
-    }, [])
+    }, [] )
+    
+    const getDataForList = ():FeedItemModel[] =>
+    {
+        return [...data.values()].sort((a,b)=> b.rating - a.rating)
+    }
 
     const theme = useTheme()
     const TouchButton = animated(View)
@@ -97,13 +110,8 @@ const LeaderBoard = () =>
                     <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
                 </View>
 
-                {/* <View row spread>
-                    <Text>rank</Text>
-                    <Text>name</Text>
-                    <Text>score</Text>
-                </View> */}
                 <FlatList
-                    data={[...data.values()]}
+                    data={getDataForList()}
                     keyExtractor={( item: FeedItemModel ) => item.reference || faker.random.number( 200 ).toString()}
                     renderItem={( { item, index } ) =>
                     {

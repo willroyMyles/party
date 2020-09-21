@@ -63,12 +63,12 @@ const HomeNavigator = () =>
         // },
       }}
       tabBar={( props ) => <CustomTabBar {...props} />}>
-      {/* <Tab.Screen
+       <Tab.Screen
         name="memories"
         options={{ tabBarIcon: () => 'trophy' }}
         component={Memories}
       />
-      {tm.isLocationGranted && (
+      {/*{tm.isLocationGranted && (
         <Tab.Screen
           options={{ tabBarIcon: () => 'map' }}
           name="near me"
