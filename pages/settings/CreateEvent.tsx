@@ -15,18 +15,21 @@ import
 import { useTheme } from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import BackDrop from '../../components/BackDrop';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { Region } from 'react-native-maps';
 import { getImage } from '../../universal/GetImage';
-import { GS } from '../../universal/GS';
+import { GetPartytypeString, GS } from '../../universal/GS';
 import FireStore from '../../data_layer/FireStore';
 import { FeedItemModel, PartyType } from '../../universal/Models';
 import TToast from '../../components/TToast';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ActionSheet from 'react-native-actionsheet'
+import * as Location from "expo-location"
+import PressableTextInput from '../../components/PressableTextInput';
 
 interface Flyer
 {
@@ -57,6 +60,21 @@ const CreateEvent = () =>
     const [timeValue, setTimeValue] = useState<string>();
     const [dateShown, setDateShown] = useState( false );
     const [timeShown, settimeShown] = useState( false );
+    let actionSheet = useRef<ActionSheet | null>()
+
+    const partyOptions = () =>
+    {
+        const arr : string[] = []
+        Object.values( PartyType ).map( ( val, index ) =>
+        {
+            const num = Number.parseInt( val )
+            if(isNaN(num)) return
+            const str = GetPartytypeString(num)            
+            arr.push(str)
+        } )
+        
+        return arr;
+    }
 
     const onStartChange = ( event: any, selectedDate: Date | undefined ) =>
     {
@@ -107,6 +125,11 @@ const CreateEvent = () =>
 
     const onLocation = ( loc: Region ) =>
     {
+        const str = Location.reverseGeocodeAsync( loc ).then( res =>
+        {
+            console.log(res);
+            
+        })
         setValue( 'location', [loc?.latitude, loc?.longitude].toString() );
     };
 
@@ -123,6 +146,12 @@ const CreateEvent = () =>
         } );
     };
 
+    const ShowActionSheet = () =>
+    {        
+        Keyboard.dismiss();
+        actionSheet.current?.show()
+    }
+
     const p = Object.values( PartyType ).filter( ( value ) => typeof 9 != typeof value )
     const showDialog = () =>
     {
@@ -133,35 +162,25 @@ const CreateEvent = () =>
     const setParty = ( index: number ) =>
     {
         setValue( "partyType", PartyType[index] )
-        setdialogVisible( false )
-
     }
 
     return (
         <SafeAreaView style={{ backgroundColor: Colors.background }}>
             <BackDrop />
 
+            <ActionSheet
+                ref={actionSheet}
+                title={<Text lvl2 marginV-10 >Which party are you keeping?</Text>}
+
+                options={[...partyOptions(), 'cancel']}
+
+                cancelButtonIndex={partyOptions().length }
+                destructiveButtonIndex={partyOptions().length }
+                onPress={setParty}
+            />
+
         <ScrollView contentContainerStyle={{ minHeight: "100%" }} >
-                <Dialog onDismiss={() => setdialogVisible( false )} visible={dialogVisible} containerStyle={{
-                    backgroundColor: Colors.background,
-                    padding: 10,
-                    borderRadius: 7,
-                }}>
-                    <ScrollView style={{ height: "90%" }}>
-                        <Text margin-9 >Party type options</Text>
-                        {p.map( ( value, index ) =>
-                        {
-                            const name = value.toString().replace( '_', " " ).toLowerCase()
-                            return <TouchableOpacity key={index} onPress={() => setParty( index )} padding-9 marginV-2 style={{ borderWidth: .5, borderRadius: 3, borderColor: Colors.text2 }}>
-                                <Text lvl1>{name}</Text>
-                            </TouchableOpacity>
-
-} )}
-                        <View paddingV-10 />
-                    </ScrollView>
-            </Dialog>
-            
-
+  
                 {dateShown && (
                     <DateTimePicker
                     onChange={( e, d ) =>
@@ -263,21 +282,25 @@ const CreateEvent = () =>
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
-                                <TextField
-                                hideUnderline
-                                error={errors.title ? errors.title.message : ''}
-                                maxLength={16}
-                                onChangeText={( e: any ) => onChange( e )}
-                                onBlur={() =>
-                                    {
-                                        onBlur();
-                                        clearErrors( 'title' );
-                                    }}
-                                    value={value}
-                                    title="Title"
-                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
-                                    
-                                    />
+                            
+                                        <TextField
+                                            hideUnderline
+                                            error={errors.title ? errors.title.message : ''}
+                                            maxLength={16}
+
+                                            onChangeText={( e: any ) => onChange( e )}
+                                            onBlur={() =>
+                                            {
+                                                onBlur();
+                                                clearErrors( 'title' );
+                                            }}
+                                            value={value}
+                                            title="Title"
+                                            style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
+
+                                        />
+                                   
+                          
                                     );
                                 }}
                                 />
@@ -291,7 +314,8 @@ const CreateEvent = () =>
                         {
                             return (
                                 <TextField
-                                hideUnderline
+                                    hideUnderline
+                                    
                                 error={errors.description ? errors.description.message : ''}
                                 showsMaxLength
                                 onChangeText={( e: any ) => onChange( e )}
@@ -318,25 +342,35 @@ const CreateEvent = () =>
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
-                                <TextField
-                                hideUnderline
-                                error={errors.partyType ? errors.partyType.message : ''}
-                                maxLength={16}
-                                showsMaxLength
-                                onFocus={() => showDialog()}
-                                
-                                onChangeText={( e: any ) => onChange( e )}
-                                onBlur={() =>
-                                    {
-                                        setdialogVisible( true )
-                                        onBlur();
-                                        clearErrors( 'partyType' );
-                                    }}
-                                    value={value}
-                                    title="Party Type"
-                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
-                                    
-                                    />
+                                <TouchableWithoutFeedback  onPress={(e) =>
+                                {
+                                    Keyboard.dismiss()
+                                    ShowActionSheet()
+                                }}>
+
+                                    <View pointerEvents="none">
+                                        <TextField
+                                            // editable={false}
+                                            hideUnderline
+                                            error={errors.partyType ? errors.partyType.message : ''}
+                                            maxLength={16}
+                                            showsMaxLength
+                                            onFocus={() => ShowActionSheet()}
+
+                                            onChangeText={( e: any ) => onChange( e )}
+                                            onBlur={() =>
+                                            {
+                                                // setdialogVisible( true )
+                                                onBlur();
+                                                clearErrors( 'partyType' );
+                                            }}
+                                            value={value}
+                                            title="Party Type"
+                                            style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
+
+                                        />
+                                   </View>
+                                    </TouchableWithoutFeedback>
                                     );
                                 }}
                                 />
@@ -353,19 +387,21 @@ const CreateEvent = () =>
                         {
                             const ref = useRef()
                             return (
-                                <TextField
-                                allowFontScaling
-                                hideUnderline
-                                error={errors.date ? errors.date.message : ''}
-                                maxLength={16}
-                                onFocus={handleShowDate}
-                                // onChangeText={(value: any) => onChange(value)}
-                                value={dateValue}
-                                title="Event Date"
-                                    autoGrow
-                                    style={[[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }], { width: '40%' }]}
-                                    
-                                    />
+                                <TouchableWithoutFeedback onPress={handleShowDate}>
+                                    <View pointerEvents="none">
+                                        <TextField
+                                            allowFontScaling
+                                            hideUnderline
+                                            error={errors.date ? errors.date.message : ''}
+                                            maxLength={16}
+                                            value={dateValue}
+                                            title="Event Date"
+                                            autoGrow
+                                            style={[[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }], { width: '40%' }]}
+
+                                        />
+                                    </View>
+                                </TouchableWithoutFeedback>
                                     );
                                 }}
                                 />
@@ -377,23 +413,21 @@ const CreateEvent = () =>
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
-                                <TextField
-                                hideUnderline
-                                error={errors.start ? errors.start.message : ''}
-                                maxLength={16}
-                                showsMaxLength
-                                defaultValue=""
-                                
-                                onFocus={handleShowTime}
-                                // onChangeText={(e: any) => onChange(e)} onBlur={() => {
-                                    //     onBlur()
-                                    //     clearErrors("start")
-                                    // }}
-                                    value={timeValue}
-                                    title="Start Time"
-                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
-                                    
-                                    />
+                                <TouchableWithoutFeedback onPress={handleShowTime}>
+                                    <View>
+                                        <TextField
+                                            hideUnderline
+                                            error={errors.start ? errors.start.message : ''}
+                                            maxLength={16}
+                                            showsMaxLength
+                                            defaultValue=""
+                                            value={timeValue}
+                                            title="Start Time"
+                                            style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
+
+                                        />
+                                    </View>
+                                    </TouchableWithoutFeedback>
                                     );
                                 }}
                                 />
@@ -448,23 +482,31 @@ const CreateEvent = () =>
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
-                                <TextField
-                                hideUnderline
-                                error={errors.location ? errors.location.message : ''}
-                                maxLength={16}
-                                onFocus={() =>
+                                <TouchableWithoutFeedback onPress={() =>
+                                {
                                     navigation.navigate( 'useMap', { set: onLocation } )
-                                }
-                                onChangeText={( e: any ) => onChange( e )}
-                                onBlur={() =>
-                                    {
-                                        onBlur();
-                                        clearErrors( 'location' );
-                                    }}
-                                    value={value}
-                                    style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width:"100%" }]}
-                                    title="Location"
-                                    />
+
+                                }}>
+                                    <View pointerEvents="none">
+                                        <TextField
+                                            hideUnderline
+                                            error={errors.location ? errors.location.message : ''}
+                                            maxLength={16}
+                                            onFocus={() =>
+                                                navigation.navigate( 'useMap', { set: onLocation } )
+                                            }
+                                            onChangeText={( e: any ) => onChange( e )}
+                                            onBlur={() =>
+                                            {
+                                                onBlur();
+                                                clearErrors( 'location' );
+                                            }}
+                                            value={value}
+                                            style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
+                                            title="Location"
+                                        />
+                                    </View>
+                              </TouchableWithoutFeedback>
                                     );
                                 }}
                                 />

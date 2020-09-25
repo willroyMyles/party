@@ -21,8 +21,6 @@ export const GetIcon = ( { name }: { name: string } ) =>
 
 export const GetPartytypeString = ( type: PartyType ) =>
 {
-	if ( !type ) return ""
-
 	const ty = PartyType[type]
 
 	const str = ty.replace( "_", " " ).toLowerCase()

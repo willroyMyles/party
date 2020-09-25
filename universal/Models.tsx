@@ -1,19 +1,9 @@
 
 export enum PartyType {
-	STAGE_SHOW = 0,
-	CARNIVAL = 1,
+	LOUNGE = 0,
+	WATER_PARTY = 1,
 	CLUB = 2,
-	LAWN_DANCE = 3,
-	STREET_DANCE = 4,
-	CHILL_SPOTS = 5,
-	HOUSE_PARTY = 6,
-	BAR = 7,
-	DANCEHALL = 8,
-	OLD_HITS = 9,
-	ROUND_ROBIN = 10,
-	AFTER_WORK_JAM = 11,
-	WATER_PARTY = 12,
-	SOCA = 13,
+	OUTDOOR = 3,
 }
 
 export interface FeedItemModel {

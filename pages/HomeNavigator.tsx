@@ -81,11 +81,11 @@ const HomeNavigator = () =>
         options={{ tabBarIcon: () => 'th-large' }}
         component={FeedV2}
       />
-       <Tab.Screen
+       {/* <Tab.Screen
         name="leaderboard"
         options={{ tabBarIcon: () => 'trophy' }}
         component={LeaderBoard}
-      /> 
+      />  */}
       <Tab.Screen
         name="settings"
         options={{ tabBarIcon: () => 'user-cog' }}
