@@ -18,6 +18,7 @@ export interface FeedItemModel {
 	person?: string
 	personId?: string
 	location?: string
+	locationObject: any
 	reference?: string
 	start?: string
 	duration?: number

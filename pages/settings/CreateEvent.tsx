@@ -30,6 +30,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import ActionSheet from 'react-native-actionsheet'
 import * as Location from "expo-location"
 import PressableTextInput from '../../components/PressableTextInput';
+import LocationBlock from '../../components/LocationBlock';
 
 interface Flyer
 {
@@ -40,7 +41,7 @@ interface Flyer
     start: Date;
     duration: number;
     location: string;
-
+    locationObject: any;
     partyType: PartyType
 }
 
@@ -48,7 +49,7 @@ const CreateEvent = () =>
 {
     const theme = useTheme();
     const col = Colors.grey30;
-    const { handleSubmit, errors, control, clearErrors, setValue } = useForm<
+    const { handleSubmit, errors, control, clearErrors, setValue, getValues } = useForm<
         Flyer
     >();
     const navigation = useNavigation();
@@ -60,6 +61,7 @@ const CreateEvent = () =>
     const [timeValue, setTimeValue] = useState<string>();
     const [dateShown, setDateShown] = useState( false );
     const [timeShown, settimeShown] = useState( false );
+    const [locObj, setLocObj] = useState<any>(undefined)
     let actionSheet = useRef<ActionSheet | null>()
 
     const partyOptions = () =>
@@ -110,6 +112,8 @@ const CreateEvent = () =>
             data.duration = Number.parseFloat( str );
         }
 
+        
+
         data.partyType = PartyType[data.partyType]
         data.date = data.date?.toString()
         data.start = data.start?.toString()
@@ -125,12 +129,14 @@ const CreateEvent = () =>
 
     const onLocation = ( loc: Region ) =>
     {
-        const str = Location.reverseGeocodeAsync( loc ).then( res =>
+        Location.reverseGeocodeAsync( loc ).then( res =>
         {
-            console.log(res);
-            
+            if(res.length == 0) return
+            const locObj = res[0]
+            setLocObj(locObj)
+            setValue( "locationObject", locObj )
+            setValue( 'location', [loc?.latitude, loc?.longitude].toString() );
         })
-        setValue( 'location', [loc?.latitude, loc?.longitude].toString() );
     };
 
     const getFlyer = async () =>
@@ -214,11 +220,17 @@ const CreateEvent = () =>
                         style.upload,
                         { backgroundColor: Colors.foreground, },
                     ]}>
-                    <Controller
-                        defaultValue=""
-                        control={control}
-                        name="flyer"
-                        rules={{ required: 'A flyer is required' }}
+                        <Controller
+                            defaultValue=""
+                            control={control}
+                            name="flyer"
+                            rules={{ required: 'A flyer is required' }}
+                        />
+                        <Controller
+                            defaultValue=""
+                            control={control}
+                            name="locationObject"
+                            // rules={{ required: 'A flyer is required' }}
                         />
                     <View marginV-15>
                         <Icon name="image" color={col} size={43} />
@@ -487,8 +499,9 @@ const CreateEvent = () =>
                                     navigation.navigate( 'useMap', { set: onLocation } )
 
                                 }}>
-                                    <View pointerEvents="none">
-                                        <TextField
+                                    <View pointerEvents="none"
+                                    >
+                                        {locObj ? <LocationBlock info={locObj} /> : <TextField
                                             hideUnderline
                                             error={errors.location ? errors.location.message : ''}
                                             maxLength={16}
@@ -504,7 +517,7 @@ const CreateEvent = () =>
                                             value={value}
                                             style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1, width: "100%" }]}
                                             title="Location"
-                                        />
+                                        />}
                                     </View>
                               </TouchableWithoutFeedback>
                                     );
