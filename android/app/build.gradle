@@ -151,7 +151,7 @@ android {
              
                 storeFile file('release.keystore')
                 storePassword 'android'
-                keyAlias 'my-key-alias'
+                keyAlias 'key_alias'
                 keyPassword 'android'
             
         }
