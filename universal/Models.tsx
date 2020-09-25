@@ -39,7 +39,8 @@ export interface FeedItemModel {
 
 	priority: number | 0,
 
-	rating : number | 0
+	rating: number | 0,
+	attendance : number | 0
 }
 
 export interface UserDatabaseModel {

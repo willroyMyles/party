@@ -107,7 +107,7 @@ const CategoryView = () =>
     if ( type )
     {
         return (
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor:Colors.background }}>
                     <View bg-background flex center>
                         <Text marginV-12 indicator>{GetPartytypeString( partyType )}</Text>
                         <FlatList

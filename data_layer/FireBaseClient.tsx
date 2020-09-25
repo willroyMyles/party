@@ -7,6 +7,7 @@ import { FeedItemModel } from '../universal/Models';
 import { errorStrings } from '../universal/EventEmitter';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { event } from 'react-native-reanimated';
+import FireStore from './FireStore';
 // import { LoginManager, AccessToken } from 'react-native-fbsdk';
 
 
@@ -309,6 +310,20 @@ class Store
     }
   }
 
+  private increaseAttendance = ( key: string ) =>
+  {
+    return new Promise( ( resolve, reject ) =>
+    {
+      firestore().collection( eventCollection ).doc( key ).update( { attendance: firestore.FieldValue.increment(1)} ).then( res =>
+      {
+        resolve( true );
+      } ).catch( err =>
+      {
+          reject(err)
+        })
+    })
+  }
+
   private getURLForEventFlyers = ( imagePath: string ) =>
   {
     return new Promise<string>( ( resolve, reject ): any =>
@@ -515,7 +530,8 @@ class Store
     getRsvpEvents: this.getRsvpEvents,
     getPastEvents: this.getPastEvents,
     getEventsByRatings:this.getEventsByRatings,
-    moveEventsAround : this.moveEventsAround
+    moveEventsAround: this.moveEventsAround,
+    increaseAttendance:this.increaseAttendance
   };
 }
 

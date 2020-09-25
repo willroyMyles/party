@@ -54,8 +54,7 @@ export const GeoLocationUpdatesActive = ( { data, error }: { data: any, error: a
     }
 
     if ( data )
-    {
-
+    {        
         if(AppState.currentState !== "active") return
         const { longitude, latitude } = data.locations[0].coords
         psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
@@ -142,8 +141,7 @@ const NearMe = () =>
         console.log(`\nforegroun tasks started with size ${data.length} \n`);
         
         Location.startLocationUpdatesAsync( foregroundTask, { //runs unlimited
-            accuracy: Location.Accuracy.Low,
-            distanceInterval: 3000
+            accuracy: Location.Accuracy.Highest,
         } ).then( res =>
         {
             psuedoLocationTracker.watchTheseLocations( data )

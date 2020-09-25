@@ -12,6 +12,7 @@ import FeedItemMemoryVersionOne from '../components/FeedItemMemoryVersionOne'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { observer } from 'mobx-react'
 import ListFooterComp from '../components/ListFooterComp'
+import ListheaderComp from '../components/ListheaderComp'
 
 const Memories = () => {
    const theme = useTheme()
@@ -56,9 +57,7 @@ const Memories = () => {
 
 		<View bg-background flex>
 				<FlatList
-					ListHeaderComponent={<View center>
-						<Text lvl1 indicator>past events</Text>
-					</View>}
+					ListHeaderComponent={<ListheaderComp header="past parties" />}
 					onScroll={() => { }}
 					onEndReached={getPastEvents}
 					onEndReachedThreshold={.1}

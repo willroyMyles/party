@@ -14,91 +14,159 @@ import RateParty from "../components/RateParty"
 export const radius = 100;
 export const taskName = 'geoLocation';
 export const threshold = 10 / radius
+
+export const thirtyMins = 30;
+export const oneHour = thirtyMins * 2;
 export class PsuedoLocationTracker
 {
     @observable userLocation: LatLng | undefined = undefined
     @observable data: Map<string, LocationRegion> = new Map()
 
     @observable entered: Map<string, number> = new Map()
-    @observable processed: Map<string, string> = new Map()
+    @observable processed: Map<string, Date> = new Map()
+    @observable done: Set<string > = new Set()
 
+    finished = ( reference: string ) =>
+    {
+        this.done.add( reference );
+        
+        [...this.done.values()].map( ( value ) =>
+        {
+            if(this.data.has(value)) this.data.delete(value)
+        })
+    }
+
+    secondProcess = (reference : string) =>
+    {
+
+        if ( this.processed.has( reference ) )
+        {
+            // at the party]
+            FireStore.send.increaseAttendance( reference ).then( res =>
+            {
+                this.finished(reference)
+            }).catch( err =>
+            {
+                console.log("could not update party");
+                
+            })
+        } else
+        {
+            this.processed.delete(reference)
+        }
+    }
+
+    addToProcessed( reference: string )
+    {
+        if ( this.processed.has( reference ) )
+        {            
+            const interval = new Date().getMinutes() - this.processed.get( reference )?.getMinutes();
+            console.log(`interval, ${interval}`);
+            
+            if (  interval > thirtyMins )
+            {
+                this.secondProcess( reference )
+            }
+            return
+        }
+        
+        this.processed.set( reference, new Date() );
+
+    }
 
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
 
+        // console.log( `this is processed size ${ this.processed.size } \n this is data size ${ this.data.size } \n` );
         
         if(this.data.size == 0) return
         this.userLocation = latLng;        
 
-        console.log(`this is processed size ${this.processed.size} \n this is data size ${this.data.size} \n`);
         
-        
-        [...this.data.entries()].map( async ( value, index ) =>
-        {            
-            if ( this.processed.has( value[0] ) ) return
 
-            const ll = getDistanceFromLatLonInKm( value[1].latitude, value[1].longitude, this.userLocation?.latitude, this.userLocation?.longitude )
-
-            console.log(`\nthis is distance and threshold ${ll} : ${threshold} : ${value[0]} \n`);
+        [...this.data.entries()].map( ( [key, value], index ) =>
+        {
+            const distance = getDistanceFromLatLonInKm( value.latitude, value.longitude, latLng.latitude, latLng.longitude )
             
-            if ( ll <= threshold)
+            if ( distance <= threshold )
             {
-                if ( AppState.currentState == "active" )
-                {
+                this.addToProcessed( key )
+                this.entered.set(key, 0)
+                eventEmitter.emit( eventStrings.locationEntered, key )
+            } 
 
-                    this.entered.set( value[0], ll )
-                    eventEmitter.emit( eventStrings.locationEntered, value[0] )
-                    console.log( "fence breached" );
-
-
-                    // check if already asked
-                    if ( this.processed.has( value[0] ) ) return
-                    
-                    // ask to rate
-                    RateParty.show(value[0])
-
-                    //remove from watch and add to processed 
-                    this.data.delete( value[0] )
-                    this.processed.set(value[0], value[0])
-                } else
-                {
-                    const perm = await GetNotificationPermission()
-                    if ( perm )
-                    {
-                        console.log( "should sent noti" );
-                        this.processed.set( value[0], value[0] )
-                        Notifications.setNotificationHandler( {
-                            handleNotification: async () => ( {
-                                shouldShowAlert: true,
-                                shouldPlaySound: false,
-                                shouldSetBadge: false,
-                            } ),
-                        } );
-
-                        Notifications.scheduleNotificationAsync( {
-                            content: {
-                                title: "test notification",
-                                body: `seem your at ${ value[1].identifier }, enjoying it?`,
-                                autoDismiss: true,
-                            },
-                            trigger: {
-                                seconds: 1
-                            }
-                        } )
-                    }
-
-                }
+            if ( distance > threshold )
+            {
+                if ( this.entered.has( key ) ) this.entered.delete( key );
+                // if(this.processed.has(key)) this.processed.delete(key)
+                eventEmitter.emit( eventStrings.locationExited, key )
+                
             }
+            
+        })
+        
+        
+        // [...this.data.entries()].map( async ( value, index ) =>
+        // {            
+        //     if ( this.processed.has( value[0] ) ) return
 
-            // if ( this.entered.has( value[0] ) && ll > threshold )
-            // {
-            //     this.entered.delete( value[0] )
-            //     eventEmitter.emit( eventStrings.locationExited, value[0] )
-            //     console.log( "fence lefted" );
+        //     const ll = getDistanceFromLatLonInKm( value[1].latitude, value[1].longitude, this.userLocation?.latitude, this.userLocation?.longitude )
+            
 
-            // }
 
-        } )
+        //     if ( ll <= threshold)
+        //     {
+        //         if ( AppState.currentState == "active" )
+        //         {
+
+        //             this.entered.set( value[0], ll )
+        //             eventEmitter.emit( eventStrings.locationEntered, value[0] )
+        //             console.log( "fence breached" );
+
+
+        //             // check if already asked
+        //             if ( this.processed.has( value[0] ) ) return
+                    
+        //             // ask to rate
+        //             RateParty.show(value[0])
+
+        //             //remove from watch and add to processed 
+        //             this.data.delete( value[0] )
+        //             this.addToProcessed(value[0])
+        //         } else
+        //         {
+        //             const perm = await GetNotificationPermission()
+        //             if ( perm )
+        //             {
+        //                 console.log( "should sent noti" );
+        //                 this.addToProcessed( value[0] )
+        //                 Notifications.setNotificationHandler( {
+        //                     handleNotification: async () => ( {
+        //                         shouldShowAlert: true,
+        //                         shouldPlaySound: false,
+        //                         shouldSetBadge: false,
+        //                     } ),
+        //                 } );
+
+        //                 Notifications.scheduleNotificationAsync( {
+        //                     content: {
+        //                         title: "test notification",
+        //                         body: `seem your at ${ value[1].identifier }, enjoying it?`,
+        //                         autoDismiss: true,
+        //                     },
+        //                     trigger: {
+        //                         seconds: 1
+        //                     }
+        //                 } )
+        //             }
+
+        //         }
+        //     }
+
+        //     if(ll > threshold && p)
+        // } )
+   
+   
     }
 
     @action watchTheseLocations = ( data: LocationRegion[] ) =>

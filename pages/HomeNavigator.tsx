@@ -62,34 +62,35 @@ const HomeNavigator = () =>
         //     elevation:10
         // },
       }}
-      tabBar={( props ) => <CustomTabBar {...props} />}>
-       <Tab.Screen
+      tabBar={( props ) => <CustomTabBar {...props} />}
+    >
+      <Tab.Screen
         name="memories"
         options={{ tabBarIcon: () => 'trophy' }}
         component={Memories}
-      />
-      {/*{tm.isLocationGranted && (
+      /> 
+      {tm.isLocationGranted && (
         <Tab.Screen
           options={{ tabBarIcon: () => 'map' }}
           name="near me"
           component={NearMe}
         />
-      )} */}
+      )} 
       <Tab.Screen
         name="discover"
         options={{ tabBarIcon: () => 'th-large' }}
         component={FeedV2}
       />
-      <Tab.Screen
+       <Tab.Screen
         name="leaderboard"
         options={{ tabBarIcon: () => 'trophy' }}
         component={LeaderBoard}
-      />
-      {/* <Tab.Screen
+      /> 
+      <Tab.Screen
         name="settings"
         options={{ tabBarIcon: () => 'user-cog' }}
         component={Settings}
-      />  */}
+      />   
     </Tab.Navigator>
   );
 };

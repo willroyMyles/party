@@ -25,7 +25,8 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
     const [data, setData] = useState<string[]>( [] );
 
     useEffect(() => {
-        eventEmitter.addListener(eventStrings.categorizedDataLoaded, load)
+        eventEmitter.addListener( eventStrings.categorizedDataLoaded, load )
+        load()
         return () => {
             eventEmitter.removeListener( eventStrings.categorizedDataLoaded, load )
         }
@@ -56,7 +57,7 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
             centerH
             paddingV-10
             bg-background
-            style={{ width: '100%', height: heightt, borderWidth: 2 }}>
+            style={{ width: '100%', height: heightt}}>
             {/* <SearchBar /> */}
             <Text
                 marginT-5
@@ -66,11 +67,7 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
                 style={{ alignSelf: 'flex-start' }}>
                 Categories
       </Text>
-            {data.length == 0 && (
-                <TouchableOpacity marginT-50 padding-10 style={{borderWidth:2}} onPress={loadFeed}>
-                    <Text>load feed</Text>
-                </TouchableOpacity>
-            )}
+
             {data.length != 0 && (
                 <FlatList
                     data={data}
@@ -125,7 +122,7 @@ const PartyCard = memo(( { item }: { item: string } ) =>
     const changeImage = ( i: number ) =>
     {
         FireStore.retrieve
-            .imageFromReference( data[i].reference || '' )
+            .imageFromReference( data[i].reference || '', data[i].flyer )
             .then( ( res ) =>
             {
                 setimage( res );

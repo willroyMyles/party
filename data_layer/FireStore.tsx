@@ -369,6 +369,17 @@ class Store
       }
   }
 
+  @action private increaseAttendance = (key:string) => new Promise<boolean>( ( resolve, reject ) =>
+  {
+    FBS.events.increaseAttendance( key ).then( res =>
+    {
+        resolve(res)
+    } ).catch( err =>
+    {
+        reject("err")
+      })
+  })
+
   retrieve = {
     isLoggedIn: this.isLoggedIn,
     events: this.getEvents,
@@ -385,7 +396,8 @@ class Store
     sendPicturesToEvent: this.uploadPictureToEvent,
     rsvp: this.addRsvpEvent,
     rating: this.sendRating,
-    moveDataAround: this.moveData
+    moveDataAround: this.moveData,
+    increaseAttendance: this.increaseAttendance
   };
 
   auth = {

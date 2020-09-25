@@ -12,6 +12,7 @@ import { AFL } from '../universal/GS'
 import PartyTypesRow from './PartyTypesRow'
 import ListheaderComp from '../components/ListheaderComp'
 import ListFooterComp from '../components/ListFooterComp'
+import { observer } from 'mobx-react'
 
 
 
@@ -79,7 +80,7 @@ const FeedV2 = () =>
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
             <View bg-background style={{ height: "100%" }}>
-                {/* <Animated.View style={{
+                <Animated.View style={{
                     position: "absolute",
                     top: 0,
                     left: 0,
@@ -89,7 +90,7 @@ const FeedV2 = () =>
                     // height: 200
                 }}>
                     <PartyTypesRow heightt={off} />
-                </Animated.View> */}
+                </Animated.View>
                 <AFL
                     scrollEventThrottle={16}
                     bounces={false}
@@ -129,4 +130,4 @@ const FeedV2 = () =>
     )
 }
 
-export default FeedV2
+export default observer(FeedV2)
