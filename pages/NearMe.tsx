@@ -75,7 +75,6 @@ const NearMe = () =>
     const [geoRegions, setGeoRegions] = useState<LocationRegion[]>( [] )
 
     useEffect(() => {
-       console.log(FireStore.data.size + " my size");
         sortMarkers()
     }, [FireStore.data.size])
 
@@ -137,9 +136,7 @@ const NearMe = () =>
     };
 
     function startForegroundTasks( data: any[] )
-    {
-        console.log(`\nforegroun tasks started with size ${data.length} \n`);
-        
+    {        
         Location.startLocationUpdatesAsync( foregroundTask, { //runs unlimited
             accuracy: Location.Accuracy.Highest,
         } ).then( res =>
@@ -152,8 +149,6 @@ const NearMe = () =>
     
     function startBackgroundTasks( data: any[] )
     {
-        console.log( "backgroun tasks started" );
-
         Location.startLocationUpdatesAsync( backgroundTask, { //runs unlimited
             timeInterval: 1000 * 60 * 6, //runs every 6 mins,
             accuracy: Location.Accuracy.Balanced,
@@ -191,10 +186,7 @@ const NearMe = () =>
 
                 d.push( c )
             }
-        }
-
-        console.log(`length of d is ${d.length}`);
-        
+        }        
         setGeoRegions( d )
         startForegroundTasks( d )
     };
@@ -279,11 +271,6 @@ const ShowEventOnMarkerPressed = ( {
                     return <View key={index}>
                         <Marker
                         ref={mark}
-                        onLayout={e =>
-                        {
-                            const { height, width, x, y } = e.nativeEvent.layout
-                            console.log(`${height}, ${width}, ${x}, ${y} \n`);
-                        }}
                         key={value.reference}
                         image={require( "../assets/images/marker.png" )}
                         pinColor="green"

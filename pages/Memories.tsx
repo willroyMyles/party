@@ -38,10 +38,7 @@ const Memories = () => {
 		{
 			const d: FeedItemModel[] = [...FireStore.memoryData.values()]
 			setdata( d )
-			setLoading( false )
-			console.log( "got data", reference );
-			
-			
+			setLoading( false )			
 		} ).catch( err =>
 		{
 			setLoadMore( false )

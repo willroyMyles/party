@@ -86,14 +86,10 @@ class Store
 
   private moveEventsAround = ( id: string, item: FeedItemModel ) => new Promise( async resolve =>
   {
-
-    console.log("entering move events around");
-    
     //check if it exsists in 
     const result = await firestore().doc( `${ eventCollection }/${ id }` ).get()
     if ( result.exists )
     {
-      console.log("exsists");
       firestore().doc( `${ eventCollection }/${ id }` ).delete()
     } 
     
@@ -202,8 +198,6 @@ class Store
     {
       if ( last == null )
       {
-        console.log( 'getting data' );
-
         const firstQuery = firestore()
           .collection( eventCollection )
           .orderBy( order )

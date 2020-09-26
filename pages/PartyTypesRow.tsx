@@ -33,9 +33,7 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
     
     const load = () =>
     {
-        const keys = [...FireStore.categorizedData.keys()];      
-        console.log(keys);
-        
+        const keys = [...FireStore.categorizedData.keys()];              
         setData( keys );
     }
 

@@ -18,14 +18,12 @@ class Store
   @observable eventImagesMap: Map<string, string> = new Map()
   @observable eventImagesForPastEventsMap: Map<string, string[]> = new Map()
 
-counter = 0
   organizeStream = ( docs: FirebaseFirestoreTypes.QuerySnapshot ) =>
   {
     this.counter++
 
     docs.forEach( ( doc, index ) =>
     {
-      console.log( doc );
       const item: FeedItemModel = doc.data();
       const id = doc.id
 
@@ -37,14 +35,11 @@ counter = 0
         this.organizeIntoCategories(item)
       }
     } )
-
-    console.log( this.counter );
   }
   
   organizeIntoCategories = ( data: FeedItemModel ) =>
   {
     const key = PartyType[data.partyType]
-    console.log(key);
     
     if ( this.categorizedData.has( key ) )
     {
@@ -141,7 +136,6 @@ counter = 0
       const key = PartyType[docs[index].data().partyType]
       const element = docs[index]
 
-      console.log(key);
       
       if ( this.categorizedData.has( key ) )
       {
@@ -360,7 +354,6 @@ counter = 0
   @action private sendRating = ( rating: number, reference: string) => new Promise( ( resolve, reject ) =>
   {
     const item = this.data.get( reference )
-    console.log(item?.rating);
     
     if ( item )
     {
@@ -393,14 +386,12 @@ counter = 0
   @action private moveData = () =>
   {
     const arr = [...this.data.values()]
-    console.log(arr.length);
     
 
       for (let index = 0; index < arr.length; index++) {
         const element = arr[index];
 
         const goAhead = this.checkDate( element.date )
-        console.log(`${goAhead}, ${element.title}`);
 
         if(goAhead) FBS.events.moveEventsAround( element.reference, element ).then( res =>
         {

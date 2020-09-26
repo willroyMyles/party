@@ -17,8 +17,6 @@ const PastEventView = () =>
 	const referenceNumber : string = route.params?.reference
 
 	const item = FireStore.memoryData.get( referenceNumber )
-	console.log(`item found? ${ FireStore.memoryData.has(referenceNumber)}, ${ referenceNumber}, ${ [...FireStore.memoryData.keys()][0]}`);
-
 	const [image, setimage] = useState<string>()
 
 	

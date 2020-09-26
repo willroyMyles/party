@@ -28,7 +28,6 @@ const FeedList = (  { scrollY, off } : {scrollY:Animated.Value<number>, off:numb
     
     const loadData = () =>
     {
-        console.log("loading");
         setData([])
         const d = []
         for ( let index = 0; index < 3; index++ )

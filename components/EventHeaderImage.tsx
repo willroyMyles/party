@@ -1,35 +1,49 @@
 import React, { useState } from 'react'
-import { ImageBackground, Modal, StatusBar } from 'react-native'
+import { Dimensions, Easing, ImageBackground, Modal, StatusBar } from 'react-native'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import { View, Text, Image, TouchableOpacity, Colors } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
+import LinearGradient from 'react-native-linear-gradient';
+import { animated, useSpring } from 'react-spring/native'
+import { interpolate } from 'react-native-reanimated'
 
+// @refresh reset
+
+
+const {width,height} = Dimensions.get("screen")
 const EventHeaderImage = ( { imageUrl }: { imageUrl?: string } ) =>
 {
     const theme = useTheme()
-    const [visible, setVisible] = useState( false )
+    const [visible, setVisible] = useState( true )
 
+     const [props, set, stop] = useSpring( () => ( {
+         opacity: 1, width: width, position: "relative", backgroundColor: Colors.background, maxHeight: height*.4,
+        config: {
+            bounce: 100,
+            friction:30
+        }
+     } ) )
+    
+    const onPress = () =>
+    {
+        set( {
+            maxHeight: visible? height : height*.4
+        } ).then( res =>
+        {
+            setVisible(v => !v)
+        })
+    }
+
+    const TouchOp = animated( TouchableOpacity )
+    const IMG = animated( Image )
 
     return (
-        <TouchableOpacity onPress={() => setVisible( true )} style={{ maxHeight: 300, overflow: "hidden" }}>
-            <Image fadeDuration={600} source={{ uri: imageUrl }} resizeMode="cover" style={{ height: "100%", width: "100%" }} />
-            <Modal visible={visible}>
-                <ImageBackground blurRadius={20} source={{ uri: imageUrl }} style={{ height: "100%", width: "100%" }}>
-                    <ImageViewer renderIndicator={() => <View />} enableSwipeDown={false} backgroundColor={"rgba(0,0,0,0)"} onCancel={() => setVisible( false )} imageUrls={[{ url: imageUrl }]} />
-                    <View absB center style={{ width: "100%" }}>
-                        <TouchableOpacity onPress={() => setVisible( false )} margin-5 padding-6 paddingH-18 br50 marginB-15 style={{
-                            borderWidth: 0, borderColor: Colors.text2,
-                            backgroundColor: Colors.background,
-                            elevation: 5
-                        }}>
-                            <Text indicator>close</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ImageBackground>
-
-
-            </Modal>
-        </TouchableOpacity>
+        <TouchOp onPress={onPress} style={{ zIndex:15, overflow: "hidden" , ...props}}>
+            <IMG fadeDuration={600} source={{ uri: imageUrl }} resizeMode="contain" style={{
+                height: height, width: width,
+                top: props.maxHeight.to([height*.4, height*.9], [-height*.3,0])
+            }} />
+        </TouchOp>
     )
 }
 

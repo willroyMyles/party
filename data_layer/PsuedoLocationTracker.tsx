@@ -61,7 +61,6 @@ export class PsuedoLocationTracker
         if ( this.processed.has( reference ) )
         {            
             const interval = new Date().getMinutes() - this.processed.get( reference )?.getMinutes();
-            console.log(`interval, ${interval}`);
             
             if (  interval > thirtyMins )
             {
@@ -76,8 +75,6 @@ export class PsuedoLocationTracker
 
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
-
-        // console.log( `this is processed size ${ this.processed.size } \n this is data size ${ this.data.size } \n` );
         
         if(this.data.size == 0) return
         this.userLocation = latLng;        
@@ -121,7 +118,6 @@ export class PsuedoLocationTracker
 
         //             this.entered.set( value[0], ll )
         //             eventEmitter.emit( eventStrings.locationEntered, value[0] )
-        //             console.log( "fence breached" );
 
 
         //             // check if already asked
@@ -138,7 +134,6 @@ export class PsuedoLocationTracker
         //             const perm = await GetNotificationPermission()
         //             if ( perm )
         //             {
-        //                 console.log( "should sent noti" );
         //                 this.addToProcessed( value[0] )
         //                 Notifications.setNotificationHandler( {
         //                     handleNotification: async () => ( {
@@ -170,9 +165,7 @@ export class PsuedoLocationTracker
     }
 
     @action watchTheseLocations = ( data: LocationRegion[] ) =>
-    {
-        console.log("watched updated");
-        
+    {        
         this.data.clear()
         const d = new Map()
         data.map( ( value, index ) =>

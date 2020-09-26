@@ -79,7 +79,6 @@ const CategoryView = () =>
     const loadData = () =>
     {
 
-        console.log(!!lastDocument,"is last?")
         if ( !lastDocument ) return // last document doest exist
 
         if ( !shouldLoadMore )  return

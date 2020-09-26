@@ -46,9 +46,7 @@ const LeaderBoard = () =>
     useEffect(() => {
 setLoading(true)
         FireStore.retrieve.getEventsByRatings().then( res =>
-        {   
-            console.log(`res returned ${res.length}`);
-            
+        {               
             if ( res.length > 0 )
             {
                 setData( d =>
@@ -101,7 +99,6 @@ setLoading(true)
         const perm = await GetNotificationPermission()
         if ( perm )
         {
-            console.log( "should sent noti" );
             
             Notifications.setNotificationHandler( {
                 handleNotification: async () => ( {
