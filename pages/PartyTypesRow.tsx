@@ -32,8 +32,8 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
     
     const load = () =>
     {
-        const keys = [...FireStore.categorizedData.keys()];
-        console.log(keys.length);
+        const keys = [...FireStore.categorizedData.keys()];      
+        console.log(keys);
         
         setData( keys );
     }
@@ -76,9 +76,10 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
                     keyExtractor={( item, index ) => 'item' + index}
                     renderItem={( { item, index } ) =>
                     {
+
                         return (
                             <View center style={{ height: '100%' }}>
-                                <PartyCard item={item} />
+                                <PartyCardV2 item={item} />
                             </View>
                         );
                     }}
@@ -90,7 +91,22 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
 
 export default PartyTypesRow;
 
-const PartyCard = memo(( { item }: { item: string } ) =>
+const PartyCardV2 = ( { item }: { item: any } ) =>
+{
+    const num : PartyType = Number.parseInt(PartyType[item])
+    const text = GetPartytypeString( num );
+    const data = [...FireStore.data.values()].filter( ( a, b ) => a.partyType == num )
+    const amount = data.length
+
+
+    return (<View center marginH-10>
+        <Text lvl1 center>{text} </Text>
+        <Text lvl1 center>type {num} </Text>
+        <Text lvl1 center>amount {amount} </Text>
+    </View>)
+}
+
+const PartyCard = ( { item }: { item: string } ) =>
 {
     const theme = useTheme();
     const navigation = useNavigation();
@@ -205,4 +221,4 @@ const PartyCard = memo(( { item }: { item: string } ) =>
             </View>
         </TouchableOpacity>
     );
-});
+};

@@ -62,7 +62,7 @@ const Memories = () => {
 					onEndReached={getPastEvents}
 					onEndReachedThreshold={.1}
 				style={{borderWidth: 0, flex: 1}}
-				data={data}
+				data={[...FireStore.memoryData.values()]}
 					renderItem={( { item, index } ) =>
 					{					
 					return (

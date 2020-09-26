@@ -1,5 +1,5 @@
 import auth from '@react-native-firebase/auth';
-import storage from '@react-native-firebase/storage';
+import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
@@ -184,6 +184,17 @@ class Store
   getUsername = () => auth().currentUser?.displayName;
   getUserId = () => auth().currentUser?.uid;
 
+  private linktorealTimeEvents = ( onResult :any ) =>
+  {
+    const order = "date"
+
+    const subscribe = firestore().collection( eventCollection ).orderBy(order).onSnapshot( doc =>
+    {
+      onResult( doc );
+    })
+    return subscribe;
+    
+  }
   getEventsInMultiplies = ( amount: number ) =>
   {
     const order = 'date';
@@ -196,6 +207,7 @@ class Store
         const firstQuery = firestore()
           .collection( eventCollection )
           .orderBy( order )
+          // .where("date", "<=", new Date())
           .limit( amount );
         const snapshotQuery = await firstQuery.get();
 
@@ -531,7 +543,8 @@ class Store
     getPastEvents: this.getPastEvents,
     getEventsByRatings:this.getEventsByRatings,
     moveEventsAround: this.moveEventsAround,
-    increaseAttendance:this.increaseAttendance
+    increaseAttendance: this.increaseAttendance,
+    linktorealTimeEvents: this.linktorealTimeEvents
   };
 }
 

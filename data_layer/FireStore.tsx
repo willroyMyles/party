@@ -18,6 +18,53 @@ class Store
   @observable eventImagesMap: Map<string, string> = new Map()
   @observable eventImagesForPastEventsMap: Map<string, string[]> = new Map()
 
+counter = 0
+  onResult = ( docs: FirebaseFirestoreTypes.QuerySnapshot ) =>
+  {
+    this.counter++
+    console.log( this.counter );
+    
+    docs.forEach( ( doc, index ) =>
+    {
+      console.log( doc );
+      const item : FeedItemModel = doc.data();
+      const id = doc.id
+
+      if ( this.checkDate( item.date ) ) this.memoryData.set( id, item )
+      else this.data.set(id, item)
+      
+      
+    })
+    
+    // this.sortDataFromFireBase(docs)    
+  }
+
+  constructor()
+  {
+    FBS.events.linktorealTimeEvents( ( docs: FirebaseFirestoreTypes.QuerySnapshot) =>
+    {
+      this.counter++
+
+      docs.forEach( ( doc, index ) =>
+      {
+        console.log( doc );
+        const item: FeedItemModel = doc.data();
+        const id = doc.id
+
+        if ( this.checkDate( item.date ) ) this.memoryData.set( id, item )
+        else this.data.set( id, item )
+
+
+      } )
+
+      console.log( this.counter );
+
+    })
+  }
+
+
+
+
   @action isLoggedIn = () => FBS.isLoggedIn();
   @action login = ( email: string, password: string ) =>
     FBS.login( email, password );
@@ -96,6 +143,8 @@ class Store
       const key = PartyType[docs[index].data().partyType]
       const element = docs[index]
 
+      console.log(key);
+      
       if ( this.categorizedData.has( key ) )
       {
         this.categorizedData.get( key )?.push( docs[index].data() )
@@ -110,29 +159,30 @@ class Store
   })
 
 
-  sortDataFromFireBase = ( data: any ) =>
+  sortDataFromFireBase = ( data: FirebaseFirestoreTypes.QuerySnapshot ) =>
   {
     this.intermediateryData.clear()
     return new Promise( ( resolve, reject ) =>
     {
-      const result: FirebaseFirestoreTypes.QuerySnapshot = data
-
-      result.docs.forEach( ( doc, index ) =>
-      {
-        if ( !this.data.has( doc.id ) && !this.checkDate(doc.data().date)) this.data.set( doc.id, doc.data() )
+      data.docs.forEach( ( doc, index ) =>
+      {         
+        if ( !this.data.has( doc.id ) && !this.checkDate( doc.data().date ) ) this.data.set( doc.id, doc.data() )
+        else this.memoryData.set( doc.id, doc.data() ) // add to memory page
+        
         this.intermediateryData.set(doc.id, doc.data())
       } )
       resolve( true )
-      this.sortAll(result.docs)
+      this.sortAll(data.docs)
       eventEmitter.emit( eventStrings.dataFromProviderFinishedLoad )
     } )
   }
 
   @action private getEvents = () => new Promise( ( resolve, reject ) =>
   {
+    return
     FBS.getEventsInMultiplies( 10 ).then( ( res: any ) =>
     {
-      this.sortMemoryData( res.docs )
+      // this.sortMemoryData( res.docs )
 
       this.sortDataFromFireBase( res ).then( res =>
       {
