@@ -19,6 +19,7 @@ import { observer } from 'mobx-react'
 const scrollY = new Animated.Value( 0 )
 const FeedV2 = () =>
 {
+    const theme = useTheme()
     const off = 260
     const [, setLastDocument] = useState<string>()
     const [moreData, setMoreData] = useState(true)

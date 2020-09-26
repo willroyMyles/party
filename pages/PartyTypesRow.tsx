@@ -20,8 +20,6 @@ const { width, height } = Dimensions.get( 'screen' );
 const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
 {
     const theme = useTheme();
-    const holder = useRef<TransitioningView | any>();
-    const [visible, setVisible] = useState( true );
     const [data, setData] = useState<string[]>( [] );
 
     useEffect(() => {
@@ -35,6 +33,8 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
     const load = () =>
     {
         const keys = [...FireStore.categorizedData.keys()];
+        console.log(keys.length);
+        
         setData( keys );
     }
 
@@ -66,7 +66,7 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
                 indicator
                 style={{ alignSelf: 'flex-start' }}>
                 Categories
-      </Text>
+            </Text>
 
             {data.length != 0 && (
                 <FlatList
@@ -104,11 +104,8 @@ const PartyCard = memo(( { item }: { item: string } ) =>
     const [image, setimage] = useState<string>();
     const handleViewAll = ( route: string ) =>
         navigation.navigate( 'category', { type: route } );
-
     
-    useEffect( () =>
-    {
-    }, [] );
+    
 
     const changeItem = () =>
     {

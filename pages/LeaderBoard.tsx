@@ -17,6 +17,7 @@ import { useEffect } from 'react'
 import { observer } from 'mobx-react'
 import LeaderBoardTiles from '../components/LeaderBoardTiles'
 import * as faker from 'faker'
+import { BackDropV2 } from '../components/BackDrop'
 
 // @refresh reset
 
@@ -36,9 +37,11 @@ const LeaderBoard = () =>
             
     //     }
     // } ) )
-    
+    const theme = useTheme()
     const [data, setData] = useState<Map<string, FeedItemModel>>( new Map() )
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState( false )
+    
+    
     
     useEffect(() => {
 setLoading(true)
@@ -67,14 +70,32 @@ setLoading(true)
             //could not get events
         })
     }, [] )
+
+    if ( data.size == 0 )
+    {
+        return <View flex center padding-60 bg-background>
+            <View center padding-10 style={{ minHeight: "10%" }}>
+                <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
+            </View>
+            <Text lvl1 center>no parties rated yet. Be one of the first to get to the top!</Text>
+            <View bg-foreground style={{
+                position:"absolute",
+                width: 200,
+                height: 200,
+                zIndex: -1,
+                borderRadius: 200,
+                elevation: 0,
+                opacity:.3
+            }} />
+            <BackDropV2 />
+        </View>
+    }
     
     const getDataForList = ():FeedItemModel[] =>
     {
         return [...data.values()].sort((a,b)=> b.rating - a.rating)
     }
 
-    const theme = useTheme()
-    const TouchButton = animated(View)
     const onPress = async () =>
     {
         const perm = await GetNotificationPermission()
