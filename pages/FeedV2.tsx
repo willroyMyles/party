@@ -14,6 +14,7 @@ import ListheaderComp from '../components/ListheaderComp'
 import ListFooterComp from '../components/ListFooterComp'
 import { observer } from 'mobx-react'
 
+// @refresh reset
 
 
 const scrollY = new Animated.Value( 0 )
@@ -21,55 +22,55 @@ const FeedV2 = () =>
 {
     const theme = useTheme()
     const off = 260
-    const [, setLastDocument] = useState<string>()
+    // const [, setLastDocument] = useState<string>()
     const [moreData, setMoreData] = useState(true)
     const [loading, setLoading] = useState(false)
 
 
     const diffY = Animated.diffClamp( scrollY, 0, off )
 
-    useEffect( () =>
-    {
-        setLoading(true)
-        eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, loadData )
-        FireStore.retrieve.events().then( res =>
-        {
-            setLoading( false )
+    // useEffect( () =>
+    // {
+    //     setLoading(true)
+    //     eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, loadData )
+    //     FireStore.retrieve.events().then( res =>
+    //     {
+    //         setLoading( false )
 
-        } ).catch( err =>
-        {
-            setLoading( false )
-            setMoreData(false)
+    //     } ).catch( err =>
+    //     {
+    //         setLoading( false )
+    //         setMoreData(false)
 
-        })
-        return () =>
-        {
-            eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, loadData )
+    //     })
+    //     return () =>
+    //     {
+    //         eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, loadData )
 
-        }
-    }, [] )
+    //     }
+    // }, [] )
 
-    const loadData = () =>
-    {
-        setLoading( false )
-        const values = [...FireStore.intermediateryData.values()]
-        const lastIndex = values.length - 1
-        if(lastIndex < 0) return
-        const ref = values[lastIndex].reference
-        setLastDocument( ref )
+    // const loadData = () =>
+    // {
+    //     setLoading( false )
+    //     const values = [...FireStore.intermediateryData.values()]
+    //     const lastIndex = values.length - 1
+    //     if(lastIndex < 0) return
+    //     const ref = values[lastIndex].reference
+    //     setLastDocument( ref )
         
-    }
+    // }
 
-    const loadMore = () =>
-    {
-        if ( !moreData ) return
-        setLoading(true)
-        FireStore.retrieve.events().catch( () =>
-        {
-            setLoading(false)
-            setMoreData(false)
-        })
-    }
+    // const loadMore = () =>
+    // {
+    //     if ( !moreData ) return
+    //     setLoading(true)
+    //     FireStore.retrieve.events().catch( () =>
+    //     {
+    //         setLoading(false)
+    //         setMoreData(false)
+    //     })
+    // }
 
 
     const headerY = Animated.interpolate( diffY, {
@@ -107,8 +108,8 @@ const FeedV2 = () =>
                     }}
                     contentContainerStyle={{ paddingBottom: off, backgroundColor: Colors.background }}
                     data={[...FireStore.data.values()]}
-                    onEndReachedThreshold={.1}
-                    onEndReached={loadMore}
+                    // onEndReachedThreshold={.1}
+                    // onEndReached={loadMore}
 
                     onScroll={
                         Animated.event<any>( [{

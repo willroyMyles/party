@@ -19,47 +19,45 @@ class Store
   @observable eventImagesForPastEventsMap: Map<string, string[]> = new Map()
 
 counter = 0
-  onResult = ( docs: FirebaseFirestoreTypes.QuerySnapshot ) =>
+  organizeStream = ( docs: FirebaseFirestoreTypes.QuerySnapshot ) =>
   {
     this.counter++
-    console.log( this.counter );
-    
+
     docs.forEach( ( doc, index ) =>
     {
       console.log( doc );
-      const item : FeedItemModel = doc.data();
+      const item: FeedItemModel = doc.data();
       const id = doc.id
 
+      //organized into old and new
       if ( this.checkDate( item.date ) ) this.memoryData.set( id, item )
-      else this.data.set(id, item)
-      
-      
-    })
+      else
+      {
+        this.data.set( id, item )
+        this.organizeIntoCategories(item)
+      }
+    } )
+
+    console.log( this.counter );
+  }
+  
+  organizeIntoCategories = ( data: FeedItemModel ) =>
+  {
+    const key = PartyType[data.partyType]
+    console.log(key);
     
-    // this.sortDataFromFireBase(docs)    
+    if ( this.categorizedData.has( key ) )
+    {
+      this.categorizedData.get( key )?.push( data )
+    } else
+    {
+      this.categorizedData.set( key, [data] )
+    }
   }
 
   constructor()
   {
-    FBS.events.linktorealTimeEvents( ( docs: FirebaseFirestoreTypes.QuerySnapshot) =>
-    {
-      this.counter++
-
-      docs.forEach( ( doc, index ) =>
-      {
-        console.log( doc );
-        const item: FeedItemModel = doc.data();
-        const id = doc.id
-
-        if ( this.checkDate( item.date ) ) this.memoryData.set( id, item )
-        else this.data.set( id, item )
-
-
-      } )
-
-      console.log( this.counter );
-
-    })
+    FBS.events.linktorealTimeEvents( this.organizeStream)
   }
 
 

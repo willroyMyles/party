@@ -16,6 +16,7 @@ import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import { GetPartytypeString } from '../universal/GS';
 import { PartyType } from '../universal/Models';
 const { width, height } = Dimensions.get( 'screen' );
+// @refresh reset
 
 const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
 {
@@ -79,7 +80,7 @@ const PartyTypesRow = ( { heightt }: { heightt: number } ) =>
 
                         return (
                             <View center style={{ height: '100%' }}>
-                                <PartyCardV2 item={item} />
+                                <PartyCard item={item} />
                             </View>
                         );
                     }}
