@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, Image } from "react-native-ui-lib"
+import { View, Text, Image, Colors, TouchableOpacity } from "react-native-ui-lib"
 import { useRoute } from "@react-navigation/native"
 
 import { ScrollView } from "react-native-gesture-handler"
 import FireStore from "../data_layer/FireStore"
 import PhotoGridV2 from "../components/PhotoGridV2"
 import DateBox from "../components/DateBox"
-import { Colors } from "react-native/Libraries/NewAppScreen"
 import EventHeaderImage from "../components/EventHeaderImage"
 import { observer } from "mobx-react"
-
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 const PastEventView = () =>
 {
 	const route = useRoute()
 	const referenceNumber : string = route.params?.reference
-
 	const item = FireStore.memoryData.get( referenceNumber )
 	const [image, setimage] = useState<string>()
 
@@ -28,17 +26,14 @@ const PastEventView = () =>
 			const d = await FireStore.retrieve.imageFromReference( item.reference , item.flyer)
 			setimage( d )
 		}
-
 		if ( item ) getImage()
-		// tm.setThemeType(true)
 	}, [] )
 
 	if ( item ) return (
 		<ScrollView contentContainerStyle={{ minHeight: "100%" }}>
-			<View bg-background style={{ minHeight: "100%" }}>
+			<View bg-background style={{ minHeight: "100%", marginBottom:15 }}>
 				<EventHeaderImage imageUrl={image} />
-
-				<View row padding-20 paddingT-3 paddingB-12 style={{ flexDirection: "column", justifyContent: "space-between" }}>
+				<View row marginT-20 padding-20 paddingT-3 paddingB-12 style={{ flexDirection: "column", justifyContent: "space-between" }}>
 					<Text lvl1>{item.title}</Text>
 					<View marginT-10 row style={{ justifyContent: "flex-start" }}>
 						<View absR style={{ marginTop: -15 }}>

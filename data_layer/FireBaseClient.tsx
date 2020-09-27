@@ -187,6 +187,10 @@ class Store
     const subscribe = firestore().collection( eventCollection ).orderBy(order).onSnapshot( doc =>
     {
       onResult( doc );
+    }, err =>
+    {
+        console.log(err, "error getting stream, firebase console");
+        
     })
     return subscribe;
     

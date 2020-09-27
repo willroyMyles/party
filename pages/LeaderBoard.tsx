@@ -62,7 +62,7 @@ setLoading(true)
             setLoading(false)
         } ).catch( err =>
         {
-            console.log("error in leaderboard");
+            console.log("leaderboard err");
             setLoading( false )
 
             //could not get events

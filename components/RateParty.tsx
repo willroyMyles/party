@@ -117,7 +117,7 @@ export default class RateParty extends Component
                 justifyContent:"center"
                 
             }}>
-                <Transitioning.View ref={this.view} transition={trans} bg-background padding-10 style={{
+                <View  bg-background padding-10 style={{
                     width: "90%",
                     elevation: 20,
                     borderRadius:7,
@@ -140,7 +140,7 @@ export default class RateParty extends Component
                             <Text lvl1>Thank you for rating <Text primary>{this.state.text}</Text>!</Text>
                         </View>}
                     </View>
-                </Transitioning.View>
+                </View>
             </Animated.View>
         )
     }

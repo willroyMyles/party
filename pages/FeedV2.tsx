@@ -24,7 +24,14 @@ const FeedV2 = () =>
     const off = 260
     // const [, setLastDocument] = useState<string>()
     const [moreData, setMoreData] = useState(true)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState( false )
+    
+    useEffect(() => {
+        console.log(FireStore.data.size);
+        
+        return () => {
+        }
+    }, [])
 
 
     const diffY = Animated.diffClamp( scrollY, 0, off )
@@ -81,6 +88,9 @@ const FeedV2 = () =>
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
+            {FireStore.data.size == 0 && <View center style={{height:"100%"}}>
+                <Text>no data</Text>
+            </View>}
             <View bg-background style={{ height: "100%" }}>
                 <Animated.View style={{
                     position: "absolute",

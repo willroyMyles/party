@@ -1,13 +1,25 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { View, Text, Colors } from 'react-native-ui-lib'
+import { useTheme } from 'styled-components'
 import { GS } from '../universal/GS'
 
 const LocationBlock = ( { info, styled = false }: { info: any, styled?: boolean } ) =>
 {
     if ( !info ) return <View />
     
-    const {city, country, isoCountryCode, name, postalCOde, region, street} = info
+    const theme= useTheme()
+    const { city, country, isoCountryCode, name, postalCOde, region, street } = info
+    
+    if ( styled ) return (
+        <View>
+            <View style={[ { backgroundColor: Colors.background, width: "100%", paddingVertical: 0, borderRadius: 15 }]}>
+                <Text lvl2 style={s.text} >{name} {street}</Text>
+                <Text lvl2 style={s.text} >{city}, {region}</Text>
+                <Text lvl2 style={s.text} >{country}</Text>
+            </View>
+        </View>
+    )
 
     return (
         <View marginB-10>

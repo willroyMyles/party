@@ -7,9 +7,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { animated, useSpring } from 'react-spring/native'
 import { interpolate } from 'react-native-reanimated'
 
-// @refresh reset
-
-
 const {width,height} = Dimensions.get("screen")
 const EventHeaderImage = ( { imageUrl }: { imageUrl?: string } ) =>
 {

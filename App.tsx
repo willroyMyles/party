@@ -8,6 +8,7 @@ import
   UIManager,
   Platform,
   LayoutAnimation,
+  LogBox,
 } from 'react-native';
 
 import
@@ -16,7 +17,7 @@ import
 } from 'react-native-ui-lib'
 import StackNavigator from './pages/StackNavigator';
 import TToast from './components/TToast';
-import { ThemeProvider } from "styled-components"
+import { ThemeProvider, useTheme } from "styled-components"
 import tm, { ThemeType } from './universal/UiManager';
 import { observer } from 'mobx-react';
 import * as Font from 'expo-font'
@@ -28,6 +29,7 @@ import { LocationRegion } from 'expo-location';
 import uuidv4 from 'uuid';
 import { GetLocationPermission } from './universal/GetLocation';
 import RateParty from './components/RateParty';
+import { AppEventsLogger } from 'react-native-fbsdk';
 
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
@@ -36,8 +38,10 @@ if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimenta
   // LayoutAnimation.configureNext( LayoutAnimation.Presets.linear )
 }
 
+
 const App = () =>
 {
+  const theme = useTheme()
   const [loading, setLoading] = useState( true )
   let webview = useRef<WebView | null>( null )
   useEffect( () =>
@@ -58,7 +62,7 @@ const App = () =>
 
   if ( loading )
   {
-    return <View flex center>
+    return <View flex center bg-background>
       <LoaderScreen />
     </View>
   }

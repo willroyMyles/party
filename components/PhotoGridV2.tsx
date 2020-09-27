@@ -9,9 +9,12 @@ import FireStore from "../data_layer/FireStore"
 import { getImage } from "../universal/GetImage"
 import { useNavigation } from "@react-navigation/native"
 import ImageViewer from "react-native-image-zoom-viewer"
+import { FlatList } from "react-native-gesture-handler"
+import MasonaryView from "./MasonaryView"
 
-const width = Dimensions.get( "screen" ).width / 3.1
-const height = 150
+
+const width = Dimensions.get( "screen" ).width / 2.5
+const height = 240
 const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 {
 	const [data, setdata] = useState<any[]>( [] )
@@ -42,10 +45,11 @@ const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 	{
 		FireStore.retrieve.picturesForEvent( reference ).then( ( res ) =>
 		{
+			
 			if ( res )
 			{
 				setLoading( false )
-				setdata( FireStore.eventImagesForPastEventsMap.get( reference ) || [] )
+				setdata( FireStore.eventImagesForPastEventsMap.get( reference ) || [] )				
 			} else
 			{
 				TToast.error( "Error", "Something went wrong retireving images" )
@@ -93,75 +97,63 @@ const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 		)
 
 	return (
-		<View marginT-60 centerH paddingB-70 style={{ borderWidth: 0 }}>
-			<Modal visible={visible}>
-				<ImageViewer imageUrls={urldata} index={index} enableSwipeDown swipeDownThreshold={200} onCancel={() => setVisible( false )} />
-			</Modal>
-			<View center>
-				<Icon name="camera" size={25} color={Colors.text2} />
-				<Text lvl2 marginB-20>
-					Pictures
-			</Text>
-			</View>
+		<View marginT-60 centerH paddingB-70 style={{ borderWidth: 0, flex:1 }}>
+				<TouchableOpacity onPress={handleUpload} center style={{
+					position: "absolute",
+					right: 25,
+					bottom: 25,
+					elevation: 7,
+					borderRadius: 100,
+					backgroundColor: Colors.foreground,
+					padding: 7,
+					width: 50,
+					height: 50,
 
-			<View row center style={{ flexWrap: "wrap", margin: 0, borderRadius: 5 }}>
-				{data.map( ( src, index ) =>
-				{
-					return (
-						<TouchableOpacity
-							onPress={() => handleImagePressed( index )}
-							margin-2
-							activeOpacity={0.85}
-							key={index}
-							style={{
-								width,
-								elevation: 1,
-								borderWidth: 0.5,
-								borderColor: Colors.grey40,
-								borderRadius: 3,
-								overflow: "hidden",
-							}}>
-							<Image source={{ uri: src }} resizeMode="cover"
-								style={{ width: "100%", height }}
+				}}>
+				<View row centerV spread>
+					{/* <Icon name="camera" color={Colors.primary} size={33} /> */}
+					<Icon
+						name="plus"
+						color={Colors.primary}
+						size={23}
+						style={{
+							// position: 'absolute',
+							// bottom: 5,
+							// left: 18,
+							// backgroundColor: Colors.background,
+							padding: 3,
+							borderRadius: 50,
+						}}
+					/>
+					{/* <Text marginH-10>add pictures</Text> */}
+					</View>
+				</TouchableOpacity>
+		
 
-							/>
-						</TouchableOpacity>
-					)
-				} )}
-				<TouchableOpacity
-					onPress={handleUpload}
-					activeOpacity={0.85}
+			<View row center bg-foreground style={{ flexWrap: "wrap", margin: 0, borderRadius: 25, paddingTop:25 }}>
+				<View center style={{ width: "100%", paddingStart: 20, opacity: .7 }}>
+					<Icon name="camera" size={25} color={Colors.text2} />
+					<Text lvl2 marginB-20>
+						Pictures
+					</Text>
+				</View>
+				<MasonaryView data={data} numOfCols={2}/>
+				{data.length == 0 && <View
 					margin-2
 					center
-					// backgroundColor={Colors.primary}
 					style={{
-						width,
+						width:"100%",
 						opacity: 0.9,
 						elevation: 0,
-						borderRadius: 3,
 						height,
 						borderColor: Colors.primary,
-						borderWidth: 2,
-						borderStyle: "dashed"
+						padding:30
 					}}>
-					<Icon name="plus-circle" size={32} color={Colors.primary} />
-					<Text marginT-10 regular primary style={{ fontWeight: "700" }}>
-						upload picture
+					<Text marginT-10 regular primary indicator center style={{ fontWeight: "700" }}>
+						no pictures as yet for {}
 					</Text>
-				</TouchableOpacity>
+				</View>}
 			</View>
-			{/* <View style={{position: "absolute", bottom: 15, margin: 5}}>
-				<TouchableOpacity
-					margin-2
-					center
-					row
-					padding-10
-					backgroundColor={Colors.primary}
-					style={{width: Dimensions.get("screen").width / 1.07, opacity: 0.8, elevation: 10, borderRadius: 3}}>
-					<Icon name="plus-circle" size={32} />
-					<Text style={{fontWeight: "700"}}>upload picture</Text>
-				</TouchableOpacity>
-			</View> */}
 		</View>
 	)
 }
