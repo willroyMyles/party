@@ -6,7 +6,7 @@ import { GS } from '../universal/GS'
 
 const LocationBlock = ( { info, styled = false }: { info: any, styled?: boolean } ) =>
 {
-    if ( !info ) return <View />
+    if ( info == undefined || info == null ) return <View />
     
     const theme= useTheme()
     const { city, country, isoCountryCode, name, postalCOde, region, street } = info

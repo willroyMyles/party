@@ -66,7 +66,7 @@ const HomeNavigator = () =>
     >
       <Tab.Screen
         name="memories"
-        options={{ tabBarIcon: () => 'trophy' }}
+        options={{ tabBarIcon: () => 'splotch' }}
         component={Memories}
       /> 
       {/* {tm.isLocationGranted && (
