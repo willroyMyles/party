@@ -26,59 +26,7 @@ const FeedV2 = () =>
     const [moreData, setMoreData] = useState(true)
     const [loading, setLoading] = useState( false )
     
-    useEffect(() => {
-        console.log(FireStore.data.size);
-        
-        return () => {
-        }
-    }, [])
-
-
     const diffY = Animated.diffClamp( scrollY, 0, off )
-
-    // useEffect( () =>
-    // {
-    //     setLoading(true)
-    //     eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, loadData )
-    //     FireStore.retrieve.events().then( res =>
-    //     {
-    //         setLoading( false )
-
-    //     } ).catch( err =>
-    //     {
-    //         setLoading( false )
-    //         setMoreData(false)
-
-    //     })
-    //     return () =>
-    //     {
-    //         eventEmitter.removeListener( eventStrings.dataFromProviderFinishedLoad, loadData )
-
-    //     }
-    // }, [] )
-
-    // const loadData = () =>
-    // {
-    //     setLoading( false )
-    //     const values = [...FireStore.intermediateryData.values()]
-    //     const lastIndex = values.length - 1
-    //     if(lastIndex < 0) return
-    //     const ref = values[lastIndex].reference
-    //     setLastDocument( ref )
-        
-    // }
-
-    // const loadMore = () =>
-    // {
-    //     if ( !moreData ) return
-    //     setLoading(true)
-    //     FireStore.retrieve.events().catch( () =>
-    //     {
-    //         setLoading(false)
-    //         setMoreData(false)
-    //     })
-    // }
-
 
     const headerY = Animated.interpolate( diffY, {
         inputRange: [0, off],

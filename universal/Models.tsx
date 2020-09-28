@@ -18,7 +18,7 @@ export interface FeedItemModel {
 	person?: string
 	personId?: string
 	location?: string
-	locationObject: any
+	locationObject: GeoCodeModel
 	reference?: string
 	start?: string
 	duration?: number
@@ -39,4 +39,15 @@ export interface UserDatabaseModel {
 	userName: string
 	flyers: FeedItemModel[] | null
 	rsvpParties: string[]
+}
+
+export interface GeoCodeModel
+{
+	city: string
+	country: string
+	isoCountryCode: string
+	name: string
+	postalCode: string
+	region: string
+	street: string
 }

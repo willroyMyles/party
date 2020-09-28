@@ -34,7 +34,7 @@ const EventView = () =>
             setImage( d )
         }
 
-        if ( item ) getImage()
+        if ( item ) getImage()        
     }, [] )
 
     if ( item ) return (
@@ -79,7 +79,7 @@ const EventView = () =>
                         <GetIcon name="map" />
                         <View marginL-10>
                             <Text marginT-7 marginB-3 lvl3 text3>Location</Text>
-                            <LocationBlock info={item.locationObject} styled />
+                            <LocationBlock {...item.locationObject} styled={true} />
                         </View>
                     </View>
                 </View>

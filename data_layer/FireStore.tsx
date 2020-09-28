@@ -328,7 +328,11 @@ class Store
 
   @action private addRsvpEvent = ( reference: string, add = true ) => new Promise( ( resolve, reject ) =>
   {
-    FBS.events.uploadRsvpEvents( reference, add ).then( res => resolve( true ) ).catch( err => reject( false ) )
+    FBS.events.uploadRsvpEvents( reference, add ).then( res =>
+    {
+      this.rsvpData.set( reference, this.data.get( reference ) );
+      resolve( true )
+    } ).catch( err => reject( false ) )
   } )
 
   @action private getRsvpEvents = () => new Promise( ( resolve, reject ) =>
@@ -346,7 +350,7 @@ class Store
       }
 
       resolve( true )
-      eventEmitter.emit(eventStrings.dataFromProviderFinishedLoad)
+      // eventEmitter.emit(eventStrings.dataFromProviderFinishedLoad)
 
     } ).catch( err => reject( err ) )
   } )

@@ -3,13 +3,15 @@ import { StyleSheet } from 'react-native'
 import { View, Text, Colors } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 import { GS } from '../universal/GS'
+import { FeedItemModel, GeoCodeModel } from '../universal/Models'
 
-const LocationBlock = ( { info, styled = false }: { info: any, styled?: boolean } ) =>
+ 
+
+const LocationBlock = ( { styled, city, country, isoCountryCode, name, postalCode, region, street }: 
+
+    { styled:boolean, city:string, country:string, isoCountryCode:string, name:string, postalCode:string, region:string, street:string }) =>
 {
-    if ( info == undefined || info == null ) return <View />
-    
     const theme= useTheme()
-    const { city, country, isoCountryCode, name, postalCOde, region, street } = info
     
     if ( styled ) return (
         <View>
@@ -25,10 +27,10 @@ const LocationBlock = ( { info, styled = false }: { info: any, styled?: boolean 
         <View marginB-10>
             <Text lvl2 marginB-15>Location</Text>
             <View style={[GS.input, { backgroundColor: Colors.background, width: "100%", paddingVertical: 13, borderRadius: 15 }]}>
-                <Text style={s.text} >{name} {street}</Text>
-                <Text style={s.text} >{city}</Text>
-                <Text style={s.text} >{region}</Text>
-                <Text style={s.text} >{country}</Text>
+                <Text lvl2 style={s.text} >{name} {street}</Text>
+                <Text lvl2 style={s.text} >{city}</Text>
+                <Text lvl2 style={s.text} >{region}</Text>
+                <Text lvl2 style={s.text} >{country}</Text>
             </View>
 </View>
     )
@@ -37,7 +39,7 @@ const LocationBlock = ( { info, styled = false }: { info: any, styled?: boolean 
 const s = StyleSheet.create( {
     text: {
         fontSize: 14,
-        color: Colors.text1,
+        // color: Colors.text1,
         paddingVertical: 5,
         marginBottom: 3,
         
