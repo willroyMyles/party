@@ -3,18 +3,33 @@ import React, { useEffect, useState } from 'react'
 import { Dimensions, Modal } from 'react-native'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import { View, Text, TouchableOpacity, Colors, Image } from 'react-native-ui-lib'
+import { useSpring, animated, useTransition } from 'react-spring/native'
 
 const GetCopy = () =>
 {
     
 }
+// @refresh reset
+
 
 const {width, height} = Dimensions.get("screen")
 const PhotoGridImage = ( { numOfCols, wid, index, img, urls }: any ) =>
 {
     const notIt = index % numOfCols == 0
     const [show, setShow] = useState( false )
-    const [urlData, seturlData] = useState([])
+    const [urlData, seturlData] = useState( [] )
+    const [values, setValues] = useState<any>()
+    
+    const [props, set] = useSpring( () => ( {
+        from: { opacity:1, num:0.97},
+        to: {  opacity:1 , num:1},
+        
+        config: {
+            duration : 300
+        },
+        native:true
+    } ) )
+
 
     const handlePressed = (val : boolean) =>
     {
@@ -29,15 +44,19 @@ const PhotoGridImage = ( { numOfCols, wid, index, img, urls }: any ) =>
         } )
 
         seturlData( arr )
+
     }, [])
 
-
+const V = animated(View)
     return (
-        <View style={{
-            // top: notIt ? 0 : 75,
+        <V style={{
+            // top: props.top,
             padding: 5 / numOfCols,
             width: wid,
-            marginVertical:5
+            marginVertical: 5,
+            transform:[{scale: props.num}],
+            ...props
+            // ...values
         }}>
             <Modal visible={show}>
                 <ImageViewer imageUrls={urlData} index={index} enableSwipeDown swipeDownThreshold={200} onCancel={() => handlePressed( false )} />
@@ -57,11 +76,11 @@ const PhotoGridImage = ( { numOfCols, wid, index, img, urls }: any ) =>
 
                 }}>
 
-                <Image source={{ uri: img }} resizeMode="cover"
+                 <Image source={{ uri: img }} resizeMode="cover"
                     style={{ width: "100%", height: "100%" }}
-                />
+                /> 
             </TouchableOpacity>
-        </View>
+        </V>
     )
 }
 

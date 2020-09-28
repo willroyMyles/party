@@ -11,10 +11,10 @@ const {width,height} = Dimensions.get("screen")
 const EventHeaderImage = ( { imageUrl }: { imageUrl?: string } ) =>
 {
     const theme = useTheme()
-    const [visible, setVisible] = useState( true )
+    const [visible, setVisible] = useState( true );
 
-     const [props, set, stop] = useSpring( () => ( {
-         opacity: 1, width: width, position: "relative", backgroundColor: Colors.background, maxHeight: height*.4,
+     const [props, set] = useSpring( () => ( {
+         opacity: 1, width: width, backgroundColor: Colors.background, maxHeight: height*.4,
         config: {
             bounce: 100,
             friction:30

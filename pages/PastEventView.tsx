@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, Image, Colors, TouchableOpacity } from "react-native-ui-lib"
+import { View, Text, Image, Colors, TouchableOpacity, LoaderScreen } from "react-native-ui-lib"
 import { useRoute } from "@react-navigation/native"
 
 import { FlatList, ScrollView } from "react-native-gesture-handler"
@@ -13,6 +13,7 @@ import { Dimensions } from "react-native"
 import PhotoGridImage from "../components/PhotoGridImage"
 import { GetIcon } from "../universal/GS"
 import moment from "moment"
+import { animated, useTransition } from "react-spring/native"
 const width = Dimensions.get( "screen" ).width
 
 const PastEventView = () =>
@@ -22,8 +23,9 @@ const PastEventView = () =>
 	const item = FireStore.memoryData.get( referenceNumber )
 	const [image, setimage] = useState<string>()
 	const [data, setdata] = useState<any[]>( [] )
+	const [loading, setLoading] = useState( false )
+	const [test, settest] = useState<any>(  )
 	const numOfCols = 3
-	const off = numOfCols / 5.5
 	const wid = width / numOfCols
 
 	if ( !item ) return <View />
@@ -31,9 +33,12 @@ const PastEventView = () =>
 	{
 		async function getImage()
 		{
+			setLoading(true)
 			const d = await FireStore.retrieve.imageFromReference( item.reference, item.flyer )
 			setimage( d )
+
 		}
+
 		if ( item )
 		{
 			getImage()
@@ -42,17 +47,41 @@ const PastEventView = () =>
 
 				if ( res )
 				{
-					// setLoading( false )
+					setLoading( false )
 					setdata( FireStore.eventImagesForPastEventsMap.get( referenceNumber ) || [] )
 				} else
 				{
+					setLoading(false)
 					TToast.error( "Error", "Something went wrong retireving images" )
 				}
 			} )
 		}
 
 
+		tenth( ( values, item, tra, index ) =>
+		{
+			settest(values)
+			return <View/>
+		})
 	}, [] )
+
+// @refresh reset
+
+	const VIMG = animated( View )
+	const tenth = useTransition( data, {
+		backgroundColor: Colors.green20,
+		from: { backgroundColor: "red", top: 1000 },
+		enter: { backgroundColor: Colors.green20, top: 0},
+		update: { color: "blue", backgroundColor: "grey" },
+		leave: { color: "red" },
+		trail: 1000,
+		reset:true,
+		config: {
+			duration: 1000
+		}
+	} )
+	
+	
 
 	if ( item ) return (
 		<View bg-background style={{ minHeight:"100%" }}>
@@ -82,7 +111,6 @@ const PastEventView = () =>
 				</View>
 			</TouchableOpacity>
 
-
 				<FlatList
 					contentContainerStyle={{paddingBottom: 105,  width, marginVertical: 20, backgroundColor: Colors.foreground }}
 					style={{ width: "100%",  backgroundColor: Colors.foreground, flex:1 }}
@@ -91,7 +119,11 @@ const PastEventView = () =>
 					numColumns={numOfCols}
 					renderItem={( { item, index } ) =>
 					{
-						return <PhotoGridImage urls={data} img={item} index={index} numOfCols={numOfCols} wid={wid} />
+						return <VIMG style={{
+							...test
+						}}>
+							<PhotoGridImage urls={data} img={item} index={index} numOfCols={numOfCols} wid={wid} />
+						</VIMG>
 					}}
 					ListHeaderComponent={
 						<View bg-background>
@@ -131,7 +163,7 @@ const PastEventView = () =>
 									</Text>
 								</View>
 							</View>
-							{data.length == 0 && <View
+							{data.length == 0 && !loading && <View
 								margin-2
 								center
 								style={{
@@ -142,6 +174,22 @@ const PastEventView = () =>
 									backgroundColor:Colors.foreground
 								}}>
 								<Text marginT-10 text2 center style={{ fontWeight: "700", fontSize:18, opacity:.95 }}>
+									no pictures as yet for <Text primary>{item.title}</Text> {"\n"}
+									Be the first to add one!
+								</Text>
+							</View>}
+							{loading && <View
+								margin-2
+								center
+								style={{
+									width: "100%",
+									// opacity: 0.9,
+									// borderColor: Colors.primary,
+									padding: 30,
+									backgroundColor: Colors.foreground
+								}}>
+								<LoaderScreen />
+								<Text marginT-10 text2 center style={{ fontWeight: "700", fontSize: 18, opacity: .95 }}>
 									no pictures as yet for <Text primary>{item.title}</Text> {"\n"}
 									Be the first to add one!
 								</Text>
