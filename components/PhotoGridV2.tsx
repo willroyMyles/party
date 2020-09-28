@@ -13,7 +13,7 @@ import { FlatList } from "react-native-gesture-handler"
 import MasonaryView from "./MasonaryView"
 
 
-const width = Dimensions.get( "screen" ).width / 2.5
+const width = Dimensions.get( "screen" ).width
 const height = 240
 const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 {
@@ -96,20 +96,25 @@ const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 			</View>
 		)
 
+	const numOfCols = 2
+	const off = numOfCols / 5.5
+	const wid = width / numOfCols 
+
+
 	return (
 		<View marginT-60 centerH paddingB-70 style={{ borderWidth: 0, flex:1 }}>
-				<TouchableOpacity onPress={handleUpload} center style={{
-					position: "absolute",
-					right: 25,
-					bottom: 25,
-					elevation: 7,
-					borderRadius: 100,
-					backgroundColor: Colors.foreground,
-					padding: 7,
-					width: 50,
-					height: 50,
+			<TouchableOpacity onPress={handleUpload} center style={{
+				position: "absolute",
+				right: 25,
+				bottom: 25,
+				elevation: 7,
+				borderRadius: 100,
+				backgroundColor: Colors.foreground,
+				padding: 7,
+				width: 50,
+				height: 50,
 
-				}}>
+			}}>
 				<View row centerV spread>
 					{/* <Icon name="camera" color={Colors.primary} size={33} /> */}
 					<Icon
@@ -117,42 +122,85 @@ const PhotoGridV2 = ( { reference }: { reference: string } ) =>
 						color={Colors.primary}
 						size={23}
 						style={{
-							// position: 'absolute',
-							// bottom: 5,
-							// left: 18,
-							// backgroundColor: Colors.background,
 							padding: 3,
 							borderRadius: 50,
 						}}
 					/>
-					{/* <Text marginH-10>add pictures</Text> */}
-					</View>
-				</TouchableOpacity>
+				</View>
+			</TouchableOpacity>
 		
 
-			<View row center bg-foreground style={{ flexWrap: "wrap", margin: 0, borderRadius: 25, paddingTop:25 }}>
-				<View center style={{ width: "100%", paddingStart: 20, opacity: .7 }}>
-					<Icon name="camera" size={25} color={Colors.text2} />
-					<Text lvl2 marginB-20>
-						Pictures
-					</Text>
-				</View>
-				<MasonaryView data={data} numOfCols={2}/>
-				{data.length == 0 && <View
-					margin-2
-					center
-					style={{
-						width:"100%",
-						opacity: 0.9,
-						elevation: 0,
-						height,
-						borderColor: Colors.primary,
-						padding:30
-					}}>
-					<Text marginT-10 regular primary indicator center style={{ fontWeight: "700" }}>
-						no pictures as yet for {}
-					</Text>
-				</View>}
+			<View bg-foreground style={{borderRadius: 25, paddingTop:25, height:"100%"  }}>
+				<FlatList
+					ListHeaderComponent={
+						<View>
+							
+							<View centerH >
+								<View center style={{ width: "100%", paddingStart: 20, opacity: .7 }}>
+									<Icon name="camera" size={25} color={Colors.text2} />
+									<Text lvl2 marginB-20>
+										Pictures
+									</Text>
+								</View>
+							</View>
+						</View>
+					}
+					contentContainerStyle={{ borderWidth: 0, paddingBottom: 35, padding: 10, width }}
+					style={{ width: "100%", overflow: "visible" }}
+					data={data.slice()}
+					keyExtractor={( item, index ) => item}
+					numColumns={numOfCols}
+					renderItem={( { item, index } ) =>
+					{
+						const notIt = index % numOfCols == 0
+						return <View style={{
+							top: notIt ? 0 : 75,
+							padding: 12 / numOfCols,
+							width: wid - 7.5
+						}}>
+							<TouchableOpacity
+								// onPress={() => handleImagePressed( index )}
+								activeOpacity={0.85}
+								key={index}
+								style={{
+									elevation: 10,
+									borderWidth: 2,
+									borderColor: Colors.text1 + "33",
+									borderRadius: 16,
+									overflow: "hidden",
+									height: 250,
+
+								}}>
+
+								<Image source={{ uri: item }} resizeMode="cover"
+									style={{ width: "100%", height: "100%" }}
+								/>
+							</TouchableOpacity>
+						</View>
+
+					}}
+
+					// ListFooterComponent={()=>
+					// 	{data.length == 0 && <View
+					// 			margin-2
+					// 			center
+					// 			style={{
+					// 				width: "100%",
+					// 				opacity: 0.9,
+					// 				elevation: 0,
+					// 				height,
+					// 				borderColor: Colors.primary,
+					// 				padding: 30
+					// 			}}>
+					// 			<Text marginT-10 regular primary indicator center style={{ fontWeight: "700" }}>
+					// 				no pictures as yet for {}
+					// 			</Text>
+					// 		</View>
+					// 	}
+					// }
+
+				/>
+			
 			</View>
 		</View>
 	)

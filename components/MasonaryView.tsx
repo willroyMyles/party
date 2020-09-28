@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Dimensions, FlatList, Image } from 'react-native';
 import { View, Text, TouchableOpacity, Colors } from 'react-native-ui-lib'
+
+
 const {width} = Dimensions.get("screen")
 const MasonaryView = ( { data, numOfCols }: { data: string[], numOfCols : number } ) =>
 {
@@ -22,8 +24,8 @@ const MasonaryView = ( { data, numOfCols }: { data: string[], numOfCols : number
                     return <View style={{
                         top: notIt ? 0 : 75,
                         padding: 12 / numOfCols,
-                        width:wid-7.5
-}}>
+                        width: wid - 7.5
+                    }}>
                         <TouchableOpacity
                         // onPress={() => handleImagePressed( index )}
                         activeOpacity={0.85}
