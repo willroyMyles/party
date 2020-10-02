@@ -9,6 +9,7 @@ import Animated, {
     TransitioningView,
 } from 'react-native-reanimated';
 import { View, Text, TouchableOpacity, Colors, Image } from 'react-native-ui-lib';
+import { useSpring, animated } from 'react-spring/native';
 import LoaderImage from '../components/LoaderImage';
 import SearchBar from '../components/SearchBar';
 import FireStore from '../data_layer/FireStore';
@@ -120,7 +121,17 @@ const PartyCard = ( { item }: { item: string } ) =>
     const handleViewAll = ( route: string ) =>
         navigation.navigate( 'category', { type: route } );
     
+    const [props, set, stop] = useSpring(()=>(
+        {   opacity:0,
+            from: { opacity: 0 },
+            to: { opacity: 1 },
+            config: {
+                duration:1000
+            }
+        }
+    ) )
     
+    const V = animated(View)
 
     const changeItem = () =>
     {
@@ -129,6 +140,7 @@ const PartyCard = ( { item }: { item: string } ) =>
         newIndex = index + 1 >= length ? 0 : index + 1;
         setIndex( newIndex );
         changeImage( newIndex );
+        set({opacity:1})
     };
 
     const changeImage = ( i: number ) =>
@@ -143,14 +155,15 @@ const PartyCard = ( { item }: { item: string } ) =>
 
     setTimeout( () =>
     {
-        // const CustomLayoutLinear = {
-        //     duration: 700,
-        //     create: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
-        //     update: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
-        //     delete: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
-        // }
+        const CustomLayoutLinear = {
+            duration: 700,
+            create: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+            update: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+            delete: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+        }
 
-        // LayoutAnimation.configureNext( CustomLayoutLinear )
+        LayoutAnimation.configureNext( CustomLayoutLinear )
+        set({opacity:0})
         changeItem();
     }, 6000 );
 
@@ -172,7 +185,7 @@ const PartyCard = ( { item }: { item: string } ) =>
 
                 if ( isSelected )
                     return (
-                        <View
+                        <V
                             key={idx}
                             style={{
                                 position: 'absolute',
@@ -180,6 +193,7 @@ const PartyCard = ( { item }: { item: string } ) =>
                                 left: 0,
                                 width: '100%',
                                 height: '100%',
+                            opacity: props.opacity
                             }}>
                             {/* <Text>{value.title}</Text> */}
                             <LoaderImage 
@@ -198,7 +212,7 @@ const PartyCard = ( { item }: { item: string } ) =>
                                 }}>
                                 <Text lvl2 muted>{value.title}</Text>
                             </View>
-                        </View>
+                        </V>
                     );
             } )}
 

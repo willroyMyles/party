@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, PureComponent } from 'react';
 import { View, Text, ColorName, Colors } from 'react-native-ui-lib';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MemoryLeaderBoard from './Memory&LeaderBoard';
@@ -13,37 +13,20 @@ import tm from '../universal/UiManager';
 import { observer } from 'mobx-react';
 import LeaderBoard from './LeaderBoard';
 import Memories from './Memories';
+import { useNavigation } from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator();
 
-const HomeNavigator = () =>
+
+export class HomeNavigator extends PureComponent
 {
-  useEffect( () =>
-  {
-    eventEmitter.addListener( eventStrings.locationGranted, () =>
-      showNearMe( true ),
-    );
-    eventEmitter.addListener( eventStrings.locationNotGranted, () =>
-      showNearMe( false ),
-    );
-    return () =>
-    {
-      eventEmitter.removeListener( eventStrings.locationGranted, () =>
-        showNearMe( true ),
-      );
-      eventEmitter.removeListener( eventStrings.locationNotGranted, () =>
-        showNearMe( false ),
-      );
-    };
-  }, [] );
 
-  const showNearMe = ( val: boolean ) =>
-  {
-    tm.setLocationGranted(val)
-  };
+  
 
-  return (
-    <Tab.Navigator
+  render(){
+  
+    return (
+      <Tab.Navigator
       tabBarPosition="bottom"
       swipeEnabled={false}
       tabBarOptions={{
@@ -58,41 +41,40 @@ const HomeNavigator = () =>
         },
         allowFontScaling: true,
         // contentContainerStyle: {
-        //     backgroundColor: Colors.background,
-        //     elevation:10
-        // },
-      }}
-      tabBar={( props ) => <CustomTabBar {...props} />}
-    >
+          //     backgroundColor: Colors.background,
+          //     elevation:10
+          // },
+        }}
+        tabBar={( props ) => <CustomTabBar {...props} />}
+        >
       <Tab.Screen
         name="memories"
         options={{ tabBarIcon: () => 'splotch' }}
         component={Memories}
-      /> 
-      {/* {tm.isLocationGranted && (
-        <Tab.Screen
-          options={{ tabBarIcon: () => 'map' }}
-          name="near me"
-          component={NearMe}
-        />
-      )}  */}
+        /> 
+          <Tab.Screen
+            options={{ tabBarIcon: () => 'map' }}
+            name="near me"
+            component={NearMe}
+            />
       <Tab.Screen
         name="discover"
         options={{ tabBarIcon: () => 'th-large' }}
         component={FeedV2}
-      />
+        />
        <Tab.Screen
         name="leaderboard"
         options={{ tabBarIcon: () => 'trophy' }}
         component={LeaderBoard}
-      /> 
+        /> 
       <Tab.Screen
         name="settings"
         options={{ tabBarIcon: () => 'user-cog' }}
         component={Settings}
-      />   
+        />   
     </Tab.Navigator>
-  );
-};
+  )
+}
+}
 
 export default observer(HomeNavigator);

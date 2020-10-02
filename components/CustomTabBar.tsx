@@ -38,15 +38,17 @@ function CustomTabBar( { state, descriptors, navigation }: { state: NavigationSt
 
         const onPress = () =>
         {
-          //   const event = navigation.dispatch({
-          //     type: 'tabPress',
-          //     target: route.key,
-          //   });
+            // const event = navigation.dispatch({
+            //   type: 'tabPress',
+            //   target: route.key,
+            // });
 
-          if ( !isFocused )
-          {
+          console.log(route.name);
+          
+
+          
             navigation.navigate( route.name );
-          }
+          
         };
 
         const onLongPress = () =>

@@ -8,21 +8,19 @@ import MapView, {
     PROVIDER_GOOGLE,
     Region,
 } from 'react-native-maps';
-import { View, Text, Colors, LoaderScreen } from 'react-native-ui-lib';
+import { View, Colors } from 'react-native-ui-lib';
 import { useTheme } from 'styled-components';
 import Mapcard from '../components/Mapcard';
-import { MarkerPinItem } from '../components/MarkerPin';
 import FireStore from '../data_layer/FireStore';
 import { getLatitudeLongitudeFromString, getLocation, getRegion } from '../universal/GetLocation';
 import { FeedItemModel } from '../universal/Models';
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
-import psuedoLocationTracker, { PsuedoLocationTracker, radius } from '../data_layer/PsuedoLocationTracker';
-import { AppState, AppStateStatus, Platform } from 'react-native';
+import psuedoLocationTracker, { radius } from '../data_layer/PsuedoLocationTracker';
+import { AppState, AppStateStatus } from 'react-native';
 import { observer } from 'mobx-react';
 
-let count = 0
 const foregroundTask = "online geo tasks"
 const backgroundTask = "offline geo tasks"
 
@@ -111,10 +109,10 @@ const NearMe = () =>
     }
 
     const userLocationChanged = async ( e: EventUserLocation ) =>
-    {        
-            const loc = e.nativeEvent.coordinate;
-            const reg = getRegion( loc );
-            setRegion( reg );
+    {
+        const loc = e.nativeEvent.coordinate;
+        const reg = getRegion( loc );
+        setRegion( reg );
     }
 
     const getUserRegion = async () =>
@@ -139,7 +137,7 @@ const NearMe = () =>
     {        
         Location.startLocationUpdatesAsync( foregroundTask, { //runs unlimited
             accuracy: Location.Accuracy.Highest,
-        } ).then( res =>
+        } ).then( () =>
         {
             psuedoLocationTracker.watchTheseLocations( data )
 
@@ -152,7 +150,7 @@ const NearMe = () =>
         Location.startLocationUpdatesAsync( backgroundTask, { //runs unlimited
             timeInterval: 1000 * 60 * 6, //runs every 6 mins,
             accuracy: Location.Accuracy.Balanced,
-        } ).then( res =>
+        } ).then( () =>
         {
             psuedoLocationTracker.watchTheseLocations( data )
 
@@ -244,8 +242,8 @@ const ShowEventOnMarkerPressed = ( {
     region
 }: {
     markers: FeedItemModel[],
-        onPress: ( ref: string ) => void,
-    region:Region
+    onPress: ( ref: string ) => void,
+    region: Region
 } ) =>
 {
     if ( markers.length <= 0 ) return <View />
@@ -253,14 +251,15 @@ const ShowEventOnMarkerPressed = ( {
 
     const mark = useRef<Marker>()
 
-    useEffect(() => {
+    useEffect( () =>
+    {
         if ( mark.current )
         {
             // mark.current.props.onLayout(()=>)
-            
+
         }
-      
-    }, [])
+
+    }, [] )
 
     return (
         <>
@@ -270,20 +269,20 @@ const ShowEventOnMarkerPressed = ( {
                 if ( coord )
                     return <View key={index}>
                         <Marker
-                        ref={mark}
-                        key={value.reference}
-                        image={require( "../assets/images/marker.png" )}
-                        pinColor="green"
-                        coordinate={coord}
-                        onPress={() => onPress( value.reference || "" ) }
-                    >
+                            ref={mark}
+                            key={value.reference}
+                            image={require( "../assets/images/marker.png" )}
+                            pinColor="green"
+                            coordinate={coord}
+                            onPress={() => onPress( value.reference || "" )}
+                        >
 
-                </Marker>
+                        </Marker>
                         <Circle center={coord} radius={100} fillColor={Colors.blue50} strokeColor={Colors.grey60} strokeWidth={3} />
-                </View>
-                else return <View key={value.reference}/>
+                    </View>
+                else return <View key={value.reference} />
             } )}
         </>
     )
 };
-export default  observer(NearMe);
+export default observer( NearMe );

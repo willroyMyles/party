@@ -17,6 +17,8 @@ import {
 } from 'react-native-reanimated';
 import {useEffect} from 'react';
 import LoaderImage from './LoaderImage';
+import { showLocation } from 'react-native-map-link'
+
 
 const trans = (
   <Transition.Sequence>
@@ -105,7 +107,13 @@ const Mapcard = ({
                   listing
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity padding-5 marginL-10>
+              <TouchableOpacity onPress={() =>
+              {
+                showLocation( {
+                  latitude: l1.latitude,
+                  longitude:l1.longitude
+                })
+              }} padding-5 marginL-10>
                 <Text lvl3 primary>
                   directions
                 </Text>

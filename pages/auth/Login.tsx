@@ -83,6 +83,7 @@ const Login = () =>
                         name="email"
                         control={control}
                         rules={{ required: 'email required' }}
+                        defaultValue=""
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
@@ -108,6 +109,7 @@ const Login = () =>
                         name="password"
                         control={control}
                         rules={{ required: 'password required' }}
+                        defaultValue=""
                         render={( { onChange, onBlur, value } ) =>
                         {
                             return (
@@ -135,7 +137,7 @@ const Login = () =>
                 <TouchableOpacity
                     onPress={( e: any ) =>
                     {
-                        return handleSubmit( onSubmit )();
+                        //return handleSubmit( onSubmit )();
                     }}
                     center
                     bg-background

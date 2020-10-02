@@ -15,7 +15,7 @@ import { observer } from 'mobx-react'
 import FBS from '../../data_layer/FireBaseClient'
 import auth from '@react-native-firebase/auth';
 
-const Profile = observer(() =>
+const Profile = () =>
 {
 
     const theme = useTheme()
@@ -41,9 +41,15 @@ const Profile = observer(() =>
 
     const handleLocationChanged = ( val: boolean ) =>
     {        
+        console.log(`what? ${val}`);
+        
         if ( val )
         {
-            GetLocationPermission()
+            GetLocationPermission().then( (res) =>
+            {
+                tm.setLocationGranted( res )
+
+            })
         } else
         {
             tm.setLocationGranted(val)
@@ -111,9 +117,9 @@ const Profile = observer(() =>
     )
 
 
-})
+}
 
-export default Profile
+export default observer(Profile)
 
 const style = StyleSheet.create( {
     create: {

@@ -15,7 +15,6 @@ import RSVPButton from '../components/RSVPButton'
 import EventHeaderImage from '../components/EventHeaderImage'
 import LocationBlock from '../components/LocationBlock'
 import { animated, useSpring } from 'react-spring/native'
-// @refresh reset
 
 const EventView = () =>
 {

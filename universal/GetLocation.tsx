@@ -11,7 +11,7 @@ export const RevokeLocationPermission = () => new Promise<boolean>( async resolv
     tm.setLocationGranted( false )
     
 })
-export const GetLocationPermission = () => new Promise<Boolean>( async (resolve) =>
+export const GetLocationPermission = () => new Promise<boolean>( async (resolve) =>
 {
     
     try
