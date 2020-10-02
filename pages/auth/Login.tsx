@@ -21,7 +21,7 @@ import SkipButton from '../../components/SkipButton';
 import { useTheme } from 'styled-components';
 import BackDrop, { BackDropV3, BackDropV2 } from '../../components/BackDrop';
 import { GS } from '../../universal/GS';
-
+import crashlytics from '@react-native-firebase/crashlytics';
 const Login = () =>
 {
     const { handleSubmit, errors, control, clearErrors } = useForm();
@@ -30,6 +30,8 @@ const Login = () =>
 
     const onSubmit = ( data: { email: string; password: string } ) =>
     {
+
+        crashlytics().log("on submit login run")
         TToast.working( "Loggin in", "Wait a moment while we log you in..." )
         FireStore.login( data.email, data.password )
             .then( ( res ) =>
@@ -137,7 +139,8 @@ const Login = () =>
                 <TouchableOpacity
                     onPress={( e: any ) =>
                     {
-                        //return handleSubmit( onSubmit )();
+                        crashlytics().log( "login pressed" )
+                        return handleSubmit( onSubmit )();
                     }}
                     center
                     bg-background
