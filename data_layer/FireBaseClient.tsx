@@ -414,10 +414,11 @@ class Store
 
       operation
         .put( blob )
-        .then( ( res ) =>
+        .then( async  ( res ) =>
         {
           // resolve( true )
-          resolve( operation.fullPath )
+          
+          resolve( await operation.getDownloadURL() )
         } )
         .catch( ( err ) =>
         {

@@ -270,6 +270,8 @@ class Store
         {
           if ( res )
           {
+            console.log(res);
+            
             this.eventImagesForPastEventsMap.set( reference, res )
 
             resolve( true )
@@ -281,18 +283,29 @@ class Store
 
   @action private uploadPictureToEvent = ( ref: string, imageUrl: string ) =>
   {
-    return new Promise( ( resolve ) =>
+    return new Promise( ( resolve, reject ) =>
     {
       FBS.events.uploadPhotoToEvent( ref, imageUrl ).then( ( res ) =>
       {
         if ( res )
         {
-          resolve( true )
+          resolve( res )
+          console.log(res);
+          
+          const imgs = this.eventImagesForPastEventsMap.get(ref)
+          if(imgs != undefined){
+            imgs.push(res)
+            this.eventImagesForPastEventsMap.set( ref, imgs )
+          }else{
+            let arr :string[] = []
+            arr.push(res)
+            this.eventImagesForPastEventsMap.set( ref, arr )
+          }
         } else
         {
-          resolve( false )
+          reject( false )
         }
-      } )
+      } ).catch(reject)
     } )
   }
 
