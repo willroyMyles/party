@@ -5,6 +5,9 @@ import { FeedItemModel, PartyType } from '../universal/Models';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import { Alert } from 'react-native';
+import crashlytics from '@react-native-firebase/crashlytics';
+
+
 class Store
 {
   @observable data: Map<string, FeedItemModel> = new Map();
@@ -295,7 +298,8 @@ class Store
 
   @action private GoogleLogin = () => new Promise( resolve =>
   {
-    FBS.social.GooglsSignIn().then( res => resolve( true ) ).catch( err => resolve( false ) )
+    FBS.social.GooglsSignIn().then( res => {      
+      resolve( res )} ).catch( err => resolve( false ) )
   } )
   @action private FacebookLogin = () => new Promise( resolve =>
   {

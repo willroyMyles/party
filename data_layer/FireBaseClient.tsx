@@ -36,6 +36,8 @@ class Store
   login = ( email: string, password: string ) =>
     new Promise( ( resolve, reject ) =>
     {
+      console.log(email, password);
+      
       auth()
         .signInWithEmailAndPassword( email, password )
         .then( ( res ) =>
@@ -48,6 +50,8 @@ class Store
   register = ( username: string, email: string, password: string ) =>
     new Promise( ( resolve, reject ) =>
     {
+      console.log("register enetred");
+      
       auth()
         .createUserWithEmailAndPassword( email, password )
         .then( ( res ) =>

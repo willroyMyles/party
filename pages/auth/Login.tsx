@@ -1,68 +1,94 @@
 import React from 'react';
-import
-{
-    View,
-    Text,
-    TextField,
-    TouchableOpacity,
-    Button,
-    Image,
-    ColorName,
-    Colors,
+import {
+View,
+Text,
+TextField,
+TouchableOpacity,
+Image,
+Colors,
 } from 'react-native-ui-lib';
 import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
+import { StyleSheet } from 'react-native';
 import FireStore from '../../data_layer/FireStore';
 import { HandleFirebaseErrors } from '../../universal/EventEmitter';
 import { useNavigation } from '@react-navigation/native';
 import TToast from '../../components/TToast';
 import SkipButton from '../../components/SkipButton';
 import { useTheme } from 'styled-components';
-import BackDrop, { BackDropV3, BackDropV2 } from '../../components/BackDrop';
+import BackDrop, { BackDropV2 } from '../../components/BackDrop';
 import { GS } from '../../universal/GS';
 import crashlytics from '@react-native-firebase/crashlytics';
-const Login = () =>
-{
-    const { handleSubmit, errors, control, clearErrors } = useForm();
+import { Formik, useFormik } from 'formik';
+import * as yup from 'yup'; // for everything
+import CustomTextInput from '../../components/CustomTextInput';
+
+const Login = () => {
     const navigation = useNavigation();
-    const theme = useTheme()
 
-    const onSubmit = ( data: { email: string; password: string } ) =>
-    {
 
-        crashlytics().log("on submit login run")
-        TToast.working( "Loggin in", "Wait a moment while we log you in..." )
-        FireStore.login( data.email, data.password )
-            .then( ( res ) =>
-            {
-                TToast.success( "Ready!", "Logged in successfully " )
-                goHome()
-            } )
-            .catch( ( err ) => HandleFirebaseErrors( err.code ) );
+    const schema = yup.object().shape({
+        email: yup.string().required("i need you rbo").email().min(3),
+        password: yup.string().required().min(3)
+    })
+
+    const onSubmit = async (data: { email: string; password: string }) => {
+
+
+        schema.isValid(data, {
+            abortEarly: true
+        }).then(res => {
+            console.log(res);
+            if(res){
+                crashlytics().log("on submit login run")
+                TToast.working("Loggin in", "Wait a moment while we log you in...")
+                FireStore.login(data.email, data.password)
+                    .then(() => {
+                        TToast.success("Ready!", "Logged in successfully ")
+                        goHome()
+                    })
+                    .catch((err) => HandleFirebaseErrors(err.code));
+            }
+        }).catch(errors => {
+            console.log(errors);
+
+        })
+
+
+        return
+
+       
     };
 
-    const handleRegisterPressed = () => navigation.navigate( 'register' );
-    const handleResetPressed = () => navigation.navigate( "reset password" )
+    const handleRegisterPressed = () => navigation.navigate('register');
+    const handleResetPressed = () => navigation.navigate("reset password")
 
-    const handleGoogleLogin = () => FireStore.auth.google().then( res =>
-    {
-        if ( res )
-        {
+    const handleGoogleLogin = () => FireStore.auth.google().then(res => {
+        if (res) {
+            crashlytics().log(`google sign in completed ${res}`)
             goHome()
-        } else
-        {
+        } else {
+            crashlytics().log(`google sign in didnt work ${res}`)
 
         }
-    } )
+
+        crashlytics().crash()
+    })
 
 
-    const goHome = () =>
-    {
-        TToast.success( 'Great!', 'Your all good to go!' );
-        navigation.navigate( 'home' );
+    const goHome = () => {
+        TToast.success('Great!', 'Your all good to go!');
+        navigation.navigate('home');
     }
 
+    const props = useFormik({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        onSubmit: values => onSubmit(values)
+        , validationSchema: schema,
+        validateOnChange:false
+    })
     return (
         <ScrollView
             contentContainerStyle={{
@@ -80,56 +106,54 @@ const Login = () =>
                 padding-10
                 bg-foreground
                 style={{ width: '100%', elevation: 0 }}>
-                <View marginT-10 padding-10 centerV style={{}}>
-                    <Controller
-                        name="email"
-                        control={control}
-                        rules={{ required: 'email required' }}
-                        defaultValue=""
-                        render={( { onChange, onBlur, value } ) =>
-                        {
-                            return (
-                                <TextField
-                                    hideUnderline
-                                    error={errors.email ? errors.email.message : ''}
+                <View marginT-10 padding-10 centerV>
+                    <Formik 
+                        initialValues={props.initialValues}
+                        onSubmit={onSubmit}
+                        validationSchema={schema}
+                    >
+                        {() => (
+                            <View>
+                                <CustomTextInput 
+                                    name="email" 
+                                    errors={props.errors.email}
                                     maxLength={16}
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
-                                    {
-                                        onBlur();
-                                        clearErrors( 'email' );
-                                    }}
-                                    value={value}
-                                    title="Email"
-                                    style={[GS.input, { backgroundColor: Colors.background }]}
-
+                                    onChangeText={props.handleChange("email")}
+                                    onBlur={props.handleBlur("email")}
+                                    value={props.values.email}
+                                    style={[GS.input, { backgroundColor: Colors.background,  width:"100%" }]}
                                 />
-                            );
-                        }}
-                    />
-                    <Controller
-                        name="password"
-                        control={control}
-                        rules={{ required: 'password required' }}
-                        defaultValue=""
-                        render={( { onChange, onBlur, value } ) =>
-                        {
-                            return (
-                                <TextField
+                                   <CustomTextInput 
+                                    name="password" 
+                                    secureTextEntry={true}
+                                    errors={props.errors.password}
+                                    maxLength={16}
+                                    onChangeText={props.handleChange("password")}
+                                    onBlur={props.handleBlur("password")}
+                                    value={props.values.password}
+                                    style={[GS.input, { backgroundColor: Colors.background,  width:"100%" }]}
+                                />
+                                {/* <TextField
                                     hideUnderline
-                                    error={errors.password ? errors.password.message : ''}
                                     maxLength={16}
                                     secureTextEntry={true}
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={onBlur()}
-                                    value={value}
-
+                                    error={formikProps.errors.password}
+                                    maxLength={16}
+                                    onChangeText={handleChange("password")}
+                                    onBlur={handleBlur("password")}
+                                    // value={values.password}
                                     style={[GS.input, { backgroundColor: Colors.background }]}
                                     title="Password"
-                                />
-                            );
-                        }}
-                    />
+                                /> */}
+          
+                            </View>
+
+                        )}
+                    </Formik>
+
+
+
+                
                     <TouchableOpacity onPress={handleResetPressed} right marginT-8>
                         <Text muted>Forgot Password?</Text>
                     </TouchableOpacity>
@@ -137,10 +161,9 @@ const Login = () =>
             </View>
             <View marginT-20 style={{ width: '100%' }}>
                 <TouchableOpacity
-                    onPress={( e: any ) =>
-                    {
-                        crashlytics().log( "login pressed" )
-                        return handleSubmit( onSubmit )();
+                    onPress={() => {
+                        crashlytics().log("login pressed")
+                        return props.handleSubmit()
                     }}
                     center
                     bg-background
@@ -149,7 +172,7 @@ const Login = () =>
                     <BackDrop />
                 </TouchableOpacity>
                 <TouchableOpacity bg-background row center padding-10 onPress={handleGoogleLogin} style={[style.btn, { borderColor: Colors.foreground }]}>
-                    <Image source={require( "../../assets/icons/google.png" )} style={{ width: 20, height: 20 }} />
+                    <Image source={require("../../assets/icons/google.png")} style={{ width: 20, height: 20 }} />
                     <Text marginL-8 btn>Continue with Google</Text>
                 </TouchableOpacity>
                 {/* <TouchableOpacity onPress={handleFaceBookLogin} center style={[style.btn]}>
@@ -168,7 +191,7 @@ const Login = () =>
 };
 
 export default Login;
-export const style = StyleSheet.create( {
+export const style = StyleSheet.create({
     cont: {
         padding: 10,
     },
@@ -192,4 +215,4 @@ export const style = StyleSheet.create( {
         elevation: 5,
         borderWidth: 0.6
     },
-} );
+});

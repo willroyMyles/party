@@ -1,7 +1,6 @@
-import React from 'react';
+ import React from 'react';
 import { View, Text, TextField, TouchableOpacity, Colors } from 'react-native-ui-lib';
 import { ScrollView, StyleSheet } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import FireStore from '../../data_layer/FireStore';
 import { HandleFirebaseErrors } from '../../universal/EventEmitter';
@@ -10,12 +9,22 @@ import SkipButton from '../../components/SkipButton';
 import BackDrop, { BackDropV2 } from '../../components/BackDrop';
 import { useTheme } from 'styled-components';
 import { GS } from '../../universal/GS';
+import { Formik, useFormik } from 'formik';
+import * as yup from 'yup'; // for everything
+import CustomTextInput from '../../components/CustomTextInput';
+
 
 const Register = () =>
 {
-    const { handleSubmit, errors, control, clearErrors } = useForm();
     const navigation = useNavigation();
     const theme = useTheme()
+
+    const schema = yup.object().shape({
+        username: yup.string().required("Your user-name is required"),
+        email: yup.string().required("Your email is a must").email().min(3),
+        password: yup.string().required().min(3)
+    })
+
     const onSubmit = ( data: {
         username: string;
         email: string;
@@ -33,7 +42,16 @@ const Register = () =>
     };
 
     const handleLoginPressed = () => navigation.navigate( 'login' );
-
+    const props = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+            username:""
+        },
+        onSubmit: values => onSubmit(values)
+        , validationSchema: schema,
+        validateOnChange:false
+    })
     return (
         <ScrollView
             style={{ backgroundColor: "transparent" }}
@@ -60,81 +78,51 @@ const Register = () =>
                 bg-foreground
                 style={{ width: '100%', elevation: 3 }}>
                 <View marginT-10 padding-10 centerV style={{}}>
-                    <Controller
-                        name="username"
-                        control={control}
-                        rules={{ required: 'user-name required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
-                            return (
-                                <TextField
-                                    hideUnderline
-                                    error={errors.username ? errors.username.message : ''}
+                <Formik 
+                        initialValues={props.initialValues}
+                        onSubmit={onSubmit}
+                        validationSchema={schema}
+                    >
+                        {() => (
+                            <View>
+                                <CustomTextInput 
+                                    name="user-name" 
+                                    errors={props.errors.username}
                                     maxLength={16}
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
-                                    {
-                                        onBlur();
-                                        clearErrors( 'user-name' );
-                                    }}
-                                    value={value}
-                                    style={[GS.input, { backgroundColor: Colors.background }]}
-                                    title="user-name"
-                                />
-                            );
-                        }}
-                    />
-                    <Controller
-                        name="email"
-                        control={control}
-                        rules={{ required: 'email required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
-                            return (
-                                <TextField
-                                    hideUnderline
-                                    error={errors.email ? errors.email.message : ''}
-                                    maxLength={56}
-                                    onChangeText={( e: any ) => onChange( e )}
-                                    onBlur={() =>
-                                    {
-                                        onBlur();
-                                        clearErrors( 'email' );
-                                    }}
-                                    value={value}
-                                    style={[GS.input, { backgroundColor: Colors.background }]}
-                                    title="Email"
-                                />
-                            );
-                        }}
-                    />
-                    <Controller
-                        name="password"
-                        control={control}
-                        rules={{ required: 'password required' }}
-                        render={( { onChange, onBlur, value } ) =>
-                        {
-                            return (
-                                <TextField
-                                    hideUnderline
-                                    error={errors.password ? errors.password.message : ''}
-                                    maxLength={16}
+                                    onChangeText={props.handleChange("username")}
+                                    onBlur={props.handleBlur("username")}
+                                    value={props.values.username}
+                                    style={[GS.input, { backgroundColor: Colors.background,  width:"100%" }]}
+                                /> 
+                                <CustomTextInput 
+                                name="email" 
+                                errors={props.errors.email}
+                                maxLength={16}
+                                onChangeText={props.handleChange("email")}
+                                onBlur={props.handleBlur("email")}
+                                value={props.values.email}
+                                style={[GS.input, { backgroundColor: Colors.background,  width:"100%" }]}
+                            />
+                                   <CustomTextInput 
+                                    name="password" 
                                     secureTextEntry={true}
-                                    onChangeText={onChange}
-                                    onBlur={onBlur()}
-                                    value={value}
-                                    style={[GS.input, { backgroundColor: Colors.background }]}
-                                    title="password"
+                                    errors={props.errors.password}
+                                    maxLength={16}
+                                    onChangeText={props.handleChange("password")}
+                                    onBlur={props.handleBlur("password")}
+                                    value={props.values.password}
+                                    style={[GS.input, { backgroundColor: Colors.background,  width:"100%" }]}
                                 />
-                            );
-                        }}
-                    />
+                            </View>
+
+                        )}
+                    </Formik>
                 </View>
             </View>
             <View marginT-20 style={{ width: '100%' }}>
                 <TouchableOpacity
-
-                    onPress={() => handleSubmit( onSubmit )()}
+                    accessibilityStates={[]}
+                    onPress={props.handleSubmit}
                     center
                     bg-background
                     style={[style.btn, { borderColor: Colors.foreground }]}>
@@ -144,7 +132,9 @@ const Register = () =>
             </View>
             <View marginT-30 row center>
                 <Text muted >Already have an account?</Text>
-                <TouchableOpacity onPress={() => handleLoginPressed()}>
+                <TouchableOpacity
+                    accessibilityStates={[]}
+                    onPress={() => handleLoginPressed()}>
                     <Text btn primary> Login</Text>
                 </TouchableOpacity>
             </View>
