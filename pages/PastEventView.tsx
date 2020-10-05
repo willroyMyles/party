@@ -14,6 +14,7 @@ import PhotoGridImage from "../components/PhotoGridImage"
 import { GetIcon } from "../universal/GS"
 import moment from "moment"
 import { animated, useTransition } from "react-spring/native"
+import { getImage } from "../universal/GetImage"
 const width = Dimensions.get( "screen" ).width
 
 const PastEventView = () =>
@@ -65,6 +66,35 @@ const PastEventView = () =>
 		})
 	}, [] )
 
+	
+	const handleUpload = () =>
+	{
+		console.log("res");
+		FireStore.auth.needAuth().then( res =>
+		{
+			
+			if ( res )
+			{
+				getImage().then( ( res ) =>
+				{
+					if ( !res.cancelled )
+					{
+						FireStore.send.sendPicturesToEvent( referenceNumber, res.uri ).then( ( res ) =>
+						{
+							if ( res )
+							{
+								TToast.success( "Success", "Everythings good to go!" )
+							} else
+							{
+								TToast.error( "Error", "Something went wrong" )
+							}
+						} )
+					}
+				} )
+			}
+		} )
+	}
+
 // @refresh reset
 
 	const VIMG = animated( View )
@@ -86,30 +116,7 @@ const PastEventView = () =>
 	if ( item ) return (
 		<View bg-background style={{ minHeight:"100%" }}>
 
-			<TouchableOpacity center style={{
-				position: "absolute",
-				right: 25,
-				bottom: 25,
-				elevation: 7,
-				borderRadius: 100,
-				backgroundColor: Colors.background,
-				padding: 7,
-				width: 50,
-				height: 50,
-			}}>
-				<View row centerV spread>
-					{/* <Icon name="camera" color={Colors.primary} size={33} /> */}
-					<Icon
-						name="plus"
-						color={Colors.primary}
-						size={23}
-						style={{
-							padding: 3,
-							borderRadius: 50,
-						}}
-					/>
-				</View>
-			</TouchableOpacity>
+		
 
 				<FlatList
 					contentContainerStyle={{paddingBottom: 105,  width, marginVertical: 20, backgroundColor: Colors.foreground }}
@@ -199,6 +206,35 @@ const PastEventView = () =>
 
 
 				/>
+					<TouchableOpacity center 
+			accessibilityStates={[]}
+			onPress={(e)=>{			
+				handleUpload()
+			}}
+			style={{
+				position: "absolute",
+				right: 25,
+				bottom: 25,
+				elevation: 7,
+				borderRadius: 100,
+				backgroundColor: Colors.background,
+				padding: 7,
+				width: 50,
+				height: 50,
+				borderWidth:.1
+			}}>
+				<View row centerV spread>
+					<Icon
+						name="plus"
+						color={Colors.primary}
+						size={23}
+						style={{
+							padding: 3,
+							borderRadius: 50,
+						}}
+					/>
+				</View>
+			</TouchableOpacity>
 		</View>
 	)
 }

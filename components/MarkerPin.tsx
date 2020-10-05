@@ -25,7 +25,7 @@ export const MarkerPinItem = (props: { value: FeedItemModel, onPressed? : (refer
 		return<>
 		<Marker
 			image={require( "../assets/images/marker.png" )}
-			pinColor="green"
+			pinColor={Colors.green20}
 			coordinate={coord}
 			onPress={() => props.onPressed ? props.onPressed( props.value.reference ) : null}
 		>

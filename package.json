@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "br" : "cd android && ./gradlew buildRelease && cd ../"
   },
   "dependencies": {
     "@ant-design/colors": "^4.0.5",

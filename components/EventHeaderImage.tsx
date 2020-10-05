@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Dimensions } from 'react-native'
-import { Image, TouchableOpacity, Colors } from 'react-native-ui-lib'
+import { Dimensions, TouchableOpacity } from 'react-native'
+import { Image, Colors } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 import { animated, useSpring } from 'react-spring/native'
 

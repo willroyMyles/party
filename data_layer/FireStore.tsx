@@ -296,10 +296,10 @@ class Store
     } )
   }
 
-  @action private GoogleLogin = () => new Promise( resolve =>
+  @action private GoogleLogin = () => new Promise( (resolve, reject) =>
   {
     FBS.social.GooglsSignIn().then( res => {      
-      resolve( res )} ).catch( err => resolve( false ) )
+      resolve( res )} ).catch( err => reject( err ) )
   } )
   @action private FacebookLogin = () => new Promise( resolve =>
   {

@@ -68,10 +68,15 @@ const Login = () => {
             goHome()
         } else {
             crashlytics().log(`google sign in didnt work ${res}`)
-
+            TToast.error("didnt log in ", "We had a problem logging you in" )
         }
 
-        crashlytics().crash()
+    }).catch(err=>{
+        console.log(err);
+        TToast.error("didnt log in ", "We had a problem logging you in" )
+        crashlytics().log(`google sign in didnt work ${err}`)
+        
+        
     })
 
 
@@ -133,19 +138,6 @@ const Login = () => {
                                     value={props.values.password}
                                     style={[GS.input, { backgroundColor: Colors.background,  width:"100%" }]}
                                 />
-                                {/* <TextField
-                                    hideUnderline
-                                    maxLength={16}
-                                    secureTextEntry={true}
-                                    error={formikProps.errors.password}
-                                    maxLength={16}
-                                    onChangeText={handleChange("password")}
-                                    onBlur={handleBlur("password")}
-                                    // value={values.password}
-                                    style={[GS.input, { backgroundColor: Colors.background }]}
-                                    title="Password"
-                                /> */}
-          
                             </View>
 
                         )}
