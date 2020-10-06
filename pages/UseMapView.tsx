@@ -9,6 +9,7 @@ import { useTheme } from 'styled-components'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import BackDrop from '../components/BackDrop'
+import tm from '../universal/UiManager'
 
 const { width, height } = Dimensions.get("screen")
 const UseMapView = () => {
@@ -50,6 +51,7 @@ const UseMapView = () => {
         <View flex>
             <MapView showsMyLocationButton
                 toolbarEnabled
+                customMapStyle={tm.maptype}
                 style={{ width, height }}
                 ref={map}
                 showsUserLocation

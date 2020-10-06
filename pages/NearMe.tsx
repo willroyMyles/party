@@ -20,6 +20,7 @@ import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import psuedoLocationTracker, { radius } from '../data_layer/PsuedoLocationTracker';
 import { AppState, AppStateStatus } from 'react-native';
 import { observer } from 'mobx-react';
+import tm from '../universal/UiManager';
 
 const foregroundTask = "online geo tasks"
 const backgroundTask = "offline geo tasks"
@@ -198,6 +199,7 @@ const NearMe = () =>
                 onUserLocationChange={userLocationChanged}
                 onPress={() => setFocusedEvent( "" )}
                 onTouchStart={()=> setFocusedEvent("")}
+                customMapStyle={tm.theme.maptype}
                 style={{ width: '100%', height: '100%' }}
                 provider={PROVIDER_GOOGLE}>
                 {region && <Circle

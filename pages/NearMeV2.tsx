@@ -38,6 +38,7 @@ import {
 import {eventEmitter, eventStrings} from '../universal/EventEmitter';
 import Mapcard from '../components/Mapcard';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import tm from '../universal/UiManager';
 
 const radius = 600;
 const taskName = 'geoLocation';
@@ -147,6 +148,7 @@ class NearMeV2 extends PureComponent {
       <View flex>
         {this.state.region && (
           <MapView
+          customMapStyle={tm.maptype}
             ref={this.map}
             followsUserLocation
             showsScale

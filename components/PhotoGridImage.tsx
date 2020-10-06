@@ -13,6 +13,7 @@ const GetCopy = () =>
 
 
 const {width, height} = Dimensions.get("screen")
+
 const PhotoGridImage = ( { numOfCols, wid, index, img, urls }: any ) =>
 {
     const notIt = index % numOfCols == 0

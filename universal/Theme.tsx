@@ -4,46 +4,6 @@ import { Colors, Typography } from "react-native-ui-lib"
 import { StyleSheet } from "react-native"
 import { observable } from 'mobx'
 
-export interface Theme
-{
-	background: string
-	text1: string
-	text2: string
-	muted: string
-	caption: string
-	primary: string
-	secondary: string
-	bgHilight: string
-	foreground: string
-}
-
-const storm = "#112432"
-const light = generate( Colors.violet40 )
-
-export const lightTheme: Theme = {
-	primary: light[5],
-	secondary: light[2],
-	text1: Colors.grey10,
-	text2: "rgba(85,85,85,1)",
-	muted: Colors.grey50,
-	caption: Colors.grey60,
-	background: "rgba(245,245,250,1)",
-	foreground: "rgba(253,253,253,1)",
-	bgHilight: "rgba(240,243,245,1)",
-}
-
-export const darkTheme: Theme = {
-	primary: light[5],
-	secondary: light[7],
-	text1: "rgba(250,250,250,.9)",
-	text2: Colors.grey60,
-	muted: Colors.grey30,
-	caption: Colors.grey30,
-	background: "rgba(27,39,49,1)",
-	foreground: "rgba(47,59,69,1)",
-	bgHilight: "rgba(55,63,65,.3)",
-}
-
 
 export const DarkMapStyleWithoutLandmarks = [
 	{
@@ -241,11 +201,114 @@ export const DarkMapStyleWithoutLandmarks = [
 	},
 ]
 
+export const LightMpaStyle = [
+	{	  featureType: "administrative.land_parcel",
+	  elementType: "labels",
+	  stylers: [
+		{
+		  visibility: "off"
+		}
+	  ]
+	},
+	{
+	  featureType: "poi",
+	  elementType: "labels.text",
+	  stylers: [
+		{
+		  visibility: "off"
+		}
+	  ]
+	},
+	{
+	  featureType: "poi.business",
+	  stylers: [
+		{
+		  visibility: "off"
+		}
+	  ]
+	},
+	{
+	  featureType: "road",
+	  elementType: "labels.icon",
+	  stylers: [
+		{
+		  visibility: "off"
+		}
+	  ]
+	},
+	{
+	  featureType: "road.local",
+	  elementType: "labels",
+	  stylers: [
+		{
+		  visibility: "off"
+		}
+	  ]
+	},
+	{
+	  featureType: "transit",
+	  stylers: [
+		{
+		  visibility: "off"
+		}
+	  ]
+	}
+  ]
+export interface Theme
+{
+	background: string
+	text1: string
+	text2: string
+	muted: string
+	caption: string
+	primary: string
+	secondary: string
+	bgHilight: string
+	foreground: string
+
+	maptype : any
+}
+
+const storm = "#112432"
+const light = generate( Colors.violet40 )
+
+export const lightTheme: Theme = {
+	primary: light[5],
+	secondary: light[2],
+	text1: Colors.grey10,
+	text2: "rgba(85,85,85,1)",
+	muted: Colors.grey50,
+	caption: Colors.grey60,
+	background: "rgba(245,245,250,1)",
+	foreground: "rgba(253,253,253,1)",
+	bgHilight: "rgba(240,243,245,1)",
+
+	maptype : LightMpaStyle
+}
+
+export const darkTheme: Theme = {
+	primary: light[5],
+	secondary: light[7],
+	text1: "rgba(250,250,250,.9)",
+	text2: Colors.grey60,
+	muted: Colors.grey30,
+	caption: Colors.grey30,
+	background: "rgba(27,39,49,1)",
+	foreground: "rgba(47,59,69,1)",
+	bgHilight: "rgba(55,63,65,.3)",
+
+
+	maptype : DarkMapStyleWithoutLandmarks
+}
+
+
+
 
 class ThemeHelper
 {
 	reviseLoading = ( t: Theme ) => new Promise( resolve =>
 	{
+		if(t)
 
 		Colors.loadColors( {
 			background: t.background,
