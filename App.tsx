@@ -30,7 +30,7 @@ import uuidv4 from 'uuid';
 import { GetLocationPermission } from './universal/GetLocation';
 import RateParty from './components/RateParty';
 import { AppEventsLogger } from 'react-native-fbsdk';
-
+import SplashScreen from 'react-native-splash-screen'
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
 {
@@ -41,11 +41,14 @@ if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimenta
 
 const App = () =>
 {
+  SplashScreen.hide()
   const theme = useTheme()
   const [loading, setLoading] = useState( true )
-  let webview = useRef<WebView | null>( null )
   useEffect( () =>
   {
+
+    console.log("app loading");
+    
     tm.setThemeType( false )
     Font.loadAsync( {
       // Nunito_Black: require( "./assets/fonts/Nunito/Nunito-Black.ttf" ),
@@ -53,7 +56,7 @@ const App = () =>
     } ).then( () =>
     {
       setLoading( false )
-      // SplashScreen.hideAsync()
+
 
      GetLocationPermission()
     } )
