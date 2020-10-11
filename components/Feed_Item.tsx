@@ -8,6 +8,7 @@ import moment from "moment"
 import BackDrop from "./BackDrop"
 import FireStore from "../data_layer/FireStore"
 import { Dimensions } from "react-native"
+import PartyTypeBadge from "./PartyTypeBadge"
 // import * as faker from "faker"
 const { width, height } = Dimensions.get( "screen" )
 
@@ -90,8 +91,13 @@ const Feed_Item = ( { reference }: { reference: string } ) =>
 								</View>
 							</View>
 							<View >
+								<View>
 								<Text muted>Rating</Text>
 								<Text regular>random stars?</Text>
+								</View>
+								<View>
+									<PartyTypeBadge type={item.partyType} />
+								</View>
 							</View>
 						</View>
 					</View>

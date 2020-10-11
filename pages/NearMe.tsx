@@ -21,6 +21,7 @@ import psuedoLocationTracker, { radius } from '../data_layer/PsuedoLocationTrack
 import { AppState, AppStateStatus } from 'react-native';
 import { observer } from 'mobx-react';
 import tm from '../universal/UiManager';
+import { getColorForType } from '../universal/GS';
 
 const foregroundTask = "online geo tasks"
 const backgroundTask = "offline geo tasks"
@@ -273,10 +274,12 @@ const ShowEventOnMarkerPressed = ( {
                         <Marker
                             ref={mark}
                             key={value.reference}
-                            image={require( "../assets/images/marker.png" )}
-                            pinColor="green"
+                            // image={require( "../assets/images/marker.png" )}
+                            pinColor={getColorForType(value.partyType)}
                             coordinate={coord}
                             onPress={() => onPress( value.reference || "" )}
+
+                            flat
                         >
 
                         </Marker>

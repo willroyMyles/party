@@ -7,38 +7,30 @@ import FireStore from "../data_layer/FireStore"
 import { FlatList } from "react-native-gesture-handler"
 import Feed_itemV2 from "./Feed_itemV2"
 import Feed_Item from "./Feed_Item"
+import { observer } from "mobx-react"
 
 const RSVPModule = () =>
 {
 
-	const [data, setData] = useState<FeedItemModel[] | undefined>()
 	useEffect( () =>
 	{
 
-		FireStore.retrieve.rsvpEvents().then( res =>
-		{
-			const d = [...FireStore.rsvpData.values()]
-			setData( d )
-
-		} ).catch( err =>
+		FireStore.retrieve.rsvpEvents().catch( err =>
 		{
 			console.log( "rsvp error", err );
-
+			
 		} )
-		return () =>
-		{
-		}
 	}, [] )
 
-	if ( data ) return (
+	if ( [...FireStore.rsvpData.values()].length > 0 ) return (
 		<View marginT-30 style={{ width: "100%" }}>
 			<View>
-				<Text lvl2>{data.length} RSVP parties</Text>
+				<Text lvl2>{[...FireStore.rsvpData.values()].length} RSVP parties</Text>
 			</View>
 
 			<View br20 marginT-0 style={{ borderBottomWidth: 0, borderBottomColor: Colors.foreground }}>
 				<FlatList
-					data={data}
+					data={[...FireStore.rsvpData.values()]}
 					horizontal
 					keyExtractor={( item, index ) => item + "" + index + ""}
 					renderItem={( { item, index } ) =>
@@ -54,4 +46,4 @@ const RSVPModule = () =>
 	return <View />
 }
 
-export default RSVPModule
+export default observer(RSVPModule)

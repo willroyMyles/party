@@ -73,7 +73,7 @@ const V = animated(View)
             ...props
             // ...values
         }}>
-            <Modal visible={show}>
+            <Modal visible={show} onRequestClose={() => setShow(false)}>
                 <ImageViewer imageUrls={urlData} index={index} enableSwipeDown swipeDownThreshold={200} onCancel={() => handlePressed( false )} />
             </Modal>
             

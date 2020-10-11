@@ -11,6 +11,39 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler'
 
 export const AFL = Animated.createAnimatedComponent( FlatList )
 
+export const getTabBarIcon = (text:string) =>{
+	switch(text){
+		case "splotch" : return AssetImages.picture
+		case "map" : return AssetImages.nearby
+		case "th-large" : return AssetImages.home
+		case "trophy" : return AssetImages.leaderboard
+		case "user-cog" : return AssetImages.profile
+	}
+}
+
+export const AssetImages = {
+	bluePin : require("../assets/images/blu.png"),
+	redPin : require("../assets/images/red.png"),
+	greenPin : require("../assets/images/green.png"),
+	purplePin : require("../assets/images/purple.png"),
+	home : require("../assets/images/Home.png"),
+	leaderboard : require("../assets/images/Leaderboard.png"),
+	location : require("../assets/images/Location.png"),
+	nearby : require("../assets/images/nearby.png"),
+	picture : require("../assets/images/picture.png"),
+	profile : require("../assets/images/profile.png"),
+
+}
+
+export const getColorForType = (type : PartyType, background = false) => {
+	switch(type){
+		case PartyType.LOUNGE : return background? Colors.red70 : Colors.red20
+		case PartyType.CLUB : return background? Colors.green70 : Colors.green20
+		case PartyType.WATER_PARTY : return background? Colors.blue70 : Colors.blue20
+		case PartyType.OUTDOOR : return background? Colors.purple70 : Colors.purple20
+	}
+}
+
 export const GetIcon = ( { name }: { name: string } ) =>
 {
 	const theme = useTheme()

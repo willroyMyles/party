@@ -12,6 +12,7 @@ import BackDrop from '../components/BackDrop'
 import tm from '../universal/UiManager'
 
 const { width, height } = Dimensions.get("screen")
+
 const UseMapView = () => {
 
     const theme = useTheme()

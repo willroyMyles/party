@@ -133,6 +133,8 @@ const CreateEvent = () =>
         {
             if(res.length == 0) return
             const locObj = res[0]
+            console.log(locObj);
+            
             setLocObj(locObj)
             setValue( "locationObject", locObj )
             setValue( 'location', [loc?.latitude, loc?.longitude].toString() );
@@ -426,13 +428,12 @@ const CreateEvent = () =>
                         {
                             return (
                                 <TouchableWithoutFeedback onPress={handleShowTime}>
-                                    <View>
+                                    <View pointerEvents="none">
                                         <TextField
                                             hideUnderline
                                             error={errors.start ? errors.start.message : ''}
                                             maxLength={16}
                                             showsMaxLength
-                                            defaultValue=""
                                             value={timeValue}
                                             title="Start Time"
                                             style={[GS.input, { backgroundColor: Colors.background, color: Colors.text1 }]}
@@ -501,7 +502,7 @@ const CreateEvent = () =>
                                 }}>
                                     <View pointerEvents="none"
                                     >
-                                        {locObj ? <LocationBlock info={locObj} /> : <TextField
+                                        {locObj ? <LocationBlock {...locObj} /> : <TextField
                                             hideUnderline
                                             error={errors.location ? errors.location.message : ''}
                                             maxLength={16}

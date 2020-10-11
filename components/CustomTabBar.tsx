@@ -4,6 +4,8 @@ import { NavigationState, useNavigation, NavigationContext, NavigationProp } fro
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { useTheme } from 'styled-components';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
+import { Image } from 'react-native';
+import { getTabBarIcon } from '../universal/GS';
 
 function CustomTabBar( { state, descriptors, navigation }: { state: NavigationState, descriptors: any, navigation: NavigationProp<any> } )
 {
@@ -38,16 +40,7 @@ function CustomTabBar( { state, descriptors, navigation }: { state: NavigationSt
 
         const onPress = () =>
         {
-            // const event = navigation.dispatch({
-            //   type: 'tabPress',
-            //   target: route.key,
-            // });
-
-          console.log(route.name);
-          
-
-          
-            navigation.navigate( route.name );
+                      navigation.navigate( route.name );
           
         };
 
@@ -70,14 +63,17 @@ function CustomTabBar( { state, descriptors, navigation }: { state: NavigationSt
             center
             style={{
               flex: 1,
-              paddingVertical: 10,
+              paddingVertical: 7,
 
             }}
           >
-            {tabBarIcon && <Icon name={tabBarIcon()} size={20} color={color} />}
-            <Text marginT-4 lvl3 adjustsFontSizeToFit allowFontScaling style={{ color, textTransform: "uppercase" }}>
+            <Image source={getTabBarIcon(tabBarIcon())} style={{
+              tintColor : color
+            }}/>
+            {/* {tabBarIcon && <Icon name={tabBarIcon()} size={20} color={color} />} */}
+            {/* <Text marginT-4 lvl3 adjustsFontSizeToFit allowFontScaling style={{ color, textTransform: "uppercase" }}>
               {label}
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         );
       } )}

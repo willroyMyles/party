@@ -299,13 +299,14 @@ export interface Theme
 
 const storm = "#112432"
 const light = generate( Colors.violet40 )
+console.log(Colors.grey50);
 
 export const lightTheme: Theme = {
 	primary: light[5],
 	secondary: light[2],
 	text1: Colors.grey10,
 	text2: "rgba(85,85,85,1)",
-	muted: Colors.grey50,
+	muted: "rgba(170,170,170,1)",
 	caption: Colors.grey60,
 	background: "rgba(245,245,250,1)",
 	foreground: "rgba(253,253,253,1)",

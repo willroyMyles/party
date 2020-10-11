@@ -14,7 +14,7 @@ import LoaderImage from '../components/LoaderImage';
 import SearchBar from '../components/SearchBar';
 import FireStore from '../data_layer/FireStore';
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
-import { GetPartytypeString } from '../universal/GS';
+import { getColorForType, GetPartytypeString } from '../universal/GS';
 import { PartyType } from '../universal/Models';
 const { width, height } = Dimensions.get( 'screen' );
 // @refresh reset
@@ -110,8 +110,9 @@ const PartyCard = ( { item }: { item: string } ) =>
 {
     const theme = useTheme();
     const navigation = useNavigation();
-    const text = GetPartytypeString( PartyType[item] );
-    const amount = [...FireStore.data.values()].filter( ( a ) => a.partyType  == PartyType[item] ).length
+    const type = PartyType[item]
+    const text = GetPartytypeString( type );
+    const amount = [...FireStore.data.values()].filter( ( a ) => a.partyType  == type ).length
     const data = FireStore.categorizedData
         .get( item )
         ?.filter( ( item, index ) => index < 3 ); //limit data to three items
@@ -210,7 +211,7 @@ const PartyCard = ( { item }: { item: string } ) =>
                                     zIndex: 2,
                                     paddingLeft: 9,
                                 }}>
-                                <Text lvl2 muted>{value.title}</Text>
+                                <Text lvl2 >{value.title}</Text>
                             </View>
                         </V>
                     );
@@ -224,10 +225,10 @@ const PartyCard = ( { item }: { item: string } ) =>
                     left: 0,
                     padding: 10,
                     paddingTop: 20,
-                    backgroundColor: Colors.foreground,
+                    backgroundColor: getColorForType(type, true),
                     width: '100%',
                 }}>
-                <Text lvl2>{text}</Text>
+                <Text lvl2 style={{color:getColorForType(type)}}>{text}</Text>
                 {/* <View bg-background paddingH-5 center style={{ borderRadius:3}}>
                     <Text lvl2>{amount}</Text>
                 </View> */}
