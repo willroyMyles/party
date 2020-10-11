@@ -34,7 +34,7 @@ function CustomTabBar( { state, descriptors, navigation }: { state: NavigationSt
               : route.name;
 
         const isFocused = state.index === index;
-        const color = isFocused ? Colors.primary : Colors.muted + "55"
+        const color = isFocused ? Colors.primary : Colors.muted
 
         const onPress = () =>
         {

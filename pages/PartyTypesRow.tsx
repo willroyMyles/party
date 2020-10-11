@@ -228,9 +228,9 @@ const PartyCard = ( { item }: { item: string } ) =>
                     width: '100%',
                 }}>
                 <Text lvl2>{text}</Text>
-                <View bg-background paddingH-5 center style={{ borderRadius:3}}>
+                {/* <View bg-background paddingH-5 center style={{ borderRadius:3}}>
                     <Text lvl2>{amount}</Text>
-                </View>
+                </View> */}
             </View>
         </TouchableOpacity>
     );

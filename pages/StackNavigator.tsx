@@ -53,8 +53,8 @@ const StackNavigator = () =>
     return (
         <View flex>
             <NavigationContainer >
-                <Stack.Navigator initialRouteName="wait" screenOptions={{ headerShown: false, ...prest }}>
-                    <Stack.Screen name="wait" component={WaitingScreen} />
+                <Stack.Navigator screenOptions={{ headerShown: false, ...prest }}>
+                    {/* <Stack.Screen name="wait" component={WaitingScreen} /> */}
                     <Stack.Screen name="home" component={HomeNavigator} />
                     <Stack.Screen name="login" component={Login} />
                     <Stack.Screen name="register" component={Register} />

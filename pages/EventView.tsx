@@ -69,7 +69,7 @@ const EventView = () =>
                     <View marginT-20 row>
                         <GetIcon name="info" />
                         <View marginL-10>
-                            <Text marginT-7 marginB-3 lvl3 text3>About</Text>
+                            <Text marginT-7 marginB-3 lvl3 text3>Description</Text>
                             <Text lvl2>{item.description}</Text>
                         </View>
                     </View>

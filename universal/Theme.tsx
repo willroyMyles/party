@@ -25,7 +25,7 @@ export const lightTheme: Theme = {
 	secondary: light[2],
 	text1: Colors.grey10,
 	text2: "rgba(85,85,85,1)",
-	muted: Colors.grey50,
+	muted: Colors.grey40,
 	caption: Colors.grey60,
 	background: "rgba(245,245,250,1)",
 	foreground: "rgba(253,253,253,1)",
