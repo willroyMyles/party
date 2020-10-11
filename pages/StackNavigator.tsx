@@ -17,6 +17,7 @@ import SearchComponent from '../components/SearchComponent';
 import SearchPage from './SearchPage';
 import CategoryView from './CategoryView';
 import ResetPassword from './auth/ResetPassword';
+import WaitingScreen from './WaitingScreen';
 
 const Stack = createStackNavigator()
 const prest = TransitionPresets.SlideFromRightIOS
@@ -53,6 +54,7 @@ const StackNavigator = () =>
         <View flex>
             <NavigationContainer >
                 <Stack.Navigator screenOptions={{ headerShown: false, ...prest }}>
+                    {/* <Stack.Screen name="wait" component={WaitingScreen} /> */}
                     <Stack.Screen name="home" component={HomeNavigator} />
                     <Stack.Screen name="login" component={Login} />
                     <Stack.Screen name="register" component={Register} />

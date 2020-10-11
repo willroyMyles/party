@@ -1,6 +1,7 @@
+import { useBackButton } from '@react-navigation/native'
 import { HeaderHeightContext } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
-import { Dimensions, Modal } from 'react-native'
+import { BackHandler, Dimensions, Modal } from 'react-native'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import { View, Text, TouchableOpacity, Colors, Image } from 'react-native-ui-lib'
 import { useSpring, animated, useTransition } from 'react-spring/native'
@@ -20,6 +21,7 @@ const PhotoGridImage = ( { numOfCols, wid, index, img, urls }: any ) =>
     const [show, setShow] = useState( false )
     const [urlData, seturlData] = useState( [] )
     const [values, setValues] = useState<any>()
+
     
     const [props, set] = useSpring( () => ( {
         from: { opacity:1, num:0.97},
@@ -34,6 +36,8 @@ const PhotoGridImage = ( { numOfCols, wid, index, img, urls }: any ) =>
 
     const handlePressed = (val : boolean) =>
     {
+        BackHandler.addEventListener( "hardwareBackPress", dismiss )
+
         setShow(val)
     }
 
@@ -43,10 +47,20 @@ const PhotoGridImage = ( { numOfCols, wid, index, img, urls }: any ) =>
         {
             arr.push( { url: val } )
         } )
+        BackHandler.addEventListener( "hardwareBackPress", dismiss )
 
         seturlData( arr )
 
-    }, [])
+    }, [] )
+    
+    const dismiss = () =>
+    {
+        console.log("Setted");
+        
+        // setShow( false )
+        // BackHandler.removeEventListener( "hardwareBackPress", dismiss )
+        return undefined
+    }
 
 const V = animated(View)
     return (

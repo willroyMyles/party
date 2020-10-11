@@ -88,7 +88,6 @@ const Register = () =>
                                 <CustomTextInput 
                                     name="user-name" 
                                     errors={props.errors.username}
-                                    maxLength={16}
                                     onChangeText={props.handleChange("username")}
                                     onBlur={props.handleBlur("username")}
                                     value={props.values.username}
@@ -97,7 +96,6 @@ const Register = () =>
                                 <CustomTextInput 
                                 name="email" 
                                 errors={props.errors.email}
-                                maxLength={16}
                                 onChangeText={props.handleChange("email")}
                                 onBlur={props.handleBlur("email")}
                                 value={props.values.email}
@@ -107,7 +105,6 @@ const Register = () =>
                                     name="password" 
                                     secureTextEntry={true}
                                     errors={props.errors.password}
-                                    maxLength={16}
                                     onChangeText={props.handleChange("password")}
                                     onBlur={props.handleBlur("password")}
                                     value={props.values.password}
