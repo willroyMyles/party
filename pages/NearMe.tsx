@@ -8,12 +8,12 @@ import MapView, {
     PROVIDER_GOOGLE,
     Region,
 } from 'react-native-maps';
-import { View, Colors } from 'react-native-ui-lib';
+import { View, Colors, TouchableOpacity, Text } from 'react-native-ui-lib';
 import { useTheme } from 'styled-components';
 import Mapcard from '../components/Mapcard';
 import FireStore from '../data_layer/FireStore';
 import { getLatitudeLongitudeFromString, getLocation, getRegion } from '../universal/GetLocation';
-import { FeedItemModel } from '../universal/Models';
+import { FeedItemModel, PartyType } from '../universal/Models';
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
@@ -21,7 +21,10 @@ import psuedoLocationTracker, { radius } from '../data_layer/PsuedoLocationTrack
 import { AppState, AppStateStatus } from 'react-native';
 import { observer } from 'mobx-react';
 import tm from '../universal/UiManager';
-import { getColorForType } from '../universal/GS';
+import { getColorForType, GetPartytypeString } from '../universal/GS';
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import ActionSheet from 'react-native-actionsheet'
+import CustomActionSheet from '../components/CustomActionSheet';
 
 const foregroundTask = "online geo tasks"
 const backgroundTask = "offline geo tasks"
@@ -191,6 +194,37 @@ const NearMe = () =>
         startForegroundTasks( d )
     };
 
+    const filterOptions = () =>
+    {
+        const arr: string[] = []
+        Object.values( PartyType ).map( ( val, index ) =>
+        {
+            const num = Number.parseInt( val )
+            if ( isNaN( num ) ) return
+            const str = GetPartytypeString( num )
+            arr.push( str )
+        } )
+
+
+        return arr;
+    }
+
+    const handleFilterPressed = () =>
+    {
+        actionSheet.current?.show()
+    }
+
+    const setFilter = ( index: number ) =>
+    {
+        if ( index == 5 ) return
+        const threshold = Object.values( PartyType).length / 2
+        const arr = index < threshold ?  [...FireStore.data.values()].filter((a) => a.partyType == index) : [...FireStore.data.values()]
+        setMarkers( arr );
+    }
+
+    let actionSheet = useRef<ActionSheet | any>()
+
+
     // if ( region )
     return (
         <View style={{ backgroundColor: Colors.background }}>
@@ -219,6 +253,34 @@ const NearMe = () =>
 
 
             </MapView>
+            <ActionSheet
+                ref={actionSheet}
+                title={<Text lvl2 marginV-10 >Which party type do you wnat to filter by?</Text>}
+                options={[...filterOptions(),"all", 'cancel']}
+                cancelButtonIndex={filterOptions().length +1}
+                destructiveButtonIndex={filterOptions().length +1}
+                onPress={setFilter}
+            />
+  
+            <View center style={{
+                position: "absolute",
+                top: 80,
+                right: 20,
+                width: 40,
+                height: 40,
+                backgroundColor: Colors.foreground,
+                borderRadius: 10,
+                elevation:10
+            }}>
+                <View>
+                    <TouchableOpacity
+                        onPress={handleFilterPressed}    
+                    >
+                        <Icon name="sliders-h" size={23} color={Colors.text1} />
+
+                    </TouchableOpacity>
+                </View>
+            </View>
             <View
                 padding-10
                 center

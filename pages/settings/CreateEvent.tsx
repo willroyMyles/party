@@ -62,7 +62,7 @@ const CreateEvent = () =>
     const [dateShown, setDateShown] = useState( false );
     const [timeShown, settimeShown] = useState( false );
     const [locObj, setLocObj] = useState<any>(undefined)
-    let actionSheet = useRef<ActionSheet | null>()
+    let actionSheet = useRef<ActionSheet | any>()
 
     const partyOptions = () =>
     {
@@ -179,9 +179,7 @@ const CreateEvent = () =>
             <ActionSheet
                 ref={actionSheet}
                 title={<Text lvl2 marginV-10 >Which party are you keeping?</Text>}
-
                 options={[...partyOptions(), 'cancel']}
-
                 cancelButtonIndex={partyOptions().length }
                 destructiveButtonIndex={partyOptions().length }
                 onPress={setParty}

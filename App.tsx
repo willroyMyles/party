@@ -77,8 +77,7 @@ const App = () =>
         <StackNavigator />
         <TToast />
         <RateParty />
-       
-
+      
       </View>
     </ThemeProvider>
   )
