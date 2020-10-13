@@ -29,8 +29,18 @@ export class Store
 		AsyncStorage.setItem( "locationGranted", val ? granted : notGranted )
 	}
 
-	l = autorun( () =>
-	{
+	constructor(){
+		AsyncStorage.getItem( "theme" ).then( ( res ) =>
+		{
+			this.setThemeType( ThemeType.DARK.toString() == res )
+			console.log(`setting theme? ${ThemeType[ res]}`);
+			
+		} ).catch(err=>{
+			// this.setThemeType(true)
+			console.log(err, "some error");
+			
+		})
+
 		if(this.isLocationGranted == undefined)
 		AsyncStorage.getItem( "locationGranted" ).then( res =>
 		{
@@ -43,22 +53,15 @@ export class Store
 			}			
 		})
 		
-	})
-
-	t = autorun( ( runner ) =>
-	{
-		if ( this.theme )
-		{
-			AsyncStorage.getItem( "theme" ).then( ( res ) =>
-			{
-				this.setThemeType( ThemeType.DARK.toString() == res )
-			} )
-		}
-		runner.dispose()
-	} )
+	}
 
 
 
+
+	/**
+	 * if true, sets the theme to dark else light
+	 * @param val : boolean
+	 */
 	@action setThemeType = ( val: boolean ) =>
 	{
 		new Promise( resolve =>
@@ -74,10 +77,6 @@ export class Store
 			this.setting.theme = val
 			this.theme = this.themeType == ThemeType.DARK ? darkTheme : lightTheme
 			AsyncStorage.setItem( "theme", this.themeType.toString() )
-			// Colors.loadColors({
-			// 	background: this.theme.background,
-			// 	primary: this.theme.primary,
-			// } )
 			themehelper.reviseLoading( this.theme )
 			resolve( true )
 		} )

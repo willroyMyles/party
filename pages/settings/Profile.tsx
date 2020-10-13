@@ -36,7 +36,7 @@ const Profile = () =>
         setdarkTheme( val )
         setTimeout(() => {
                 tm.setThemeType( val )
-        }, 300);
+        }, 10);
     }
 
     const handleLocationChanged = ( val: boolean ) =>
