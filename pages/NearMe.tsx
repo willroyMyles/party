@@ -24,7 +24,6 @@ import tm from '../universal/UiManager';
 import { getColorForType, GetPartytypeString } from '../universal/GS';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import ActionSheet from 'react-native-actionsheet'
-import CustomActionSheet from '../components/CustomActionSheet';
 
 const foregroundTask = "online geo tasks"
 const backgroundTask = "offline geo tasks"
