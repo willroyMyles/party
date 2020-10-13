@@ -122,7 +122,6 @@ const Login = () => {
                                 <CustomTextInput 
                                     name="email" 
                                     errors={props.errors.email}
-                                    maxLength={16}
                                     onChangeText={props.handleChange("email")}
                                     onBlur={props.handleBlur("email")}
                                     value={props.values.email}
@@ -132,7 +131,6 @@ const Login = () => {
                                     name="password" 
                                     secureTextEntry={true}
                                     errors={props.errors.password}
-                                    maxLength={16}
                                     onChangeText={props.handleChange("password")}
                                     onBlur={props.handleBlur("password")}
                                     value={props.values.password}

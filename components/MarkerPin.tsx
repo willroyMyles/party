@@ -11,7 +11,7 @@ const { width, height } = Dimensions.get( "screen" )
 const MarkerPin = (props: { marker?: LatLng }) => {
 	if (props.marker)
 		return <Marker image={require( "../assets/images/marker.png" )} pinColor="green" coordinate={props.marker}>
-			<Circle center={props.marker} radius={100} fillColor={Colors.grey30} />
+			{/* <Circle center={props.marker} radius={100} fillColor={Colors.grey30} /> */}
 		</Marker>
 	else return <View />
 }
@@ -30,7 +30,7 @@ export const MarkerPinItem = (props: { value: FeedItemModel, onPressed? : (refer
 			onPress={() => props.onPressed ? props.onPressed( props.value.reference ) : null}
 		>
 		</Marker>
-			<Circle center={coord} radius={100} fillColor={Colors.grey10} strokeColor={Colors.black} strokeWidth={3}  />
+			{/* <Circle center={coord} radius={100} fillColor={Colors.grey10} strokeColor={Colors.black} strokeWidth={3}  /> */}
 		</>
 	else return <View />
 }
