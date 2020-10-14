@@ -353,7 +353,19 @@ class Store
   } )
 
 
-  @action private checkUserLimitForPosting = () => FBS.events.limitUser()
+  @action private checkUserLimitForPosting = () => new Promise((resolve, reject) =>{
+    FBS.events.limitUser().then(res=>{
+      if(res){
+        resolve(res)
+      }else{
+        resolve(res)
+        Alert.alert("oh my!", "We noticed users have been posting parties too often, as such we have set a limit on two posting per seven days. thank you for your understanding.")
+      }
+    }).catch(err=>{
+      resolve(false)
+      Alert.alert("oops!", `something went horribly wrong. \n ${err}`)
+    })
+  })
 
   @action private getRsvpEvents = () => new Promise( ( resolve, reject ) =>
   {

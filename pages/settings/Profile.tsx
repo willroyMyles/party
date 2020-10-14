@@ -26,9 +26,12 @@ const Profile = () =>
         FireStore.auth.needAuth().then( res =>
         {
             if ( res )
-            {
-                navigation.navigate( "create event" )
-            }
+            FireStore.retrieve.limit().then(res=>{
+                if(res)   {
+                    navigation.navigate( "create event" )
+                }
+            })
+         
         } )
     }
     const handleCHnage = ( val: boolean ) =>
