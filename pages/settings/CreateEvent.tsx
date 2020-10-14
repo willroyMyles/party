@@ -298,7 +298,6 @@ const CreateEvent = () =>
                                         <TextField
                                             hideUnderline
                                             error={errors.title ? errors.title.message : ''}
-                                            maxLength={16}
 
                                             onChangeText={( e: any ) => onChange( e )}
                                             onBlur={() =>
@@ -365,7 +364,6 @@ const CreateEvent = () =>
                                             // editable={false}
                                             hideUnderline
                                             error={errors.partyType ? errors.partyType.message : ''}
-                                            maxLength={16}
                                             showsMaxLength
                                             onFocus={() => ShowActionSheet()}
 
@@ -405,7 +403,6 @@ const CreateEvent = () =>
                                             allowFontScaling
                                             hideUnderline
                                             error={errors.date ? errors.date.message : ''}
-                                            maxLength={16}
                                             value={dateValue}
                                             title="Event Date"
                                             autoGrow
@@ -430,7 +427,6 @@ const CreateEvent = () =>
                                         <TextField
                                             hideUnderline
                                             error={errors.start ? errors.start.message : ''}
-                                            maxLength={16}
                                             showsMaxLength
                                             value={timeValue}
                                             title="Start Time"
@@ -503,7 +499,6 @@ const CreateEvent = () =>
                                         {locObj ? <LocationBlock {...locObj} /> : <TextField
                                             hideUnderline
                                             error={errors.location ? errors.location.message : ''}
-                                            maxLength={16}
                                             onFocus={() =>
                                                 navigation.navigate( 'useMap', { set: onLocation } )
                                             }
