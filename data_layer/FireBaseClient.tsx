@@ -188,7 +188,7 @@ class Store
   {
     const order = "date"
 
-    const subscribe = firestore().collection( eventCollection ).orderBy(order).onSnapshot( doc =>
+    const subscribe = firestore().collection( eventCollection ).orderBy(order, "desc").onSnapshot( doc =>
     {
       onResult( doc );
     }, err =>
