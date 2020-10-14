@@ -106,6 +106,10 @@ const Profile = () =>
                     <BackDropV2 />
                 </TouchableOpacity>
             </View>
+
+  
+
+
             { auth().currentUser?.email == 'myleswillroy@gmail.com' &&   <View center marginT-40>
                     <TouchableOpacity row onPress={checButton} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>
                         <Text btn uppercase marginH-10 >check backend</Text>

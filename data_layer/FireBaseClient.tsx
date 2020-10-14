@@ -184,6 +184,37 @@ class Store
   getUsername = () => auth().currentUser?.displayName;
   getUserId = () => auth().currentUser?.uid;
 
+
+
+  private checkUserLimitForPosting = () => new Promise<boolean>((resolve, reject) =>{
+    const id = this.getUserId()
+    
+    firestore().collection(userCollection).doc(id).get().then(async res=>{
+      const data = res.data()
+      const events : string[] = data["events"]
+      const rsvps : string [] = data["rsvp"]
+      
+      if(events.length < 2) return resolve(true)
+      
+      const secondToLast = events[events.length - 2]
+      console.log("entered here", secondToLast);
+      const secondToLastDocument = await firestore().doc(`${eventCollection}/${secondToLast}`).get()
+      
+        if( secondToLastDocument == undefined) return resolve(true)
+        const days = 7
+        const secondToLastdate : Date = secondToLastDocument.data()["timeStamp"].toDate()
+        const now  = new Date()
+        const sevenDaysAgo = new Date(now.getTime() - (1000 * 60 * 60 * 24 * days))
+
+        resolve(secondToLastdate > sevenDaysAgo)
+        console.log(`${secondToLastdate > sevenDaysAgo}`);
+        
+
+        
+    }).catch(err=>{
+        reject(err)
+    })
+  })
   private linktorealTimeEvents = ( onResult :any ) =>
   {
     const order = "date"
@@ -197,7 +228,6 @@ class Store
         
     })
     return subscribe;
-    
   }
   getEventsInMultiplies = ( amount: number ) =>
   {
@@ -547,7 +577,8 @@ class Store
     getEventsByRatings:this.getEventsByRatings,
     moveEventsAround: this.moveEventsAround,
     increaseAttendance: this.increaseAttendance,
-    linktorealTimeEvents: this.linktorealTimeEvents
+    linktorealTimeEvents: this.linktorealTimeEvents,
+    limitUser: this.checkUserLimitForPosting
   };
 }
 

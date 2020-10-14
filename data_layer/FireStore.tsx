@@ -352,6 +352,9 @@ class Store
     } ).catch( err => reject( false ) )
   } )
 
+
+  @action private checkUserLimitForPosting = () => FBS.events.limitUser()
+
   @action private getRsvpEvents = () => new Promise( ( resolve, reject ) =>
   {
     FBS.events.getRsvpEvents().then( res =>
@@ -448,7 +451,8 @@ class Store
     rsvpEvents: this.getRsvpEvents,
     imageFromReference: this.getEventImageForReference,
     getPastEvents: this.getPastEvents,
-    getEventsByRatings: this.getEventsByRatings
+    getEventsByRatings: this.getEventsByRatings,
+    limit : this.checkUserLimitForPosting
   };
 
   send = {
