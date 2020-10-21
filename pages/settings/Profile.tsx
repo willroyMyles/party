@@ -14,6 +14,7 @@ import { GetLocationPermission } from '../../universal/GetLocation'
 import { observer } from 'mobx-react'
 import FBS from '../../data_layer/FireBaseClient'
 import auth from '@react-native-firebase/auth';
+import LoaderButton from '../../components/LoaderButton'
 
 const Profile = () =>
 {
@@ -21,16 +22,26 @@ const Profile = () =>
     const theme = useTheme()
     const navigation = useNavigation()
     const [darkTheme, setdarkTheme] = useState( false )
+    const [loading, setLoading] = useState(false)
+
     const handleCreateEvent = () =>
     {
+        console.log("let get started");
+        
+        setLoading(true)
         FireStore.auth.needAuth().then( res =>
         {
-            if ( res )
-            FireStore.retrieve.limit().then(res=>{
-                if(res)   {
-                    navigation.navigate( "create event" )
-                }
-            })
+            if ( res ){
+                FireStore.retrieve.limit().then(res=>{
+                    if(res)   {
+                        navigation.navigate( "create event" )
+                    }
+                    setLoading(false)
+                })
+            }else{
+                setLoading(false)
+            }
+
          
         } )
     }
@@ -102,12 +113,14 @@ const Profile = () =>
                 <RSVPModule />
             </View>
             <View center marginT-40>
-                <TouchableOpacity row onPress={handleCreateEvent} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>
 
+                     <LoaderButton loading={loading} onPress={handleCreateEvent} title={
+                         <View row>
                     <Icon name="plus" size={18} color={Colors.text1} />
                     <Text btn uppercase marginH-10 >create party</Text>
-                    <BackDropV2 />
-                </TouchableOpacity>
+                         </View >
+                     }  />
+            
             </View>
 
   

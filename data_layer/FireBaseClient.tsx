@@ -194,7 +194,7 @@ class Store
       const events : string[] = data["events"]
       const rsvps : string [] = data["rsvp"]
       
-      if(events.length < 2) return resolve(true)
+      if(events.length < 2 || events == undefined) return resolve(true)
       
       const secondToLast = events[events.length - 2]
       console.log("entered here", secondToLast);

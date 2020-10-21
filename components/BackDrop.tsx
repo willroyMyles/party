@@ -100,11 +100,9 @@ export const BackDropV2 = () =>
                 right: "-70%",
                 bottom: "0%",
                 borderRadius: 200,
-                elevation: 30,
+                elevation: 10,
 
             }} />
-
-
         </View>
     )
 }

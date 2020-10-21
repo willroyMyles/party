@@ -344,7 +344,7 @@ const ShowEventOnMarkerPressed = ( {
                         >
 
                         </Marker>
-                        <Circle center={coord} radius={100} fillColor={Colors.blue50} strokeColor={Colors.grey60} strokeWidth={3} />
+                        <Circle center={coord} radius={30} fillColor={Colors.black} strokeColor={Colors.grey20} strokeWidth={.5} />
                     </View>
                 else return <View key={value.reference} />
             } )}
