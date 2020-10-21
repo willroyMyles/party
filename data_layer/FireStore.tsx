@@ -354,6 +354,10 @@ class Store
 
 
   @action private checkUserLimitForPosting = () => new Promise((resolve, reject) =>{
+
+    //disabled for testing
+    if(true) return resolve(true)
+
     FBS.events.limitUser().then(res=>{
       if(res){
         resolve(res)

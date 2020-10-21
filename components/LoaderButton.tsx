@@ -15,8 +15,6 @@ const LoaderButton = ({ loading, onPress, title }: { loading: boolean, onPress: 
 
     const handleClick = () =>{
         if(loading) return;
-        console.log("clciked");
-        
         loading? null : onPress()
     }
 
