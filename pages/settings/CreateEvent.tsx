@@ -11,6 +11,7 @@ import
     Picker,
     Dialog,
     TextArea,
+    LoaderScreen,
 } from 'react-native-ui-lib';
 import { useTheme } from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -31,6 +32,7 @@ import ActionSheet from 'react-native-actionsheet'
 import * as Location from "expo-location"
 import PressableTextInput from '../../components/PressableTextInput';
 import LocationBlock from '../../components/LocationBlock';
+import LoaderButton from '../../components/LoaderButton';
 
 interface Flyer
 {
@@ -56,6 +58,7 @@ const CreateEvent = () =>
 
     const [image, setImage] = useState<string | null>( null );
     const [dialogVisible, setdialogVisible] = useState( false )
+    const [loading, setLoading] = useState(false);
 
     const [dateValue, setDateValue] = useState<string>();
     const [timeValue, setTimeValue] = useState<string>();
@@ -106,6 +109,7 @@ const CreateEvent = () =>
 
     const onSubmit = ( data: FeedItemModel ) =>
     {
+        setLoading(true);
         if ( typeof data.duration == typeof '' )
         {
             const str: string = data.duration + '';
@@ -124,7 +128,10 @@ const CreateEvent = () =>
                 TToast.success( "Great!", 'Event Created' )
                 navigation.navigate( "home" )
             } )
-            .catch( ( err ) => TToast.error( 'oh my!', err ) );
+            .catch( ( err ) => {
+                setLoading(false);
+                TToast.error( 'oh my!', err )
+            } );
     };
 
     const onLocation = ( loc: Region ) =>
@@ -519,6 +526,10 @@ const CreateEvent = () =>
                                 />
                 </View>
 
+
+
+
+
                     <TouchableOpacity
                         bg-background
                     onPress={() =>
@@ -528,8 +539,14 @@ const CreateEvent = () =>
                         activeOpacity={0.8}
                         center
                         style={style.btn}>
-                    <BackDrop />
+<View row>
+<BackDrop />
                     <Text btn uppercase style={{ padding: 10, textShadowRadius: 0.4 }}>create party</Text>
+</View>
+
+                    {loading && <View style={{height:25}}>
+                    <LoaderScreen color={Colors.primary }/>
+                    </View>}
                 </TouchableOpacity>
             </View>
         </ScrollView>
