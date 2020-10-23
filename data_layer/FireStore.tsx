@@ -6,6 +6,7 @@ import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import { Alert } from 'react-native';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { date } from 'faker';
 
 
 class Store
@@ -23,7 +24,6 @@ class Store
 
   organizeStream = ( docs: FirebaseFirestoreTypes.QuerySnapshot ) =>
   {
-    this.counter++
 
     docs.forEach( ( doc, index ) =>
     {
@@ -31,7 +31,7 @@ class Store
       const id = doc.id
 
       //organized into old and new
-      if ( this.checkDate( item.date ) ) this.memoryData.set( id, item )
+      if ( this.checkDate( item.dateNum ) ) this.memoryData.set( id, item )
       else
       {
         this.data.set( id, item )
@@ -83,6 +83,16 @@ class Store
     data.priority = data.priority || 0;
     data.reference = uuidv4.v4();
     data.timeStamp = new Date();
+  
+
+    //edit date 
+    data.date?.setHours(data.start?.getHours());
+    data.date?.setMinutes(data.start?.getMinutes());
+
+        data.date = data.date?.toString()
+        data.start = data.start?.toString()
+
+    data.dateNum = new Date(data.date).getTime()
 
     return new Promise( ( resolve, reject ) =>
     {
@@ -126,11 +136,11 @@ class Store
    * 
    * if d is less than current date, will return true
    */
-  private checkDate = ( d: string ) =>
+  private checkDate = ( d: number ) =>
   {
-    const old = Date.parse( d )
-    const comp = new Date().valueOf()
-    return old <= comp
+    
+    const comp = new Date().getTime();
+    return d <= comp
   }
   private sortCategorizedData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) => new Promise( resolve =>
   {
@@ -191,7 +201,7 @@ class Store
 
   @action private getPastEvents = ( reference: string ) => new Promise( ( resolve, reject ) =>
   {
-    const amount = 15
+    const amount = 5
     FBS.events.getPastEvents( amount, reference ).then( res =>
     {
       this.sortMemoryData(res.docs)

@@ -119,8 +119,8 @@ const CreateEvent = () =>
         
 
         data.partyType = PartyType[data.partyType]
-        data.date = data.date?.toString()
-        data.start = data.start?.toString()
+        // data.date = data.date?.toString()
+        // data.start = data.start?.toString()
         FireStore.send
             .sendEvent( data )
             .then( ( res ) =>

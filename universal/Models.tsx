@@ -13,14 +13,14 @@ export interface FeedItemModel {
 
 	imageUrl?: string
 	flyerBase64?: string
-	date?: string
+	date?: Date
 	hint?: string
 	person?: string
 	personId?: string
 	location?: string
 	locationObject: GeoCodeModel
 	reference?: string
-	start?: string
+	start?: Date
 	duration?: number
 	partyType?: PartyType
 
@@ -32,6 +32,8 @@ export interface FeedItemModel {
 
 	rating: number | 0,
 	attendance : number | 0
+
+	dateNum : number | 0
 }
 
 export interface UserDatabaseModel {

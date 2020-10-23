@@ -217,9 +217,9 @@ class Store
   })
   private linktorealTimeEvents = ( onResult :any ) =>
   {
-    const order = "date"
+    const order = "dateNum"
 
-    const subscribe = firestore().collection( eventCollection ).orderBy(order, "desc").onSnapshot( doc =>
+    const subscribe = firestore().collection( eventCollection ).orderBy(order, "asc").onSnapshot( doc =>
     {
       onResult( doc );
     }, err =>
