@@ -90,26 +90,31 @@ class Store
 
   private moveEventsAround = ( id: string, item: FeedItemModel ) => new Promise( async resolve =>
   {
-    //check if it exsists in 
-    const result = await firestore().doc( `${ eventCollection }/${ id }` ).get()
-    if ( result.exists )
+    try
     {
-      firestore().doc( `${ eventCollection }/${ id }` ).delete()
-    } 
-    
-    
-    //check if it is in pastEventCollection
-    const pastResult = await firestore().doc( `${ pastEventCollection }/${ id }` ).get()
-    if ( !pastResult.exists ) // perfect
-    {
-      //if it doesnt add it
-      const add = await firestore().collection( `${ pastEventCollection }` ).add( item )
-      if (  add.id ) resolve( true )
-      else resolve( false )
       
+      //check if it exsists in 
+      const result = await firestore().doc( `${ eventCollection }/${ id }` ).get();
+      if ( result.exists )
+      {
+        firestore().doc( `${ eventCollection }/${ id }` ).delete()
+      } 
+      
+      //check if it is in pastEventCollection
+      const pastResult = await firestore().doc( `${ pastEventCollection }/${ id }` ).get()
+      if ( !pastResult.exists ) // perfect
+      {
+        //if it doesnt add it
+        const add = await firestore().collection( `${ pastEventCollection }` ).doc( item.reference ).set( item );
+        resolve( true )        
+      }
+    } catch ( err )
+    {
+      resolve(false)
     }
 
     resolve(true)
+      
   })
 
 
@@ -215,18 +220,32 @@ class Store
         reject(err)
     })
   })
-  private linktorealTimeEvents = ( onResult :any ) =>
+  private linktorealTimeEvents = ( onResult: any ) =>
   {
     const order = "dateNum"
 
-    const subscribe = firestore().collection( eventCollection ).orderBy(order, "asc").onSnapshot( doc =>
+    const subscribe = firestore().collection( eventCollection ).orderBy( order, "asc" ).onSnapshot( doc =>
     {
       onResult( doc );
     }, err =>
     {
-        console.log(err, "error getting stream, firebase console");
-        
-    })
+      console.log( err, "error getting stream, firebase console" );
+
+    } )
+    return subscribe;
+  }
+
+  private linktoPastTimeEvents = ( onResult: any ) =>
+  {
+    const order = "dateNum"
+    const subscribe = firestore().collection( pastEventCollection ).orderBy( order, "asc" ).onSnapshot( doc =>
+    {
+      onResult( doc );
+    }, err =>
+    {
+      console.log( err, "error getting pasr stream, firebase console" );
+
+    } )
     return subscribe;
   }
   getEventsInMultiplies = ( amount: number ) =>
@@ -482,10 +501,6 @@ class Store
     } )
   } )
 
-  private facebookSignIn = () => new Promise( async ( resolve, reject ) =>
-  {
-  
-  } )
 
   private rsvpEvent = ( reference: string, add = true ) => new Promise( ( resolve, reject ) =>
   {
@@ -551,7 +566,6 @@ class Store
   })
   social = {
     GooglsSignIn: this.googleSignIN,
-    Facebook: this.facebookSignIn
   }
 
   auth = {
@@ -578,6 +592,7 @@ class Store
     moveEventsAround: this.moveEventsAround,
     increaseAttendance: this.increaseAttendance,
     linktorealTimeEvents: this.linktorealTimeEvents,
+    linktoPastTimeEvents: this.linktoPastTimeEvents,
     limitUser: this.checkUserLimitForPosting
   };
 }

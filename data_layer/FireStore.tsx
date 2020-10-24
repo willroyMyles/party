@@ -22,6 +22,13 @@ class Store
   @observable eventImagesMap: Map<string, string> = new Map()
   @observable eventImagesForPastEventsMap: Map<string, string[]> = new Map()
 
+
+  constructor()
+  {
+    FBS.events.linktorealTimeEvents( this.organizeStream )
+    FBS.events.linktoPastTimeEvents( this.organizePastEventsStream )
+  }
+
   organizeStream = ( docs: FirebaseFirestoreTypes.QuerySnapshot ) =>
   {
 
@@ -31,15 +38,30 @@ class Store
       const id = doc.id
 
       //organized into old and new
-      if ( this.checkDate( item.dateNum ) ) this.memoryData.set( id, item )
+      if ( this.checkDate( item.dateNum ) )
+      {
+        //should move to past parties
+        // this.memoryData.set( id, item )
+        FBS.events.moveEventsAround( id, item );
+      }
       else
       {
         this.data.set( id, item )
-        this.organizeIntoCategories(item)
+        this.organizeIntoCategories( item )
       }
     } )
   }
   
+  organizePastEventsStream = ( docs: FirebaseFirestoreTypes.QuerySnapshot ) =>
+  {
+
+    docs.forEach( ( doc, index ) =>
+    {
+      const item: FeedItemModel = doc.data();
+      const id = doc.id
+        this.memoryData.set( id, item )
+    } )
+  }
   organizeIntoCategories = ( data: FeedItemModel ) =>
   {
     const key = PartyType[data.partyType]
@@ -52,13 +74,6 @@ class Store
       this.categorizedData.set( key, [data] )
     }
   }
-
-  constructor()
-  {
-    FBS.events.linktorealTimeEvents( this.organizeStream)
-  }
-
-
 
 
   @action isLoggedIn = () => FBS.isLoggedIn();
@@ -471,7 +486,7 @@ class Store
 
   retrieve = {
     isLoggedIn: this.isLoggedIn,
-    events: this.getEvents,
+    // events: this.getEvents,
     picturesForEvent: this.picturesForEvent,
     specificParties: this.getSpecificParties,
     rsvpEvents: this.getRsvpEvents,
