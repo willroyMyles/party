@@ -75,6 +75,11 @@ class Store
     }
   }
 
+  @action private getLeaderboardPartyByType = ( type: PartyType ) => new Promise<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[]>( ( resolve, reject ) =>
+  {
+    return FBS.events.getLeaderboardPartyByType(type)
+  })
+
 
   @action isLoggedIn = () => FBS.isLoggedIn();
   @action login = ( email: string, password: string ) =>
@@ -197,22 +202,6 @@ class Store
     } )
   }
 
-  @action private getEvents = () => new Promise( ( resolve, reject ) =>
-  {
-    return
-    FBS.getEventsInMultiplies( 10 ).then( ( res: any ) =>
-    {
-      // this.sortMemoryData( res.docs )
-
-      this.sortDataFromFireBase( res ).then( res =>
-      {
-        resolve( true )
-      } )
-    } ).catch( err =>
-    {
-      reject( "unable to get events" )
-    } )
-  } )
 
   @action private getPastEvents = ( reference: string ) => new Promise( ( resolve, reject ) =>
   {
@@ -493,7 +482,8 @@ class Store
     imageFromReference: this.getEventImageForReference,
     getPastEvents: this.getPastEvents,
     getEventsByRatings: this.getEventsByRatings,
-    limit : this.checkUserLimitForPosting
+    limit: this.checkUserLimitForPosting,
+    getLeaderboardPartyByType: this.getLeaderboardPartyByType
   };
 
   send = {

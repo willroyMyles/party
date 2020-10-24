@@ -3,7 +3,7 @@ import storage, { FirebaseStorageTypes } from '@react-native-firebase/storage';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
-import { FeedItemModel } from '../universal/Models';
+import { FeedItemModel, PartyType } from '../universal/Models';
 import { errorStrings } from '../universal/EventEmitter';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { event } from 'react-native-reanimated';
@@ -248,7 +248,7 @@ class Store
     } )
     return subscribe;
   }
-  getEventsInMultiplies = ( amount: number ) =>
+  private getEventsInMultiplies = ( amount: number ) =>
   {
     const order = 'date';
     return new Promise( async ( resolve, reject ) =>
@@ -336,7 +336,28 @@ class Store
     }
   } )
   
+  private getLeaderboardPartyByType = ( type: PartyType ) =>
+    new Promise<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[]>( async ( resolve, reject ) =>
+    {
+      const order = "partyType"
+      const amount = 20
 
+      try
+      {
+
+        const query = await firestore().collection( pastEventCollection ).orderBy( order ).where(order, "==", type).limit( amount ).get();
+        resolve(query.docs)
+
+      } catch ( err )
+      {
+        reject(false)
+      }
+    })
+    
+    
+
+
+  
 
   private getEventsByType = async ( type: number, referenceNumber: string ) =>
   {
@@ -588,7 +609,8 @@ class Store
     getEventByType: this.getEventsByType,
     getRsvpEvents: this.getRsvpEvents,
     getPastEvents: this.getPastEvents,
-    getEventsByRatings:this.getEventsByRatings,
+    getEventsByRatings: this.getEventsByRatings,
+    getLeaderboardPartyByType: this.getLeaderboardPartyByType,
     moveEventsAround: this.moveEventsAround,
     increaseAttendance: this.increaseAttendance,
     linktorealTimeEvents: this.linktorealTimeEvents,
