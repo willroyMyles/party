@@ -25,6 +25,15 @@ import CustomTextInput from '../../components/CustomTextInput';
 const Login = () => {
     const navigation = useNavigation();
 
+    if ( __DEV__ )
+    {
+        console.log( 'I am in debug' );
+        crashlytics().log( "running in dev!!!" )
+        crashlytics().crash();
+    } else
+    {
+        crashlytics().log("not running in dev")
+    }
 
     const schema = yup.object().shape({
         email: yup.string().required("i need you rbo").email().min(3),

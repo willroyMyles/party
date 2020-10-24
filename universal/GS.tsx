@@ -44,6 +44,12 @@ export const getColorForType = (type : PartyType, background = false) => {
 	}
 }
 
+export const getPartyTypeArray = () =>
+{
+	const arr = Object.values( PartyType ).filter( ( e ) => typeof e == typeof "" );	
+	return arr;
+}
+
 export const GetIcon = ( { name }: { name: string } ) =>
 {
 	const theme = useTheme()

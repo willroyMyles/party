@@ -49,7 +49,6 @@ const App = () =>
 
     console.log("app loading");
     
-    tm.setThemeType( false )
     Font.loadAsync( {
       // Nunito_Black: require( "./assets/fonts/Nunito/Nunito-Black.ttf" ),
       // RR: require( "./assets/fonts/Red_Rose/RedRose-Regular.ttf" )

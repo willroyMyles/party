@@ -10,7 +10,7 @@ import { animated, useSpring } from 'react-spring/native'
 import { Dimensions, Easing } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { FlatList } from 'react-native-gesture-handler'
-import { FeedItemModel } from '../universal/Models'
+import { FeedItemModel, PartyType } from '../universal/Models'
 import { useState } from 'react'
 import FireStore from '../data_layer/FireStore'
 import { useEffect } from 'react'
@@ -18,11 +18,14 @@ import { observer } from 'mobx-react'
 import LeaderBoardTiles from '../components/LeaderBoardTiles'
 import * as faker from 'faker'
 import { BackDropV2 } from '../components/BackDrop'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import LeaderBoardPage from './leaderboards/LeaderBoardPage'
+import { getPartyTypeArray } from '../universal/GS'
 
 // @refresh reset
 
 const width = Dimensions.get("screen").width
-
+const Tabs = createMaterialTopTabNavigator();
 const LeaderBoard = () =>
 {
     // @refresh reset
@@ -69,25 +72,25 @@ setLoading(true)
         })
     }, [] )
 
-    if ( data.size == 0 )
-    {
-        return <View flex center padding-60 bg-background>
-            <View center padding-10 style={{ minHeight: "10%" }}>
-                <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
-            </View>
-            <Text lvl1 center>no parties rated yet. Be one of the first to get to the top!</Text>
-            <View bg-foreground style={{
-                position:"absolute",
-                width: 200,
-                height: 200,
-                zIndex: -1,
-                borderRadius: 200,
-                elevation: 0,
-                opacity:.3
-            }} />
-            <BackDropV2 />
-        </View>
-    }
+    // if ( data.size == 0 )
+    // {
+    //     return <View flex center padding-60 bg-background>
+    //         <View center padding-10 style={{ minHeight: "10%" }}>
+    //             <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
+    //         </View>
+    //         <Text lvl1 center>no parties rated yet. Be one of the first to get to the top!</Text>
+    //         <View bg-foreground style={{
+    //             position:"absolute",
+    //             width: 200,
+    //             height: 200,
+    //             zIndex: -1,
+    //             borderRadius: 200,
+    //             elevation: 0,
+    //             opacity:.3
+    //         }} />
+    //         <BackDropV2 />
+    //     </View>
+    // }
     
     const getDataForList = ():FeedItemModel[] =>
     {
@@ -119,6 +122,27 @@ setLoading(true)
             })
         }
     }
+    
+    const style = {
+        tabStyle: { backgroundColor: Colors.background, borderBottomWidth: 2, borderBottomColor: Colors.foreground }, labelStyle: { fontFamily: "RR" }, activeTintColor: Colors.primary, inactiveTintColor: Colors.muted
+    }
+
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} >
+            <View center padding-10 bg-background style={{ minHeight: "10%" }}>
+                <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
+            </View>
+            <Tabs.Navigator tabBarOptions={style}>
+                {getPartyTypeArray().map( ( keys, index:number ) =>
+                {
+                    return ( <Tabs.Screen name={keys + ""} >
+                       {()=> <LeaderBoardPage type={keys} />}
+                        </Tabs.Screen>)
+                         
+                        })}
+            </Tabs.Navigator>
+        </SafeAreaView>
+    )
 
 
     return (
