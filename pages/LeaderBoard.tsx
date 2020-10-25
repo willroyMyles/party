@@ -135,7 +135,7 @@ setLoading(true)
             <Tabs.Navigator tabBarOptions={style}>
                 {getPartyTypeArray().map( ( keys, index:number ) =>
                 {
-                    return ( <Tabs.Screen name={keys + ""} >
+                    return ( <Tabs.Screen key={keys + "" + index} name={keys + ""} >
                        {()=> <LeaderBoardPage type={keys} />}
                         </Tabs.Screen>)
                          

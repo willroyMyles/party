@@ -75,10 +75,25 @@ class Store
     }
   }
 
-  @action private getLeaderboardPartyByType = ( type: PartyType ) => new Promise<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[]>( ( resolve, reject ) =>
+  @action private getLeaderboardPartyByType = ( type: PartyType ) => new Promise<FeedItemModel[]>( ( resolve, reject ) =>
   {
-    return FBS.events.getLeaderboardPartyByType(type)
-  })
+    FBS.events.getLeaderboardPartyByType( type ).then( res =>
+    {
+      const arr: FeedItemModel[] = [];
+
+      res.forEach( ( value, index ) =>
+      {
+        arr.push( value.data() )
+
+      } )
+
+      resolve( arr )
+    } ).catch( err =>
+    {
+      console.log(err);
+      reject()
+    } )
+  } );
 
 
   @action isLoggedIn = () => FBS.isLoggedIn();

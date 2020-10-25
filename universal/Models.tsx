@@ -32,7 +32,6 @@ export interface FeedItemModel {
 
 	rating: number | 0,
 	attendance : number | 0
-
 	dateNum : number | 0
 }
 

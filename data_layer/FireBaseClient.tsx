@@ -339,18 +339,19 @@ class Store
   private getLeaderboardPartyByType = ( type: PartyType ) =>
     new Promise<FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>[]>( async ( resolve, reject ) =>
     {
-      const order = "partyType"
+      const order = "attendance"
+      const where = "partyType"
       const amount = 20
 
       try
       {
 
-        const query = await firestore().collection( pastEventCollection ).orderBy( order ).where(order, "==", type).limit( amount ).get();
+        const query = await firestore().collection( pastEventCollection ).orderBy( order ).where(where, "==", type).limit( amount ).get();
         resolve(query.docs)
 
       } catch ( err )
       {
-        reject(false)
+        reject(err)
       }
     })
     
