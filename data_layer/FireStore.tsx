@@ -39,7 +39,7 @@ class Store
       const id = doc.id
 
       //organized into old and new
-      if ( this.checkDate( item.dateNum ) )
+      if ( this.checkDate( this.getEndTime(item).getTime() ) )
       {
         //should move to past parties
         // this.memoryData.set( id, item )
@@ -162,7 +162,6 @@ class Store
       if ( val )
       { // add to memory set
         this.memoryData.set( item.reference , item )
-        // FBS.events.moveEventsAround( element.id, item )
       }
     }
     resolve( true )
@@ -270,6 +269,13 @@ class Store
     } )
   }
 
+  private getEndTime = ( item: FeedItemModel ) : Date =>
+  {
+    const startTime = moment( new Date( item.date ) );
+    const finishTime = moment( new Date( item.date ) ).add( item.duration, "hours" )
+    return finishTime.toDate()
+  }
+
   @action getOnGoingParties = () =>
   {
     return new Promise( ( resolve ) =>
@@ -277,13 +283,19 @@ class Store
       const arr: FeedItemModel[] = [];
       this.data.forEach( ( value, key ) =>
       {
-        const old = moment( new Date( value.date ) );
-        const currentTime = moment( new Date( value.date ) );
-        const inSession = currentTime .add( 5, "hours" )
+        const startTime = moment( new Date( value.date ) );
+        const finishTime = moment( new Date( value.date ) ).add( value.duration, "hours" )
+        const currentTime = moment( new Date() );
+
+        if ( currentTime.isBetween( startTime, finishTime ) )
+        {
+          arr.push(value)
+        }
         
-        console.log(old.format("hh:mm"), currentTime.format("hh:mm"));
         
-      })
+      } )
+      
+      resolve( arr );
     })
   }
 
