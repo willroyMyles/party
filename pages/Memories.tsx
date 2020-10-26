@@ -16,36 +16,7 @@ import ListheaderComp from '../components/ListheaderComp'
 
 const Memories = () => {
    const theme = useTheme()
-	// const [data, setdata] = useState<FeedItemModel[]>( [] )
-	// const [loading, setLoading] = useState( false )
-	// const [loadMore, setLoadMore] = useState(true)
-	// useEffect(() => {
-	// 	getPastEvents()
-	// }, [])
 
-	// const handleViewClick = (item: FeedItemModel) => {
-	// 	navigation.navigate("event", {reference : item.reference})
-	// }
-
-	// const getPastEvents = () =>
-	// {
-	// 	if(!loadMore || loading) return
-	// 	let reference = data.length >0 ? data[data.length - 1].reference  : ""
-
-	// 	setLoading(true)
-	// 	FireStore.retrieve.getPastEvents( reference ).then( res =>
-	// 	{
-	// 		const d: FeedItemModel[] = [...FireStore.memoryData.values()]
-	// 		setdata( d )
-	// 		setLoading( false )			
-	// 	} ).catch( err =>
-	// 	{
-	// 		setLoadMore( false )
-	// 		setLoading( false )
-	// 		console.log("didnt get data");
-			
-	// 	})
-	// }
 
 
 	return (

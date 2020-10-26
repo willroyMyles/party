@@ -7,6 +7,7 @@ import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import { Alert } from 'react-native';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { date } from 'faker';
+import moment from 'moment';
 
 
 class Store
@@ -95,6 +96,8 @@ class Store
     } )
   } );
 
+
+  
 
   @action isLoggedIn = () => FBS.isLoggedIn();
   @action login = ( email: string, password: string ) =>
@@ -265,6 +268,23 @@ class Store
         this.data.set( key, value )
       }
     } )
+  }
+
+  @action getOnGoingParties = () =>
+  {
+    return new Promise( ( resolve ) =>
+    {
+      const arr: FeedItemModel[] = [];
+      this.data.forEach( ( value, key ) =>
+      {
+        const old = moment( new Date( value.date ) );
+        const currentTime = moment( new Date( value.date ) );
+        const inSession = currentTime .add( 5, "hours" )
+        
+        console.log(old.format("hh:mm"), currentTime.format("hh:mm"));
+        
+      })
+    })
   }
 
   private getEventImageForReference = ( reference: string, flyer:string ) => new Promise<string>( async ( resolve, reject ) =>

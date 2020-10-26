@@ -46,7 +46,10 @@ const LeaderBoard = () =>
     
     
     
-    useEffect(() => {
+    useEffect( () =>
+    {
+        
+        FireStore.getOnGoingParties()
 setLoading(true)
         FireStore.retrieve.getEventsByRatings().then( res =>
         {               
