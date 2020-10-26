@@ -31,7 +31,7 @@ const LeaderBoardTiles = ( { item, index }: { item: FeedItemModel, index: number
             overflow:"hidden"
         }}>
 
-            {isFirst && <Image fadeDuration={600} blurRadius={6} source={{ uri: image }} resizeMode="cover" style={{ height: "120%", width: "105%", position:"absolute" }} />
+            {isFirst && <Image fadeDuration={600} blurRadius={1} source={{ uri: image }} resizeMode="cover" style={{ height: "120%", width: "105%", position:"absolute" }} />
 }
 
             <View row centerV style={{
