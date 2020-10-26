@@ -9,6 +9,7 @@ import
   Platform,
   LayoutAnimation,
   LogBox,
+  YellowBox,
 } from 'react-native';
 
 import
@@ -31,6 +32,13 @@ import { GetLocationPermission } from './universal/GetLocation';
 import RateParty from './components/RateParty';
 import { AppEventsLogger } from 'react-native-fbsdk';
 import SplashScreen from 'react-native-splash-screen'
+
+
+YellowBox.ignoreWarnings( [
+  "registerHeadlessTask or registerCancellableHeadlessTask called multiple times for same key 'test worker'"
+
+])
+
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
 {

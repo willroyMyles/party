@@ -1,4 +1,5 @@
 package com.fowler.party;
+// import com.backgroundworker;
 import com.fowler.party.generated.BasePackageList;
 import android.app.Application;
 import android.content.Context;
@@ -17,7 +18,6 @@ import org.unimodules.adapters.react.ReactModuleRegistryProvider;
 import org.unimodules.core.interfaces.SingletonModule;
 
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
-
 
 public class MainApplication extends Application implements ReactApplication {
 

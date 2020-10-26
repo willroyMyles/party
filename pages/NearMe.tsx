@@ -24,6 +24,8 @@ import tm from '../universal/UiManager';
 import { getColorForType, GetPartytypeString } from '../universal/GS';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import ActionSheet from 'react-native-actionsheet'
+import WorkManager from 'react-native-background-worker';
+import workManager from 'react-native-background-worker';
 
 const foregroundTask = "online geo tasks"
 const backgroundTask = "offline geo tasks"
@@ -88,7 +90,42 @@ const NearMe = () =>
         if ( !eventEmitter.eventNames().includes( eventStrings.dataFromProviderFinishedLoad ) )
         eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
 
-        AppState.addEventListener("change", changeLocationUpdates)
+        AppState.addEventListener( "change", changeLocationUpdates )
+        
+
+
+        workManager.setWorker( {
+            type: "periodic",
+            name: "test worker",
+            notification: {
+                title: "test title",
+                text: "just a test notification "
+            },
+            workflow: async () => new Promise( ( resolve ) =>
+            {
+                console.log("talks to me nicely");
+                const arr = []
+                for ( let index = 0; index < 1000000000; index++ )
+                {
+                    arr.push( index );
+
+                }
+
+                resolve();
+            } ),
+            repeatInterval : 15
+            
+        } ).then( res =>
+        {
+            console.log(`things done ${res}`);
+            
+        } ).catch( err =>
+        {
+            console.log(`some error ${err}`);
+            
+        })
+
+
         return () =>
         {
             AppState.removeEventListener( "change", changeLocationUpdates )
