@@ -131,6 +131,15 @@ const PartyCard = ( { item }: { item: string } ) =>
             }
         }
     ) )
+
+    const CustomLayoutLinear = {
+        duration: 700,
+        create: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+        update: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+        delete: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+    }
+
+    LayoutAnimation.configureNext( CustomLayoutLinear )
     
     const V = animated(View)
 
@@ -156,14 +165,14 @@ const PartyCard = ( { item }: { item: string } ) =>
 
     setTimeout( () =>
     {
-        const CustomLayoutLinear = {
-            duration: 700,
-            create: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
-            update: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
-            delete: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
-        }
+        // const CustomLayoutLinear = {
+        //     duration: 700,
+        //     create: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+        //     update: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+        //     delete: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
+        // }
 
-        LayoutAnimation.configureNext( CustomLayoutLinear )
+        // LayoutAnimation.configureNext( CustomLayoutLinear )
         set({opacity:0})
         changeItem();
     }, 6000 );

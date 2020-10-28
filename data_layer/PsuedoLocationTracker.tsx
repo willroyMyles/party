@@ -9,19 +9,18 @@ import uuid from 'uuid'
 import { GetNotificationPermission } from "../universal/GetNotification"
 import * as Notifications from 'expo-notifications'
 import { AppState, AppStateStatus } from "react-native"
-import RateParty from "../components/RateParty"
 
 export const radius = 100;
 export const taskName = 'geoLocation';
 export const threshold = 10 / radius
 
-export const thirtyMins = 30;
+const fifteenMinutes = 15;
+export const thirtyMins = fifteenMinutes * 2;
 export const oneHour = thirtyMins * 2;
 export class PsuedoLocationTracker
 {
     @observable userLocation: LatLng | undefined = undefined
     @observable data: Map<string, LocationRegion> = new Map()
-
     @observable entered: Map<string, number> = new Map()
     @observable processed: Map<string, Date> = new Map()
     @observable done: Set<string > = new Set()
@@ -52,7 +51,7 @@ export class PsuedoLocationTracker
             })
         } else
         {
-            this.processed.delete(reference)
+            // this.processed.delete(reference)
         }
     }
 
@@ -62,12 +61,14 @@ export class PsuedoLocationTracker
         {            
             const interval = new Date().getMinutes() - this.processed.get( reference )?.getMinutes();
             
-            if (  interval > thirtyMins )
+            if (  interval > 3 )
             {
                 this.secondProcess( reference )
             }
             return
         }
+        
+        console.log("added to process", reference);
         
         this.processed.set( reference, new Date() );
 
@@ -75,11 +76,10 @@ export class PsuedoLocationTracker
 
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
+        console.log( "updating stat", latLng);
         
         if(this.data.size == 0) return
         this.userLocation = latLng;        
-
-        
 
         [...this.data.entries()].map( ( [key, value], index ) =>
         {
@@ -96,72 +96,9 @@ export class PsuedoLocationTracker
             {
                 if ( this.entered.has( key ) ) this.entered.delete( key );
                 // if(this.processed.has(key)) this.processed.delete(key)
-                eventEmitter.emit( eventStrings.locationExited, key )
-                
-            }
-            
+                eventEmitter.emit( eventStrings.locationExited, key )   
+            }  
         })
-        
-        
-        // [...this.data.entries()].map( async ( value, index ) =>
-        // {            
-        //     if ( this.processed.has( value[0] ) ) return
-
-        //     const ll = getDistanceFromLatLonInKm( value[1].latitude, value[1].longitude, this.userLocation?.latitude, this.userLocation?.longitude )
-            
-
-
-        //     if ( ll <= threshold)
-        //     {
-        //         if ( AppState.currentState == "active" )
-        //         {
-
-        //             this.entered.set( value[0], ll )
-        //             eventEmitter.emit( eventStrings.locationEntered, value[0] )
-
-
-        //             // check if already asked
-        //             if ( this.processed.has( value[0] ) ) return
-                    
-        //             // ask to rate
-        //             RateParty.show(value[0])
-
-        //             //remove from watch and add to processed 
-        //             this.data.delete( value[0] )
-        //             this.addToProcessed(value[0])
-        //         } else
-        //         {
-        //             const perm = await GetNotificationPermission()
-        //             if ( perm )
-        //             {
-        //                 this.addToProcessed( value[0] )
-        //                 Notifications.setNotificationHandler( {
-        //                     handleNotification: async () => ( {
-        //                         shouldShowAlert: true,
-        //                         shouldPlaySound: false,
-        //                         shouldSetBadge: false,
-        //                     } ),
-        //                 } );
-
-        //                 Notifications.scheduleNotificationAsync( {
-        //                     content: {
-        //                         title: "test notification",
-        //                         body: `seem your at ${ value[1].identifier }, enjoying it?`,
-        //                         autoDismiss: true,
-        //                     },
-        //                     trigger: {
-        //                         seconds: 1
-        //                     }
-        //                 } )
-        //             }
-
-        //         }
-        //     }
-
-        //     if(ll > threshold && p)
-        // } )
-   
-   
     }
 
     @action watchTheseLocations = ( data: LocationRegion[] ) =>

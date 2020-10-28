@@ -63,19 +63,22 @@ export const GetLocationPermission = () => new Promise<boolean>( async (resolve)
 
 
 export const getLocation = () => new Promise<any>(async (resolve, reject) => {
-    try {
+    try
+    {
+        
         const perm = await GetLocationPermission()     
-       
-        if (perm) {
-            Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }).then(res => {
+        if ( perm )
+        {
+            Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High, enableHighAccuracy:true }).then(res => {
 
                 resolve(res.coords)
-            } ).catch( err =>
+            } ).catch( async (err) =>
             {
-                console.log( "somthing bad happened, could not get location" );
+                console.log( "somthing bad happened, could not get location", err );
+                console.log( await Location.isBackgroundLocationAvailableAsync() );
                 //TODO: show oast that couldnt get location
                 
-            eventEmitter.emit(eventStrings.locationNotGranted)
+            // eventEmitter.emit(eventStrings.locationNotGranted)
                 
             })
         }

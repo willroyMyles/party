@@ -27,6 +27,9 @@ let lastType: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
 class Store
 {
 
+  constructor()
+  {
+  }
   private userData = null
 
   resetLast = () => last = null
@@ -186,6 +189,49 @@ class Store
     }
   };
 
+  private updateuserAttended = ( ref: string ) =>
+  {
+    return new Promise<boolean>( ( resolve, reject ) =>
+    {
+      firestore().doc( `${ userCollection }/${ auth().currentUser?.uid }` ).get().then( res =>
+      {
+        const data = res.data();
+        const attendedArray: string[] = data["attended"]
+
+        if ( attendedArray == undefined )
+        {
+          firestore()
+            .doc( `${ userCollection }/${ auth().currentUser?.uid }` )
+            .set( { attended: firestore.FieldValue.arrayUnion( ref ) }, { merge: true } ).catch( err =>
+            {
+              return resolve( false )
+            } )
+          
+          resolve(true)
+        } else
+        {
+          if ( attendedArray.includes( ref ) )
+          {//contains ref
+            return resolve(false)
+          } else
+          {
+            firestore()
+              .doc( `${ userCollection }/${ auth().currentUser?.uid }` )
+              .set( { attended: firestore.FieldValue.arrayUnion( ref ) }, { merge: true } ).catch( err =>
+              {
+                return resolve( false )
+              } )
+            return resolve(true)
+          }
+        }
+
+
+      } ).catch( err =>
+      {
+        return resolve(false)
+      })
+    })
+  }
   getUsername = () => auth().currentUser?.displayName;
   getUserId = () => auth().currentUser?.uid;
 
@@ -258,7 +304,6 @@ class Store
         const firstQuery = firestore()
           .collection( eventCollection )
           .orderBy( order )
-          // .where("date", "<=", new Date())
           .limit( amount );
         const snapshotQuery = await firstQuery.get();
 
@@ -399,13 +444,28 @@ class Store
   {
     return new Promise( ( resolve, reject ) =>
     {
-      firestore().collection( eventCollection ).doc( key ).update( { attendance: firestore.FieldValue.increment(1)} ).then( res =>
+
+
+      this.updateuserAttended( key ).then( res =>
       {
-        resolve( true );
-      } ).catch( err =>
-      {
-          reject(err)
-        })
+        if ( res )
+        {
+          firestore().collection( eventCollection ).doc( key ).update( { attendance: firestore.FieldValue.increment( 1 ) } ).then( res =>
+          {
+            resolve( true );
+          } ).catch( err =>
+          {
+            reject( err )
+          } )
+        } else
+        {
+          resolve(false)
+        }
+      })
+
+
+
+
     })
   }
 

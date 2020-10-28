@@ -5,7 +5,6 @@ import {useTheme} from 'styled-components'
 import { GetNotificationPermission } from '../universal/GetNotification'
 import * as Notifications from 'expo-notifications';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import RateParty from '../components/RateParty'
 import { animated, useSpring } from 'react-spring/native'
 import { Dimensions, Easing } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'

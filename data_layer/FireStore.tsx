@@ -278,7 +278,7 @@ class Store
 
   @action getOnGoingParties = () =>
   {
-    return new Promise( ( resolve ) =>
+    return new Promise<FeedItemModel[]>( ( resolve ) =>
     {
       const arr: FeedItemModel[] = [];
       this.data.forEach( ( value, key ) =>

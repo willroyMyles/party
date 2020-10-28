@@ -24,49 +24,52 @@ import tm from '../universal/UiManager';
 import { getColorForType, GetPartytypeString } from '../universal/GS';
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import ActionSheet from 'react-native-actionsheet'
-import WorkManager from 'react-native-background-worker';
 import workManager from 'react-native-background-worker';
+import Geolocation from 'react-native-geolocation-service';
+import RNLocation from 'react-native-location';
 
 const foregroundTask = "online geo tasks"
 const backgroundTask = "offline geo tasks"
 
 
-export const GeoLocationUpdates = ( { data, error }: { data: any, error: any } ) =>
-{
+// export const GeoLocationUpdates = ( { data, error }: { data: any, error: any } ) =>
+// {
 
-    if ( error )
-    {
-        console.log( error )
-        return
-    }
+//     if ( error )
+//     {
+//         console.log( error )
+//         return
+//     }
 
-    if ( data )
-    {
-        const { longitude, latitude } = data.locations[0].coords
-        psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
-    }
-}
+//     if ( data )
+//     {
+//         const { longitude, latitude } = data.locations[0].coords
+//         console.log(`passing location, ${longitude} ${latitude}`)
+//         psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
+//     }
+// }
 
-export const GeoLocationUpdatesActive = ( { data, error }: { data: any, error: any } ) =>
-{
+// export const GeoLocationUpdatesActive = ( { data, error }: { data: any, error: any } ) =>
+// {
 
 
-    if ( error )
-    {
-        console.log( error )
-        return
-    }
+//     if ( error )
+//     {
+//         console.log( error )
+//         return
+//     }
 
-    if ( data )
-    {        
-        if(AppState.currentState !== "active") return
-        const { longitude, latitude } = data.locations[0].coords
-        psuedoLocationTracker.updateUserLocation( { latitude, longitude } )
-    }
-}
+//     if ( data )
+//     {        
+//         if(AppState.currentState !== "active") return
+//         const { longitude, latitude } = data.locations[0].coords
+//         psuedoLocationTracker.updateUserLocation( { latitude, longitude } );
+        
+//     }
+// }
 
-TaskManager.defineTask( backgroundTask, ( { data, error } ) => GeoLocationUpdates({data,error}) )
-TaskManager.defineTask( foregroundTask, ( { data, error } ) => GeoLocationUpdatesActive( { data, error } ) )
+// TaskManager.defineTask( backgroundTask, ( { data, error } ) => GeoLocationUpdates({data,error}) )
+// TaskManager.defineTask( foregroundTask, ( { data, error } ) => GeoLocationUpdatesActive( { data, error } ) )
 
 
 const NearMe = () =>
@@ -80,7 +83,62 @@ const NearMe = () =>
 
     useEffect(() => {
         sortMarkers()
-    }, [FireStore.data.size])
+    }, [FireStore.data.size] )
+    
+    const BackgroundTask = () => new Promise<void>( async ( resolve, reject ) =>
+    {
+        let id: string = ""
+        try
+        {
+            console.log( "talks to me nicely" );
+            const parties = await FireStore.getOnGoingParties();
+
+            const locationRegions: LocationRegion[] = []
+            for ( let index = 0; index < parties.length; index++ )
+            {
+                const element = parties[index];
+                console.log( element.title );
+
+                const coord = getLatitudeLongitudeFromString( element.location );
+                if ( coord )
+                {
+                    const c: LocationRegion = {
+                        latitude: coord.latitude,
+                        longitude: coord.longitude,
+                        radius: radius,
+                        identifier: element.reference,
+                    };
+
+                    locationRegions.push( c )
+                }
+            }
+
+         
+            RNLocation.configure( {
+                allowsBackgroundLocationUpdates: true,
+                androidProvider: "auto",
+                showsBackgroundLocationIndicator: true,
+            } ).then( res =>
+            {
+                const unsubscribe = RNLocation.subscribeToLocationUpdates( location =>
+                {
+                    console.log( location[0] );
+                } )
+            })
+           
+            
+            
+
+
+        } catch ( err )
+        {
+            console.log( "error", err );
+            workManager.cancel( id );
+            resolve();
+        }
+
+        resolve()
+    })
 
     useEffect( () =>
     {
@@ -90,10 +148,10 @@ const NearMe = () =>
         if ( !eventEmitter.eventNames().includes( eventStrings.dataFromProviderFinishedLoad ) )
         eventEmitter.addListener( eventStrings.dataFromProviderFinishedLoad, () => sortMarkers() )
 
-        AppState.addEventListener( "change", changeLocationUpdates )
+        // AppState.addEventListener( "change", changeLocationUpdates )
         
 
-
+        let id: string = ""
         workManager.setWorker( {
             type: "periodic",
             name: "test worker",
@@ -101,24 +159,19 @@ const NearMe = () =>
                 title: "test title",
                 text: "just a test notification "
             },
-            workflow: async () => new Promise( ( resolve ) =>
-            {
-                console.log("talks to me nicely");
-                const arr = []
-                for ( let index = 0; index < 1000000000; index++ )
-                {
-                    arr.push( index );
+            foregroundBehaviour:"blocking",
+            workflow: async () => BackgroundTask(),
 
-                }
-
-                resolve();
-            } ),
-            repeatInterval : 15
+            repeatInterval: 15,
+            timeout: 1,
+            constraints: {
+                network : "connected",
+            }
             
         } ).then( res =>
         {
             console.log(`things done ${res}`);
-            
+            id = res;
         } ).catch( err =>
         {
             console.log(`some error ${err}`);
@@ -140,12 +193,12 @@ const NearMe = () =>
 
         if ( state == "active" )
         {
-            stopBackgroundTask()
-            startForegroundTasks(geoRegions.length >0? geoRegions : [...psuedoLocationTracker.data.values()])
+            // stopBackgroundTask()
+            // startForegroundTasks(geoRegions.length >0? geoRegions : [...psuedoLocationTracker.data.values()])
         } else
         {
-            stopForegroundTask()
-            startBackgroundTasks( geoRegions.length > 0 ? geoRegions : [...psuedoLocationTracker.data.values()] )
+            // stopForegroundTask()
+            // startBackgroundTasks( geoRegions.length > 0 ? geoRegions : [...psuedoLocationTracker.data.values()] )
         }
     }
 
@@ -186,11 +239,11 @@ const NearMe = () =>
     }
 
     
-    function startBackgroundTasks( data: any[] )
+    async function startBackgroundTasks( data: any[] )
     {
-        Location.startLocationUpdatesAsync( backgroundTask, { //runs unlimited
-            timeInterval: 1000 * 60 * 6, //runs every 6 mins,
-            accuracy: Location.Accuracy.Balanced,
+        await Location.startLocationUpdatesAsync( backgroundTask, { //runs unlimited
+            timeInterval: 1000 * 60 * 60, //runs every hr mins,
+            accuracy: Location.Accuracy.High,
         } ).then( () =>
         {
             psuedoLocationTracker.watchTheseLocations( data )
@@ -199,7 +252,7 @@ const NearMe = () =>
     }
 
     const stopForegroundTask = () => Location.stopLocationUpdatesAsync( foregroundTask )
-    const stopBackgroundTask = () =>    Location.stopLocationUpdatesAsync(backgroundTask)
+    const stopBackgroundTask = async () =>   await Location.stopLocationUpdatesAsync(backgroundTask)
     
 
     const sortMarkers = () =>
