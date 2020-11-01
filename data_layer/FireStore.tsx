@@ -22,8 +22,6 @@ class Store
   @observable userName: string | null = null;
   @observable eventImagesMap: Map<string, string> = new Map()
   @observable eventImagesForPastEventsMap: Map<string, string[]> = new Map()
-
-
   constructor()
   {
     FBS.events.linktorealTimeEvents( this.organizeStream )
@@ -152,6 +150,23 @@ class Store
     this.sortCategorizedData( docs )
   }
 
+  @action private checkPartyAttendance = (partyId : string) =>
+  {
+    
+    return new Promise<boolean>( ( resolve, reject ) =>
+    {
+      FBS.auth.getUserData().then( res =>
+      {
+        const holder : string[] = res["attended"];
+        resolve( holder.includes( partyId ) );
+   
+      } ).catch( err =>
+      {
+        reject()
+      })
+    })
+
+  }
   private sortMemoryData = ( docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[] ) => new Promise( resolve =>
   {
     for ( let index = 0; index < docs.length; index++ )
@@ -530,7 +545,8 @@ class Store
     getPastEvents: this.getPastEvents,
     getEventsByRatings: this.getEventsByRatings,
     limit: this.checkUserLimitForPosting,
-    getLeaderboardPartyByType: this.getLeaderboardPartyByType
+    getLeaderboardPartyByType: this.getLeaderboardPartyByType,
+    checkPartyAttendance:this.checkPartyAttendance
   };
 
   send = {

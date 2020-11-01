@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, Avatar, Switch, TouchableOpacity, Colors } from 'react-native-ui-lib'
 import ProfilePiece from '../../pieces/ProfilePiece'
 import tm, { ThemeType } from '../../universal/UiManager'
-import { StyleSheet } from 'react-native'
+import { Alert, Linking, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useTheme } from 'styled-components'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -105,26 +105,50 @@ const Profile = () =>
                         thumbStyle={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.primary + "60" }}
                         style={{ borderWidth: 1, borderColor: Colors.primary + "68", elevation: 1 }}
 
-                    onValueChange={handleLocationChanged}
+                        onValueChange={handleLocationChanged}
                     ></Switch>
                 </View>
+                {tm.isLocationGranted && <View marginT-20 row spread>
+                    <Text lvl2>Location All the time</Text>
+                    <TouchableOpacity onPress={() =>
+                    {
+                        Alert.alert( "Additional Location Permission Needed", `     \tHey, we need additional persmission location to be "allow all the time" to determine when your at a party. this will check if your at a party periodically. No personal information will be collected in the process`,
+                            [{
+                                text: "Maybe Later",
+                                onPress: () => { },
+                                style: "cancel"
+                            },
+                            {
+                                text: "Sure",
+                                onPress: () => Linking.openSettings()
+                            },
+                       
+                            ], {cancelable:true} );
+                    }} center style={{
+                        backgroundColor: Colors.foreground,
+                        paddingHorizontal: 12,
+                        padding:6,
+                        borderRadius: 5,
+                        elevation:10
+                    }}>
+                        {/* <Icon name="info" size={22} color={Colors.text1} /> */}
+                        <Text lvl1> show</Text>
+                    </TouchableOpacity>
+                </View>}
             </View>
             <View>
                 <RSVPModule />
             </View>
             <View center marginT-40>
 
-                     <LoaderButton loading={loading} onPress={handleCreateEvent} title={
-                         <View row>
-                    <Icon name="plus" size={18} color={Colors.text1} />
-                    <Text btn uppercase marginH-10 >create party</Text>
-                         </View >
-                     }  />
-            
+                <LoaderButton loading={loading} onPress={handleCreateEvent} title={
+                    <View row>
+                        <Icon name="plus" size={18} color={Colors.text1} />
+                        <Text btn uppercase marginH-10 >create party</Text>
+                    </View >
+                } />
+
             </View>
-
-  
-
 
             { auth().currentUser?.email == 'myleswillroy@gmail.com' &&   <View center marginT-40>
                     <TouchableOpacity row onPress={checButton} activeOpacity={.8} center style={[style.create, { backgroundColor: Colors.foreground }]}>

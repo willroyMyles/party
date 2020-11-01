@@ -35,11 +35,10 @@ export interface FeedItemModel {
 	dateNum : number | 0
 }
 
-export interface UserDatabaseModel {
-	email: string
-	userName: string
-	flyers: FeedItemModel[] | null
-	rsvpParties: string[]
+export interface UserModel {
+	attended: string[]
+	events: string[]
+	rsvp: string[]
 }
 
 export interface GeoCodeModel

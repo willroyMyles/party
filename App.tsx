@@ -82,7 +82,7 @@ const App = () =>
       <StatusBar animated translucent backgroundColor={Colors.background} barStyle={tm.themeType == ThemeType.DARK ? "light-content" : "dark-content"} />
       <View flex bg-background>
         <StackNavigator />
-        {/* <TToast /> */}
+        <TToast />
         <RateParty />
       
       </View>

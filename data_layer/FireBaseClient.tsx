@@ -30,8 +30,6 @@ class Store
   constructor()
   {
   }
-  private userData = null
-
   resetLast = () => last = null
   restLastType = () => lastType = null
   isLoggedIn = () => auth().currentUser != undefined || null;
@@ -401,7 +399,18 @@ class Store
     })
     
     
-
+  private getUserData = () => new Promise( ( resolve, reject ) =>
+  {
+    firestore().doc( `${ userCollection }/${ auth().currentUser?.uid }` ).get().then( res =>
+    {
+      resolve(res.data())
+    } ).catch( err =>
+    {
+      reject()
+      console.log(err);
+      
+    })
+    })
 
   
 
@@ -655,6 +664,7 @@ class Store
     register: this.register,
     logout: this.logout,
     resetPassword: this.resetPassword,
+    getUserData: this.getUserData
   }
 
 

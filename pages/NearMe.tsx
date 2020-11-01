@@ -18,7 +18,7 @@ import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { eventEmitter, eventStrings } from '../universal/EventEmitter';
 import psuedoLocationTracker, { radius } from '../data_layer/PsuedoLocationTracker';
-import { AppState, AppStateStatus } from 'react-native';
+import { AppState, AppStateStatus , PermissionsAndroid} from 'react-native';
 import { observer } from 'mobx-react';
 import tm from '../universal/UiManager';
 import { getColorForType, GetPartytypeString } from '../universal/GS';
@@ -31,6 +31,18 @@ import RNLocation from 'react-native-location';
 const foregroundTask = "online geo tasks"
 const backgroundTask = "offline geo tasks"
 
+
+// PermissionsAndroid.request( PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+//     title: "need ",
+//     message: "never",
+//     buttonPositive: "ok",
+//     buttonNegative: "no",
+//     buttonNeutral: "none"
+// } )
+
+
+
+// Location.requestPermissionsAsync()
 
 // export const GeoLocationUpdates = ( { data, error }: { data: any, error: any } ) =>
 // {
@@ -112,21 +124,14 @@ const NearMe = () =>
                     locationRegions.push( c )
                 }
             }
-
-         
-            RNLocation.configure( {
-                allowsBackgroundLocationUpdates: true,
-                androidProvider: "auto",
-                showsBackgroundLocationIndicator: true,
-            } ).then( res =>
-            {
-                const unsubscribe = RNLocation.subscribeToLocationUpdates( location =>
-                {
-                    console.log( location[0] );
-                } )
-            })
-           
             
+            getLocation().then( res =>
+            {
+                console.log( res, "get location " );
+                psuedoLocationTracker.watchTheseLocations( locationRegions );
+                psuedoLocationTracker.updateUserLocation( res );
+                
+            })
             
 
 
@@ -143,6 +148,9 @@ const NearMe = () =>
     useEffect( () =>
     {
         getUserRegion();
+   
+  
+        // sort
         // sortMarkers()
         
         if ( !eventEmitter.eventNames().includes( eventStrings.dataFromProviderFinishedLoad ) )
@@ -150,6 +158,8 @@ const NearMe = () =>
 
         // AppState.addEventListener( "change", changeLocationUpdates )
         
+       
+
 
         let id: string = ""
         workManager.setWorker( {
@@ -213,6 +223,7 @@ const NearMe = () =>
     {
         try
         {
+            return
             const coor = await getLocation();
             const reg = getRegion( coor );
             if ( map.current )

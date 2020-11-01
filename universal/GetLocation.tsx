@@ -4,6 +4,7 @@ import { LatLng, Region } from "react-native-maps";
 import { Alert, Dimensions } from "react-native";
 import { eventEmitter, eventStrings } from "./EventEmitter";
 import tm from "./UiManager";
+import RNLocation from 'react-native-location';
 
 
 export const RevokeLocationPermission = () => new Promise<boolean>( async resolve =>
@@ -65,21 +66,26 @@ export const GetLocationPermission = () => new Promise<boolean>( async (resolve)
 export const getLocation = () => new Promise<any>(async (resolve, reject) => {
     try
     {
+
+     
         
         const perm = await GetLocationPermission()     
         if ( perm )
         {
-            Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High, enableHighAccuracy:true }).then(res => {
+            Location.getCurrentPositionAsync({ enableHighAccuracy:true }).then(res => {
 
                 resolve(res.coords)
             } ).catch( async (err) =>
             {
-                console.log( "somthing bad happened, could not get location", err );
-                console.log( await Location.isBackgroundLocationAvailableAsync() );
-                //TODO: show oast that couldnt get location
-                
-            // eventEmitter.emit(eventStrings.locationNotGranted)
-                
+                Location.getLastKnownPositionAsync().then( res =>
+                {
+                    resolve(res.coords)
+                } ).catch( err =>
+                {
+                    console.log( "\n somthing bad happened again!!, could not get location", err );
+
+                })
+
             })
         }
     }

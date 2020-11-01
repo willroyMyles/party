@@ -69,30 +69,39 @@ const PastEventView = () =>
 	
 	const handleUpload = () =>
 	{
-		console.log("res");
-		FireStore.auth.needAuth().then( res =>
+		
+		FireStore.retrieve.checkPartyAttendance(item.reference).then( res =>
 		{
-			
 			if ( res )
 			{
-				getImage().then( ( res ) =>
+				FireStore.auth.needAuth().then( res =>
 				{
-					if ( !res.cancelled )
+
+					if ( res )
 					{
-						FireStore.send.sendPicturesToEvent( referenceNumber, res.uri ).then( ( res ) =>
+						getImage().then( ( res ) =>
 						{
-							if ( res )
+							if ( !res.cancelled )
 							{
-								TToast.success( "Success", "Everythings good to go!" )
-							} else
-							{
-								TToast.error( "Error", "Something went wrong" )
+								FireStore.send.sendPicturesToEvent( referenceNumber, res.uri ).then( ( res ) =>
+								{
+									if ( res )
+									{
+										TToast.success( "Success", "Everythings good to go!" )
+									} else
+									{
+										TToast.error( "Error", "Something went wrong" )
+									}
+								} )
 							}
 						} )
 					}
 				} )
+			} else
+			{
+				TToast.error( "Oh my", "You would of had to attended the party to be able to post a picture." )
 			}
-		} )
+		})
 	}
 
 // @refresh reset
