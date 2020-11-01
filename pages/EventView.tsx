@@ -3,9 +3,9 @@ import { View, Text, Image, Avatar, Colors } from 'react-native-ui-lib'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useTheme } from 'styled-components'
 import FireStore from '../data_layer/FireStore'
-import { Easing, ScrollView, StatusBar } from 'react-native'
+import { Easing, ScrollView, Share, StatusBar } from 'react-native'
 import moment from 'moment'
-import { PartyType } from '../universal/Models'
+import { FeedItemModel, PartyType } from '../universal/Models'
 import tm from '../universal/UiManager'
 import { GS, GetIcon, GetPartytypeString } from '../universal/GS'
 import Organizer from '../components/Organizer'
@@ -23,7 +23,37 @@ const EventView = () =>
     const theme = useTheme()
     const route = useRoute()
     const reference = route.params?.reference
-    const item = FireStore.data.get( reference )
+    const item : FeedItemModel = FireStore.data.get( reference )
+
+    const onShare = async () =>
+    {
+        const { title, description, date, duration } = item;
+        const actualDate = moment( date ).format( "MMM M, YYYY" );
+        try
+        {
+            const result = await Share.share( {
+                message:
+                    `${title}\n${description}\n${actualDate}`,
+            } );
+            if ( result.action === Share.sharedAction )
+            {
+                if ( result.activityType )
+                {
+                    // shared with activity type of result.activityType
+                } else
+                {
+                    // shared
+                }
+            } else if ( result.action === Share.dismissedAction )
+            {
+                // dismissed
+            }
+        } catch ( error )
+        {
+            console.log(error);
+            
+        }
+    };
 
     useEffect( () =>
     {
