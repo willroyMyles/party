@@ -19,9 +19,17 @@ import org.unimodules.core.interfaces.SingletonModule;
 
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
-public class MainApplication extends Application implements ReactApplication {
+import cl.json.RNSharePackage;
+import cl.json.ShareApplication;
+
+public class MainApplication extends Application implements ShareApplication, ReactApplication {
 
 private final ReactModuleRegistryProvider mModuleRegistryProvider = new ReactModuleRegistryProvider(new BasePackageList().getPackageList(), null);
+
+     @Override
+     public String getFileProviderAuthority() {
+            return BuildConfig.APPLICATION_ID + ".provider";
+     }
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {

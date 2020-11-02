@@ -10,6 +10,10 @@ import
   LayoutAnimation,
   LogBox,
   YellowBox,
+  Linking,
+  AppState,
+  AppStateEvent,
+  AppStateStatus,
 } from 'react-native';
 
 import
@@ -67,7 +71,27 @@ const App = () =>
 
      GetLocationPermission()
     } )
+
+    AppState.addEventListener( 'change', listeningForLink )
+    
+    return() =>
+    {
+      AppState.removeEventListener("change", listeningForLink)
+    }
+
   }, [] )
+
+  const listeningForLink = (state : AppStateStatus) =>
+  {    
+    if ( state == "active" )
+    {
+      Linking.getInitialURL().then( res =>
+      {
+        console.log( res, "okay" );
+      } )
+    }
+  }
+
 
 
   if ( loading )
