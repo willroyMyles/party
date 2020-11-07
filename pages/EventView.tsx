@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, Image, Avatar, Colors } from 'react-native-ui-lib'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useTheme } from 'styled-components'
 import FireStore from '../data_layer/FireStore'
-import { Easing, ScrollView, StatusBar } from 'react-native'
+import { Easing, ScrollView, StatusBar, NativeModules } from 'react-native'
 import moment from 'moment'
 import { FeedItemModel, PartyType } from '../universal/Models'
 import tm from '../universal/UiManager'
@@ -16,7 +16,7 @@ import EventHeaderImage from '../components/EventHeaderImage'
 import LocationBlock from '../components/LocationBlock'
 import { animated, useSpring } from 'react-spring/native'
 import Share from 'react-native-share';
-
+import rnfb from "rn-fetch-blob";
 
 const EventView = () =>
 {
@@ -27,23 +27,44 @@ const EventView = () =>
     const reference = route.params?.reference
     const item : FeedItemModel = FireStore.data.get( reference )
 
+
     const onShare = async () =>
     {
-        const { title, description, date, duration, reference } = item;
-        const actualDate = moment( date ).format( "MMM M, YYYY" );
-        Share.open( {
-            title: title,
-            message: `${description}\n`,
-            url: "http://myparty.com/" + reference,
-            subject : "come out and chill!"
-       })
+
+        let shareImage = "data:image/png;base64,"
+        try
+        {
+            console.log( item.imageUrl);
+
+            rnfb.fetch( "GET", item.imageUrl ).then( ( res ) =>
+            {
+                console.log( "mad ness", res );
+                shareImage += res.base64()
+                const { title, description, date, duration, reference } = item;
+                const actualDate = moment( date ).format( "MMM M, YYYY" );
+                Share.open( {
+                    title: `${title}\n`,
+                    message: `${ description }\n http://myparty.com/${reference}`,
+                    url: shareImage, 
+                } )
+            } ).catch( err => console.log( err ) )
+            
+        } catch ( err )
+        {
+            console.log(err);
+            
+        }
+
+return
+  
     };
 
     useEffect( () =>
     {
         async function getImage()
         {
-            const d = await FireStore.retrieve.imageFromReference( item.reference , item.flyer)
+            const d = await FireStore.retrieve.imageFromReference( item.reference, item.flyer )
+            item.imageUrl = d;
             setImage( d )
         }
 
