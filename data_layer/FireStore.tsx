@@ -22,6 +22,7 @@ class Store
   @observable userName: string | null = null;
   @observable eventImagesMap: Map<string, string> = new Map()
   @observable eventImagesForPastEventsMap: Map<string, string[]> = new Map()
+  @observable lastKnownUrl = "";
   constructor()
   {
     FBS.events.linktorealTimeEvents( this.organizeStream )

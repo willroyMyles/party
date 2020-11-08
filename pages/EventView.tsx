@@ -11,7 +11,7 @@ import
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import FireStore from '../data_layer/FireStore';
-import { Easing, ScrollView, StatusBar, NativeModules } from 'react-native';
+import { Easing, ScrollView, StatusBar } from 'react-native';
 import moment from 'moment';
 import { FeedItemModel, PartyType } from '../universal/Models';
 import tm from '../universal/UiManager';
@@ -53,12 +53,16 @@ const EventView = () =>
         let shareImage = 'data:image/png;base64,' + base64;
 
         const { title, description, date, duration, reference } = item;
-        // const actualDate = moment( date ).format( "MMM M, YYYY" );
+
+
+
+        const actualDate = moment( date ).format( "MMM M, YYYY" );
         Share.open( {
             title: `${ title }\n`,
             message: `${ description }\n http://myparty.com/${ reference }`,
             url: shareImage,
-        } );
+            failOnCancel: true
+        } ); 
     };
 
     useEffect( () =>

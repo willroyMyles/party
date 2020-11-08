@@ -36,13 +36,15 @@ import { GetLocationPermission } from './universal/GetLocation';
 import RateParty from './components/RateParty';
 import { AppEventsLogger } from 'react-native-fbsdk';
 import SplashScreen from 'react-native-splash-screen'
+import { suppressDeprecationWarnings } from 'moment';
 
 
-YellowBox.ignoreWarnings( [
-  "registerHeadlessTask or registerCancellableHeadlessTask called multiple times for same key 'test worker'"
+// YellowBox.ignoreWarnings( [
+//   "registerHeadlessTask or registerCancellableHeadlessTask called multiple times for same key 'test worker'"
 
-])
+// ] )
 
+LogBox.ignoreLogs( ["registerHeadlessTask or registerCancellableHeadlessTask called multiple times for same key 'test worker'"])
 
 if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental )
 {
@@ -58,39 +60,19 @@ const App = () =>
   const [loading, setLoading] = useState( true )
   useEffect( () =>
   {
-
-    console.log("app loading");
-    
+    console.log( "app loading" );
     Font.loadAsync( {
       // Nunito_Black: require( "./assets/fonts/Nunito/Nunito-Black.ttf" ),
       // RR: require( "./assets/fonts/Red_Rose/RedRose-Regular.ttf" )
     } ).then( () =>
     {
       setLoading( false )
-
-
-     GetLocationPermission()
+      GetLocationPermission()
     } )
-
-    AppState.addEventListener( 'change', listeningForLink )
-    
-    return() =>
-    {
-      AppState.removeEventListener("change", listeningForLink)
-    }
 
   }, [] )
 
-  const listeningForLink = (state : AppStateStatus) =>
-  {    
-    if ( state == "active" )
-    {
-      Linking.getInitialURL().then( res =>
-      {
-        console.log( res, "okay" );
-      } )
-    }
-  }
+
 
 
 
@@ -108,22 +90,9 @@ const App = () =>
         <StackNavigator />
         <TToast />
         <RateParty />
-      
       </View>
     </ThemeProvider>
   )
-
-
-
-
-  return (
-    <>
-      <StatusBar barStyle="default" />
-      <SafeAreaView>
-
-      </SafeAreaView>
-    </>
-  );
 };
 
 
