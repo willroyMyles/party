@@ -139,9 +139,7 @@ const CreateEvent = () =>
         Location.reverseGeocodeAsync( loc ).then( res =>
         {
             if(res.length == 0) return
-            const locObj = res[0]
-            console.log(locObj);
-            
+            const locObj = res[0]            
             setLocObj(locObj)
             setValue( "locationObject", locObj )
             setValue( 'location', [loc?.latitude, loc?.longitude].toString() );

@@ -37,7 +37,6 @@ export const GetLocationPermission = () => new Promise<boolean>( async (resolve)
             else
             {
                 //show alert
-                console.log("location denied");
                 Alert.alert(
                     "Location",
                     "We need your location to show you parties near you. \n\nIf at anytime you wish to change your locations preferences, look under your profile settings" )
@@ -90,7 +89,6 @@ export const getLocation = () => new Promise<any>(async (resolve, reject) => {
         }
     }
     catch (err) {
-        console.log(err);
         reject( "not granted" )
     }
 

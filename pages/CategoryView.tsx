@@ -94,9 +94,7 @@ const CategoryView = () =>
                 
             })
         } ).catch( err =>
-        {
-            console.log("error?");
-            
+        {            
             setLoading( false )
             setShouldLoadMore( false )
         } )

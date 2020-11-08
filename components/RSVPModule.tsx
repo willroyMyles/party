@@ -17,8 +17,6 @@ const RSVPModule = () =>
 
 		FireStore.retrieve.rsvpEvents().catch( err =>
 		{
-			console.log( "rsvp error", err );
-			
 		} )
 	}, [] )
 

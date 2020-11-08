@@ -33,11 +33,9 @@ export class Store
 		AsyncStorage.getItem( "theme" ).then( ( res ) =>
 		{
 			this.setThemeType( ThemeType.DARK.toString() == res )
-			console.log(`setting theme? ${ThemeType[ res]}`);
 			
 		} ).catch(err=>{
 			// this.setThemeType(true)
-			console.log(err, "some error");
 			
 		})
 

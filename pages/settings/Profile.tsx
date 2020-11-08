@@ -25,9 +25,7 @@ const Profile = () =>
     const [loading, setLoading] = useState(false)
 
     const handleCreateEvent = () =>
-    {
-        console.log("let get started");
-        
+    {        
         setLoading(true)
         FireStore.auth.needAuth().then( res =>
         {
@@ -54,9 +52,7 @@ const Profile = () =>
     }
 
     const handleLocationChanged = ( val: boolean ) =>
-    {        
-        console.log(`what? ${val}`);
-        
+    {                
         if ( val )
         {
             GetLocationPermission().then( (res) =>

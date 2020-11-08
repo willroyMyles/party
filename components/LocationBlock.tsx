@@ -12,9 +12,7 @@ const LocationBlock = ( { styled, city, country, isoCountryCode, name, postalCod
 
     { styled:boolean, city:string, country:string, isoCountryCode:string, name:string, postalCode:string, region:string, street:string }) =>
 {
-    const theme= useTheme()
-    console.log(`location block ${city}`)
-    
+    const theme= useTheme()    
     if ( styled ) return (
         <View>
             <View style={[ { backgroundColor: Colors.background, width: "100%", paddingVertical: 0, borderRadius: 15 }]}>

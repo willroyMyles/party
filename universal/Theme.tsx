@@ -272,8 +272,6 @@ export interface Theme
 
 const storm = "#112432"
 const light = generate( Colors.violet40 )
-console.log(Colors.grey50);
-
 export const lightTheme: Theme = {
 	primary: light[5],
 	secondary: light[2],

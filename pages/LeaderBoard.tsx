@@ -40,64 +40,7 @@ const LeaderBoard = () =>
     //     }
     // } ) )
     const theme = useTheme()
-    const [data, setData] = useState<Map<string, FeedItemModel>>( new Map() )
-    const [loading, setLoading] = useState( false )
-    
-    
-    
-    useEffect( () =>
-    {
-        
-        FireStore.getOnGoingParties()
-setLoading(true)
-        FireStore.retrieve.getEventsByRatings().then( res =>
-        {               
-            if ( res.length > 0 )
-            {
-                setData( d =>
-                {
-                    res.map( ( value: FeedItemModel, index ) =>
-                    {
-                        d.set(value.reference, value)
-                    } )
-                    
-                    return d
-                })  
-            }
-            setLoading(false)
-        } ).catch( err =>
-        {
-            console.log("leaderboard err");
-            setLoading( false )
-
-            //could not get events
-        })
-    }, [] )
-
-    // if ( data.size == 0 )
-    // {
-    //     return <View flex center padding-60 bg-background>
-    //         <View center padding-10 style={{ minHeight: "10%" }}>
-    //             <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
-    //         </View>
-    //         <Text lvl1 center>no parties rated yet. Be one of the first to get to the top!</Text>
-    //         <View bg-foreground style={{
-    //             position:"absolute",
-    //             width: 200,
-    //             height: 200,
-    //             zIndex: -1,
-    //             borderRadius: 200,
-    //             elevation: 0,
-    //             opacity:.3
-    //         }} />
-    //         <BackDropV2 />
-    //     </View>
-    // }
-    
-    const getDataForList = ():FeedItemModel[] =>
-    {
-        return [...data.values()].sort((a,b)=> b.rating - a.rating)
-    }
+ 
 
     const onPress = async () =>
     {
@@ -146,26 +89,6 @@ setLoading(true)
         </SafeAreaView>
     )
 
-
-    return (
-        <SafeAreaView style={{flex:1, backgroundColor:Colors.background}}>
-        <View bg-background>
-                <View center padding-10 bg-background style={{ minHeight: "10%" }}>
-                    <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
-                </View>
-
-                <FlatList
-                    data={getDataForList()}
-                    keyExtractor={( item: FeedItemModel ) => item.reference || faker.random.number( 200 ).toString()}
-                    renderItem={( { item, index } ) =>
-                    {
-                    return <LeaderBoardTiles index={index} item={item} />
-                }}    
-                    />
-
-        </View>
-        </SafeAreaView>
-    )
 }
 
 export default observer(LeaderBoard)

@@ -54,9 +54,7 @@ const PhotoGridImage = ( { numOfCols, wid, index, img, urls }: any ) =>
     }, [] )
     
     const dismiss = () =>
-    {
-        console.log("Setted");
-        
+    {        
         // setShow( false )
         // BackHandler.removeEventListener( "hardwareBackPress", dismiss )
         return undefined

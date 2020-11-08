@@ -31,15 +31,12 @@ export const HomeNavigator =  observer(() =>
     return () =>
     {
       Linking.removeEventListener("url", listenerForLinking)
-      console.log("should remove listener");
     }
   }, [] )
 
   const listenerForLinking = ({url}:{url:string}) =>
   {
-    console.log( `listener for strin ${ url }` );
     const path = dissectUrl( url );
-    console.log( path );
     if ( FireStore.data.has( path ) )
     {
       nav.navigate( "view event", { reference: path } )

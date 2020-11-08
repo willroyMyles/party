@@ -8,6 +8,7 @@ import { Alert } from 'react-native';
 import crashlytics from '@react-native-firebase/crashlytics';
 import { date } from 'faker';
 import moment from 'moment';
+import { refDecorator } from 'mobx/lib/internal';
 
 
 class Store
@@ -318,7 +319,19 @@ class Store
   private getEventImageForReference = ( reference: string, flyer:string ) => new Promise<string>( async ( resolve, reject ) =>
   {
 
-    
+    if ( this.data.has( reference ) )
+    {
+      const element: FeedItemModel = this.data.get( reference );
+      if ( element.imageUrl != null || element.imageUrl != undefined ) return resolve( element.imageUrl );
+    }
+
+    if ( this.memoryData.has( reference ) )
+    {
+      const element: FeedItemModel = this.memoryData.get( reference );
+      if ( element.imageUrl != null || element.imageUrl != undefined ) return resolve( element.imageUrl );
+    }
+
+
     if ( this.eventImagesMap.has( reference ) )
     {
       return resolve( this.eventImagesMap.get( reference ) )
@@ -328,10 +341,13 @@ class Store
     {
       const imageUrl = await FBS.events.getUrlForFlyers( flyer)
       resolve( imageUrl )
+      this.eventImagesMap.set( reference, imageUrl );
+      if(imageUrl)   FBS.events.updateImageUrl( reference, imageUrl );
+
     } catch ( err )
     {
       console.log( `didnt get image for reference : ${ reference }`, err );
-
+      reject();
     }
   } )
 
@@ -346,9 +362,7 @@ class Store
         .then( ( res ) =>
         {
           if ( res )
-          {
-            console.log(res);
-            
+          {            
             this.eventImagesForPastEventsMap.set( reference, res )
 
             resolve( true )
@@ -366,9 +380,7 @@ class Store
       {
         if ( res )
         {
-          resolve( res )
-          console.log(res);
-          
+          resolve( res )          
           const imgs = this.eventImagesForPastEventsMap.get(ref)
           if(imgs != undefined){
             imgs.push(res)

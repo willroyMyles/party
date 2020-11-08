@@ -68,7 +68,6 @@ export class PsuedoLocationTracker
             return
         }
         
-        console.log("added to process", reference);
         
         this.processed.set( reference, new Date() );
 
@@ -76,7 +75,6 @@ export class PsuedoLocationTracker
 
     @action updateUserLocation = ( latLng: LatLng ) =>
     {
-        console.log( "updating stat", latLng);
         
         if(this.data.size == 0) return
         this.userLocation = latLng;        

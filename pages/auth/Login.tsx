@@ -36,7 +36,6 @@ const Login = () => {
         schema.isValid(data, {
             abortEarly: true
         }).then(res => {
-            console.log(res);
             if(res){
                 crashlytics().log("on submit login run")
                 TToast.working("Loggin in", "Wait a moment while we log you in...")
@@ -71,11 +70,8 @@ const Login = () => {
         }
 
     }).catch(err=>{
-        console.log(err);
         TToast.error("didnt log in ", "We had a problem logging you in" )
         crashlytics().log(`google sign in didnt work ${err}`)
-        
-        
     })
 
 

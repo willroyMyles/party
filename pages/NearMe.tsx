@@ -102,15 +102,12 @@ const NearMe = () =>
         let id: string = ""
         try
         {
-            console.log( "talks to me nicely" );
             const parties = await FireStore.getOnGoingParties();
 
             const locationRegions: LocationRegion[] = []
             for ( let index = 0; index < parties.length; index++ )
             {
                 const element = parties[index];
-                console.log( element.title );
-
                 const coord = getLatitudeLongitudeFromString( element.location );
                 if ( coord )
                 {
@@ -127,7 +124,6 @@ const NearMe = () =>
             
             getLocation().then( res =>
             {
-                console.log( res, "get location " );
                 psuedoLocationTracker.watchTheseLocations( locationRegions );
                 psuedoLocationTracker.updateUserLocation( res );
                 
@@ -180,7 +176,6 @@ const NearMe = () =>
             
         } ).then( res =>
         {
-            console.log(`things done ${res}`);
             id = res;
         } ).catch( err =>
         {
@@ -223,7 +218,6 @@ const NearMe = () =>
     {
         try
         {
-            return
             const coor = await getLocation();
             const reg = getRegion( coor );
             if ( map.current )

@@ -36,9 +36,7 @@ class Store
 
   login = ( email: string, password: string ) =>
     new Promise( ( resolve, reject ) =>
-    {
-      console.log(email, password);
-      
+    {      
       auth()
         .signInWithEmailAndPassword( email, password )
         .then( ( res ) =>
@@ -50,9 +48,7 @@ class Store
 
   register = ( username: string, email: string, password: string ) =>
     new Promise( ( resolve, reject ) =>
-    {
-      console.log("register enetred");
-      
+    {      
       auth()
         .createUserWithEmailAndPassword( email, password )
         .then( ( res ) =>
@@ -79,8 +75,6 @@ class Store
     } ).catch( err =>
     {
       reject( err )
-      console.log( err );
-
     } )
   } )
 
@@ -246,7 +240,6 @@ class Store
       if(events.length < 2 || events == undefined) return resolve(true)
       
       const secondToLast = events[events.length - 2]
-      console.log("entered here", secondToLast);
       const secondToLastDocument = await firestore().doc(`${eventCollection}/${secondToLast}`).get()
       
         if( secondToLastDocument == undefined) return resolve(true)
@@ -256,9 +249,6 @@ class Store
         const sevenDaysAgo = new Date(now.getTime() - (1000 * 60 * 60 * 24 * days))
 
         resolve(secondToLastdate > sevenDaysAgo)
-        console.log(`${secondToLastdate > sevenDaysAgo}`);
-        
-
         
     }).catch(err=>{
         reject(err)
@@ -314,8 +304,6 @@ class Store
         resolve( snapshotQuery );
       } else
       {
-        console.log( 'old', last.id );
-
         const firstQuery = firestore()
           .collection( eventCollection )
           .orderBy( order )
@@ -353,7 +341,6 @@ class Store
 
     } catch ( err )
     {
-      console.log( "err" );
       reject( err )
     }
   } )
@@ -477,6 +464,26 @@ class Store
 
     })
   }
+
+  private updateImageurl = ( reference: string, url: string ) => new Promise<boolean>( ( resolve ) =>
+  {
+    firestore().collection( eventCollection ).doc( reference ).update( { imageUrl: url } ).then( res =>
+    {
+       return resolve(true)
+    } ).catch( err =>
+    {
+      
+      firestore().collection( pastEventCollection ).doc( reference ).update( { imageUrl: url } ).then( res =>
+      {
+        return resolve( true )
+      } ).catch( err =>
+      {
+        resolve(false)
+
+      } )
+      
+    })
+  })
 
   private getURLForEventFlyers = ( imagePath: string ) =>
   {
@@ -686,7 +693,8 @@ class Store
     increaseAttendance: this.increaseAttendance,
     linktorealTimeEvents: this.linktorealTimeEvents,
     linktoPastTimeEvents: this.linktoPastTimeEvents,
-    limitUser: this.checkUserLimitForPosting
+    limitUser: this.checkUserLimitForPosting,
+    updateImageUrl:this.updateImageurl
   };
 }
 
