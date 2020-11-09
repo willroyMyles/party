@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Colors, Image } from 'react-native-ui-lib'
+import { View, Text, Colors, TouchableOpacity } from 'react-native-ui-lib'
 import { useSpring } from 'react-spring/native'
 import { useTheme } from 'styled-components'
 import { FeedItemModel } from '../universal/Models'
@@ -8,11 +8,15 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import FireStore from '../data_layer/FireStore'
 import FastImage from 'react-native-fast-image'
+import { useNavigation } from '@react-navigation/native'
 
 const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: number } ) =>
 {
     const theme = useTheme()
+    const nav = useNavigation()
     const [image, setImage] = useState<string>()
+
+    const onPress= () => nav.navigate("view past event", {reference : item.reference})
     useEffect( () =>
     {
         async function getImage()
@@ -28,7 +32,7 @@ const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: numb
         <View marginT-20 bg-foreground centerV style={{
             width: "100%", overflow: "hidden", elevation:.2, paddingVertical:5, borderRadius:7 }}>
             
-            <View centerV row style={{ width: "100%"}}>
+            <TouchableOpacity onPress={onPress} centerV row style={{ width: "100%"}}>
 
                 <View center padding-10>
                     <Text lvl1>{index + 1}.</Text>
@@ -51,7 +55,7 @@ const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: numb
                 </View>    
 
 
-            </View>      
+            </TouchableOpacity>      
         </View>
     )
 }

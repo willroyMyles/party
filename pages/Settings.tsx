@@ -13,13 +13,21 @@ const Tab = createMaterialTopTabNavigator()
 const Settings = () =>
 {
     const theme = useTheme()
-    const style = {
-        tabStyle: { backgroundColor: Colors.background, borderBottomWidth: 2, borderBottomColor: Colors.foreground }, labelStyle: { fontFamily: "RR" }, activeTintColor: Colors.primary, inactiveTintColor: Colors.muted
-    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
 
-            <Tab.Navigator tabBarOptions={style}>
+            <Tab.Navigator tabBarOptions={{
+                allowFontScaling: true,
+                tabStyle: {
+                    borderBottomColor: Colors.primary,
+                    backgroundColor: Colors.background
+                },
+                labelStyle: { shadowRadius: 1 },
+                activeTintColor: Colors.primary,
+                inactiveTintColor: Colors.muted,
+                indicatorStyle: { backgroundColor: Colors.secondary, elevation: 12, borderRadius: 0, marginBottom: -3 }
+            }}>
                 <Tab.Screen name="profile" component={Profile} />
                 <Tab.Screen name="account" component={Account} />
                 <Tab.Screen name="about" component={About} />

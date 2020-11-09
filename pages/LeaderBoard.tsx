@@ -68,20 +68,36 @@ const LeaderBoard = () =>
         }
     }
     
-    const style = {
-        tabStyle: { backgroundColor: Colors.background, borderBottomWidth: 2, borderBottomColor: Colors.foreground }, labelStyle: { fontFamily: "RR" }, activeTintColor: Colors.primary, inactiveTintColor: Colors.muted
-    }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} >
             <View center padding-10 bg-background style={{ minHeight: "10%" }}>
-                <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 10, textShadowRadius: 10 }} />
+                <Icon name="trophy" size={42} color={Colors.text1} style={{ elevation: 0, textShadowRadius: 1 }} />
             </View>
-            <Tabs.Navigator tabBarOptions={style}>
+            <Tabs.Navigator tabBarOptions={{
+                allowFontScaling: true,
+                tabStyle: {
+                    borderBottomColor: Colors.primary,
+                    backgroundColor:Colors.background
+                },
+                labelStyle:{shadowRadius:1},
+                activeTintColor: Colors.primary,
+                inactiveTintColor: Colors.muted,
+                indicatorStyle:{backgroundColor:Colors.secondary, elevation:12, borderRadius:50}
+            }}>
                 {getPartyTypeArray().map( ( keys, index:number ) =>
                 {
-                    return ( <Tabs.Screen key={keys + "" + index} name={keys + ""} >
-                       {()=> <LeaderBoardPage type={keys} />}
+                    
+                    const text = (keys + "").replace('_', ' ').toLowerCase()
+                    
+                    return ( <Tabs.Screen key={keys + "" + index} name={text} >
+
+                        {() =>
+                        {
+                            return (
+                                    <LeaderBoardPage type={keys} />
+                            )
+                       }}
                         </Tabs.Screen>)
                          
                         })}
