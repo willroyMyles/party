@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import FireStore from '../data_layer/FireStore'
+import FastImage from 'react-native-fast-image'
 
 const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: number } ) =>
 {
@@ -25,7 +26,7 @@ const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: numb
   
     return (
         <View marginT-20 bg-foreground centerV style={{
-            width: "100%", overflow: "hidden", elevation:0, paddingVertical:5, borderRadius:7 }}>
+            width: "100%", overflow: "hidden", elevation:.2, paddingVertical:5, borderRadius:7 }}>
             
             <View centerV row style={{ width: "100%"}}>
 
@@ -35,12 +36,12 @@ const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: numb
                 <View style={{
                     height: 70, width: 70, borderRadius: 60, elevation: 7, overflow: "hidden", borderWidth: 3, borderColor: Colors.foreground
                 }}>
-                    <Image fadeDuration={600} blurRadius={.5} source={{ uri: image }} resizeMode="cover" style={{ height: "100%", width: "100%", position: "absolute" }} />
+                    <FastImage source={{ uri: image }} resizeMode={FastImage.resizeMode.cover} style={{ height: "100%", width: "100%", position: "absolute" }} />
                 </View>
       
                 <View row marginL-5 paddingH-10 centerV spread style={{width:"70%"}}>
-                    <View padding-3 br10 paddingH-15>
-                        <Text lvl1> { item.title}</Text>
+                    <View padding-3 br10 paddingH-15 style={{width:"80%"}}>
+                        <Text lvl1  style={{lineHeight:30, }}>{ item.title}</Text>
                     </View>
 
                     <View marginR-5 center padding-10>

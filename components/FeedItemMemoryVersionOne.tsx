@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo, memo } from 'react'
 import { View, Text, TouchableOpacity, Colors } from 'react-native-ui-lib'
 import { FeedItemModel, PartyType } from '../universal/Models'
 import { Dimensions } from 'react-native'
@@ -10,10 +10,10 @@ import { useNavigation } from '@react-navigation/native'
 import FireStore from '../data_layer/FireStore'
 import PartyTypeBadge from './PartyTypeBadge'
 const { width, height } = Dimensions.get( "screen" )
+import FastImage from 'react-native-fast-image'
 
 
-
-const FeedItemMemoryVersionOne = ( { item }: { item: FeedItemModel } ) =>
+const FeedItemMemoryVersionOne = memo( ( { item }: { item: FeedItemModel } ) =>
 {
 
     if ( !item )
@@ -64,12 +64,14 @@ const FeedItemMemoryVersionOne = ( { item }: { item: FeedItemModel } ) =>
                 {/* <BackDrop /> */}
                 <View>
                     <View style={{ elevation: 5 }} center>
-                        <Image
-                            source={{ uri: image }}
-
-                            style={{ flex: 1, flexDirection: "row", borderRadius: 3, height: 150, width: "100%" }}
-                            resizeMode="cover"
-                        // aspectRatio={height/width * 1.2}
+                        <FastImage
+                            style={{ width: "100%", height: 200 }}
+                            source={{
+                                uri: image,
+                                headers: { Authorization: 'someAuthToken' },
+                                priority: FastImage.priority.normal,
+                            }}
+                            resizeMode={FastImage.resizeMode.cover}
                         />
                     </View>
                     <View
@@ -94,6 +96,6 @@ const FeedItemMemoryVersionOne = ( { item }: { item: FeedItemModel } ) =>
             </TouchableOpacity>
         </View>
     )
-}
+});
 
 export default FeedItemMemoryVersionOne

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import { View, Text, LoaderScreen, Colors } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 
@@ -8,10 +8,10 @@ const LoaderImage = ( { uri, width, height }: { uri: string | undefined, height:
     const theme = useTheme()
    
    if(uri) return (
-       <Image
-           fadeDuration={300}
+       <FastImage
            source={{ uri: uri }}
-           style={{ width: width || "100%", height: height || "100%", borderRadius:7 }}
+           resizeMode = {FastImage.resizeMode.cover}
+           style={{ width: "100%", height:  "100%" }}
        />
    )
     
