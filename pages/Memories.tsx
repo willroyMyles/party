@@ -39,7 +39,8 @@ const Memories = () => {
 				style={{borderWidth: 0, flex: 1}}
 				data={[...FireStore.memoryData.values()]}
 					renderItem={itemToRnder}
-					keyExtractor={( item: FeedItemModel ) => item.reference || faker.random.number( 200 ).toString()}
+					initialNumToRender={15}
+					keyExtractor={( item: FeedItemModel , index) => item.reference + "" + index }
 				/>
 			
 		</View>
