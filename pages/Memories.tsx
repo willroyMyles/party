@@ -18,6 +18,14 @@ const Memories = () => {
    const theme = useTheme()
 
 
+	const itemToRnder = ( { item, index }: { item: FeedItemModel, index: number } ) =>
+	{
+		return (
+			<View key={index}>
+				<FeedItemMemoryVersionOne item={item} />
+			</View>
+		)
+	}
 
 	return (
 		<SafeAreaView style={{flex:1, paddingTop:20, backgroundColor:Colors.background}}>
@@ -30,14 +38,7 @@ const Memories = () => {
 					// onEndReachedThreshold={.1}
 				style={{borderWidth: 0, flex: 1}}
 				data={[...FireStore.memoryData.values()]}
-					renderItem={( { item, index } ) =>
-					{					
-					return (
-						<View key={index}>
-							<FeedItemMemoryVersionOne item={item} />
-						</View>
-					)
-				}}
+					renderItem={itemToRnder}
 					keyExtractor={( item: FeedItemModel ) => item.reference || faker.random.number( 200 ).toString()}
 				/>
 			
