@@ -21,7 +21,6 @@ const Profile = () =>
 
     const theme = useTheme()
     const navigation = useNavigation()
-    const [darkTheme, setdarkTheme] = useState( false )
     const [loading, setLoading] = useState(false)
 
     const handleCreateEvent = () =>
@@ -43,95 +42,18 @@ const Profile = () =>
          
         } )
     }
-    const handleCHnage = ( val: boolean ) =>
-    {
-        setdarkTheme( val )
-        setTimeout(() => {
-                tm.setThemeType( val )
-        }, 10);
-    }
 
-    const handleLocationChanged = ( val: boolean ) =>
-    {                
-        if ( val )
-        {
-            GetLocationPermission().then( (res) =>
-            {
-                tm.setLocationGranted( res )
-
-            })
-        } else
-        {
-            tm.setLocationGranted(val)
-        }
-    }
 
     const checButton = () =>
     {
        
         FireStore.send.moveDataAround()
     }
-    useEffect( () =>
-        setdarkTheme( tm.themeType == ThemeType.DARK )
-        , [] )
+
 
     return (
         <ScrollView contentContainerStyle={{ minHeight: "100%", overflow: "scroll", padding: 10, backgroundColor: Colors.background }}>
-            <ProfilePiece />
-            <View>
-                <View row spread>
-                    <Text lvl2>Dark Theme</Text>
-                    <Switch
-                        offColor={Colors.secondary}
-                        onColor={Colors.secondary}
-                        value={darkTheme}
-                        thumbColor={Colors.background}
-                        thumbStyle={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.primary + "60" }}
-                        style={{ borderWidth: 1, borderColor: Colors.primary + "68", elevation: 1 }}
-
-                        onValueChange={handleCHnage}></Switch>
-                </View>
-                <View marginT-20 row spread>
-                    <Text lvl2>Location Permission</Text>
-                    <Switch
-                        offColor={Colors.secondary}
-                        onColor={Colors.secondary}
-                        value={tm.isLocationGranted}
-                        thumbColor={Colors.background}
-                        thumbStyle={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.primary + "60" }}
-                        style={{ borderWidth: 1, borderColor: Colors.primary + "68", elevation: 1 }}
-
-                        onValueChange={handleLocationChanged}
-                    ></Switch>
-                </View>
-                {tm.isLocationGranted && <View marginT-20 row spread>
-                    <Text lvl2>Location All the time</Text>
-                    <TouchableOpacity onPress={() =>
-                    {
-                        Alert.alert( "Additional Location Permission Needed", `     \tHey, we need additional persmission location to be "allow all the time" to determine when your at a party. this will check if your at a party periodically. No personal information will be collected in the process`,
-                            [{
-                                text: "Maybe Later",
-                                onPress: () => { },
-                                style: "cancel"
-                            },
-                            {
-                                text: "Sure",
-                                onPress: () => Linking.openSettings()
-                            },
-                       
-                            ], {cancelable:true} );
-                    }} center style={{
-                        backgroundColor: Colors.foreground,
-                        paddingHorizontal: 12,
-                        padding:6,
-                        borderRadius: 5,
-                        elevation:10
-                    }}>
-                        {/* <Icon name="info" size={22} color={Colors.text1} /> */}
-                        <Text lvl1> show</Text>
-                    </TouchableOpacity>
-                </View>}
-            </View>
+            
             <View>
                 <RSVPModule />
             </View>

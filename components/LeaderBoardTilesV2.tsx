@@ -9,6 +9,10 @@ import { useEffect } from 'react'
 import FireStore from '../data_layer/FireStore'
 import FastImage from 'react-native-fast-image'
 import { useNavigation } from '@react-navigation/native'
+import { Dimensions } from 'react-native'
+
+const {width} = Dimensions.get("screen");
+const size = width * .16;
 
 const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: number } ) =>
 {
@@ -32,25 +36,25 @@ const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: numb
         <View marginT-20 bg-foreground centerV style={{
             width: "100%", overflow: "hidden", elevation:.2, paddingVertical:5, borderRadius:7 }}>
             
-            <TouchableOpacity onPress={onPress} centerV row style={{ width: "100%"}}>
+            <TouchableOpacity onPress={onPress} centerV row style={{ width: "100%", paddingHorizontal:10}}>
 
-                <View center padding-10>
-                    <Text lvl1>{index + 1}.</Text>
+                <View center padding-10 style={{marginStart:-10, width:"10%"}}>
+                    <Text lvl2>{index + 1}.</Text>
                 </View>
                 <View style={{
-                    height: 70, width: 70, borderRadius: 60, elevation: 7, overflow: "hidden", borderWidth: 3, borderColor: Colors.foreground
+                    height: size, width: size, borderRadius: 60, elevation: 7, overflow: "hidden", borderWidth: 3, borderColor: Colors.foreground
                 }}>
                     <FastImage source={{ uri: image }} resizeMode={FastImage.resizeMode.cover} style={{ height: "100%", width: "100%", position: "absolute" }} />
                 </View>
       
-                <View row marginL-5 paddingH-10 centerV spread style={{width:"70%"}}>
+                <View row marginL-5 paddingH-10 centerV spread style={{width:"74%"}}>
                     <View padding-3 br10 paddingH-15 style={{width:"80%"}}>
-                        <Text lvl1  style={{lineHeight:30, }}>{ item.title}</Text>
+                        <Text lvl2  style={{lineHeight:22, }}>{ item.title}</Text>
                     </View>
 
-                    <View marginR-5 center padding-10>
-                        <Text lvl1 center style={{ width: "100%", fontWeight: "700", marginStart: 3, marginTop: 3, fontSize: 30 }}>{item.attendance} </Text>
-                        <Text lvl2 center muted style={{ width: "100%", fontWeight: "400", marginStart: 3, marginTop: 3 }}>attended </Text>
+                    <View marginR-5 center padding-10 style={{transform : [{scale:.9}]}}>
+                        <Text lvl2 center style={{ width: "100%", fontWeight: "600", marginStart: 3, marginTop: 3, fontSize: 20 }}>{item.attendance} </Text>
+                        <Text lvl2 center muted style={{ width: "100%", fontWeight: "400", marginStart: 3, marginTop: 3, fontSize:10 }}>attended </Text>
                     </View>
                 </View>    
 

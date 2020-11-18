@@ -25,7 +25,8 @@ const LeaderBoardPage = ( { type }: { type: string } ) =>
         <View bg-background padding-7 style={{height:"100%"}}>
             <FlatList
                 data={data}
-                contentContainerStyle={{height:"100%"}}
+                scrollEnabled
+                // contentContainerStyle={{height:"80%"}}
 
                 keyExtractor={(item, index)=> item.reference + index}
                 renderItem={( { item, index } ) =>

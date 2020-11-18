@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dimensions, TouchableOpacity } from 'react-native'
-import { Image, Colors } from 'react-native-ui-lib'
+import { Image, Colors, View } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 import { animated, useSpring } from 'react-spring/native'
 import FastImage from 'react-native-fast-image'
@@ -48,6 +48,9 @@ const EventHeaderImage = ( { imageUrl }: { imageUrl?: string } ) =>
                 height: height, width: width,
                 top: props.maxHeight.to([height*.4, height*.9], [-height*.3,0])
             }} />
+            <View centerH style={{position:"absolute", width:"80%"}}>
+                <FastImage source={{uri:imageUrl}}  />
+            </View>
         </TouchOp>
     )
 }

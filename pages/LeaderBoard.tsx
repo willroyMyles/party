@@ -92,12 +92,8 @@ const LeaderBoard = () =>
                     
                     return ( <Tabs.Screen key={keys + "" + index} name={text} >
 
-                        {() =>
-                        {
-                            return (
-                                    <LeaderBoardPage type={keys} />
-                            )
-                       }}
+                        {() =>   <LeaderBoardPage type={keys} />
+                        }
                         </Tabs.Screen>)
                          
                         })}
