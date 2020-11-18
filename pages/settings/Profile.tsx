@@ -15,6 +15,7 @@ import { observer } from 'mobx-react'
 import FBS from '../../data_layer/FireBaseClient'
 import auth from '@react-native-firebase/auth';
 import LoaderButton from '../../components/LoaderButton'
+import PostedPartiesModule from '../../components/PostedPartiesModule'
 
 const Profile = () =>
 {
@@ -56,6 +57,9 @@ const Profile = () =>
             
             <View>
                 <RSVPModule />
+            </View>
+            <View>
+                <PostedPartiesModule />
             </View>
             <View center marginT-40>
 
