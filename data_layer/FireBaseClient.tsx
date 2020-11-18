@@ -504,6 +504,30 @@ class Store
     } )
   }
 
+  private getPostedEvents = () =>  new Promise<FirebaseFirestoreTypes.QuerySnapshot>( async ( resolve, reject ) =>
+  {
+    try
+    {
+      const d = await firestore().collection( userCollection ).doc( auth().currentUser?.uid ).get()
+      if ( d.exists )
+      {
+        const obj = d.data()
+        const arr = obj ? obj["events"] : []
+        const postedEvents = await firestore().collection( eventCollection ).where( "reference", "in", [...arr] ).get()
+        resolve( postedEvents )
+
+      } else
+      {
+        reject( "no data" )
+      }
+    } catch ( err )
+    {
+      console.log( "err", err );
+      reject( err )
+
+    }
+  } )
+
   private getEventsInCategories = ( amount: number ) =>
   {
     //will have to get a large collection and filter them down the line
@@ -694,7 +718,8 @@ class Store
     linktorealTimeEvents: this.linktorealTimeEvents,
     linktoPastTimeEvents: this.linktoPastTimeEvents,
     limitUser: this.checkUserLimitForPosting,
-    updateImageUrl:this.updateImageurl
+    updateImageUrl:this.updateImageurl,
+    getPostedEvents:this.getPostedEvents
   };
 }
 

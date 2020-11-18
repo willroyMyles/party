@@ -480,6 +480,23 @@ class Store
     } ).catch( err => reject( err ) )
   } )
 
+  @action private getPostedEvents = () => new Promise( ( resolve, reject ) =>
+  {
+    FBS.events.getPostedEvents().then( res =>
+    {
+      const array : FeedItemModel[] = []
+
+      for ( let index = 0; index < res.docs.length; index++ )
+      {
+        const element = res.docs[index];
+        const data: FeedItemModel = element.data()
+        array.push(data)
+      }
+
+      resolve( array )
+    } ).catch( err => reject( err ) )
+  } )
+
   @action private sendRating = ( rating: number, reference: string) => new Promise( ( resolve, reject ) =>
   {
     const item = this.data.get( reference )
@@ -559,7 +576,8 @@ class Store
     getEventsByRatings: this.getEventsByRatings,
     limit: this.checkUserLimitForPosting,
     getLeaderboardPartyByType: this.getLeaderboardPartyByType,
-    checkPartyAttendance:this.checkPartyAttendance
+    checkPartyAttendance:this.checkPartyAttendance,
+    getPostedEvents:this.getPostedEvents
   };
 
   send = {
