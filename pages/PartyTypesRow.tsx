@@ -139,7 +139,7 @@ const PartyCard = ( { item }: { item: string } ) =>
         delete: { type: LayoutAnimation.Types.linear, property: LayoutAnimation.Properties.opacity },
     }
 
-    LayoutAnimation.configureNext( CustomLayoutLinear )
+    // LayoutAnimation.configureNext( CustomLayoutLinear )
     
     const V = animated(View)
 

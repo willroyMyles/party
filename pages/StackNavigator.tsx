@@ -18,6 +18,7 @@ import SearchPage from './SearchPage';
 import CategoryView from './CategoryView';
 import ResetPassword from './auth/ResetPassword';
 import WaitingScreen from './WaitingScreen';
+import PostedPartiesView from './PostedPartiesView';
 
 const Stack = createStackNavigator()
 const prest = TransitionPresets.SlideFromRightIOS
@@ -65,6 +66,7 @@ const StackNavigator = () =>
                     <Stack.Screen name="search" component={SearchPage} />
                     <Stack.Screen name="category" component={CategoryView} />
                     <Stack.Screen name="reset password" component={ResetPassword} />
+                    <Stack.Screen name="posted parties" component={PostedPartiesView} />
                     <Stack.Screen options={{ ...scaleTransition, cardStyleInterpolator: forFade }} name="image view" component={ImageView} />
                 </Stack.Navigator>
             </NavigationContainer>

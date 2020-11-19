@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { FlatList } from 'react-native-gesture-handler'
@@ -12,6 +13,7 @@ import PostedPartiesItem from './PostedPartiesItem'
 
 const PostedPartiesModule = () => {
 
+    const Navigator = useNavigation();
 
     const [data, setdata] = useState<FeedItemModel[]>([])
 
@@ -23,7 +25,7 @@ const PostedPartiesModule = () => {
        })
     }, )
 
-
+    const handlePress = () => Navigator.navigate("posted parties")
 
     if ( data.length > 0 ) return (
 		<View marginT-30 style={{ width: "100%" }}>
@@ -36,15 +38,16 @@ const PostedPartiesModule = () => {
 				<FlatList
                     data={data}
                     numColumns={2}
-                    
+                    scrollEnabled={false}
 					keyExtractor={( item, index ) => item + "" + index + ""}
 					renderItem={( { item, index } ) =>
 					{
+                        if(index >= 4) return <View/>;
 						return <PostedPartiesItem key={index} reference={item.reference} />
 					}}
 				/>
                 {data.length > 4 && <View>
-                        <TouchableOpacity center bg-foreground padding-10 marginH-10>
+                        <TouchableOpacity onPress={handlePress} activeOpacity={.85} center bg-foreground padding-10 marginH-10>
                             <Text lvl2>see more</Text>
                         </TouchableOpacity>
                     </View>}
