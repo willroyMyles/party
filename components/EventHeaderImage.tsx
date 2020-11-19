@@ -1,18 +1,22 @@
 import React, { useState } from 'react'
-import { Dimensions, TouchableOpacity } from 'react-native'
-import { Image, Colors, View } from 'react-native-ui-lib'
+import { Dimensions } from 'react-native'
+import { Image, Colors, View, TouchableOpacity } from 'react-native-ui-lib'
 import { useTheme } from 'styled-components'
 import { animated, useSpring } from 'react-spring/native'
 import FastImage from 'react-native-fast-image'
 
+//@refresh reset
+
 const {width,height} = Dimensions.get("screen")
+const minimizedHeight = height*.4;
 const EventHeaderImage = ( { imageUrl }: { imageUrl?: string } ) =>
 {
     const theme = useTheme()
     const [visible, setVisible] = useState( true );
 
      const [props, set] = useSpring( () => ( {
-         opacity: 1, width: width, backgroundColor: Colors.background, maxHeight: height*.4,
+         opacity: 1, width: width, backgroundColor: Colors.background, maxHeight: minimizedHeight,
+         blur : 6,
         config: {
             bounce: 100,
             friction:30
@@ -22,7 +26,8 @@ const EventHeaderImage = ( { imageUrl }: { imageUrl?: string } ) =>
     const onPress = () =>
     {
         set( {
-            maxHeight: visible? height : height*.4
+            maxHeight: visible? height : minimizedHeight,
+            blur : visible? 0 : 6
         } ).then( () =>
         {
             setVisible(v => !v)
@@ -35,23 +40,33 @@ const EventHeaderImage = ( { imageUrl }: { imageUrl?: string } ) =>
   
 
     return (
-        <TouchOp activeOpacity={.9} onPress={onPress} style={{ zIndex:15, overflow: "hidden" , ...props}}>
-            <IMG 
-                source={{
-                    uri: imageUrl,
-                    headers: { Authorization: 'someAuthToken' },
-                    priority: FastImage.priority.normal,
+       <View style={{marginBottom:"45%"}}>
+             <View center style={{width:"100%", height:"100%", zIndex:16, position:"absolute", top: "30%"}}>
+               <TouchableOpacity center activeOpacity={.9} onPress={onPress} style={{width:"95%", height:"130%", padding:20}} >
+               <View style={{elevation:10, width:"95%", height:"100%"}}>
+               <IMG source={{
+                    uri:imageUrl ,
+                    priority : "normal"
                 }}
-                resizeMode={FastImage.resizeMode.contain}
+                    style={{width:"100%", height:"100%"}}
+                    resizeMode={FastImage.resizeMode.contain}
+                    />
+               </View>
+               </TouchableOpacity>
+            </View>
+            <Image 
+            blurRadius={6.3}
+                source={{
+                    uri: imageUrl
+                }}
+                resizeMode={FastImage.resizeMode.cover}
                 
                 style={{
-                height: height, width: width,
-                top: props.maxHeight.to([height*.4, height*.9], [-height*.3,0])
+                height: 390, width: "100%",
+                // top : -minimizedHeight
+                // top: props.maxHeight.to([minimizedHeight, height*.9], [-minimizedHeight,0])
             }} />
-            <View centerH style={{position:"absolute", width:"80%"}}>
-                <FastImage source={{uri:imageUrl}}  />
-            </View>
-        </TouchOp>
+        </View>
     )
 }
 

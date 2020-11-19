@@ -35,7 +35,7 @@ const Feed_Item = ( { reference }: { reference: string } ) =>
 
 	const handleClick = () =>
 	{
-		navigation.navigate( "view event", { reference: item?.reference } )
+		navigation.navigate( FireStore.data.has(reference) ? "view event" : "view past event", { reference: item?.reference } )
 	}
 
 	return (
