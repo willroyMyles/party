@@ -12,15 +12,14 @@ const minimizedHeight = height*.7;
 const EventHeaderImage = ( { imageUrl }: { imageUrl?: string } ) =>
 {
     const theme = useTheme()
-    const [visible, setVisible] = useState( false );
+    const [visible, setVisible] = useState( true );
 
      const [props, set] = useSpring( () => ( {
          opacity: 1, width: width, backgroundColor: Colors.background, maxHeight: minimizedHeight,
          bm : "45%", h:minimizedHeight, top:"8%", blurImageHeight: "80%",
          blur : 6,
         config: {
-            bounce: 100,
-            friction:30
+            duration:350
         }
      } ) )
     

@@ -8,15 +8,24 @@ import { FlatList } from "react-native-gesture-handler"
 import Feed_itemV2 from "./Feed_itemV2"
 import Feed_Item from "./Feed_Item"
 import { observer } from "mobx-react"
+import notificationSystem from "../data_layer/NotificationSystem"
 
 const RSVPModule = () =>
 {
 
 	useEffect( () =>
 	{
+		
+		FireStore.retrieve.rsvpEvents().then( _ =>{
+			[...FireStore.rsvpData.entries()].map(([key,vals], index)=>{
+				notificationSystem.addToWatch(key.toString(),vals.dateNum);
+			})
+			console.log("entered");
 
-		FireStore.retrieve.rsvpEvents().catch( err =>
-		{
+		notificationSystem.checkTime();
+		}).catch( err =>
+			{
+			
 		} )
 	}, [] )
 
