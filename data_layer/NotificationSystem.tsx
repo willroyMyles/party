@@ -2,11 +2,38 @@ import { action, observable } from "mobx";
 import moment from "moment";
 import * as Notifications from 'expo-notifications';
 import FireStore from "./FireStore";
+import workManager from 'react-native-background-worker';
 
 class NotificationSystem {
     @observable data : Map<string, number> = new Map();
     @observable observed : Set<string> = new Set();
+    @observable id : string = ""
 
+    constructor(){
+        workManager.setWorker( {
+            type: "periodic",
+            name: "notofication worker",
+            notification: {
+                title: "Checking rsvp events",
+                text: "just a test notification "
+            },
+            foregroundBehaviour:"blocking",
+            workflow: async () => this.downloadRsvpEvents(),
+            repeatInterval: 1 * 60 * 12, //every 12 hours
+            timeout: 1,
+            constraints: {
+                network : "connected",
+            }
+            
+        } ).then( res =>
+        {
+            this.id = res;
+        } ).catch( err =>
+        {
+            console.log(`some notification error ${err}`);
+        })
+
+    }
 
     @action addToWatch = (refs : string, date : number) =>{
         // if not observed, add to app
@@ -16,6 +43,20 @@ class NotificationSystem {
         // if not observed, add to app
         if(!this.observed.has(refs)) this.data.delete(refs);
     }
+
+    @action downloadRsvpEvents = () => new Promise<void>((resolve, reject)=>{
+        FireStore.retrieve.rsvpEvents().then( _ =>{
+			[...FireStore.rsvpData.entries()].map(([key,vals], index)=>{
+				this.addToWatch(key.toString(),vals.dateNum);
+			})
+
+        this.checkTime();
+        resolve();
+		}).catch( err =>
+			{
+			reject("no rsvp data");
+		} )
+    })
 
     @action checkTime = () => {
         [...this.data.entries()].map(([key,value], index)=>{
@@ -37,6 +78,7 @@ class NotificationSystem {
 
             if(today > partyDay && isSameYear){
                 this.removeFromWatch(key);
+                //should remove from rsvp???
             }
             
         })

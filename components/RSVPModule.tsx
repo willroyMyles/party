@@ -20,7 +20,6 @@ const RSVPModule = () =>
 			[...FireStore.rsvpData.entries()].map(([key,vals], index)=>{
 				notificationSystem.addToWatch(key.toString(),vals.dateNum);
 			})
-			console.log("entered");
 
 		notificationSystem.checkTime();
 		}).catch( err =>
