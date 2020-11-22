@@ -37,6 +37,7 @@ import RateParty from './components/RateParty';
 import { AppEventsLogger } from 'react-native-fbsdk';
 import SplashScreen from 'react-native-splash-screen'
 import { suppressDeprecationWarnings } from 'moment';
+import BusyOverlay from './components/BusyOverlay';
 
 
 // YellowBox.ignoreWarnings( [

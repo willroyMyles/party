@@ -167,7 +167,6 @@ const NearMe = () =>
             },
             foregroundBehaviour:"blocking",
             workflow: async () => BackgroundTask(),
-
             repeatInterval: 15,
             timeout: 1,
             constraints: {
@@ -180,7 +179,6 @@ const NearMe = () =>
         } ).catch( err =>
         {
             console.log(`some error ${err}`);
-            
         })
 
 

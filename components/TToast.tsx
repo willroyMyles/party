@@ -90,13 +90,11 @@ class TToast extends PureComponent {
 			toValue: height - 130,
 			bounciness: 15,
 			useNativeDriver: true,
-		}).start()
-
-		const duration = config.timing > 0 ? config.timing : 5000
-
-		setTimeout(() => {
-			this.hideToast()
-		}, duration)
+		}).start(()=>{
+			setTimeout(() => {
+				this.hideToast();
+			}, 1500);
+		});
 	}
 
 	hideToast() {
