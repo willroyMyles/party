@@ -1,4 +1,4 @@
-import React, { useState, useEffect, PureComponent, useMemo } from 'react';
+import React, { useState, useEffect, PureComponent, useMemo, lazy } from 'react';
 import { View, Text, ColorName, Colors } from 'react-native-ui-lib';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MemoryLeaderBoard from './Memory&LeaderBoard';
@@ -19,6 +19,7 @@ import FireStore from '../data_layer/FireStore';
 import TToast from '../components/TToast';
 
 const Tab = createMaterialTopTabNavigator();
+
 
 
 export const HomeNavigator =  observer(() =>
@@ -59,6 +60,8 @@ export const HomeNavigator =  observer(() =>
       <Tab.Navigator
         tabBarPosition="bottom"
         swipeEnabled={false}
+        lazy
+        initialRouteName="discover"
         tabBarOptions={{
           activeTintColor: Colors.primary,
           indicatorContainerStyle: {

@@ -36,8 +36,9 @@ const FeedV2 = () =>
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
-            {FireStore.data.size == 0 && <View center style={{height:"100%"}}>
-                <Text>no data</Text>
+            {FireStore.data.size == 0 && <View center style={{height:"100%", width:"100%"}}>
+                <Text>Fetching Data</Text>
+                <LoaderScreen />
             </View>}
             <View bg-background style={{ height: "100%" }}>
                 <Animated.View style={{

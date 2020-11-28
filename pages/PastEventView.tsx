@@ -17,7 +17,7 @@ import { animated, useTransition } from "react-spring/native"
 import { getImage } from "../universal/GetImage"
 const width = Dimensions.get( "screen" ).width
 
-const PastEventView = () =>
+const PastEventView = ()  =>
 {
 	const route = useRoute()
 	const referenceNumber: string = route.params?.reference
@@ -246,6 +246,8 @@ const PastEventView = () =>
 			</TouchableOpacity>
 		</View>
 	)
+
+	return <View/>
 }
 
 
