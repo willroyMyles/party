@@ -20,7 +20,9 @@ const LeaderBoardTilesV2 = ( { item, index }: { item: FeedItemModel, index: numb
     const nav = useNavigation()
     const [image, setImage] = useState<string>()
 
-    const onPress= () => nav.navigate("view past event", {reference : item.reference})
+    // const onPress= () => nav.navigate("view past event", {reference : item.reference})
+    const onPress= () => nav.navigate( FireStore.data.has(item.reference) ? "view event" : "view past event", { reference: item?.reference } )
+
     useEffect( () =>
     {
         async function getImage()

@@ -136,7 +136,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // versionCode 1
-        versionName "1.5.5"
+        versionName "1.7.3"
         multiDexEnabled true
     }
     splits {
@@ -150,10 +150,10 @@ android {
     signingConfigs {
         release{
              
-                storeFile file('release.keystore')
-                storePassword 'android'
-                keyAlias 'key_alias'
-                keyPassword 'android'
+                storeFile file('party.keystore')
+                storePassword 'androidparty'
+                keyAlias 'party'
+                keyPassword 'androidparty'
             
         }
         debug {
@@ -203,15 +203,14 @@ dependencies {
 
 implementation project(':react-native-share')
 //firebasw analytics
-// implementation 'com.google.firebase:firebase-analytics:17.2.2'
     // Recommended: Add the Firebase SDK for Google Analytics.
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
 
 
 implementation "com.google.android.gms:play-services-base:16.0.1"
 implementation "com.google.android.gms:play-services-location:16.0.0"
-    // Add the Firebase Crashlytics SDK.
-    // implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+
 
     implementation project(':react-native-background-worker')
 

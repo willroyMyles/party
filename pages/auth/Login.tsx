@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 View,
 Text,
@@ -24,6 +24,7 @@ import CustomTextInput from '../../components/CustomTextInput';
 
 const Login = () => {
     const navigation = useNavigation();
+    const [error, setError] = useState<string>("")
 
     const schema = yup.object().shape({
         email: yup.string().required("i need you rbo").email().min(3),
@@ -67,11 +68,15 @@ const Login = () => {
         } else {
             crashlytics().log(`google sign in didnt work ${res}`)
             TToast.error("didnt log in ", "We had a problem logging you in" )
+            setError(`${res}`)
+           
         }
 
     }).catch(err=>{
         TToast.error("didnt log in ", "We had a problem logging you in" )
         crashlytics().log(`google sign in didnt work ${err}`)
+        setError(`${err}`)
+        
     })
 
 
@@ -171,6 +176,7 @@ const Login = () => {
                 </TouchableOpacity>
             </View>
             <SkipButton where="home" />
+            <Text>{error}</Text>
         </ScrollView>
     );
 };

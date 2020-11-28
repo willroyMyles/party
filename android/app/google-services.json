@@ -8,24 +8,40 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:562995348940:android:417ad56d2efdcf2f33c969",
+        "mobilesdk_app_id": "1:562995348940:android:1c4cbcdc5c8fd4ac33c969",
         "android_client_info": {
           "package_name": "com.fowler.party"
         }
       },
       "oauth_client": [
         {
-          "client_id": "562995348940-slh1c41vv4q3lp2ign921vgu0h43v84c.apps.googleusercontent.com",
+          "client_id": "562995348940-kbpel2g82n68o7aru41vbjjan24tr64k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fowler.party",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
+        },
+        {
+          "client_id": "562995348940-vjhq6s1rcd6ngj9i2fcouflcc5ir7toa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fowler.party",
+            "certificate_hash": "6f06310f53ac46ae75fb4cbb0ffed5b8f4d42ce3"
+          }
+        },
+        {
+          "client_id": "562995348940-c8e99adk6c89govab8q52m906qihcovj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fowler.party",
+            "certificate_hash": "2b802eb2b47202333abedca425571b7dd9f2ff79"
+          }
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDT_iPWmm34yL704gCgOnAssfL59cNVACQ"
+          "current_key": "AIzaSyAIkmTZwYoYu1rWCw4IaTHxLP1W5IIi3aQ"
         }
       ],
       "services": {
