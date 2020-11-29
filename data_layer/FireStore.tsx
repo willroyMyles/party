@@ -26,8 +26,13 @@ class Store
   @observable lastKnownUrl = "";
   constructor()
   {
-    FBS.events.linktorealTimeEvents( this.organizeStream )
+    this.getStreamToParties(10);
     FBS.events.linktoPastTimeEvents( this.organizePastEventsStream )
+  }
+
+  @action private getStreamToParties = (limit? : number, id?:string) =>{
+    FBS.events.linktorealTimeEvents( this.organizeStream, limit, id );
+
   }
 
   organizeStream = ( docs: FirebaseFirestoreTypes.QuerySnapshot ) =>
@@ -577,7 +582,8 @@ class Store
     limit: this.checkUserLimitForPosting,
     getLeaderboardPartyByType: this.getLeaderboardPartyByType,
     checkPartyAttendance:this.checkPartyAttendance,
-    getPostedEvents:this.getPostedEvents
+    getPostedEvents:this.getPostedEvents,
+    getStreamToParties:this.getStreamToParties
   };
 
   send = {

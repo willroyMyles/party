@@ -13,6 +13,7 @@ import PartyTypesRow from './PartyTypesRow'
 import ListheaderComp from '../components/ListheaderComp'
 import ListFooterComp from '../components/ListFooterComp'
 import { observer } from 'mobx-react'
+import { FlatList } from 'react-native-gesture-handler'
 
 // @refresh reset
 
@@ -32,6 +33,12 @@ const FeedV2 = () =>
         inputRange: [0, off],
         outputRange: [0, -off]
     } )
+
+    const loadMore = () =>{
+        const last = [...FireStore.data.values()][[...FireStore.data.values()].length - 1];
+        FireStore.retrieve.getStreamToParties(15,last.dateNum)
+        
+    }
 
 
     return (
@@ -67,15 +74,15 @@ const FeedV2 = () =>
                     }}
                     contentContainerStyle={{ paddingBottom: off, backgroundColor: Colors.background }}
                     data={[...FireStore.data.values()]}
-                    // onEndReachedThreshold={.1}
-                    // onEndReached={loadMore}
+                    onEndReachedThreshold={5}
+                    onEndReached={loadMore}
 
                     onScroll={
                         Animated.event<any>( [{
                             nativeEvent: { contentOffset: { y: scrollY } }
                         }])
                     }
-
+                    
 
                     keyExtractor={( item: any, index: number ) => "item" + index}
 

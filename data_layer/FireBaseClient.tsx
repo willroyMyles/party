@@ -254,12 +254,18 @@ class Store
         reject(err)
     })
   })
-  private linktorealTimeEvents = ( onResult: any ) =>
+  private linktorealTimeEvents = ( onResult: any , limit? : number,  datenum?:number) =>
   {
     const order = "dateNum"
 
-    const subscribe = firestore().collection( eventCollection ).orderBy( order, "asc" ).onSnapshot( doc =>
+    let subscribe;
+    if(datenum)  subscribe = firestore().collection( eventCollection ).orderBy( order, "asc" ).limit(limit? limit : 100).startAfter(datenum? datenum : 0);
+    else  subscribe = firestore().collection( eventCollection ).orderBy( order, "asc" ).limit(limit? limit : 100);
+
+    subscribe.onSnapshot( doc =>
     {
+      console.log(doc.size, "doc size");
+      
       onResult( doc );
     }, err =>
     {

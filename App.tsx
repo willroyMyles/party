@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import 'react-native-gesture-handler';
 import
 {
@@ -53,6 +53,7 @@ if ( Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimenta
   // LayoutAnimation.configureNext( LayoutAnimation.Presets.linear )
 }
 
+const StackNav = lazy(() => import("./pages/StackNavigator"));
 
 const App = () =>
 {
@@ -88,9 +89,10 @@ const App = () =>
     <ThemeProvider theme={tm.theme} >
       <StatusBar animated translucent backgroundColor={Colors.background} barStyle={tm.themeType == ThemeType.DARK ? "light-content" : "dark-content"} />
       <View flex bg-background>
-        <StackNavigator />
+        <Suspense fallback={<LoaderScreen/>}>
+          <StackNav />
+        </Suspense>
         <TToast />
-        <RateParty />
       </View>
     </ThemeProvider>
   )
