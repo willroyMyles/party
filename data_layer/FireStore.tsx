@@ -27,11 +27,16 @@ class Store
   constructor()
   {
     this.getStreamToParties(10);
-    FBS.events.linktoPastTimeEvents( this.organizePastEventsStream )
+    this.getStreamToPastParties(10);
   }
 
-  @action private getStreamToParties = (limit? : number, id?:string) =>{
-    FBS.events.linktorealTimeEvents( this.organizeStream, limit, id );
+  @action private getStreamToParties = (limit? : number, datenum?:number) =>{
+    FBS.events.linktorealTimeEvents( this.organizeStream, limit, datenum );
+
+  }
+
+  @action private getStreamToPastParties = (limit? : number, datenum?:number) =>{
+    FBS.events.linktoPastTimeEvents( this.organizePastEventsStream, limit, datenum );
 
   }
 
@@ -583,7 +588,8 @@ class Store
     getLeaderboardPartyByType: this.getLeaderboardPartyByType,
     checkPartyAttendance:this.checkPartyAttendance,
     getPostedEvents:this.getPostedEvents,
-    getStreamToParties:this.getStreamToParties
+    getStreamToParties:this.getStreamToParties,
+    getStreamToPastParties:this.getStreamToPastParties
   };
 
   send = {

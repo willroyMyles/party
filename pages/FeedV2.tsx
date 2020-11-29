@@ -74,7 +74,7 @@ const FeedV2 = () =>
                     }}
                     contentContainerStyle={{ paddingBottom: off, backgroundColor: Colors.background }}
                     data={[...FireStore.data.values()]}
-                    onEndReachedThreshold={5}
+                    onEndReachedThreshold={3}
                     onEndReached={loadMore}
 
                     onScroll={

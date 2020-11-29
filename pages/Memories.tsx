@@ -27,6 +27,12 @@ const Memories = () => {
 		)
 	}
 
+	const loadMore = () =>{
+        const last = [...FireStore.memoryData.values()][[...FireStore.memoryData.values()].length - 1];
+        FireStore.retrieve.getStreamToPastParties(15,last.dateNum)
+        
+    }
+
 	return (
 		<SafeAreaView style={{flex:1, paddingTop:20, backgroundColor:Colors.background}}>
 
@@ -34,8 +40,8 @@ const Memories = () => {
 				<FlatList
 					ListHeaderComponent={<ListheaderComp header="past parties" />}
 					onScroll={() => { }}
-					// onEndReached={getPastEvents}
-					// onEndReachedThreshold={.1}
+					onEndReached={loadMore}
+					onEndReachedThreshold={3}
 				style={{borderWidth: 0, flex: 1}}
 				data={[...FireStore.memoryData.values()]}
 					renderItem={itemToRnder}

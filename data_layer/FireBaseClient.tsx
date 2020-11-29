@@ -275,10 +275,14 @@ class Store
     return subscribe;
   }
 
-  private linktoPastTimeEvents = ( onResult: any ) =>
+  private linktoPastTimeEvents = ( onResult: any , limit? : number,  datenum?:number ) =>
   {
     const order = "dateNum"
-    const subscribe = firestore().collection( pastEventCollection ).orderBy( order, "asc" ).onSnapshot( doc =>
+    let subscribe;
+    if(datenum) subscribe = firestore().collection( pastEventCollection ).orderBy( order, "asc" ).limit(limit? limit : 100).startAfter(datenum? datenum : 0);
+    else subscribe = firestore().collection( pastEventCollection ).orderBy( order, "asc" ).limit(limit? limit : 100);
+    
+      subscribe.onSnapshot( doc =>
     {
       onResult( doc );
     }, err =>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, memo } from "react"
 import { View, Text, TouchableOpacity, Image, Colors } from "react-native-ui-lib"
 
 import { useNavigation } from "@react-navigation/native"
@@ -12,7 +12,7 @@ import PartyTypeBadge from "./PartyTypeBadge"
 // import * as faker from "faker"
 const { width, height } = Dimensions.get( "screen" )
 
-const Feed_Item = ( { reference }: { reference: string } ) =>
+const Feed_Item = memo(( { reference }: { reference: string } ) =>
 {
 	const item = FireStore.data.get( reference )
 	if ( !item ) return <View />
@@ -105,6 +105,6 @@ const Feed_Item = ( { reference }: { reference: string } ) =>
 			</TouchableOpacity>
 		</View>
 	)
-}
+})
 
 export default Feed_Item
