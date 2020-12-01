@@ -14,6 +14,7 @@ import ListheaderComp from '../components/ListheaderComp'
 import ListFooterComp from '../components/ListFooterComp'
 import { observer } from 'mobx-react'
 import { FlatList } from 'react-native-gesture-handler'
+import ChipsRow from '../components/ChipsRow'
 
 // @refresh reset
 
@@ -22,7 +23,7 @@ const scrollY = new Animated.Value( 0 )
 const FeedV2 = () =>
 {
     const theme = useTheme()
-    const off = 260
+    const off = 30
     // const [, setLastDocument] = useState<string>()
     const [moreData, setMoreData] = useState(true)
     const [loading, setLoading] = useState( false )
@@ -31,7 +32,7 @@ const FeedV2 = () =>
 
     const headerY = Animated.interpolate( diffY, {
         inputRange: [0, off],
-        outputRange: [0, -off]
+        outputRange: [0, -off*2]
     } )
 
     const loadMore = () =>{
@@ -54,11 +55,21 @@ const FeedV2 = () =>
                     left: 0,
                     zIndex: 2,
                     width: "100%",
+                    backgroundColor:Colors.red10,
                     transform: [{ translateY: headerY }]
                     // height: 200
                 }}>
-                    <PartyTypesRow heightt={off} />
+                    {/* <PartyTypesRow heightt={off} /> */}
+                    <ChipsRow height={off} />
                 </Animated.View>
+                <Text
+                marginT-5
+                marginL-10
+                marginB-5
+                indicator
+                style={{ alignSelf: 'flex-start' }}>
+                Parties
+            </Text>
                 <AFL
                     scrollEventThrottle={16}
                     bounces={false}

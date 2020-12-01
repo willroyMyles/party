@@ -37,10 +37,10 @@ export const AssetImages = {
 
 export const getColorForType = (type : PartyType, background = false) => {
 	switch(type){
-		case PartyType.LOUNGE : return background? Colors.red70 : Colors.red20
-		case PartyType.CLUB : return background? Colors.green70 : Colors.green20
-		case PartyType.WATER_PARTY : return background? Colors.blue70 : Colors.blue20
-		case PartyType.OUTDOOR : return background? Colors.purple70 : Colors.purple20
+		case PartyType.LOUNGE : return background? Colors.red80 : Colors.red20
+		case PartyType.CLUB : return background? Colors.green80 : Colors.green20
+		case PartyType.WATER_PARTY : return background? Colors.blue80 : Colors.blue20
+		case PartyType.OUTDOOR : return background? Colors.purple80 : Colors.purple20
 	}
 }
 

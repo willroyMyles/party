@@ -5,7 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import Animated, {
     Easing,
     Transition,
-    Transitioning,
+    Transitioning, 
     TransitioningView,
 } from 'react-native-reanimated';
 import { View, Text, TouchableOpacity, Colors, Image } from 'react-native-ui-lib';
