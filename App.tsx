@@ -60,9 +60,8 @@ const App = () => {
       console.log('updating app');
 
       FireStore.retrieve.getStreamToParties(10);
-      FireStore.retrieve.getPostedEvents();
+      // FireStore.retrieve.getPostedEvents();
       FireStore.retrieve.rsvpEvents();
-      FireStore.retrieve.getPostedEvents();
     }
   };
 

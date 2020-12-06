@@ -179,6 +179,8 @@ class Store {
         if (val) {
           // add to memory set
           this.memoryData.set(item.reference, item);
+        } else {
+          this.data.set(item.reference, item);
         }
       }
       resolve(true);
@@ -221,10 +223,10 @@ class Store {
           this.data.set(doc.id, doc.data());
         else this.memoryData.set(doc.id, doc.data()); // add to memory page
 
-        this.intermediateryData.set(doc.id, doc.data());
+        // this.intermediateryData.set(doc.id, doc.data());
       });
       resolve(true);
-      this.sortAll(data.docs);
+      // this.sortAll(data.docs);
       eventEmitter.emit(eventStrings.dataFromProviderFinishedLoad);
     });
   };
@@ -469,16 +471,23 @@ class Store {
 
   @action private getPostedEvents = () =>
     new Promise((resolve, reject) => {
+      console.log('firestore hit');
+      // debugger;
+
       FBS.events
         .getPostedEvents()
         .then((res) => {
           const array: FeedItemModel[] = [];
 
-          for (let index = 0; index < res.docs.length; index++) {
-            const element = res.docs[index];
+          this.sortMemoryData(res);
+
+          for (let index = 0; index < res.length; index++) {
+            const element = res[index];
             const data: FeedItemModel = element.data();
             array.push(data);
           }
+
+          console.log(array.length);
 
           resolve(array);
         })
@@ -544,6 +553,20 @@ class Store {
         });
     });
 
+  @action getOneEventByReference = (ref: string) => {
+    return new Promise((resolve, reject) => {
+      FBS.getOneEventByReference(ref)
+        .then((res: {data: any; page: string}) => {
+          if (res.page == 'view event') {
+            this.data.set(ref, res.data);
+          } else {
+            this.memoryData.set(ref, res.data);
+          }
+          resolve(res);
+        })
+        .catch((err) => {});
+    });
+  };
   retrieve = {
     isLoggedIn: this.isLoggedIn,
     // events: this.getEvents,

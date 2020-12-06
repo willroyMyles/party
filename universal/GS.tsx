@@ -6,6 +6,31 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {PartyType} from './Models';
 import Animated from 'react-native-reanimated';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import FireStore from '../data_layer/FireStore';
+
+export const showItemToBeDownloaded = (
+  ref: string,
+  nav: typeof useNavigation,
+) => {
+  const isBefore = FireStore.data.has(ref);
+  const isAfter = FireStore.memoryData.has(ref);
+
+  if (isBefore) {
+    nav.navigate('view event', {reference: ref});
+    return;
+  }
+  if (isAfter) {
+    nav.navigate('view past event', {reference: ref});
+    return;
+  }
+
+  //not in either
+
+  const data = FireStore.getOneEventByReference(ref).then((res) => {
+    nav.navigate(res.page, {reference: ref});
+  });
+};
 
 export const AFL = Animated.createAnimatedComponent(FlatList);
 

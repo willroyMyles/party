@@ -21,6 +21,31 @@ let last: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
 let lastType: FirebaseFirestoreTypes.QueryDocumentSnapshot | null = null;
 
 class Store {
+  async getOneEventByReference(ref: string) {
+    return new Promise(async (resolve, reject) => {
+      let data: any;
+      let page: string = '';
+      const fitem = await firestore()
+        .collection(eventCollection)
+        .doc(ref)
+        .get();
+      if (!fitem.exists) {
+        const sitem = await firestore()
+          .collection(pastEventCollection)
+          .doc(ref)
+          .get();
+        data = sitem.data();
+        page = 'view past event';
+        return resolve({data: data, page: page});
+      }
+
+      data = fitem.data();
+      page = 'view event';
+
+      return resolve({data: data, page: page});
+    });
+  }
+
   constructor() {}
   resetLast = () => (last = null);
   restLastType = () => (lastType = null);
@@ -65,7 +90,7 @@ class Store {
         });
     });
 
-  logout = () => auth().signOut();
+  logout = () => GoogleSignin.signOut() && auth().signOut();
 
   private moveEventsAround = (id: string, item: FeedItemModel) =>
     new Promise(async (resolve) => {
@@ -510,30 +535,41 @@ class Store {
   };
 
   private getPostedEvents = () =>
-    new Promise<FirebaseFirestoreTypes.QuerySnapshot>(
-      async (resolve, reject) => {
-        try {
-          const d = await firestore()
-            .collection(userCollection)
-            .doc(auth().currentUser?.uid)
+    new Promise<
+      FirebaseFirestoreTypes.QueryDocumentSnapshot<
+        FirebaseFirestoreTypes.DocumentData
+      >[]
+    >(async (resolve, reject) => {
+      try {
+        const d = await firestore()
+          .collection(userCollection)
+          .doc(auth().currentUser?.uid)
+          .get();
+        if (d.exists) {
+          console.log(`d exsists`);
+
+          const obj = d.data();
+          const arr = obj ? obj['events'] : [];
+          const postedEvents = await firestore()
+            .collection(eventCollection)
+            .where('reference', 'in', [...arr])
             .get();
-          if (d.exists) {
-            const obj = d.data();
-            const arr = obj ? obj['events'] : [];
-            const postedEvents = await firestore()
-              .collection(eventCollection)
-              .where('reference', 'in', [...arr])
-              .get();
-            resolve(postedEvents);
-          } else {
-            reject('no data');
-          }
-        } catch (err) {
-          console.log('err', err);
-          reject(err);
+
+          const pastPostedEvents = await firestore()
+            .collection(pastEventCollection)
+            .where('reference', 'in', [...arr])
+            .get();
+
+          const all = [...postedEvents.docs, ...pastPostedEvents.docs];
+          resolve(all);
+        } else {
+          reject('no data');
         }
-      },
-    );
+      } catch (err) {
+        console.log('err', err);
+        reject(err);
+      }
+    });
 
   private getEventsInCategories = (amount: number) => {
     //will have to get a large collection and filter them down the line
