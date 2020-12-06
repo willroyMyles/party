@@ -1,17 +1,12 @@
-import React, {useState, useEffect, useRef, lazy, Suspense} from 'react';
+import React, {useState, useEffect, lazy, Suspense} from 'react';
 import 'react-native-gesture-handler';
 import {
-  SafeAreaView,
-  StyleSheet,
   StatusBar,
   UIManager,
   Platform,
   LayoutAnimation,
   LogBox,
-  YellowBox,
-  Linking,
   AppState,
-  AppStateEvent,
   AppStateStatus,
 } from 'react-native';
 
@@ -22,26 +17,13 @@ import {
   Text,
   ProgressBar,
 } from 'react-native-ui-lib';
-import StackNavigator from './pages/StackNavigator';
 import TToast from './components/TToast';
 import {ThemeProvider, useTheme} from 'styled-components';
 import tm, {ThemeType} from './universal/UiManager';
 import {observer} from 'mobx-react';
 import * as Font from 'expo-font';
-import * as TaskManager from 'expo-task-manager';
-import * as Location from 'expo-location';
-import {eventEmitter, eventStrings} from './universal/EventEmitter';
-import psuedoLocationTracker, {
-  PsuedoLocationTracker,
-} from './data_layer/PsuedoLocationTracker';
-import {LocationRegion} from 'expo-location';
-import uuidv4 from 'uuid';
 import {GetLocationPermission} from './universal/GetLocation';
-import RateParty from './components/RateParty';
-import {AppEventsLogger} from 'react-native-fbsdk';
 import SplashScreen from 'react-native-splash-screen';
-import {suppressDeprecationWarnings} from 'moment';
-import BusyOverlay from './components/BusyOverlay';
 import FireStore from './data_layer/FireStore';
 
 LogBox.ignoreLogs([
@@ -59,9 +41,9 @@ if (
 const StackNav = lazy(() => import('./pages/StackNavigator'));
 
 const App = () => {
-  const theme = useTheme();
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [progress, setProgress] = useState<number>(0);
+  const [firstStart, setFirstStart] = useState(true);
   useEffect(() => {
     const start = async () => setUp();
     start();
@@ -74,7 +56,7 @@ const App = () => {
   }, []);
 
   const updateStates = (ap: AppStateStatus) => {
-    if (ap == 'active') {
+    if (ap == 'active' && !firstStart) {
       console.log('updating app');
 
       FireStore.retrieve.getStreamToParties(10);
@@ -97,6 +79,7 @@ const App = () => {
       await FireStore.retrieve.getStreamToParties(10);
       setProgress(80);
       SplashScreen.hide();
+      setFirstStart(false);
       // setLoading(false);
     } catch (err) {
       console.log('loading app went wrongly');

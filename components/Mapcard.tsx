@@ -17,8 +17,7 @@ import {
 } from 'react-native-reanimated';
 import {useEffect} from 'react';
 import LoaderImage from './LoaderImage';
-import { showLocation } from 'react-native-map-link'
-
+import {showLocation} from 'react-native-map-link';
 
 const trans = (
   <Transition.Sequence>
@@ -50,7 +49,10 @@ const Mapcard = ({
     setVisivle(true);
 
     async function getImage() {
-      const d = await FireStore.retrieve.imageFromReference(item.reference, item.flyer);
+      const d = await FireStore.retrieve.imageFromReference(
+        item.reference,
+        item.flyer,
+      );
       setImage(d);
     }
 
@@ -80,40 +82,44 @@ const Mapcard = ({
             bg-background
             br40
             style={{
-              width: '100%',
-                padding: 10,
-            //   backgroundColor:"rgba(240,240,240,.9)",
-
+              width: '87%',
+              paddingBottom: 10,
               elevation: 10,
+              overflow: 'hidden',
             }}>
             <View row style={{height: '80%'}}>
-                            <LoaderImage height="100%" width="40%" uri={image} />
-                        <View paddingH-10 centerV center style={{ width: "63%" }}>
-                            <Text lvl1>{item.title}</Text>
-                            <View center>
-                                <Text muted>Date</Text>
-                                <Text regular>{moment( new Date( item.date ) ).format( "ddd MMM DD, YYYY" )}</Text>
-                            </View>
-                            <View center>
-                                <Text muted>Time</Text>
-                                <Text regular>{moment( new Date( item.start ) ).format( "hh:mm a" )}</Text>
-                            </View>
-
-                        </View>
-                    </View>
+              <LoaderImage height="100%" width="40%" uri={image} />
+              <View paddingH-10 centerV center style={{width: '63%'}}>
+                <Text lvl1>{item.title}</Text>
+                <View center>
+                  <Text muted>Date</Text>
+                  <Text regular>
+                    {moment(new Date(item.date)).format('ddd MMM DD, YYYY')}
+                  </Text>
+                </View>
+                <View center>
+                  <Text muted>Time</Text>
+                  <Text regular>
+                    {moment(new Date(item.start)).format('hh:mm a')}
+                  </Text>
+                </View>
+              </View>
+            </View>
             <View row center marginV-8 paddingV-4>
               <TouchableOpacity onPress={handleListing} padding-5 marginH-15>
                 <Text lvl3 primary>
                   listing
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() =>
-              {
-                showLocation( {
-                  latitude: l1.latitude,
-                  longitude:l1.longitude
-                })
-              }} padding-5 marginL-10>
+              <TouchableOpacity
+                onPress={() => {
+                  showLocation({
+                    latitude: l1.latitude,
+                    longitude: l1.longitude,
+                  });
+                }}
+                padding-5
+                marginL-10>
                 <Text lvl3 primary>
                   directions
                 </Text>
