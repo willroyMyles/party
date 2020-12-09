@@ -21,6 +21,7 @@ import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 import cl.json.RNSharePackage;
 import cl.json.ShareApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;  // <--- Import Package
 
 public class MainApplication extends Application implements ShareApplication, ReactApplication {
 

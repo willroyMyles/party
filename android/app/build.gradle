@@ -195,7 +195,7 @@ android {
 }
 
 dependencies {
-      
+          implementation project(':react-native-push-notification')
     //facebook
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
 
