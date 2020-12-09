@@ -25,7 +25,8 @@ import * as Font from 'expo-font';
 import {GetLocationPermission} from './universal/GetLocation';
 import SplashScreen from 'react-native-splash-screen';
 import FireStore from './data_layer/FireStore';
-
+import Crashlytics from '@react-native-firebase/crashlytics';
+const crash = Crashlytics();
 LogBox.ignoreLogs([
   "registerHeadlessTask or registerCancellableHeadlessTask called multiple times for same key 'test worker'",
 ]);
@@ -60,7 +61,7 @@ const App = () => {
       console.log('updating app');
 
       FireStore.retrieve.getStreamToParties(10);
-      // FireStore.retrieve.getPostedEvents();
+      FireStore.retrieve.getPostedEvents();
       FireStore.retrieve.rsvpEvents();
     }
   };
@@ -76,12 +77,15 @@ const App = () => {
       setProgress(20);
       FireStore.retrieve.getStreamToPastParties(10);
       await FireStore.retrieve.getStreamToParties(10);
+      setProgress(55);
+      FireStore.retrieve.getPostedEvents();
+      await FireStore.retrieve.rsvpEvents();
       setProgress(80);
       SplashScreen.hide();
       setFirstStart(false);
       // setLoading(false);
     } catch (err) {
-      console.log('loading app went wrongly');
+      console.log(`loading app went wrongly, ${err}`);
     }
   };
 

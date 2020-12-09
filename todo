@@ -1,0 +1,18 @@
+// TODO:search by parish
+// TODO:filter by properties
+// TODO:like at the party
+// TODO: dont allow person who didnt upload pictures to upload party pictures
+
+const { POSITION_KEY_PATTERN } = require("react-native-ui-lib/generatedTypes/commons/modifiers")
+
+rsvp - not showing up after restart
+leaderboard - only show one party when attended both ? only one for 11'oclock, check if operation continues after updating attendance
+geoPosition - only picked up on one location ?
+
+    //leave out now playing
+    make the chips static.
+location toggle in off POSITION
+post parties list not showing
+notification should open party
+colors on chip
+start up party in dark mode

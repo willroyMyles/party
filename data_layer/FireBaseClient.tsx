@@ -549,7 +549,8 @@ class Store {
           console.log(`d exsists`);
 
           const obj = d.data();
-          const arr = obj ? obj['events'] : [];
+          let arr: any[] = obj ? (obj['events'] ? obj['events'] : [0]) : [0];
+          if (arr.length >= 10) arr = arr.slice(9);
           const postedEvents = await firestore()
             .collection(eventCollection)
             .where('reference', 'in', [...arr])
@@ -560,13 +561,15 @@ class Store {
             .where('reference', 'in', [...arr])
             .get();
 
-          const all = [...postedEvents.docs, ...pastPostedEvents.docs];
+          let all: any[] = [];
+          all = all.concat(postedEvents.docs).concat(pastPostedEvents.docs);
+
           resolve(all);
         } else {
           reject('no data');
         }
       } catch (err) {
-        console.log('err', err);
+        console.log('err here', err);
         reject(err);
       }
     });
@@ -690,7 +693,8 @@ class Store {
             .get();
           if (d.exists) {
             const obj = d.data();
-            const arr = obj ? obj['rsvp'] : [];
+            let arr: any[] = obj ? (obj['rsvp'] ? obj['rsvp'] : [0]) : [0];
+            if (arr.length >= 10) arr = arr.slice(9);
             const rsvpEvents = await firestore()
               .collection(eventCollection)
               .where('reference', 'in', [...arr])

@@ -175,7 +175,7 @@ class Store {
       for (let index = 0; index < docs.length; index++) {
         const element = docs[index];
         const item: FeedItemModel = element.data();
-        const val = this.checkDate(item.date || '');
+        const val = this.checkDate(item.dateNum);
         if (val) {
           // add to memory set
           this.memoryData.set(item.reference, item);
@@ -466,7 +466,7 @@ class Store {
           resolve(true);
           // eventEmitter.emit(eventStrings.dataFromProviderFinishedLoad)
         })
-        .catch((err) => reject(err));
+        .catch((err) => resolve(false));
     });
 
   @action private getPostedEvents = () =>
@@ -487,11 +487,9 @@ class Store {
             array.push(data);
           }
 
-          console.log(array.length);
-
           resolve(array);
         })
-        .catch((err) => reject(err));
+        .catch((err) => resolve([]));
     });
 
   @action private sendRating = (rating: number, reference: string) =>
