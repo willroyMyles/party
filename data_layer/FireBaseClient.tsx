@@ -1,4 +1,4 @@
-import auth from '@react-native-firebase/auth';
+import auth, {firebase} from '@react-native-firebase/auth';
 import storage, {FirebaseStorageTypes} from '@react-native-firebase/storage';
 import firestore, {
   FirebaseFirestoreTypes,
@@ -90,7 +90,11 @@ class Store {
         });
     });
 
-  logout = () => GoogleSignin.signOut() && auth().signOut();
+  logout = async () => {
+    const si = await GoogleSignin.isSignedIn();
+    if (si) GoogleSignin.signOut();
+    else auth().signOut();
+  };
 
   private moveEventsAround = (id: string, item: FeedItemModel) =>
     new Promise(async (resolve) => {
@@ -541,33 +545,19 @@ class Store {
       >[]
     >(async (resolve, reject) => {
       try {
-        const d = await firestore()
-          .collection(userCollection)
-          .doc(auth().currentUser?.uid)
+        let all: any[] = [];
+
+        const pe = await firestore()
+          .collection(eventCollection)
+          .where('personId', '==', auth().currentUser?.uid)
           .get();
-        if (d.exists) {
-          console.log(`d exsists`);
+        const ppe = await firestore()
+          .collection(pastEventCollection)
+          .where('personId', '==', auth().currentUser?.uid)
+          .get();
 
-          const obj = d.data();
-          let arr: any[] = obj ? (obj['events'] ? obj['events'] : [0]) : [0];
-          if (arr.length >= 10) arr = arr.slice(9);
-          const postedEvents = await firestore()
-            .collection(eventCollection)
-            .where('reference', 'in', [...arr])
-            .get();
-
-          const pastPostedEvents = await firestore()
-            .collection(pastEventCollection)
-            .where('reference', 'in', [...arr])
-            .get();
-
-          let all: any[] = [];
-          all = all.concat(postedEvents.docs).concat(pastPostedEvents.docs);
-
-          resolve(all);
-        } else {
-          reject('no data');
-        }
+        all = all.concat(pe.docs).concat(ppe.docs);
+        resolve(all);
       } catch (err) {
         console.log('err here', err);
         reject(err);

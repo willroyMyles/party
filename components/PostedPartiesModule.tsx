@@ -10,6 +10,7 @@ import Feed_itemV2 from './Feed_itemV2';
 import LeaderBoardTilesV2 from './LeaderBoardTilesV2';
 import PostedPartiesItem from './PostedPartiesItem';
 
+const limit = 4;
 const PostedPartiesModule = () => {
   const Navigator = useNavigation();
 
@@ -40,18 +41,17 @@ const PostedPartiesModule = () => {
           br20
           marginT-0
           style={{borderBottomWidth: 0, borderBottomColor: Colors.foreground}}>
-          <FlatList
-            data={data}
-            // numColumns={2}
-            scrollEnabled={false}
-            keyExtractor={(item, index) => item + '' + index + ''}
-            renderItem={({item, index}) => {
-              if (index >= 4) return <View />;
-              // return <PostedPartiesItem key={index} reference={item.reference} />
-              return <LeaderBoardTilesV2 index={index} item={item} />;
-            }}
-          />
-          {data.length > 4 && (
+          {data
+            .filter((_, index) => index < limit)
+            .map((value, index) => {
+              return (
+                <View key={index}>
+                  <LeaderBoardTilesV2 index={index} item={value} />
+                </View>
+              );
+            })}
+
+          {data.length > limit && (
             <View paddingB-35>
               <TouchableOpacity
                 row

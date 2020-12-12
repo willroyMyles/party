@@ -36,7 +36,8 @@ export class Store {
   constructor() {
     AsyncStorage.getItem('theme')
       .then((res) => {
-        this.setThemeType(ThemeType.DARK.toString() == res);
+        if (res == undefined || res == null) this.setThemeType(true);
+        else this.setThemeType(ThemeType.DARK.toString() == res);
       })
       .catch((err) => {
         this.setThemeType(true);

@@ -26,6 +26,7 @@ import {GetLocationPermission} from './universal/GetLocation';
 import SplashScreen from 'react-native-splash-screen';
 import FireStore from './data_layer/FireStore';
 import Crashlytics from '@react-native-firebase/crashlytics';
+import AsyncStorage from '@react-native-community/async-storage';
 const crash = Crashlytics();
 LogBox.ignoreLogs([
   "registerHeadlessTask or registerCancellableHeadlessTask called multiple times for same key 'test worker'",
