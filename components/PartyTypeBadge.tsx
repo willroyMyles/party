@@ -12,18 +12,19 @@ const PartyTypeBadge = ( { type }: { type: PartyType } ) =>
             center
             style={{
                 marginTop: 4,
-                backgroundColor: getColorForType(type, true),
+                backgroundColor: getColorForType(type),
                 borderWidth: 3,
                 borderColor: Colors.foreground,
                 borderRadius: 45,
                 paddingHorizontal: 20,
-                elevation: .5,
+                paddingVertical:5,
+                elevation: 10,
                 zIndex: 5,
                 padding: 3
                 // , width: "100%"
             }}>
 
-            <Text lvl2 style={{color: getColorForType(type), fontWeight:"700"}}>{GetPartytypeString( type )}</Text>
+            <Text lvl2 style={{color: getColorForType(type, true), fontWeight:"700"}}>{GetPartytypeString( type )}</Text>
 
         </View>
 
