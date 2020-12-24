@@ -56,7 +56,7 @@ const FeedV2 = () => {
             left: 0,
             zIndex: 2,
             width: '100%',
-            backgroundColor: Colors.red10,
+            // backgroundColor: Colors.red10,
             transform: [{translateY: headerY}],
             // height: 200
           }}>

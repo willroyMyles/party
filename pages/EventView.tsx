@@ -79,81 +79,84 @@ const EventView = () => {
   if (item) {
     return (
       <ScrollView
-      contentContainerStyle={{paddingBottom: 50, backgroundColor:Colors.background}}
-      >
+        contentContainerStyle={{
+          paddingBottom: 50,
+          backgroundColor: Colors.background,
+        }}>
         <StatusBar animated backgroundColor={'rgba(0,0,0,0)'} />
         <EventHeaderImage imageUrl={image} />
         <View>
-            <View centerH>
-              <PartyTypeBadge type={item?.partyType} />
-            </View>
-            <View bg-background padding-20 style={{marginTop: -10}}>
-              <View marginV-5 centerV row spread>
-                <Text lvl1>{item.title}</Text>
-                <View row spread center>
-                  <RSVPButton reference={item.reference} />
-                  <TouchableOpacity onPress={onShare} marginB-7 marginL-12>
-                    <Icon name="share-alt" size={22} color={Colors.text1} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View marginT-20 row>
-                <GetIcon name="calendar" />
-                <View marginL-10>
-                  <Text lvl3 text3>
-                    Date
-                  </Text>
-                  <Text regular>
-                    {moment(new Date(item.date)).format('ddd - MMM DD, YYYY')}
-                  </Text>
-                </View>
-              </View>
-              <View marginT-20 row>
-                <GetIcon name="clock" />
-                <View marginL-10>
-                  <Text lvl3 text3>
-                    Time
-                  </Text>
-                  <Text lvl2>
-                    {moment(new Date(item.start || '')).format('hh:mm A')} for{' '}
-                    {item.duration} hrs
-                  </Text>
-                </View>
-              </View>
-              <View marginT-20 row>
-                <GetIcon name="info" />
-                <View marginL-10>
-                  <Text marginT-7 marginB-3 lvl3 text3>
-                    Description
-                  </Text>
-                  <Text lvl2>{item.description}</Text>
-                </View>
-              </View>
-
-              <View marginT-20 row>
-                <GetIcon name="map" />
-                <View marginL-10>
-                  <Text marginT-7 marginB-3 lvl3 text3>
-                    Location
-                  </Text>
-                  <LocationBlock {...item.locationObject} styled={true} />
-                </View>
-              </View>
-            </View>
-            <View>
-              <UseSmallMapView loc={item.location} />
-            </View>
-
-            <Organizer
-              org
-              name={item.person || ''}
-              reference={item.reference || ''}
-            />
+          <View centerH>
+            <PartyTypeBadge type={item?.partyType} />
           </View>
+          <View bg-background padding-20 style={{marginTop: -10}}>
+            <View marginV-5 centerV row spread>
+              <Text lvl1 style={{width: '50%'}}>
+                {item.title}
+              </Text>
+              <View row spread style={{width: '30%'}}>
+                <RSVPButton reference={item.reference} />
+                <TouchableOpacity onPress={onShare} marginB-7 marginL-12>
+                  <Icon name="share-alt" size={22} color={Colors.text1} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View marginT-20 row>
+              <GetIcon name="calendar" />
+              <View marginL-10>
+                <Text lvl3 text3>
+                  Date
+                </Text>
+                <Text regular>
+                  {moment(new Date(item.date)).format('ddd - MMM DD, YYYY')}
+                </Text>
+              </View>
+            </View>
+            <View marginT-20 row>
+              <GetIcon name="clock" />
+              <View marginL-10>
+                <Text lvl3 text3>
+                  Time
+                </Text>
+                <Text lvl2>
+                  {moment(new Date(item.start || '')).format('hh:mm A')} for{' '}
+                  {item.duration} hrs
+                </Text>
+              </View>
+            </View>
+            <View marginT-20 row>
+              <GetIcon name="info" />
+              <View marginL-10>
+                <Text marginT-7 marginB-3 lvl3 text3>
+                  Description
+                </Text>
+                <Text lvl2>{item.description}</Text>
+              </View>
+            </View>
+
+            <View marginT-20 row>
+              <GetIcon name="map" />
+              <View marginL-10>
+                <Text marginT-7 marginB-3 lvl3 text3>
+                  Location
+                </Text>
+                <LocationBlock {...item.locationObject} styled={true} />
+              </View>
+            </View>
+          </View>
+          <View>
+            <UseSmallMapView loc={item.location} />
+          </View>
+
+          <Organizer
+            org
+            name={item.person || ''}
+            reference={item.reference || ''}
+          />
+        </View>
       </ScrollView>
     );
-  }
-  else return <View />;
+  } else return <View />;
 };
 
 export default EventView;

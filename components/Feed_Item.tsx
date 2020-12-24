@@ -51,7 +51,6 @@ const Feed_Item = memo(({item}: {item: FeedItemModel}) => {
       <TouchableOpacity
         onPress={() => handleClick()}
         activeOpacity={0.85}
-        padding-9
         marginV-8
         bg-foreground
         style={{
@@ -70,7 +69,7 @@ const Feed_Item = memo(({item}: {item: FeedItemModel}) => {
                 flex: 1,
                 flexDirection: 'row',
                 borderRadius: 3,
-                height: 150,
+                height: 170,
                 width: '100%',
               }}
               resizeMode="cover"
@@ -79,7 +78,7 @@ const Feed_Item = memo(({item}: {item: FeedItemModel}) => {
           </View>
           <View
             row
-            padding-2
+            paddingH-10
             paddingT-3
             marginV-15
             style={{
@@ -117,10 +116,10 @@ const Feed_Item = memo(({item}: {item: FeedItemModel}) => {
                 </View>
               </View>
               <View>
-                <View>
+                {/* <View>
                   <Text muted>Rating</Text>
                   <Text regular>random stars?</Text>
-                </View>
+                </View> */}
                 <View>
                   <PartyTypeBadge type={item.partyType} />
                 </View>

@@ -11,6 +11,7 @@ import {Linking} from 'react-native';
 import {eventEmitter} from '../universal/EventEmitter';
 import {useNavigation} from '@react-navigation/native';
 
+const refer = () => console.log('this notification is finished');
 // Must be outside of any component LifeCycle (such as `componentDidMount`).
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
@@ -24,10 +25,12 @@ PushNotification.configure({
     let {ref} = notification.data;
     FireStore.lastKnownUrl = ref;
 
+    console.log(notification);
+
     // process the notification
 
     // (required) Called when a remote is received or opened, or local notification is opened
-    notification.finish('ref');
+    notification.finish('refer');
     eventEmitter.emit('noti', notification.message);
   },
 
@@ -93,7 +96,7 @@ class NotificationSystem {
         },
         foregroundBehaviour: 'blocking',
         workflow: async () => this.downloadRsvpEvents(),
-        repeatInterval: 1 * 60 * 12, //every 12 hours
+        repeatInterval: 1 * 60 * 6, //every 6 hours
         timeout: 1,
         constraints: {
           network: 'connected',
@@ -171,7 +174,7 @@ class NotificationSystem {
         partyData?.start,
       ).format('ddd MMM d, hh:mm a')}`,
       title: 'Party Today',
-      actions: ['View', 'Dismiss'], // (Android only) See the doc for notification actions to know more      color: Colors.primary,
+      actions: ['View'], // (Android only) See the doc for notification actions to know more      color: Colors.primary,
       subText: 'This is a subText',
       ticker: 'My Notification Ticker',
       tag: 'some_tag', // (optional) add tag to message

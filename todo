@@ -9,9 +9,9 @@ geoPosition - only picked up on one location ?
 
 
 
-post parties list not showing
-rsvp - not showing up after restart
 
+//rsvp - not showing up after restart
+//post parties list not showing
 //notification should open party
 //start up party in dark mode
 
@@ -19,3 +19,6 @@ rsvp - not showing up after restart
     //make the chips static.
 //location toggle in off POSITION
 //colors on chip
+
+
+make calls on login
