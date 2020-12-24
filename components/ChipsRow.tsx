@@ -26,6 +26,9 @@ const ChipsRow = ({height}: {height: number}) => {
 
   return (
     <View bg-background padding-7>
+      <View padding-10>
+        <Text lvl1 color={Colors.primary} style={{fontWeight:"700", textShadowOffset:{height:3, width:3}}}>My #1 Party</Text>
+      </View>
       {data.length != 0 && (
         <FlatList
           data={data}

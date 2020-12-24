@@ -21,7 +21,7 @@ import ChipsRow from '../components/ChipsRow';
 const scrollY = new Animated.Value(0);
 const FeedV2 = () => {
   const theme = useTheme();
-  const off = 30;
+  const off = 70;
   // const [, setLastDocument] = useState<string>()
   const [moreData, setMoreData] = useState(true);
   const [loading, setLoading] = useState(false);
