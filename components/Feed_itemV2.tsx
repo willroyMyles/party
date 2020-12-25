@@ -44,31 +44,28 @@ const Feed_ItemV2 = ( { reference }: { reference: string } ) =>
 			activeOpacity={0.85}
 			marginV-15
 			marginH-15
-
-			// marginV-8
 			bg-foreground
-			style={{ borderRadius: 8, elevation: 2, width: width * .5, overflow: "hidden" }}>
+			style={{ borderRadius: 8, elevation: 4, width: width * .5, overflow: "hidden" }}>
+			<View style={{elevation:0}}>
 			<Image
 				source={{ uri: image }}
-				style={{ flexDirection: "row", borderRadius: 3, height: 100, width: "100%", borderWidth: 2 }}
+				style={{ flexDirection: "row", borderRadius: 3, height: 100, width: "100%", borderWidth: 0 }}
 				resizeMode="cover"
 			/>
 			<View
 				row
-				padding-2
-				paddingT-3
+				paddingH-2
+				paddingT-0
 				paddingH-12
 				marginV-15
 				style={{ flexDirection: "column", justifyContent: "space-between" }}>
 				<Text lvl1>{item.title}</Text>
 				<View row spread >
-					<View>
-						<View>
-							<Text muted>Date</Text>
-							<Text regular>{moment( new Date( item.date )).format( "ddd MMM DD, YYYY" )}</Text>
-						</View>
+					<View marginT-6>
+						<Text regular>{moment( new Date( item.date )).format( "ddd MMM DD, YYYY" )}</Text>
 					</View>
 				</View>
+			</View>
 			</View>
 		</TouchableOpacity>
 	)

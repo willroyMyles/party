@@ -9,6 +9,7 @@ import BackDrop from './BackDrop';
 import FireStore from '../data_layer/FireStore';
 import {Dimensions} from 'react-native';
 import PartyTypeBadge from './PartyTypeBadge';
+import { GetIcon } from '../universal/GS';
 // import * as faker from "faker"
 const {width, height} = Dimensions.get('screen');
 
@@ -79,8 +80,8 @@ const Feed_Item = memo(({item}: {item: FeedItemModel}) => {
           <View
             row
             paddingH-10
-            paddingT-3
-            marginV-15
+            paddingV-5
+            marginT-15
             style={{
               flex: 2,
               flexDirection: 'column',
@@ -89,17 +90,18 @@ const Feed_Item = memo(({item}: {item: FeedItemModel}) => {
             <Text lvl1>{item.title}</Text>
             <View row spread>
               <View>
-                <View marginV-3>
-                  <Text muted>Date</Text>
+                <View marginT-10 row>
+                <GetIcon name="calendar" />
                   <Text regular>
                     {moment(new Date(item.date || '')).format(
                       'ddd MMM DD, YYYY',
                     )}
                   </Text>
                 </View>
-                <View marginV-3>
-                  <Text muted>Starts at</Text>
+                <View marginT-7 >
                   <View row>
+                  <GetIcon name="clock" />
+
                     <Text regular>
                       {moment(new Date(item.start || '')).format('h:mm a')}
                     </Text>

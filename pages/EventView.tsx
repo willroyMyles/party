@@ -14,7 +14,7 @@ import {Dimensions, Easing, ScrollView, StatusBar} from 'react-native';
 import moment from 'moment';
 import {FeedItemModel, PartyType} from '../universal/Models';
 import tm from '../universal/UiManager';
-import {GS, GetIcon, GetPartytypeString} from '../universal/GS';
+import {GS, GetIcon, GetPartytypeString, GetFormattedTime} from '../universal/GS';
 import Organizer from '../components/Organizer';
 import UseSmallMapView from './UseSmallMapView';
 import PartyTypeBadge from '../components/PartyTypeBadge';
@@ -86,9 +86,7 @@ const EventView = () => {
         <StatusBar animated backgroundColor={'rgba(0,0,0,0)'} />
         <EventHeaderImage imageUrl={image} />
         <View>
-          <View centerH>
-            <PartyTypeBadge type={item?.partyType} />
-          </View>
+        
           <View bg-background padding-20 style={{marginTop: -10}}>
             <View marginV-5 centerV row spread>
               <Text lvl1 style={{width: '50%'}}>
@@ -101,23 +99,26 @@ const EventView = () => {
                 </TouchableOpacity>
               </View>
             </View>
+            <View style={{alignItems:"flex-start"}}>
+            <PartyTypeBadge type={item?.partyType} />
+          </View>
             <View marginT-20 row>
               <GetIcon name="calendar" />
               <View marginL-10>
-                <Text lvl3 text3>
+                {/* <Text lvl3 text3>
                   Date
-                </Text>
+                </Text> */}
                 <Text regular>
-                  {moment(new Date(item.date)).format('ddd - MMM DD, YYYY')}
+                  {GetFormattedTime(item.date)}
                 </Text>
               </View>
             </View>
             <View marginT-20 row>
               <GetIcon name="clock" />
               <View marginL-10>
-                <Text lvl3 text3>
+                {/* <Text lvl3 text3>
                   Time
-                </Text>
+                </Text> */}
                 <Text lvl2>
                   {moment(new Date(item.start || '')).format('hh:mm A')} for{' '}
                   {item.duration} hrs
@@ -127,9 +128,9 @@ const EventView = () => {
             <View marginT-20 row>
               <GetIcon name="info" />
               <View marginL-10>
-                <Text marginT-7 marginB-3 lvl3 text3>
+                {/* <Text marginT-7 marginB-3 lvl3 text3>
                   Description
-                </Text>
+                </Text> */}
                 <Text lvl2>{item.description}</Text>
               </View>
             </View>
@@ -137,9 +138,9 @@ const EventView = () => {
             <View marginT-20 row>
               <GetIcon name="map" />
               <View marginL-10>
-                <Text marginT-7 marginB-3 lvl3 text3>
+                {/* <Text marginT-7 marginB-3 lvl3 text3>
                   Location
-                </Text>
+                </Text> */}
                 <LocationBlock {...item.locationObject} styled={true} />
               </View>
             </View>

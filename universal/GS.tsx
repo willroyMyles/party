@@ -8,6 +8,7 @@ import Animated from 'react-native-reanimated';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import FireStore from '../data_layer/FireStore';
+import moment from 'moment';
 
 export const showItemToBeDownloaded = (
   ref: string,
@@ -31,6 +32,9 @@ export const showItemToBeDownloaded = (
     nav.navigate(res.page, {reference: ref});
   });
 };
+
+export const GetFormattedTime = (date: Date) => moment(new Date(date)).format('ddd MMM DD, YYYY',)
+
 
 export const AFL = Animated.createAnimatedComponent(FlatList);
 

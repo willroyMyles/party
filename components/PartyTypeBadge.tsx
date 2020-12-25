@@ -18,7 +18,7 @@ const PartyTypeBadge = ( { type }: { type: PartyType } ) =>
                 borderRadius: 45,
                 paddingHorizontal: 20,
                 paddingVertical:5,
-                elevation: 10,
+                elevation: 4,
                 zIndex: 5,
                 padding: 3
                 // , width: "100%"

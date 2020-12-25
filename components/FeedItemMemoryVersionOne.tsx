@@ -11,6 +11,7 @@ import FireStore from '../data_layer/FireStore'
 import PartyTypeBadge from './PartyTypeBadge'
 const { width, height } = Dimensions.get( "screen" )
 import FastImage from 'react-native-fast-image'
+import { GetIcon } from '../universal/GS'
 
 
 const FeedItemMemoryVersionOne = memo( ( { item }: { item: FeedItemModel } ) =>
@@ -56,7 +57,6 @@ const FeedItemMemoryVersionOne = memo( ( { item }: { item: FeedItemModel } ) =>
             <TouchableOpacity
                 onPress={() => handleClick()}
                 activeOpacity={0.85}
-                padding-9
                 marginV-8
                 bg-foreground
 
@@ -76,16 +76,16 @@ const FeedItemMemoryVersionOne = memo( ( { item }: { item: FeedItemModel } ) =>
                     </View>
                     <View
                         row
-                        padding-2
+                        paddingH-10
                         paddingT-7
                         marginV-7
                         style={{ flex: 2, flexDirection: "column", justifyContent: "space-between" }}>
                         <Text lvl1>{item.title}</Text>
-                        <View row spread >
+                        <View row spread style={{marginStart:-8}}>
                             <View>
-                                <View marginV-3>
-                                    <Text muted>Date</Text>
-                                    <Text regular>{moment( new Date( item.date || "" ) ).format( "ddd MMM DD, YYYY" )}</Text>
+                                <View marginV-3 row centerV>
+                                    <GetIcon name="calendar" />
+                                    <Text marginL-3 regular>{moment( new Date( item.date || "" ) ).format( "ddd MMM DD, YYYY" )}</Text>
                                 </View>
 
                             </View>
